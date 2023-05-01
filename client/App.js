@@ -1,15 +1,18 @@
-import { Text } from 'react-native';
+import { useState } from 'react';
+import { Text, View } from 'react-native';
 import { demos } from './demo';
+import { DemoContext } from './shared/DemoContext';
 import { DemoInstanceListScreen } from './shared/DemoInstanceListScreen';
 import { DemoListScreen } from './shared/DemoListScreen';
+import { TopBar } from './shared/TopBar';
 import { setUrlPath, useLivePath } from './shared/url';
+import { resetData } from './util/localdata';
 
 export default function App() {
+  const [personaKey, setPersonaKey] = useState(null);
   const path = useLivePath();
   const {demoKey, instanceKey} = parsePath(path); 
   const demo = chooseDemoByKey(demoKey);
-
-  console.log('App', {path, demoKey, instanceKey, demo})
 
   function onSelectDemo(newDemoKey) {
     setUrlPath(newDemoKey);
@@ -17,6 +20,8 @@ export default function App() {
 
   function onSelectInstance(newInstanceKey) {
     setUrlPath(demoKey + '/' + newInstanceKey);
+    const instance = chooseInstanceByKey({demo, instanceKey: newInstanceKey});
+    resetData(instance)
   }
 
   if (!demoKey) {
@@ -27,7 +32,13 @@ export default function App() {
     return <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
   } else {
     const instance = chooseInstanceByKey({demo, instanceKey});
-    return <demo.screen instance={instance} />    
+    return <DemoContext.Provider value={{demoKey, instance, instanceKey, personaKey}}>
+      <View style={{flex: 1}}>
+        <TopBar onSetPersonaKey={setPersonaKey} />
+        <demo.screen instance={instance} />    
+      </View>
+    </DemoContext.Provider>
+
   }
 }
 
