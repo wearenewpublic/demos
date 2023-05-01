@@ -1,47 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text } from 'react-native';
 import { demos } from './demo';
 import { DemoListScreen } from './shared/DemoListScreen';
-import { historyPushState, watchPopState } from './util/shim';
-import * as Linking from 'expo-linking';
+import { setUrlPath, useLivePath } from './shared/url';
 
 export default function App() {
-  const initialUrl = Linking.useURL();
-  const [url, setUrl] = useState(null);
-  const selectedDemoKey = getDemoKeyForUrl(url || initialUrl);
+  const path = useLivePath();
+  const {demoKey, demoInstance} = parsePath(path); 
 
-  useEffect(() => {
-    watchPopState(() => {
-      setUrl(window.location.href);      
-    })
-  }, []);
-
-  function onSelectDemo(demoKey) {
-    historyPushState({state: {demoKey}, url: `/${demoKey}`});
-    setUrl(window.location.href);
+  function onSelectDemo(newDemoKey) {
+    setUrlPath(newDemoKey);
   }
 
-  if (selectedDemoKey == null) {
-    return null;
-  } else if (!selectedDemoKey) {
+  if (!demoKey) {
     return <DemoListScreen onSelectDemo={onSelectDemo}/>
   } else {
-    const selectedDemo = chooseDemoByKey(selectedDemoKey);
-    if (selectedDemo) {
-      return <selectedDemo.screen />
+    const demo = chooseDemoByKey(demoKey);
+    if (demo) {
+      return <demo.screen />
     } else {
-      return <Text>Unknown demo key: {selectedDemoKey}</Text>
+      return <Text>Unknown demo key: {demoKey}</Text>
     }
   }
 }
 
-
-function getDemoKeyForUrl(url) {
-  if (!url) return null;
-  const path = new URL(url).pathname;
+function parsePath(path) {
   const components = path.split('/');
-  return components[1]
+  return {
+    demoKey: components[1],
+    demoInstance: components[2],
+    demoComponents: components.slice(3)
+  }
 }
 
 function chooseDemoByKey(key) {
