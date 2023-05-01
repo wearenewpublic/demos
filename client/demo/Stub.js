@@ -5,7 +5,7 @@ import { BigTitle } from '../component/basics';
 export const StubDemo = {
     key: "stub",
     name: "Stub Demo",    
-    description: "This demo is just a stub. It does nothing interesting. \nClick on a particular instance of this demo that you want to use for user testing.",
+    description: "This demo is just a stub. It does nothing interesting.",
     screen: StubScreen,
     instance: [
         {key: 'silly', name: 'Silly'},

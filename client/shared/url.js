@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { historyPushState, watchPopState } from "../util/shim";
 
+// TODO: Using a global variable is a hack.  We should use a context instead.
+var global_path_watcher = null;
+
 export function useLivePath() {
-    const [url, setUrl] = useState(window.location.pathname);
+    const [path, setPath] = useState(window.location.pathname);
 
     useEffect(() => {
         watchPopState(() => {
-            setUrl(window.location.pathname);
+            setPath(window.location.pathname);
         })
     }, []);
 
-    return url;
+    global_path_watcher = setPath;
+    return path;
 }
 
 export function setUrlPath(path) {
     historyPushState({state: {path}, url: `/${path}`});
-    window.location.pathname = path;
-    // setUrl(window.location.href);
+    if (global_path_watcher) {
+        global_path_watcher('/' + path);
+    }
 }
