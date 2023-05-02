@@ -9,7 +9,6 @@ import { setUrlPath, useLivePath } from './shared/url';
 import { resetData } from './util/localdata';
 
 export default function App() {
-  const [personaKey, setPersonaKey] = useState(null);
   const path = useLivePath();
   const {demoKey, instanceKey} = parsePath(path); 
   const demo = chooseDemoByKey(demoKey);
@@ -32,10 +31,10 @@ export default function App() {
     return <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
   } else {
     const instance = chooseInstanceByKey({demo, instanceKey});
-    return <DemoContext.Provider value={{demoKey, instance, instanceKey, personaKey}}>
+    return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
       <View style={{flex: 1}}>
-        <TopBar onSetPersonaKey={setPersonaKey} />
-        <demo.screen instance={instance} />    
+        <TopBar demo={demo} />
+        <demo.screen/>    
       </View>
     </DemoContext.Provider>
 

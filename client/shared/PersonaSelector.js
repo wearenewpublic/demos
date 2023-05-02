@@ -1,6 +1,15 @@
 import { Text } from "react-native";
+import { PopupSelector } from "../component/shimui";
+import { personas } from "../demo";
+import { setGlobalProperty, useGlobalProperty } from "../util/localdata";
 
 export function PersonaSelector() {
-    return <Text>Persona Selector</Text>
+    const selectedPersona = useGlobalProperty('$personaKey');
+    const itemKeys = Object.keys(personas);
+    const items = itemKeys.map(key => ({key, label: personas[key].name}));
+    return <PopupSelector value={selectedPersona} items={items} 
+        onSelect={personalKey => setGlobalProperty('$personaKey', personalKey)} 
+    />
 }
+
 
