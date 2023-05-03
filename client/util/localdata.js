@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { personas } from "../demo";
+import { defaultPersona, personas } from "../demo";
 import { DemoContext } from "../shared/DemoContext";
 
 var global_data = null;
@@ -28,7 +28,7 @@ function useData() {
 }
 
 export function resetData(instance) {
-    setGlobalData({persona: deepClone(personas), ...deepClone(instance)});    
+    setGlobalData({persona: deepClone(personas), ['$personaKey']: defaultPersona, ...deepClone(instance)});    
 }
 
 export function useCollection(typeName, {sortBy}) {

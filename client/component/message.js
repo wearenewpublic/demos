@@ -6,12 +6,12 @@ export function Message({messageKey}) {
     const message = useObject('message', messageKey);
     const currentUser = useGlobalProperty('$personaKey');
     const fromMe = message.from == currentUser;
-    return <View style={s.messageHolder}> 
-        <View style={s.messageBubble}>
-            {currentUser ? null : 
+    return <View style={[s.messageHolder, fromMe ? s.myMessageHolder : {}]}> 
+        <View style={[s.messageBubble, fromMe ? s.myMessageBubble : s.theirMessageBubble]}>
+            {fromMe ? null : 
                 <MessageAuthorInfo messageKey={messageKey} />
             }
-            <Text>Message: {message.text}</Text>
+            <Text style={fromMe ? s.myMessageText : {}}>Message: {message.text}</Text>
         </View>
     </View>
 }
@@ -20,8 +20,19 @@ const MessageStyles = StyleSheet.create({
     messageHolder: {
         flexDirection: 'row',
     },
-    messageBubble: {
+    myMessageText: {
+        color: '#fff'
+    },
+    myMessageHolder: {
+        justifyContent: 'flex-end'
+    },
+    theirMessageBubble: {
         backgroundColor: '#eee',
+    },
+    myMessageBubble: {
+        backgroundColor: '#0084FF',
+    },
+    messageBubble: {
         borderRadius: 16,
         paddingHorizontal: 12,
         paddingVertical: 6,
@@ -38,3 +49,6 @@ function MessageAuthorInfo({messageKey}) {
     </View>
 }
 
+function BottomScroller({children}) {
+
+}
