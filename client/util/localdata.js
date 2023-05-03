@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { personas } from "../demo";
 import { DemoContext } from "../shared/DemoContext";
 
 var global_data = null;
@@ -8,18 +9,14 @@ var data_watchers = [];
 
 function useData() {
     const {demoKey, instance, instanceKey} = useContext(DemoContext);
-    if (!global_data) {
-        global_data = deepClone(instance);
-    }
-    const [data, setData] = useState(global_data);
+    if (!global_data) resetData(instance);
 
+    const [data, setData] = useState(global_data);
 
     useEffect(() => {
         setData(global_data);        
 
-        const watchFunc = (newData) => {
-            setData(newData);
-        }
+        const watchFunc = (newData) => setData(newData);
         data_watchers.push(watchFunc);
 
         return () => {
@@ -31,12 +28,17 @@ function useData() {
 }
 
 export function resetData(instance) {
-    setGlobalData(deepClone(instance));    
+    setGlobalData({persona: deepClone(personas), ...deepClone(instance)});    
 }
 
-export function useCollection(typeName) {
+export function useCollection(typeName, {sortBy}) {
     const data = useData();
-    return data[typeName]
+    const collection = data[typeName];
+    if (!collection) {
+        console.error('No such type:', typeName);
+    }
+    const sorted = sortMapValuesByProp(collection, sortBy);
+    return sorted;
 }
 
 export function useObject(typeName, key) {
@@ -74,5 +76,27 @@ export function newKey() {
 
 function deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
+}
+
+
+function sortMapValuesByProp(obj, prop) {
+    const keys = Object.keys(obj);
+    const sortedKeys = sortArrayByProp(keys, prop);
+    return sortedKeys.map(key => obj[key]);
+}
+
+function sortArrayByProp(array, prop) {
+    return array.sort((a, b) => {
+        const valueA = a[prop];
+        const valueB = b[prop];
+    
+        if (valueA < valueB) {
+            return -1;
+        }
+        if (valueA > valueB) {
+            return 1;
+        }
+        return 0;
+    });
 }
 

@@ -1,9 +1,11 @@
+import { ChatDemo } from "./Chat";
 import { StubDemo } from "./Stub";
 
 export const demos = [
-    StubDemo
+    StubDemo, ChatDemo
 ]
 
+export const defaultPersona = 'angry';
 export const personas = {
     'angry': {
         name: 'Angry Alice',
@@ -20,7 +22,6 @@ export const personas = {
     'peacemaker': {
         name: 'Peacemaker Pete',
         face: 'face3.jpeg'
-
     },
     'leader': {
         name: 'Leader Laura',

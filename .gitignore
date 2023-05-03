@@ -133,3 +133,4 @@ public_out/
 .firebase/
 .vscode
 .DS_Store
+.expo
