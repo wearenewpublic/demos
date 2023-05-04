@@ -8,12 +8,14 @@ export function useLivePath() {
     const [path, setPath] = useState(window.location.pathname);
 
     useEffect(() => {
-        watchPopState(() => {
+        watchPopState(path => {
             setPath(window.location.pathname);
         })
+        global_path_watcher = path => {
+            setPath(path);
+        }    
     }, []);
 
-    global_path_watcher = setPath;
     return path;
 }
 
