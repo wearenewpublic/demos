@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import { PopupSelector } from "../component/shimui";
+import { PopupSelector } from "../platform-specific/popup";
 import { personas } from "../demo";
 import { setGlobalProperty, useGlobalProperty } from "../util/localdata";
 

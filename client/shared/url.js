@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { historyPushState, watchPopState } from "../util/shim";
+import { historyPushState, watchPopState } from "../platform-specific/url";
 
 // TODO: Using a global variable is a hack.  We should use a context instead.
 var global_path_watcher = null;
