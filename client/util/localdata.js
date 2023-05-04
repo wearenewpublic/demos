@@ -51,6 +51,12 @@ export function useGlobalProperty(key) {
     return data[key];
 }
 
+export function addObject(typename, value) {
+    const key = newKey();
+    setObject(typename, key, {...value, key});
+    notifyDataWatchers();
+}
+
 export function setObject(typeName, key, value) {
     const typeData = {...global_data[typeName], [key]: value};
     setGlobalProperty(typeName, typeData);
@@ -63,6 +69,10 @@ export function setGlobalProperty(key, value) {
 
 export function setGlobalData(data) {
     global_data = data;
+    notifyDataWatchers();
+}
+
+function notifyDataWatchers() {
     data_watchers.forEach(w => w(global_data));
 }
 
