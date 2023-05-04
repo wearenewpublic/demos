@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { demos } from './demo';
 import { DemoContext } from './shared/DemoContext';
 import { DemoInstanceListScreen } from './shared/DemoInstanceListScreen';
@@ -9,6 +9,7 @@ import { setUrlPath, useLivePath } from './shared/url';
 import { resetData } from './util/localdata';
 
 export default function App() {
+  const s = AppStyle;
   const path = useLivePath();
   const {demoKey, instanceKey} = parsePath(path); 
   const demo = chooseDemoByKey(demoKey);
@@ -32,7 +33,7 @@ export default function App() {
   } else {
     const instance = chooseInstanceByKey({demo, instanceKey});
     return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
-      <View style={{flex: 1}}>
+      <View style={s.fullScreen}>
         <TopBar demo={demo} />
         <demo.screen/>    
       </View>
@@ -40,6 +41,13 @@ export default function App() {
 
   }
 }
+
+const AppStyle = StyleSheet.create({
+  fullScreen: {
+    position: 'absolute',
+    top: 0, bottom: 0, left: 0, right: 0
+  }
+})
 
 function parsePath(path) {
   const components = path.split('/');

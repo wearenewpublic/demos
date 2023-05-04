@@ -13,8 +13,16 @@ export const ChatDemo = {
     screen: ChatScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', message: expandDataList([
-            {from: 'leader', text:'Welcome to the E-Corp Alumni chat room!'},
-            {from: 'angry', text:'I hate E-Corp!'}
+            {from: 'leader', text: 'Welcome to the E-Corp Alumni chat room!'},
+            {from: 'angry', text: 'I hate E-Corp!'},
+            {from: 'peacemaker', text: 'What concerns do you have? What would you like to see E-Corp do differently?'},
+        ])},
+        {key: 'soccer', name: 'Soccer Team', message: expandDataList([
+            {from: 'leader', text: 'We have got a game against the Sunnytown Slinkies this weekend!'},
+            {from: 'peacemaker', text: 'I hope everyone has a really fun game.'},
+            {from: 'boring', text: "I'm going to say something extremely long and boring that nobody is particularly interested in."},
+            {from: 'angry', text: "Can you shut up. You talk too much."},
+            {from: 'boring', text: "I'm going to keep talking because that's what I always do. I keep talking"}
         ])},
     ]
 }

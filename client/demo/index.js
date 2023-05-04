@@ -30,5 +30,9 @@ export const personas = {
     'silly': {
         name: 'Silly Sam',
         face: 'face2.jpeg'
+    },
+    'boring': {
+        name: 'Boring Bob',
+        face: 'face10.jpeg'
     }
 }
