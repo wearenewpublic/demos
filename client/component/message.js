@@ -12,7 +12,7 @@ export function Message({messageKey}) {
             {fromMe ? null : 
                 <MessageAuthorInfo messageKey={messageKey} />
             }
-            <Text style={fromMe ? s.myMessageText : {}}>Message: {message.text}</Text>
+            <Text style={fromMe ? s.myMessageText : {}}>{message.text}</Text>
         </View>
     </View>
 }
