@@ -10,6 +10,13 @@ export function ScrollableScreen({children}) {
     </View>
 }
 
+export function WideScreen({children}) {
+    return <View style={{flex: 1}}>
+        {children}
+    </View>
+}
+
+
 export function Card({children}) {
     return <View style={{borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10}}>
         {children}
@@ -41,4 +48,8 @@ export function BodyText({children}) {
 
 export function Separator() {
     return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: 16}}/>
+}
+
+export function Pad({size}) {
+    return <View style={{height: size, width: size}}/>
 }

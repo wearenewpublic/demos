@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import { Pad, WideScreen } from "../component/basics";
 import { Message } from "../component/message";
 import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
@@ -19,11 +20,12 @@ export const ChatDemo = {
 export function ChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
     return (
-        <View style={{flex: 1}}>
+        <WideScreen>
+            <Pad size={8} />
             {messages.map(message => 
                 <Message key={message.key} messageKey={message.key}/>
             )}
-        </View>
+        </WideScreen>
     )
 }
 
