@@ -25,21 +25,29 @@ export default function App() {
   }
 
   if (!demoKey) {
-    return <DemoListScreen onSelectDemo={onSelectDemo}/>
+    return <FullScreen>
+      <DemoListScreen onSelectDemo={onSelectDemo}/>
+    </FullScreen>
   } else if (!demo) {
     return <Text>Unknown demo key: {demoKey}</Text>
   } else if (!instanceKey) {
-    return <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
+    return <FullScreen>
+      <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
+    </FullScreen>
   } else {
     const instance = chooseInstanceByKey({demo, instanceKey});
     return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
-      <View style={s.fullScreen}>
+      <FullScreen>
         <TopBar demo={demo} />
         <demo.screen/>    
-      </View>
+      </FullScreen>
     </DemoContext.Provider>
 
   }
+}
+
+function FullScreen({children}) {
+  return <View style={AppStyle.fullScreen}>{children}</View>
 }
 
 const AppStyle = StyleSheet.create({
