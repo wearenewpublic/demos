@@ -134,3 +134,5 @@ public_out/
 .vscode
 .DS_Store
 .expo
+
+keys.js 
