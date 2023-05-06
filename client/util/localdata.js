@@ -31,13 +31,14 @@ export function resetData(instance) {
     setGlobalData({persona: deepClone(personas), ['$personaKey']: defaultPersona, ...deepClone(instance)});    
 }
 
-export function useCollection(typeName, {sortBy}) {
+export function useCollection(typeName, props = {}) {
+    const {sortBy} = props;
     const data = useData();
     const collection = data[typeName];
     if (!collection) {
         console.error('No such type:', typeName);
     }
-    const sorted = sortMapValuesByProp(collection, sortBy);
+    const sorted = sortMapValuesByProp(collection, sortBy || 'key');
     return sorted;
 }
 

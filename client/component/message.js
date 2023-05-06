@@ -61,7 +61,3 @@ function MessageAuthorInfo({messageKey}) {
         <Text style={{fontWeight: 'bold', fontSize: 12}}>{user.name}</Text>
     </View>
 }
-
-function BottomScroller({children}) {
-
-}

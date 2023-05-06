@@ -10,8 +10,8 @@ export function ScrollableScreen({children}) {
     </View>
 }
 
-export function WideScreen({children}) {
-    return <View style={{flex: 1}}>
+export function WideScreen({children, pad}) {
+    return <View style={{flex: 1, margin: pad ? 16 : null}}>
         {children}
     </View>
 }

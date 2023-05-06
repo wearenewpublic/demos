@@ -8,7 +8,7 @@ export function expandDataList(list) {
 
     list.forEach(item => {
         date.setMinutes(date.getMinutes + 1);
-        const key = newKey();
+        const key = item.key || newKey();
         collection[key] = {
             ...item,
             key,

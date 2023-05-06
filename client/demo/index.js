@@ -1,8 +1,9 @@
 import { ChatDemo } from "./Chat";
 import { StubDemo } from "./Stub";
+import { ThreadedCommentsDemo } from "./ThreadedComments";
 
 export const demos = [
-    StubDemo, ChatDemo
+    StubDemo, ChatDemo, ThreadedCommentsDemo
 ]
 
 export const defaultPersona = 'angry';
