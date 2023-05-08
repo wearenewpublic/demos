@@ -25,7 +25,7 @@ export function ReplyInput({commentKey}) {
         <View style={s.right}>
             <TextInput style={s.textInput}
                 placeholder='Write a comment...' 
-                placeHolderTextColor='#999'
+                placeholderTextColor='#999'
                 value={text}
                 onChangeText={setText}
                 multiline={true}
@@ -63,3 +63,35 @@ const ReplyInputStyle = StyleSheet.create({
         margin: 8,
     }
 })
+
+export function TopCommentInput() {
+    const personaKey = useGlobalProperty('$personaKey');
+    const [text, setText] = useState('');
+    const s = ReplyInputStyle;
+
+    function onPost() {
+        addObject('comment', {
+            from: personaKey, text
+        })
+        setText('');
+    }
+
+    return <View style={s.row}>
+        <UserFace userId={personaKey} size={32} />
+        <View style={[s.right, !text ? {height: 40} : null]}>
+            <TextInput style={s.textInput}
+                placeholder='Write a comment...' 
+                placeholderTextColor='#999'
+                value={text}
+                onChangeText={setText}
+                multiline={true}
+            />
+            {text ? 
+                <View style={s.actions}>
+                    <PrimaryButton onPress={onPost}>Post</PrimaryButton>
+                    <SecondaryButton onPress={() => setText('')}>Cancel</SecondaryButton>
+                </View>
+            : null}
+        </View>
+    </View>
+}

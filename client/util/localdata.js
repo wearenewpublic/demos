@@ -39,7 +39,8 @@ export function useCollection(typeName, props = {}) {
         console.error('No such type:', typeName);
     }
     const sorted = sortMapValuesByProp(collection, sortBy || 'key');
-    return sorted;
+    if (props.reverse) return sorted.reverse()
+    else return sorted;
 }
 
 export function useObject(typeName, key) {
@@ -55,6 +56,7 @@ export function useGlobalProperty(key) {
 export function addObject(typename, value) {
     const key = newKey();
     setObject(typename, key, {...value, key, time: Date.now()});
+    console.log('data, addObject', global_data);
     notifyDataWatchers();
 }
 
@@ -112,9 +114,7 @@ function deepClone(obj) {
 
 
 function sortMapValuesByProp(obj, prop) {
-    const keys = Object.keys(obj);
-    const sortedKeys = sortArrayByProp(keys, prop);
-    return sortedKeys.map(key => obj[key]);
+    return sortArrayByProp(Object.values(obj), prop);
 }
 
 function sortArrayByProp(array, prop) {

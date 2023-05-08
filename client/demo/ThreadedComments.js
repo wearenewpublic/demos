@@ -3,7 +3,7 @@ import { Pad, WideScreen } from "../component/basics";
 import { ActionLike, ActionReply, Comment, actionLike, actionReply } from "../component/comment";
 import { expandDataList } from "../shared/util"
 import { useCollection, useGlobalProperty } from "../util/localdata";
-import { ReplyInput } from "../component/replyinput";
+import { ReplyInput, TopCommentInput } from "../component/replyinput";
 
 export const ThreadedCommentsDemo = {
     key: 'threaded',
@@ -27,12 +27,14 @@ export const ThreadedCommentsDemo = {
 }
 
 export function ThreadedScreen() {
-    const comments = useCollection('comment', {sortBy: 'time'});
+    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => !comment.replyTo);
 
     return (
         <WideScreen pad>
             <ScrollView>
+                <Pad size={8} />
+                <TopCommentInput />
                 <Pad size={8} />
                 {topLevelComments.map(comment => 
                     <Comment key={comment.key} commentKey={comment.key} 

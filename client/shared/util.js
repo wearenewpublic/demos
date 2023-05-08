@@ -7,7 +7,8 @@ export function expandDataList(list) {
     var collection = {};
 
     list.forEach(item => {
-        date.setMinutes(date.getMinutes + 1);
+        date.setMinutes(date.getMinutes() + 1);
+
         const key = item.key || newKey();
         collection[key] = {
             ...item,
@@ -15,9 +16,10 @@ export function expandDataList(list) {
             time: date.getTime()
         };
     });
-    
+
     return collection;
 }
+
 
 export function removeKey(collection, key) {
     const newCollection = {...collection};
