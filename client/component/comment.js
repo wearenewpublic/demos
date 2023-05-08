@@ -1,10 +1,65 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useCollection, useObject } from "../util/localdata";
+import { modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, useSessionData } from "../util/localdata";
+import { Clickable } from "./basics";
 import { UserFace } from "./userface";
+import React from "react";
+import { addKey, removeKey } from "../shared/util";
+import { ReplyInput } from "./replyinput";
 
-export function Comment({commentKey}) {
+
+export function CommentActionButton({label, onPress}) {
+    const s = CommentActionButtonStyle;
+    return <Clickable>
+        <Text style={s.text} onPress={onPress}>{label}</Text>
+    </Clickable>
+}
+const CommentActionButtonStyle = StyleSheet.create({
+    text: {
+        fontSize: 11,
+        textTransform: 'uppercase',
+        marginRight: 32,
+        marginTop: 4,
+        color: '#666'
+    }
+})
+
+
+function replyToComment(commentKey) {
+    setSessionData('replyToComment', commentKey);
+}
+
+export function ActionReply({commentKey}) {
+    return <CommentActionButton key='reply' label='Reply' onPress={() => replyToComment(commentKey)} />
+}
+
+function likeComment(commentKey, comment, personaKey) {
+    const shouldLike = !comment.likes?.[personaKey];
+    modifyObject('comment', commentKey, comment => ({
+        ...comment, likes: shouldLike ? addKey(comment.likes, personaKey) : removeKey(comment.likes, personaKey)
+    }))
+}
+
+export function ActionLike({commentKey, comment}) {
+    const personaKey = useGlobalProperty('$personaKey');
+    const actionLabel = comment?.likes?.[personaKey] ? 'Unlike' : 'Like';
+    const likeCount = Object.keys(comment?.likes || {}).length;    
+    const likeCountLabel = likeCount ? ' (' + likeCount + ')' : '';
+    return <CommentActionButton key='like' label={actionLabel + likeCountLabel} onPress={() => likeComment(commentKey, comment, personaKey)} />
+}
+
+const defaultActions = [ActionLike, ActionReply];
+function ActionBar({actions, commentKey, comment}) {
+    return <View style={{flexDirection: 'row'}}>
+        {actions.map((action, idx) => 
+            React.createElement(action, {key: idx, commentKey, comment})
+        )}
+    </View>
+}
+
+export function Comment({commentKey, actions=defaultActions, replyComponent=ReplyInput}) {
     const s = CommentStyle;
     const comment = useObject('comment', commentKey);
+    const showReplyComponent = useSessionData('replyToComment') == commentKey;
     return <View style={s.commentHolder}>
         <View style={s.commentLeft}>
             <UserFace userId={comment.from} />
@@ -13,11 +68,12 @@ export function Comment({commentKey}) {
         <View style={s.commentRight}>
             <View style={s.commentBox}>
                 <CommentAuthorInfo commentKey={commentKey} />
-                <Text>{comment.text}</Text>
+                <Text style={s.text}>{comment.text}</Text>
+                <ActionBar actions={actions} commentKey={commentKey} comment={comment} />
             </View>
-            <Replies commentKey={commentKey} />
+            {showReplyComponent ? React.createElement(replyComponent, {commentKey}) : null}
+            <Replies commentKey={commentKey} actions={actions} replyComponent={replyComponent} />
         </View>
-
     </View>
 }
 
@@ -27,8 +83,10 @@ const CommentStyle = StyleSheet.create({
         // marginHorizontal: 8,
         marginTop: 16,
     },
-    commentLeft: {
-
+    text: {
+        fontSize: 15,
+        color: '#333',
+        maxWidth: 500
     },
     verticalLine: {
         backgroundColor: '#ccc',
@@ -46,12 +104,15 @@ const CommentStyle = StyleSheet.create({
     }
 })
 
-function Replies({commentKey}) {
+function Replies({commentKey, actions, replyComponent}) {
     const s = RepliesStyle;
-    const comments = useCollection('comment');
+    const comments = useCollection('comment', {sortBy: 'time'});
     const replies = comments.filter(c => c.replyTo == commentKey);
     return <View style={s.repliesHolder}>
-        {replies.map(reply => <Comment commentKey={reply.key} />)}
+        {replies.map(reply => 
+            <Comment key={reply.key} commentKey={reply.key} 
+                actions={actions} replyComponent={replyComponent}/>
+        )}
     </View>
 }
 

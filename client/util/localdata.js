@@ -44,7 +44,7 @@ export function useCollection(typeName, props = {}) {
 
 export function useObject(typeName, key) {
     const data = useData();
-    return data[typeName][key];
+    return data[typeName]?.[key];
 }
 
 export function useGlobalProperty(key) {
@@ -54,8 +54,14 @@ export function useGlobalProperty(key) {
 
 export function addObject(typename, value) {
     const key = newKey();
-    setObject(typename, key, {...value, key});
+    setObject(typename, key, {...value, key, time: Date.now()});
     notifyDataWatchers();
+}
+
+export function modifyObject(typename, key, modFunc) {
+    const object = global_data[typename][key];
+    const newObject = modFunc(object);
+    setObject(typename, key, newObject);
 }
 
 export function setObject(typeName, key, value) {
@@ -67,6 +73,21 @@ export function setGlobalProperty(key, value) {
     setGlobalData({...global_data, [key]: value});
 }
  
+function pathToName(path) {
+    if (typeof(path) == 'string') {
+        return path;
+    } else {
+        return path.join('/');
+    }
+}
+
+export function useSessionData(path) {
+    return useObject('$session', pathToName(path))
+}
+
+export function setSessionData(path, value) {
+    return setObject('$session', pathToName(path), value);
+}
 
 export function setGlobalData(data) {
     global_data = data;

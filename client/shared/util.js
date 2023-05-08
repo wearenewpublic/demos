@@ -19,3 +19,12 @@ export function expandDataList(list) {
     return collection;
 }
 
+export function removeKey(collection, key) {
+    const newCollection = {...collection};
+    delete newCollection[key];
+    return newCollection;
+}
+
+export function addKey(collection, key, value=true) {
+    return {...collection, [key]: value};
+}

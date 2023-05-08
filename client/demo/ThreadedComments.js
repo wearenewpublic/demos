@@ -1,8 +1,9 @@
 import { ScrollView, Text } from "react-native"
 import { Pad, WideScreen } from "../component/basics";
-import { Comment } from "../component/comment";
+import { ActionLike, ActionReply, Comment, actionLike, actionReply } from "../component/comment";
 import { expandDataList } from "../shared/util"
 import { useCollection, useGlobalProperty } from "../util/localdata";
+import { ReplyInput } from "../component/replyinput";
 
 export const ThreadedCommentsDemo = {
     key: 'threaded',
@@ -34,7 +35,10 @@ export function ThreadedScreen() {
             <ScrollView>
                 <Pad size={8} />
                 {topLevelComments.map(comment => 
-                    <Comment key={comment.key} commentKey={comment.key}/>
+                    <Comment key={comment.key} commentKey={comment.key} 
+                        actions={[ActionLike, ActionReply]} 
+                        replyComponent={ReplyInput}
+                    />
                 )}
             </ScrollView>
         </WideScreen>

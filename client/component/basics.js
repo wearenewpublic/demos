@@ -43,7 +43,6 @@ export function SectionTitle({children}) {
 
 export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444'}}>{children}</Text>
-
 }
 
 export function Separator() {
@@ -52,4 +51,20 @@ export function Separator() {
 
 export function Pad({size}) {
     return <View style={{height: size, width: size}}/>
+}
+
+export function PrimaryButton({children, onPress}) {
+    return <Clickable onPress={onPress}>
+        <View style={{paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
+            <Text style={{color: 'white'}}>{children}</Text>
+        </View>
+    </Clickable>
+}
+
+export function SecondaryButton({children, onPress}) {
+    return <Clickable onPress={onPress}>
+        <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666'}}>
+            <Text style={{color: '#666'}}>{children}</Text>
+        </View>
+    </Clickable>
 }
