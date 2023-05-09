@@ -1,9 +1,10 @@
 import { ChatDemo } from "./Chat";
+import { RoboMediatorChatDemo } from "./RoboMediatorChat";
 import { StubDemo } from "./Stub";
 import { ThreadedCommentsDemo } from "./ThreadedComments";
 
 export const demos = [
-    StubDemo, ChatDemo, ThreadedCommentsDemo
+    StubDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo
 ]
 
 export const defaultPersona = 'angry';
@@ -35,5 +36,17 @@ export const personas = {
     'boring': {
         name: 'Boring Bob',
         face: 'face10.jpeg'
+    },
+    'left': {
+        name: 'Lefty Larry',
+        face: 'face6.jpeg'
+    },
+    'right': {
+        name: 'Righty Rita',
+        face: 'face7.jpeg'
+    },
+    'robo': {
+        name: 'Robot',
+        face: 'robo.jpeg'
     }
 }

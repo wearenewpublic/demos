@@ -6,9 +6,6 @@ export function Message({messageKey}) {
     const s = MessageStyles;
     const message = useObject('message', messageKey);
     const currentUser = useGlobalProperty('$personaKey');
-
-    console.log('message', message, message.from, currentUser)
-
     const fromMe = message.from == currentUser;
     return <View style={[s.messageHolder, fromMe ? s.myMessageHolder : {}]}> 
         {fromMe ? null : 
@@ -55,9 +52,36 @@ const MessageStyles = StyleSheet.create({
 })
 
 function MessageAuthorInfo({messageKey}) {
+    const s = MessageAuthorInfoStyle;
     const message = useObject('message', messageKey);
     const user = useObject('persona', message.from);
-    return <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 2}}> 
-        <Text style={{fontWeight: 'bold', fontSize: 12}}>{user.name}</Text>
+    return <View style={s.authorInfoBox}> 
+        <Text style={s.authorName}>{user.name}</Text>
     </View>
 }
+
+const MessageAuthorInfoStyle = StyleSheet.create({
+    authorName: {
+        fontWeight: 'bold',
+        fontSize: 12
+    },
+    authorInfoBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 2
+    }
+});
+
+
+export function QuietSystemMessage({children}) {
+    const s = QuietSystemMessageStyle;
+    return <Text style={s.text}>{children}</Text>
+}
+
+const QuietSystemMessageStyle = StyleSheet.create({
+    text: {
+        color: '#999',
+        marginVertical: 8,
+        alignSelf: 'center'
+    }
+});

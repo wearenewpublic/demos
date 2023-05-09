@@ -43,6 +43,12 @@ export function useCollection(typeName, props = {}) {
     else return sorted;
 }
 
+export function useCollectionMap(typeName) {
+    const data = useData();
+    const collection = data[typeName];
+    return collection;
+}
+
 export function useObject(typeName, key) {
     const data = useData();
     return data[typeName]?.[key];
@@ -58,6 +64,7 @@ export function addObject(typename, value) {
     setObject(typename, key, {...value, key, time: Date.now()});
     console.log('data, addObject', global_data);
     notifyDataWatchers();
+    return key
 }
 
 export function modifyObject(typename, key, modFunc) {
