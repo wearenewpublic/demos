@@ -7,3 +7,6 @@ export function watchPopState(callback) {
     window.addEventListener('popstate', event => callback(event.state));
 }
 
+export function getIsLocalhost() {
+    return location.hostname == 'localhost';
+}
