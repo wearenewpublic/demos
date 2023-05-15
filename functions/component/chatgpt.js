@@ -1,9 +1,10 @@
-const { robo_mediator_prompt } = require("../demo/robo-mediator-chat");
+const { robo_mediator_prompt, unproductive_conflict_prompt } = require("../demo/robo-mediator-chat");
 const keys = require('../keys');
 
 // Add links to your prompts here so that they can be used with chatGPT
 const prompts = {
-    robomediator: robo_mediator_prompt
+    robomediator: robo_mediator_prompt,
+    unproductive: unproductive_conflict_prompt,
 }
 
 

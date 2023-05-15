@@ -10,8 +10,8 @@ export function ChatInput({onSend}) {
 
     async function onPressSend() {
         setInProgress(true)
-        await onSend(text);
         setText('');
+        await onSend(text);
         setInProgress(false);
     }
 

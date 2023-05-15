@@ -1,10 +1,9 @@
-import { View } from "react-native";
 import { Pad, WideScreen } from "../component/basics";
 import { ChatInput } from "../component/chatinput";
-import { Message } from "../component/message";
+import { Message, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../shared/util";
-import { addObject, useCollection, useGlobalProperty } from "../util/localdata";
+import { useCollection } from "../util/localdata";
 import { ecorp, soccer } from "../data/conversations";
 
 export const ChatDemo = {
@@ -20,10 +19,9 @@ export const ChatDemo = {
 
 export function ChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
-    const personaKey = useGlobalProperty('$personaKey');
 
     function onSend(text) {
-        addObject('message', {from: personaKey, text})
+        sendMessage({text});
     }
 
     return (

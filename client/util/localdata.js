@@ -103,6 +103,15 @@ export function setGlobalData(data) {
     notifyDataWatchers();
 }
 
+export function getObject(typeName, key) {
+    return global_data[typeName]?.[key];
+}
+
+export function getGlobalProperty(key) {
+    return global_data[key];
+}
+
+
 function notifyDataWatchers() {
     data_watchers.forEach(w => w(global_data));
 }

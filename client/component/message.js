@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { newKey, useGlobalProperty, useObject } from "../util/localdata";
+import { addObject, getGlobalProperty, newKey, setGlobalProperty, useGlobalProperty, useObject } from "../util/localdata";
 import { UserFace } from "./userface";
 
 export function Message({messageKey}) {
@@ -85,3 +85,8 @@ const QuietSystemMessageStyle = StyleSheet.create({
         alignSelf: 'center'
     }
 });
+
+export function sendMessage({text, from=null}) {    
+    console.log('sendMessage', text, from, getGlobalProperty('$personaKey'));
+    addObject('message', {from: from || getGlobalProperty('$personaKey'), text})
+}

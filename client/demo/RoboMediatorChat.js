@@ -1,13 +1,12 @@
-import { View } from "react-native";
 import { Pad, WideScreen } from "../component/basics";
 import { ChatInput } from "../component/chatinput";
-import { Message, QuietSystemMessage } from "../component/message";
+import { Message, QuietSystemMessage, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../shared/util";
-import { addObject, useCollection, useCollectionMap, useGlobalProperty } from "../util/localdata";
-import { abortion, ecorp, soccer } from "../data/conversations";
-import { callServerApiAsync } from "../util/servercall";
+import { useCollection } from "../util/localdata";
+import { abortion, soccer } from "../data/conversations";
 import { useState } from "react";
+import { askGptToRespondToConversationAsync } from "../component/chatgpt";
 
 export const RoboMediatorChatDemo = {
     key: 'robomediator',
@@ -22,25 +21,20 @@ export const RoboMediatorChatDemo = {
 
 export function RoboMediatorChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
-    const personas = useCollectionMap('persona');
-    const personaKey = useGlobalProperty('$personaKey');
     const [inProgress, setInProgress] = useState(false);
 
     async function onSend(text) {
-        addObject('message', {from: personaKey, text})
         setInProgress(true);
-        const messagesText = messagesToGptString(personas, [...messages, {from: personaKey, text}]);
-        console.log('messagesText', messagesText)
-        try {
-            const gptResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey: 'robomediator', messagesText});
-            if (gptResponse.actionNeeded) {
-                addObject('message', {from: 'robo', text: gptResponse.messageText});
-            }
-        } catch (error) {
-            console.error('error in gpt call', error);
+        sendMessage({text});
+
+        // const unproductiveResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey: 'unproductive', messagesText: messagesToGptString(personas, messages)});
+
+        const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'robomediator', messages, newMessageText: text});
+        if (gptMessageText) {
+            sendMessage({text: gptMessageText, from: 'robo'})
         }
-        setInProgress(false);
-        
+
+        setInProgress(false);        
     }
 
     return (
@@ -59,6 +53,3 @@ export function RoboMediatorChatScreen() {
     )
 }
 
-function messagesToGptString(personas, messages) {
-    return messages.map(message => personas[message.from].name + ': ' + JSON.stringify(message.text)).join('\n\n');
-}
