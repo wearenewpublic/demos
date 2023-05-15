@@ -68,3 +68,4 @@ export function SecondaryButton({children, onPress}) {
         </View>
     </Clickable>
 }
+

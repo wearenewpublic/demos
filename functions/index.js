@@ -10,16 +10,15 @@ exports.api = functions.https.onRequest(async (request, response) => {
         return;
     }
 
-    const parts = request.path.split('/').filter(x => x);
-    const componentId = parts[0];
-    const apiId = parts[1];
+    const {componentId, apiId} = parsePath(request.path);
+
     const component = components[componentId];
     const apiFunction = component?.apiFunctions?.[apiId];
     const params = {...request.query, ...request.body};
 
-    if (!component) {
+    if (!component || !apiFunction) {
         response.status(400);
-        response.send(JSON.stringify({success: false, error: 'Unknown api'}));
+        response.send(JSON.stringify({success: false, error: 'Unknown api', path: request.path, componentId, apiId}));
         return;
     }
 
@@ -37,4 +36,16 @@ exports.api = functions.https.onRequest(async (request, response) => {
         }  
     }); 
 });
+
+function parsePath(path) {
+    var parts = path.split('/').filter(x => x);
+    if (parts[0] == 'api') {
+        parts = parts.slice(1);
+    }
+
+    return {
+        componentId: parts[0],
+        apiId: parts[1],
+    }
+}
 

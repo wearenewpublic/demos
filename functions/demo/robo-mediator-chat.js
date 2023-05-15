@@ -16,6 +16,7 @@ Here are the messages:
 exports.robo_mediator_is_angry_prompt = `
 I want you to look at a message and say whether this message seems to be causing an unproductive conflict. This might be because it is angry, because it is implying that the other person has bad intent, because it is accusing the other person of having unacceptable beliefs, or otherwise creating conflict.
 
-I want you to reply in JSON format. If the message is creating unproductive conflict then reply 
+I want you to reply in JSON format with no other explanation of your answer. If the message is creating unproductive conflict then reply 
 {"unproductive": true} otherwise reply {"unproductive": false}.
 `
+
