@@ -4,15 +4,12 @@ import { Platform, StyleSheet, TextInput, View } from "react-native";
 import { Clickable } from "./basics";
 
 export function ChatInput({onSend}) {
-    const [inProgress, setInProgress] = useState(false)
     const [text, setText] = useState('');
     const s = ChatInputStyle;
 
     async function onPressSend() {
-        setInProgress(true)
         setText('');
         await onSend(text);
-        setInProgress(false);
     }
 
     function onKeyPress(e) {
@@ -35,7 +32,7 @@ export function ChatInput({onSend}) {
             onKeyPress={onKeyPress}
         />
         <Clickable onPress={onPressSend}>
-            <Ionicons name='md-send' size={24} color={inProgress ? '#999' : '#0084ff'} />
+            <Ionicons name='md-send' size={24} color='#0084ff' />
         </Clickable>
     </View>
 }

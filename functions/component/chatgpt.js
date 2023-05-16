@@ -32,7 +32,7 @@ async function callGptAsync({messagesText, promptKey}) {
     console.log('message', message);
     const result = await callOpenAIAsync({action: 'chat/completions', data: {
         temperature: 0,
-        model: 'gpt-3.5-turbo-0301',
+        model: 'gpt-3.5-turbo',
         max_tokens: 100,
         messages: [
             {role: 'user', content: message}

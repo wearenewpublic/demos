@@ -29,8 +29,6 @@ export function RoboMediatorChatScreen() {
 
         const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'unproductive', text});
         if (isUnproductiveMessage) {
-            console.log('unproductive message', text);
-
             const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'robomediator', messages, newMessageText: text});
             if (gptMessageText) {
                 sendMessage({text: gptMessageText, from: 'robo'})
