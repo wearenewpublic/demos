@@ -2,7 +2,6 @@ import { getIsLocalhost } from "../platform-specific/url";
 import { appApiDomain, localHostApiDomain } from "./config";
 
 
-
 // TODO: Do user-based authentication, once we have a database
 export async function callServerApiAsync(component, funcname, params) {
     try {

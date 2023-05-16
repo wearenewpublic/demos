@@ -1,5 +1,6 @@
+const { readFileSync, existsSync } = require('fs');
 const keys = require('../keys');
-const { prompts } = require("../prompts");
+const Mustache = require('mustache');
 
 async function callOpenAIAsync({action, data}) {
     const fetch = await import('node-fetch');
@@ -21,21 +22,34 @@ async function helloAsync({name}) {
     return {data: "Hello " + name};
 }
 
-async function callGptAsync({messagesText, promptKey}) {
-    console.log('prompts', prompts);
-    console.log('callGptAsync', promptKey, prompts);
-    const prompt = prompts[promptKey];
+function createGptPrompt({promptKey, params}) {
+    console.log('createGptPrompt', {promptKey, params});
+    const filename = 'prompts/' + promptKey + '.txt';
+    if (!existsSync(filename)) {
+        console.log('file does not exist', filename);
+        return null;
+    }
+    const promptTemplate = readFileSync(filename).toString();  
+    const prompt = Mustache.render(promptTemplate, params);
+    console.log('prompt', prompt);
+    return prompt;
+}
+
+async function callGptAsync({promptKey, params}) {
+    console.log('callGptAsync', {promptKey, params})
+
+    const prompt = createGptPrompt({promptKey, params});
     if (!prompt) {
         return {success: false, error: 'Unknown prompt: ' + promptKey}
     }
-    const message = prompt + messagesText;    
-    console.log('message', message);
+
+    console.log('prompt', prompt);
     const result = await callOpenAIAsync({action: 'chat/completions', data: {
         temperature: 0,
         model: 'gpt-3.5-turbo',
         max_tokens: 100,
         messages: [
-            {role: 'user', content: message}
+            {role: 'user', content: prompt}
         ]
     }});
     console.log('result', result);

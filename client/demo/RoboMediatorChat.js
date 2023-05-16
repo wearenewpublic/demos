@@ -27,9 +27,9 @@ export function RoboMediatorChatScreen() {
         setInProgress(true);
         sendMessage({text});
 
-        const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'unproductive', text});
+        const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'conflict', text});
         if (isUnproductiveMessage) {
-            const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'robomediator', messages, newMessageText: text});
+            const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'mediator', messages, newMessageText: text});
             if (gptMessageText) {
                 sendMessage({text: gptMessageText, from: 'robo'})
             }    
