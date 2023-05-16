@@ -50,7 +50,7 @@ export function Separator() {
     return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: 16}}/>
 }
 
-export function Pad({size}) {
+export function Pad({size=8}) {
     return <View style={{height: size, width: size}}/>
 }
 
