@@ -6,7 +6,7 @@ import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
 import { abortion, soccer } from "../data/conversations";
 import { useState } from "react";
-import { askGptToRespondToConversationAsync } from "../component/chatgpt";
+import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
 
 export const RoboMediatorChatDemo = {
     key: 'robomediator',
@@ -27,11 +27,14 @@ export function RoboMediatorChatScreen() {
         setInProgress(true);
         sendMessage({text});
 
-        // const unproductiveResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey: 'unproductive', messagesText: messagesToGptString(personas, messages)});
+        const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'unproductive', text});
+        if (isUnproductiveMessage) {
+            console.log('unproductive message', text);
 
-        const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'robomediator', messages, newMessageText: text});
-        if (gptMessageText) {
-            sendMessage({text: gptMessageText, from: 'robo'})
+            const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'robomediator', messages, newMessageText: text});
+            if (gptMessageText) {
+                sendMessage({text: gptMessageText, from: 'robo'})
+            }    
         }
 
         setInProgress(false);        

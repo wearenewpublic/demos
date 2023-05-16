@@ -4,13 +4,20 @@ import { callServerApiAsync } from "../util/servercall";
 
 export async function askGptToRespondToConversationAsync({promptKey, messages, newMessageText}) {
     const messagesText = messagesToGptString({messages, newMessageText});
-    console.log('calling GPT', {promptKey, messagesText});
-    const gptResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, messagesText});
-    console.log('got GPT response', {gptResponse});
-    return gptResponse.messageText || null;
+    console.log('askGptToRespondToConversation', {promptKey, messagesText});
+    const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, messagesText});
+    console.log('got GPT response', {rawResponse});
+    const parsedResponse = JSON.parse(rawResponse);
+    return parsedResponse.messageText || null;
 }
 
-export function askGptToEvaluateMessageTextAsync({text}) {
+export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
+    console.log('askGptToEvaluateMessageText', {promptKey, text});
+    const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, messagesText:text});
+    const lastLine = rawResponse.split('\n').pop();
+    console.log('get GPT response', rawResponse, lastLine);
+    const parsedResponse = JSON.parse(lastLine);
+    return parsedResponse.judgement || false;
 
 }
 

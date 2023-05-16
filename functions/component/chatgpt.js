@@ -1,12 +1,5 @@
-const { robo_mediator_prompt, unproductive_conflict_prompt } = require("../demo/robo-mediator-chat");
 const keys = require('../keys');
-
-// Add links to your prompts here so that they can be used with chatGPT
-const prompts = {
-    robomediator: robo_mediator_prompt,
-    unproductive: unproductive_conflict_prompt,
-}
-
+const { prompts } = require("../prompts");
 
 async function callOpenAIAsync({action, data}) {
     const fetch = await import('node-fetch');
@@ -47,9 +40,9 @@ async function callGptAsync({messagesText, promptKey}) {
     }});
     console.log('result', result);
     console.log(result.choices?.[0]?.message?.content);
-    const responseData = result.choices?.[0]?.message?.content;
+    const data = result.choices?.[0]?.message?.content;
 
-    return {data: JSON.parse(responseData)};
+    return {data};
 }
 
 
