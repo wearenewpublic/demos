@@ -111,6 +111,14 @@ export function getGlobalProperty(key) {
     return global_data[key];
 }
 
+export function getAllData() {
+    return global_data;
+}
+
+export function usePersonaKey() {
+    return useGlobalProperty('$personaKey');
+}
+
 
 function notifyDataWatchers() {
     data_watchers.forEach(w => w(global_data));

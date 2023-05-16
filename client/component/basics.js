@@ -1,4 +1,5 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export function ScrollableScreen({children}) {
     return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16}}>
@@ -69,3 +70,51 @@ export function SecondaryButton({children, onPress}) {
     </Clickable>
 }
 
+
+export function MaybeEditableText({editable, value, action, placeholder, onChange}) {
+    if (editable) {
+        return <EditableText value={value} action={action} placeholder={placeholder} onChange={onChange}/>
+    } else {
+        return <BodyText>{value}</BodyText>
+    }
+}
+
+export function EditableText({value, action='Update', placeholder, onChange}) {
+    const s = EditableTextStyle;
+    const [text, setText] = useState(null);
+    return <View style={s.outer}>
+        <TextInput style={s.textInput} 
+            value={text ?? value}
+            placeholder={placeholder}
+            placeholderTextColor='#999'
+            multiline={true} 
+            onChangeText={setText} 
+        />
+        {text ? 
+            <View style={s.actions}>
+                <PrimaryButton onPress={() => {onChange(text); setText(null)}}>{action}</PrimaryButton>
+                <SecondaryButton onPress={() => setText(null)}>Cancel</SecondaryButton>
+            </View>
+        : null}
+    </View>
+}
+
+const EditableTextStyle = StyleSheet.create({
+    outer: {
+        // height: 150,
+    },
+    textInput: {
+        flexShrink: 0,
+        borderRadius: 8, 
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: '#ddd', padding: 8,
+        marginHorizontal: 8,
+        fontSize: 15, lineHeight: 20,
+        height: 150,
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 8,
+    }
+})
