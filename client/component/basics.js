@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+
 export function ScrollableScreen({children}) {
-    return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16}}>
-        <View style={{maxWidth: 500, flexShrink: 1, marginHorizontal: 8}}>
-            <ScrollView style={{maxWidth: 500}}>
+    return <ScrollView>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16}}>
+            <View style={{maxWidth: 500, flexShrink: 1, marginHorizontal: 8}}>
                 {children}
-            </ScrollView>
+            </View>
         </View>
-    </View>
+    </ScrollView>
 }
 
 export function WideScreen({children, pad}) {
@@ -24,8 +25,8 @@ export function Card({children}) {
     </View>
 }
 
-export function Clickable({onPress, children}) {
-    return <TouchableOpacity onPress={onPress}>
+export function Clickable({onPress, children, style}) {
+    return <TouchableOpacity onPress={onPress} style={style}>
         {children}
     </TouchableOpacity>
 }
@@ -54,9 +55,14 @@ export function Pad({size=8}) {
     return <View style={{height: size, width: size}}/>
 }
 
-export function PrimaryButton({children, onPress}) {
-    return <Clickable onPress={onPress}>
-        <View style={{paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
+export function HorizBox({children}) {
+    return <View style={{flexDirection: 'row'}}>{children}</View>
+}
+
+export function PrimaryButton({children, icon, onPress}) {
+    return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
+            {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
             <Text style={{color: 'white'}}>{children}</Text>
         </View>
     </Clickable>
@@ -79,15 +85,15 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function EditableText({value, action='Update', placeholder, onChange}) {
+export function EditableText({value, action='Update', placeholder, onChange, multiline=true}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
-        <TextInput style={s.textInput} 
+        <TextInput style={[s.textInput, {height: multiline ? 150 : 40}]} 
             value={text ?? value}
             placeholder={placeholder}
             placeholderTextColor='#999'
-            multiline={true} 
+            multiline={multiline} 
             onChangeText={setText} 
         />
         {text ? 
@@ -110,7 +116,7 @@ const EditableTextStyle = StyleSheet.create({
         borderColor: '#ddd', padding: 8,
         marginHorizontal: 8,
         fontSize: 15, lineHeight: 20,
-        height: 150,
+        // height: 150,
     },
     actions: {
         flexDirection: 'row',

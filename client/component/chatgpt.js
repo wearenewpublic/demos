@@ -7,23 +7,11 @@ export async function askGptToRespondToConversationAsync({promptKey, messages, n
     const messagesText = messagesToGptString({messages, newMessageText});
     const response = await gptProcessAsync({promptKey, params: {messagesText}});
     return response?.messageText || null;
-
-    // console.log('askGptToRespondToConversation', {promptKey, messagesText});
-    // const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, params: {messagesText}});
-    // console.log('got GPT response', {rawResponse});
-    // const parsedResponse = extractAndParseJSON(rawResponse);
-    // return parsedResponse?.messageText || null;
 }
 
 export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
     const response = await gptProcessAsync({promptKey, params: {text}});
     return response?.judgement || false;
-
-    // console.log('askGptToEvaluateMessageText', {promptKey, text});
-    // const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, params: {text}});
-    // console.log('ot GPT response', {rawResponse});
-    // const parsedResponse = extractAndParseJSON(rawResponse);
-    // return parsedResponse?.judgement || false;
 }
 
 export async function gptProcessAsync({promptKey, params}) {

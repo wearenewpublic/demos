@@ -1,6 +1,6 @@
 import { ResizeMode, Video } from "expo-av"
 import { Image, StyleSheet, View } from "react-native"
-import { Clickable, PrimaryButton } from "./basics";
+import { Clickable } from "./basics";
 import { useRef, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 
