@@ -61,7 +61,8 @@ export function useGlobalProperty(key) {
 
 export function addObject(typename, value) {
     const key = newKey();
-    setObject(typename, key, {...value, key, time: Date.now()});
+    const from = getGlobalProperty('$personaKey');
+    setObject(typename, key, {from, ...value, key, time: Date.now()});
     console.log('data, addObject', global_data);
     notifyDataWatchers();
     return key

@@ -19,8 +19,8 @@ export function WideScreen({children, pad}) {
 }
 
 
-export function Card({children}) {
-    return <View style={{borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10}}>
+export function Card({children, fitted=false}) {
+    return <View style={{borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10, alignSelf: fitted ? 'flex-start' : null}}>
         {children}
     </View>
 }
@@ -47,6 +47,38 @@ export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444'}}>{children}</Text>
 }
 
+function formatDate(date) {
+    const currentDate = new Date();
+    const inputDate = new Date(date);
+
+    const diffInSeconds = Math.floor((currentDate - inputDate) / 1000);
+
+    if (diffInSeconds < 60) {
+        return 'Just now';
+    } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes}m ago`;
+    } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours}h ago`;
+    } else if (diffInSeconds < 2592000) {
+        const days = Math.floor(diffInSeconds / 86400);
+        return `${days}d ago`;
+    } else {
+        const formattedDate = inputDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        });
+        return formattedDate;
+    }
+}
+    
+
+export function TimeText({time}) {
+    return <Text style={{fontSize: 12, color: '#999'}}>{formatDate(time)}</Text>
+}
+
 export function Separator() {
     return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: 16}}/>
 }
@@ -57,6 +89,10 @@ export function Pad({size=8}) {
 
 export function HorizBox({children}) {
     return <View style={{flexDirection: 'row'}}>{children}</View>
+}
+
+export function WrapBox({children}) {
+    return <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{children}</View>
 }
 
 export function PrimaryButton({children, icon, onPress}) {

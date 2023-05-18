@@ -1,8 +1,42 @@
 import { ResizeMode, Video } from "expo-av"
-import { Image, StyleSheet, View } from "react-native"
-import { Clickable } from "./basics";
+import { Image, StyleSheet, Text, View } from "react-native"
+import { Card, Clickable, TimeText } from "./basics";
 import { useRef, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
+import { UserFace } from "./userface";
+import { useObject } from "../util/localdata";
+
+
+export function VideoPost({post}) {
+    const s = VideoPostStyle;
+    const user = useObject('persona', post.from);
+    console.log('videopost', post, user, new Date(post.time));
+    return <Card fitted> 
+        <View style={s.authorBox}>
+            <UserFace userId={post.from} size={32} />
+            <View style={s.authorRight}>
+                <Text style={s.authorName}>{user.name}</Text>
+                <TimeText time={post.time} />
+            </View>
+        </View>
+        <VideoPlayer uri={post.uri} size={200}/>
+    </Card>
+}
+
+const VideoPostStyle = StyleSheet.create({
+    authorBox: {
+        flexDirection: 'row',
+        marginBottom: 8
+    },
+    authorRight: {
+        flex: 1,
+        marginLeft: 8
+    },
+    authorName: {
+        fontSize: 15,
+        fontWeight: 'bold'
+    }
+});
 
 export function VideoPlayer({uri, posterUri, size=200}) {
     const s = VideoPlayerStyle;

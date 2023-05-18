@@ -1,9 +1,9 @@
 import { Entypo } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Clickable, PrimaryButton } from "../component/basics";
+import { Clickable, Pad, PrimaryButton } from "../component/basics";
 
-export function VideoCamera({size, action='Record Video', onSubmitRecording}) {
+export function VideoCamera({size=200, action='Record Video', onSubmitRecording}) {
     const s = VideoCameraStyle;
     const [cameraShown, setCameraShown] = useState(false);
 
@@ -51,6 +51,8 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     const videoRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const recordedBlobsRef = useRef([]);
+    const [recording, setRecording] = useState(false);  
+    const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
         initializeMedia();
@@ -66,6 +68,7 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
         mediaRecorderRef.current.onstop = handleStop;
 
         mediaRecorderRef.current.start();
+        setRecording(true);
     };
     
     const stopRecording = () => {
@@ -101,6 +104,7 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     
     const handleSuccess = (stream) => {
         videoRef.current.srcObject = stream;
+        setInitialized(true);
     };
     
     const handleError = (error) => {
@@ -114,13 +118,26 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     };
     
     return (
-        <div>
+        <View>
             <video 
                 ref={videoRef} 
                 style={{width: size, height: size, objectFit: "cover"}} autoPlay muted 
             />
-            <button onClick={startRecording}>Start Recording</button>
-            <button onClick={stopRecording}>Stop Recording</button>
-        </div>
+            <Pad />
+            {initialized ? 
+                (recording ?
+                    <PrimaryButton
+                        icon={<Entypo name='controller-stop' size={24} color='white' />} 
+                        onPress={stopRecording}>Stop Recording</PrimaryButton>
+                :
+                   <PrimaryButton 
+                        icon={<Entypo name='controller-record' size={24} color='white' />} 
+                        onPress={startRecording}>Start Recording</PrimaryButton>
+
+                )
+            : 
+                <div>Initializing Camera...</div>
+            }
+        </View>
     );
 }

@@ -3,9 +3,10 @@ import { RoboMediatorChatDemo } from "./RoboMediatorChat";
 import { RuleEnforcerChatDemo } from "./RuleEnforcer";
 import { ExampleDemo } from "./Example";
 import { ThreadedCommentsDemo } from "./ThreadedComments";
+import { VideoResponse } from "./VideoResponse";
 
 export const demos = [
-    ExampleDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo, RuleEnforcerChatDemo
+    ExampleDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo, RuleEnforcerChatDemo, VideoResponse
 ]
 
 export const defaultPersona = 'angry';
