@@ -54,7 +54,7 @@ const ReplyInputStyle = StyleSheet.create({
         maxWidth: 500
     },
     row: {
-        marginVertical: 16,
+        marginTop: 16,
         flexDirection: 'row',
     },
     actions: {

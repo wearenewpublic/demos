@@ -106,7 +106,7 @@ const CommentStyle = StyleSheet.create({
 
 function Replies({commentKey, actions, replyComponent}) {
     const s = RepliesStyle;
-    const comments = useCollection('comment', {sortBy: 'time'});
+    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const replies = comments.filter(c => c.replyTo == commentKey);
     return <View style={s.repliesHolder}>
         {replies.map(reply => 
