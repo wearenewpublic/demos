@@ -4,10 +4,11 @@ import { demos } from "../demo"
 
 export function DemoListScreen({onSelectDemo}) {
     const s = DemoListScreenStyle;
+    const sortedDemos = demos.sort((a, b) => b.date.localeCompare(a.date));
     return (
         <ScrollableScreen>
             <BigTitle>New Public Demo Garden</BigTitle>
-            {demos.map(demo => 
+            {sortedDemos.map(demo => 
                 <Clickable key={demo.name} onPress={() => onSelectDemo(demo)}>
                     <Card>
                         <View style={s.authorLine}>
