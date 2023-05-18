@@ -14,7 +14,9 @@ export const VideoResponse = {
             {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'},
             {from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm'}
         ])},        
-        {key: 'bio', name: 'What is the 30 second story of your life?', response: []},
+        {key: 'bio', name: 'What is the 30 second story of your life?', response: expandDataList([
+            {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
+        ])},
     ]
 }
 
