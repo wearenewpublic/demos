@@ -9,7 +9,7 @@ export function DemoInstanceListScreen({demo, onSelectInstance}) {
                 <BigTitle>{demo.name}</BigTitle>
                 <BodyText>{demo.description}</BodyText>      
                 <Separator />         
-                <SectionTitle>Instances</SectionTitle> 
+                <SectionTitle>Role Play Instances</SectionTitle> 
             </View>
             {demo.instance.map(instance => (
                 <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>

@@ -25,3 +25,11 @@ export function setUrlPath(path) {
         global_path_watcher('/' + path);
     }
 }
+
+export function goBack() {
+    const path = window.location.pathname;
+    const parts = path.split('/').filter(x => x);
+    parts.pop();
+    const newPath = parts.join('/');
+    setUrlPath(newPath);
+}

@@ -32,13 +32,14 @@ export default function App() {
     return <Text>Unknown demo key: {demoKey}</Text>
   } else if (!instanceKey) {
     return <FullScreen>
+      <TopBar title={demo.name} />
       <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
     </FullScreen>
   } else {
     const instance = chooseInstanceByKey({demo, instanceKey});
     return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
       <FullScreen>
-        <TopBar demo={demo} />
+        <TopBar title={instance.name} subtitle={demo.name} showPersonas />
         <demo.screen/>    
       </FullScreen>
     </DemoContext.Provider>
