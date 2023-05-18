@@ -9,8 +9,9 @@ import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
 
 export const RoboMediatorChatDemo = {
-    key: 'robomediator',
     name: 'RoboMediator Chat',
+    author: 'Rob Ennals',
+    date: '2023-05-09',
     description: 'A GPT agent takes part in a sequential chat and attempts to mediate in conflicts.',
     screen: RoboMediatorChatScreen,
     instance: [

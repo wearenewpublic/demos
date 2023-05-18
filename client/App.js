@@ -9,13 +9,12 @@ import { setUrlPath, useLivePath } from './shared/url';
 import { resetData } from './util/localdata';
 
 export default function App() {
-  const s = AppStyle;
   const path = useLivePath();
   const {demoKey, instanceKey} = parsePath(path); 
   const demo = chooseDemoByKey(demoKey);
 
-  function onSelectDemo(newDemoKey) {
-    setUrlPath(newDemoKey);
+  function onSelectDemo(demo) {
+    setUrlPath(getKeyForDemo(demo));
   }
 
   function onSelectInstance(newInstanceKey) {
@@ -29,7 +28,10 @@ export default function App() {
       <DemoListScreen onSelectDemo={onSelectDemo}/>
     </FullScreen>
   } else if (!demo) {
-    return <Text>Unknown demo key: {demoKey}</Text>
+    return <FullScreen>
+      <TopBar title='Unknown Demo' />
+      <Text>Unknown demo: {demoKey}</Text>
+    </FullScreen>
   } else if (!instanceKey) {
     return <FullScreen>
       <TopBar title={demo.name} />
@@ -69,7 +71,7 @@ function parsePath(path) {
 
 function chooseDemoByKey(key) {
   if (!key) return null;
-  return demos.find(demo => demo.key === key);
+  return demos.find(demo => getKeyForDemo(demo) === key);
 }
 
 function chooseInstanceByKey({demo, instanceKey}) {
@@ -77,4 +79,13 @@ function chooseInstanceByKey({demo, instanceKey}) {
     return null;
   }
   return demo.instance.find(instance => instance.key === instanceKey);
+}
+
+function getKeyForDemo(demo) {
+  const screenName = demo.screen.name;
+  return removeScreenSuffix(screenName).toLowerCase();
+}
+
+function removeScreenSuffix(str) {
+  return str.replace(/Screen$/, '');
 }

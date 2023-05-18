@@ -5,8 +5,9 @@ import { expandDataList } from "../shared/util";
 import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
 
 export const VideoResponse = {
-    key: 'video-response',
     name: 'Video Response',
+    author: 'Rob Ennals',
+    date: '2023-05-18',
     description: 'Record a video response to a question.',
     screen: VideoResponseScreen,
     instance: [

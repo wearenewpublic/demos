@@ -7,8 +7,9 @@ import { useCollection } from "../util/localdata";
 import { ecorp, soccer } from "../data/conversations";
 
 export const ChatDemo = {
-    key: 'chat',
     name: 'Basic Chat',
+    author: 'Rob Ennals',
+    date: '2023-05-04',
     description: 'A simple chat demo. Starting point for more interesting demos.',
     screen: ChatScreen,
     instance: [

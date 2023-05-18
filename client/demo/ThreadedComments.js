@@ -7,8 +7,9 @@ import { ReplyInput, TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer } from "../data/conversations";
 
 export const ThreadedCommentsDemo = {
-    key: 'threaded',
     name: 'Basic Threaded Conversation',
+    author: 'Rob Ennals',
+    date: '2023-05-08',
     description: 'A simple threaded conversation demo. Messages expand in a tree.',
     screen: ThreadedScreen,
     instance: [
@@ -26,7 +27,7 @@ export function ThreadedScreen() {
             <ScrollView>
                 <Pad size={8} />
                 <TopCommentInput />
-                <Pad size={8} />
+                {/* <Pad size={4} /> */}
                 {topLevelComments.map(comment => 
                     <Comment key={comment.key} commentKey={comment.key} 
                         actions={[ActionLike, ActionReply]} 

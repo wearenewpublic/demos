@@ -7,17 +7,18 @@ import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
 
 export const ExampleDemo = {
-    key: "example",
     name: "Example Demo",    
+    author: "Rob Ennals",
+    date: "2023-05-04",
     description: "This demo gives examples of how to use the various parts of the demo infrastructure.",
-    screen: StubScreen,
+    screen: ExampleScreen,
     instance: [
         {key: 'silly', name: 'Silly', message: 'I love silliness'},
         {key: 'sensible', name: 'Sensible', message: 'I love sensibleness'}
     ]
 }
 
-export function StubScreen() {   
+export function ExampleScreen() {   
     const name = useGlobalProperty('name');
 
     return (

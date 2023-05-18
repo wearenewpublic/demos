@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { abortion, soccer } from "../data/conversations";
 import { expandDataList } from "../shared/util";
-import { getAllData, useCollection, useGlobalProperty, usePersonaKey } from "../util/localdata";
-import { EditableText, MaybeEditableText, Pad, WideScreen } from "../component/basics";
+import { useCollection, useGlobalProperty } from "../util/localdata";
+import { EditableText, Pad, WideScreen } from "../component/basics";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { Message, QuietSystemMessage, sendMessage } from "../component/message";
 import { ChatInput } from "../component/chatinput";
 import { ExpandSection } from "../component/expand-section";
-import { Text } from "react-native";
 import { gptProcessAsync } from "../component/chatgpt";
 
 const initialRules = `1. Nobody can say anything disrespectful towards any person or group, including implying that they have bad motivations.
@@ -17,8 +16,9 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 `
 
 export const RuleEnforcerChatDemo = {
-    key: 'ruleenforcer',
     name: 'Rule Enforcer',
+    author: 'Rob Ennals',
+    date: '2023-05-16',
     description: 'A chat app that enforces a list of user-defined rules in a conversation',
     screen: RuleEnforcerChatScreen,
     instance: [
