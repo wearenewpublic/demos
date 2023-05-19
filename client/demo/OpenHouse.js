@@ -1,8 +1,8 @@
 import { ScrollView } from "react-native";
-import { BodyText, Card, Pad, Separator, WideScreen } from "../component/basics";
+import { BodyText, Pad, Separator, WideScreen } from "../component/basics";
 import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText } from "../component/comment";
 import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
-import { ReplyInput, TopCommentInput } from "../component/replyinput";
+import { TopCommentInput } from "../component/replyinput";
 import { civic_society } from "../data/openhouse_civic";
 import { expandDataList } from "../shared/util";
 import { useContext } from "react";
@@ -70,7 +70,6 @@ export function ActionPromote({commentKey, comment}) {
     const boosterName = useObject('persona', comment?.promotedBy)?.name;
 
     function onPromote(promote) {
-        console.log('promote', commentKey, comment, promote);
         modifyObject('comment', commentKey, comment => ({...comment, promotedBy: promote ? personaKey : null}))    
     }
 

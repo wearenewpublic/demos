@@ -134,6 +134,10 @@ export function usePersonaKey() {
     return useGlobalProperty('$personaKey');
 }
 
+export function getPersonaKey() {
+    return getGlobalProperty('$personaKey');
+}
+
 
 function notifyDataWatchers() {
     data_watchers.forEach(w => w(global_data));

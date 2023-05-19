@@ -1,18 +1,24 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { UserFace } from "./userface";
 import { addObject, setSessionData, useGlobalProperty } from "../util/localdata";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
+import { CommentContext } from "./comment";
 
 export function ReplyInput({commentKey}) {
     const personaKey = useGlobalProperty('$personaKey');
     const [text, setText] = useState('');
+    const {postHandler} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     function onPost() {
-        addObject('comment', {
-            from: personaKey, text, replyTo: commentKey
-        })
+        if (postHandler) {
+            postHandler({text, replyTo: commentKey});
+        } else {
+            addObject('comment', {
+                from: personaKey, text, replyTo: commentKey
+            })
+        }
         hideReplyInput();
     }
 

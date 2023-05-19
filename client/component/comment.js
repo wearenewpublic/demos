@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, useSessionData } from "../util/localdata";
+import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, usePersonaKey, useSessionData } from "../util/localdata";
 import { Clickable } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
@@ -72,6 +72,52 @@ export function ActionCollapse({commentKey}) {
     return <CommentActionButton key='collapse' label='Collapse' onPress={onCollapse} />
 }
 
+export function ActionApprove({commentKey, comment}) {
+    const personaKey = usePersonaKey();
+    const parentComment = useObject('comment', comment.replyTo);    
+
+    function onApprove() {
+        console.log('approve', commentKey, comment);
+        modifyObject('comment', commentKey, comment => ({...comment, maybeBad: false}))    
+    }
+
+    if (comment.maybeBad && parentComment?.from == personaKey) {
+        return <CommentActionButton key='promote' label='Approve' onPress={onApprove} />
+    } else {
+        return null;
+    }
+}
+
+
+
+export function CommentBlingText({label, color = '#666'}) {
+    const s = CommentBlingTextStyle
+    return <View style={[s.bubble, {borderColor: color}]}>
+        <Text style={[s.text, {color}]}>{label}</Text>
+    </View>
+}
+const CommentBlingTextStyle = StyleSheet.create({
+    bubble: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        marginVertical: 4
+    },
+    text: {
+        fontSize: 11,
+    }
+})
+
+
+export function BlingPending({comment}) {
+    if (comment.pending) {
+        return <CommentBlingText label='Posting...' />
+    } else {
+        return null;
+    }
+}
+
 
 const defaultActions = [ActionLike, ActionReply, ActionCollapse];
 function ActionBar({actions, commentKey, comment}) {
@@ -82,10 +128,23 @@ function ActionBar({actions, commentKey, comment}) {
     </View>
 }
 
+function TopBlingBar({commentKey, comment}) {
+    const {topBling} = React.useContext(CommentContext);
+    return <View style={{flexDirection: 'row'}}>
+        {topBling.map((bling, idx) => 
+            React.createElement(bling, {key: idx, commentKey, comment})
+        )}
+    </View>
+}
+
+
+
 export const CommentContext = React.createContext({
     actions: defaultActions, 
+    topBling: [BlingPending],
     replyComponent: ReplyInput,
-    getIsDefaultCollapsed: () => false
+    getIsDefaultCollapsed: () => false,
+    getIsVisible: () => true
 });
 
 
@@ -110,6 +169,7 @@ export function Comment({commentKey}) {
             <View style={s.commentRight}>
                 <View style={s.commentBox}>
                     <CommentAuthorInfo commentKey={commentKey} />
+                    <TopBlingBar commentKey={commentKey} comment={comment} />
                     <Text style={s.text}>{comment.text}</Text>
                     <ActionBar actions={actions} commentKey={commentKey} comment={comment} />
                 </View>
@@ -187,8 +247,9 @@ const CollapsedCommentStyle = StyleSheet.create({
 
 function Replies({commentKey}) {
     const s = RepliesStyle;
+    const {getIsVisible} = React.useContext(CommentContext);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const replies = comments.filter(c => c.replyTo == commentKey);
+    const replies = comments.filter(c => c.replyTo == commentKey && getIsVisible({comment: c}));
     return <View style={s.repliesHolder}>
         {replies.map(reply => 
             <Comment key={reply.key} commentKey={reply.key} />

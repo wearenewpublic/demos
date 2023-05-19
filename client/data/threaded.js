@@ -69,3 +69,52 @@ export const threaded_abortion_mediated =
     {"key": "message-34", "replyTo": "message-33", "from": "left", "text": "Indeed, Rita. It's through dialogue that we can make progress."}
 ]
 
+
+export const abortion_reply_approves = [
+    {
+        "from": "peacemaker",
+        "text": "You make a good point. Forcing a women to have children against their own will seems terrible.\n\nThe question is how we balance this against the needs of the unborn. Should we consider unborn babies to be full humans? If not, where should we draw the line?",
+        "replyTo": 144,
+        "pending": false,
+        "key": 153,
+        "time": 1684539595127
+    },
+    {
+        "from": "right",
+        "text": "You just want to kill babies, you fascist!",
+        "replyTo": 144,
+        "pending": false,
+        "key": 148,
+        "time": 1684536189171,
+        "maybeBad": true
+    },
+    {
+        "from": "left",
+        "text": "I think abortion should be a basic human right. Nobody should have the power to tell a woman what they can do with their body.",
+        "key": 144,
+        "time": 1684536129171
+    },
+    {
+        "from": "angry",
+        "text": "Die in hell!",
+        "maybeBad": true,
+        "replyTo": 144,
+        "key": 146,
+        "time": 1684536069171
+    },
+    {
+        "from": "right",
+        "text": "Abortion is murder. Nothing magical happens when the baby comes out of the mother's womb. It's just as much a baby before birth as out as killing a baby is murder even when we use words like \"abortion\" to describe it.",
+        "key": 150,
+        "time": 1684536009171
+    },
+    {
+        "from": "left",
+        "text": "You are just a fascist who wants to control women's bodies! You say all this rubbish about abortion being murder but you know it isn't. This is just your feeble justification for propping up the capitalist colonialist white patriarchy.",
+        "replyTo": 150,
+        "pending": false,
+        "key": 151,
+        "time": 1684535949171,
+        "maybeBad": true
+    }
+]
