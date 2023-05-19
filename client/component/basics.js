@@ -95,6 +95,10 @@ export function WrapBox({children}) {
     return <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{children}</View>
 }
 
+export function Center({children, pad=0}) {
+    return <View style={{flexDirection: 'row', justifyContent: 'center', margin: pad}}>{children}</View>  
+}
+
 export function PrimaryButton({children, icon, onPress}) {
     return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
@@ -121,11 +125,15 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function EditableText({value, action='Update', placeholder, onChange, multiline=true}) {
+export function EditableText({value, label, action='Update', height=150, placeholder, onChange, multiline=true, flatTop=false, flatBottom=false}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
-        <TextInput style={[s.textInput, {height: multiline ? 150 : 40}]} 
+        {label ? <Text style={s.label}>{label}</Text> : null}
+        <TextInput style={[s.textInput, {height: multiline ? height : 40}, 
+            flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
+            flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
+         ]} 
             value={text ?? value}
             placeholder={placeholder}
             placeholderTextColor='#999'
@@ -145,8 +153,16 @@ const EditableTextStyle = StyleSheet.create({
     outer: {
         // height: 150,
     },
+    label: {
+        marginLeft: 12,
+        fontWeight: 'bold',
+        fontSize: 12, 
+        marginBottom: 2
+    },
     textInput: {
         flexShrink: 0,
+        maxWidth: 500,
+        marginLeft: 4, marginRight: 4,
         borderRadius: 8, 
         borderWidth: StyleSheet.hairlineWidth, 
         borderColor: '#ddd', padding: 8,

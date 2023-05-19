@@ -47,7 +47,7 @@ async function callGptAsync({promptKey, params}) {
     const result = await callOpenAIAsync({action: 'chat/completions', data: {
         temperature: 0,
         model: 'gpt-3.5-turbo',
-        max_tokens: 100,
+        max_tokens: 1000,
         messages: [
             {role: 'user', content: prompt}
         ]

@@ -1,0 +1,16 @@
+Write a conversation about {{topic}} between the following people:
+
+{{oneName}}: {{onePersonality}}
+
+{{twoName}}: {{twoPersonality}}
+
+{{threeName}}: {{threePersonality}}
+
+{{fourName}}: {{fourPersonality}}
+
+
+Write the conversation in JSON format, with each message formatted like {"fromName": "{{oneName}}", "text": "You are a fascist and I don't like you."}.
+
+The conversation should be approximately 10 messages long.
+
+

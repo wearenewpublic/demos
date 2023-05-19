@@ -17,6 +17,7 @@ export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
 export async function gptProcessAsync({promptKey, params}) {
     console.log('gptProcess', {promptKey, params});
     const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, params});
+    console.log('get gpt raw response', rawResponse);
     const parsedResponse = extractAndParseJSON(rawResponse);
     console.log('get gpt response', parsedResponse);
     return parsedResponse;
@@ -32,8 +33,8 @@ export function messagesToGptString({messages, newMessageText}) {
 
 function extractAndParseJSON(text) {
     // Find JSON pattern using regular expression
-    const jsonPattern = /{(?:[^{}]|{[^{}]*})*}/;
-  
+    const jsonPattern = /{[^{}]*}|(\[[^\[\]]*\])/g;
+
     // Extract JSON from the text
     const jsonMatch = text.match(jsonPattern);
     
