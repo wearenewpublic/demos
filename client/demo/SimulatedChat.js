@@ -33,7 +33,7 @@ const persona = {
 export const SimulatedChat = {
     name: "Simulated Chat",
     author: "Rob Ennals",
-    date: "2023-05-18",
+    date: "2023-05-19",
     description: "Describe personas and have GPT simulate them chatting to each other",
     screen: SimulatedChatScreen,
     instance: [
