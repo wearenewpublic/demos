@@ -4,7 +4,7 @@ import { Message, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
-import { ecorp, soccer } from "../data/conversations";
+import { abortion, abortion_mediated, ecorp, soccer } from "../data/conversations";
 
 export const ChatDemo = {
     key: 'chat',
@@ -15,7 +15,9 @@ export const ChatDemo = {
     screen: ChatScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', message: expandDataList(ecorp)},
-        {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)}
+        {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)},
+        {key: 'abortion', name: 'Abortion', message: expandDataList(abortion)},
+        {key: 'abortion-mediated', name: 'Abortion (mediated)', message: expandDataList(abortion_mediated)},
     ]
 }
 
