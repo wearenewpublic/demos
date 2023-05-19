@@ -25,7 +25,7 @@ const persona = {
     },
     four: {
         name: 'Annoying Andy',
-        personality: 'A troll who likes to say things that will wind other people up, poking at their insecurities, and taking extreme positions to get a reaction.',
+        personality: 'A troll who likes to say things that will wind other people up, poking at their insecurities, and pointing out contradictions between their beliefs.',
         face: 'face3.jpeg'
     }
 }
