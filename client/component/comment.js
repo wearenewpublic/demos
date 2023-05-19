@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, useSessionData } from "../util/localdata";
+import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, useSessionData } from "../util/localdata";
 import { Clickable } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
@@ -7,13 +7,30 @@ import { addKey, removeKey } from "../shared/util";
 import { ReplyInput } from "./replyinput";
 
 
+
 export function CommentActionButton({label, onPress}) {
     const s = CommentActionButtonStyle;
-    return <Clickable>
+    return <Clickable style={s.clicker}>
         <Text style={s.text} onPress={onPress}>{label}</Text>
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({
+    text: {
+        fontSize: 11,
+        textTransform: 'uppercase',
+        // marginRight: 32,
+        marginTop: 4,
+        color: '#666'
+    },
+    clicker: {
+        marginRight: 32
+    }
+})
+
+export function CommentDataText({label}) {
+    return <Text style={CommentDataTextStyle.text}>{label}</Text>
+}
+const CommentDataTextStyle = StyleSheet.create({
     text: {
         fontSize: 11,
         textTransform: 'uppercase',
@@ -47,7 +64,16 @@ export function ActionLike({commentKey, comment}) {
     return <CommentActionButton key='like' label={actionLabel + likeCountLabel} onPress={() => likeComment(commentKey, comment, personaKey)} />
 }
 
-const defaultActions = [ActionLike, ActionReply];
+
+export function ActionCollapse({commentKey}) {
+    function onCollapse() {
+        setSessionData(['comment', commentKey, 'collapsed'], true);
+    }
+    return <CommentActionButton key='collapse' label='Collapse' onPress={onCollapse} />
+}
+
+
+const defaultActions = [ActionLike, ActionReply, ActionCollapse];
 function ActionBar({actions, commentKey, comment}) {
     return <View style={{flexDirection: 'row'}}>
         {actions.map((action, idx) => 
@@ -56,31 +82,49 @@ function ActionBar({actions, commentKey, comment}) {
     </View>
 }
 
-export function Comment({commentKey, actions=defaultActions, replyComponent=ReplyInput}) {
+export const CommentContext = React.createContext({
+    actions: defaultActions, 
+    replyComponent: ReplyInput,
+    getIsDefaultCollapsed: () => false
+});
+
+
+export function Comment({commentKey}) {
     const s = CommentStyle;
     const comment = useObject('comment', commentKey);
+    const {actions, replyComponent, getIsDefaultCollapsed} = React.useContext(CommentContext);
     const showReplyComponent = useSessionData('replyToComment') == commentKey;
-    return <View style={s.commentHolder}>
-        <View style={s.commentLeft}>
-            <UserFace userId={comment.from} />
-            <View style={s.verticalLine} />
-        </View>
-        <View style={s.commentRight}>
-            <View style={s.commentBox}>
-                <CommentAuthorInfo commentKey={commentKey} />
-                <Text style={s.text}>{comment.text}</Text>
-                <ActionBar actions={actions} commentKey={commentKey} comment={comment} />
+    const sessionCollapsed = getSessionData(['comment', commentKey, 'collapsed']);
+    const collapsed = sessionCollapsed ?? getIsDefaultCollapsed({commentKey, comment});
+
+    function onExpand() {
+        setSessionData(['comment', commentKey, 'collapsed'], false);
+    }
+
+    if (!collapsed) {
+        return <View style={s.commentHolder}>
+            <View style={s.commentLeft}>
+                <UserFace userId={comment.from} />
+                <View style={s.verticalLine} />
             </View>
-            {showReplyComponent ? React.createElement(replyComponent, {commentKey}) : null}
-            <Replies commentKey={commentKey} actions={actions} replyComponent={replyComponent} />
+            <View style={s.commentRight}>
+                <View style={s.commentBox}>
+                    <CommentAuthorInfo commentKey={commentKey} />
+                    <Text style={s.text}>{comment.text}</Text>
+                    <ActionBar actions={actions} commentKey={commentKey} comment={comment} />
+                </View>
+                {showReplyComponent ? React.createElement(replyComponent, {commentKey}) : null}
+                <Replies commentKey={commentKey} />
+            </View>
         </View>
-    </View>
+    } else {
+        return <CollapsedComment commentKey={commentKey} onPress={onExpand} />
+    }
 }
 
 const CommentStyle = StyleSheet.create({
     commentHolder: {
         flexDirection: 'row',
-        // marginHorizontal: 8,
         marginTop: 16,
     },
     text: {
@@ -104,14 +148,50 @@ const CommentStyle = StyleSheet.create({
     }
 })
 
-function Replies({commentKey, actions, replyComponent}) {
+function CollapsedComment({commentKey, onPress}) {
+    const s = CollapsedCommentStyle;
+    const comment = useObject('comment', commentKey);
+
+    return <Clickable onPress={onPress}>
+        <View style={s.commentHolder}>
+            <View style={s.commentLeft}>
+                <UserFace userId={comment.from} faint />
+            </View>
+            <View style={s.commentRight}>
+                <CommentAuthorInfo commentKey={commentKey} collapsed />
+                <Text numberOfLines={1} style={s.text}>{comment.text}</Text>
+            </View>
+        </View>
+    </Clickable>
+}
+
+const CollapsedCommentStyle = StyleSheet.create({
+    commentHolder: {
+        flexDirection: 'row',
+        marginTop: 16,
+    },
+    text: {
+        fontSize: 13,
+        color: '#999',
+        maxWidth: 500
+    },
+    commentRight: {
+        flex: 1,
+        marginLeft: 12
+    },
+    commentBox: {
+        flex: 1,
+        marginLeft: 12,
+    }
+});
+
+function Replies({commentKey}) {
     const s = RepliesStyle;
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const replies = comments.filter(c => c.replyTo == commentKey);
     return <View style={s.repliesHolder}>
         {replies.map(reply => 
-            <Comment key={reply.key} commentKey={reply.key} 
-                actions={actions} replyComponent={replyComponent}/>
+            <Comment key={reply.key} commentKey={reply.key} />
         )}
     </View>
 }
@@ -121,12 +201,12 @@ const RepliesStyle = StyleSheet.create({
     }
 })
 
-function CommentAuthorInfo({commentKey}) {
+function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
     const comment = useObject('comment', commentKey);
     const user = useObject('persona', comment.from);
     return <View style={s.authorInfoBox}> 
-        <Text style={s.authorName}>{user.name}</Text>
+        <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>{user.name}</Text>
     </View>
 }
 
@@ -138,6 +218,10 @@ const CommentAuthorInfoStyle = StyleSheet.create({
     },
     authorName: {
         fontWeight: 'bold',
+        fontSize: 12
+    }, 
+    collapsedAuthorName: {
+        // fontWeight: 'bold',
         fontSize: 12
     }
 });

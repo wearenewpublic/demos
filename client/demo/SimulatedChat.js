@@ -38,7 +38,7 @@ export const SimulatedChat = {
     description: "Describe personas and have GPT simulate them chatting to each other",
     screen: SimulatedChatScreen,
     instance: [
-        {key: 'politics', name: 'Politics', topic: 'Gun Control', message: {}, persona, '$personaKey':'one'}        
+        {key: 'politics', name: 'Politics', topic: 'Gun Control', message: {}, persona}        
     ]
 }
 

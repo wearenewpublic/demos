@@ -85,6 +85,3 @@ function getKeyForDemo(demo) {
   return demo.key
 }
 
-function removeScreenSuffix(str) {
-  return str.replace(/Screen$/, '');
-}

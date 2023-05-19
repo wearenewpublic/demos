@@ -45,3 +45,4 @@ exports.abortion = [
     {from: "left", text: "I can't believe you don't see this as a human right issue. You're denying women basic rights."},
     {from: "right", text: "And I can't believe you're okay with taking a human life."},
 ]
+

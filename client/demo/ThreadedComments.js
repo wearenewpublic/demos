@@ -5,6 +5,7 @@ import { expandDataList } from "../shared/util"
 import { useCollection, useGlobalProperty } from "../util/localdata";
 import { ReplyInput, TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer } from "../data/conversations";
+import { threaded_abortion_mediated } from "../data/threaded";
 
 export const ThreadedCommentsDemo = {
     key: 'threadedcomments',
@@ -15,7 +16,8 @@ export const ThreadedCommentsDemo = {
     screen: ThreadedScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
-        {key: 'soccer', name: 'Soccer Team', comment: expandDataList(soccer)}
+        {key: 'soccer', name: 'Soccer Team', comment: expandDataList(soccer)},
+        {key: 'abortion-mediated', name: 'Abortion (Mediated)', comment: expandDataList(threaded_abortion_mediated)}
     ]    
 }
 
@@ -28,12 +30,8 @@ export function ThreadedScreen() {
             <ScrollView>
                 <Pad size={8} />
                 <TopCommentInput />
-                {/* <Pad size={4} /> */}
                 {topLevelComments.map(comment => 
-                    <Comment key={comment.key} commentKey={comment.key} 
-                        actions={[ActionLike, ActionReply]} 
-                        replyComponent={ReplyInput}
-                    />
+                    <Comment key={comment.key} commentKey={comment.key} />
                 )}
             </ScrollView>
         </WideScreen>

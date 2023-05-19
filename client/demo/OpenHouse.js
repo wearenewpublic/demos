@@ -1,0 +1,88 @@
+import { ScrollView } from "react-native";
+import { BodyText, Card, Pad, Separator, WideScreen } from "../component/basics";
+import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText } from "../component/comment";
+import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
+import { ReplyInput, TopCommentInput } from "../component/replyinput";
+import { civic_society } from "../data/openhouse_civic";
+import { expandDataList } from "../shared/util";
+import { useContext } from "react";
+
+const persona = {
+    memberAlice: {name: 'Alice (Member)', face: 'face9.jpeg', member: true},
+    memberBob: {name: 'Bob (Member)', face: 'face10.jpeg', member: true},
+    memberLaura: {name: 'Laura (Member)', face: 'face5.jpeg', member: true},
+    guestNatalie: {name: 'Natalie', face: 'face4.jpeg'},
+    guestTim: {name: 'Tim', face: 'face2.jpeg'},
+    guestLarry: {name: 'Larry', face: 'face6.jpeg'},
+    guestRita: {name: 'Rita', face: 'face7.jpeg'},
+    guestSarah: {name: 'Sarah', face: 'face8.jpeg'},
+}
+
+export const OpenHouseDemo = {
+    key: 'openhouse',
+    name: 'Open House Conversation',
+    author: 'Rob Ennals',
+    date: '2023-05-19 15:00:00',
+    description: 'A conversation where non-members of a group can talk with members, but members are in control',
+    screen: OpenHouseScreen,
+    instance: [
+        {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
+            description: 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.',
+            persona, comment: expandDataList(civic_society)},
+    ]
+}
+
+export function OpenHouseScreen() {
+    const commentContext = useContext(CommentContext);
+    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
+    const description = useGlobalProperty('description');
+    const topLevelComments = comments.filter(comment => !comment.replyTo);
+    const actions = [ActionLike, ActionReply, ActionPromote, ActionCollapse]
+
+    console.log('comments', comments);
+
+    return (
+        <WideScreen pad>
+            <ScrollView>
+                <BodyText>{description}</BodyText>
+                <Separator />
+                <Pad size={8} />
+                <TopCommentInput />
+                <CommentContext.Provider value={{...commentContext, actions, getIsDefaultCollapsed}}> 
+                    {topLevelComments.map(comment => 
+                        <Comment key={comment.key} commentKey={comment.key} />
+                    )}
+                </CommentContext.Provider>
+            </ScrollView>
+        </WideScreen>
+    )   
+}
+
+function getIsDefaultCollapsed({comment}) {
+    const fromMember = getObject('persona', comment.from)?.member;
+    return !fromMember && !comment.promotedBy;
+}
+
+export function ActionPromote({commentKey, comment}) {
+    const personaKey = usePersonaKey();
+    const myPersona = useObject('persona', personaKey);
+    const fromPersona = useObject('persona', comment?.from);
+    const boosterName = useObject('persona', comment?.promotedBy)?.name;
+
+    function onPromote(promote) {
+        console.log('promote', commentKey, comment, promote);
+        modifyObject('comment', commentKey, comment => ({...comment, promotedBy: promote ? personaKey : null}))    
+    }
+
+    if (fromPersona.member) {
+        return null;
+    } else if (myPersona.member && !comment.promotedBy) {
+        return <CommentActionButton key='promote' label='Promote' onPress={() => onPromote(true)} />
+    } else if (comment.promotedBy == personaKey) {
+        return <CommentActionButton key='promote' label='Un-Promote' onPress={() => onPromote(false)} />
+    } else if (comment.promotedBy) {
+        return <CommentDataText key='promote' label={`Promoted by ${boosterName}`} />
+    } else {
+        return null;
+    }      
+}

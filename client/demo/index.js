@@ -5,10 +5,11 @@ import { ExampleDemo } from "./Example";
 import { ThreadedCommentsDemo } from "./ThreadedComments";
 import { VideoResponse } from "./VideoResponse";
 import { SimulatedChat } from "./SimulatedChat";
+import { OpenHouseDemo } from "./OpenHouse";
 
 export const demos = [
     ExampleDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo, RuleEnforcerChatDemo, VideoResponse,
-    SimulatedChat
+    SimulatedChat, OpenHouseDemo
 ]
 
 export const defaultPersona = 'angry';
@@ -34,8 +35,8 @@ export const personas = {
         face: 'face5.jpeg'
     },
     'silly': {
-        name: 'Silly Sam',
-        face: 'face2.jpeg'
+        name: 'Silly Sarah',
+        face: 'face8.jpeg'
     },
     'boring': {
         name: 'Boring Bob',

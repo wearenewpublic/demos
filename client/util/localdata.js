@@ -27,8 +27,19 @@ function useData() {
     return data;
 }
 
+function firstPersona(instance) {
+    if (!instance?.persona) {
+        return null
+    } else {
+        const keys = Object.keys(instance.persona);
+        return keys[0];
+    }
+
+}
+
 export function resetData(instance) {
-    setGlobalData({persona: deepClone(personas), ['$personaKey']: defaultPersona, ...deepClone(instance)});    
+    const personaKey = firstPersona(instance) || defaultPersona;
+    setGlobalData({persona: deepClone(personas), ['$personaKey']: personaKey, ...deepClone(instance)});    
 }
 
 export function useCollection(typeName, props = {}) {
@@ -98,6 +109,10 @@ export function setSessionData(path, value) {
     return setObject('$session', pathToName(path), value);
 }
 
+export function getSessionData(path) {
+    return global_data['$session']?.[pathToName(path)];
+}
+
 export function setGlobalData(data) {
     global_data = data;
     notifyDataWatchers();
@@ -130,6 +145,14 @@ var global_nextKey = 0;
 export function newKey() {
     global_nextKey++;
     return global_nextKey;
+}
+
+export function ensureNextKeyGreater(key) {
+    if (typeof(key) == 'number') {
+        if (global_nextKey <= key) {
+            global_nextKey = key + 1;
+        }
+    }
 }
 
 function deepClone(obj) {

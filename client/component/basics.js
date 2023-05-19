@@ -44,7 +44,7 @@ export function SectionTitle({children}) {
 }
 
 export function BodyText({children}) {
-    return <Text style={{fontSize: 15, color: '#444'}}>{children}</Text>
+    return <Text style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
 }
 
 function formatDate(date) {
