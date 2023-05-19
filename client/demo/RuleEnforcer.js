@@ -16,6 +16,7 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 `
 
 export const RuleEnforcerChatDemo = {
+    key: 'ruleenforcer',
     name: 'Rule Enforcer',
     author: 'Rob Ennals',
     date: '2023-05-16',

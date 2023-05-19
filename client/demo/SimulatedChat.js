@@ -26,11 +26,12 @@ const persona = {
     four: {
         name: 'Annoying Andy',
         personality: 'A troll who likes to say things that will wind other people up, poking at their insecurities, and taking extreme positions to get a reaction.',
-        face: 'face2.jpeg'
+        face: 'face3.jpeg'
     }
 }
 
 export const SimulatedChat = {
+    key: 'simulatedchat',
     name: "Simulated Chat",
     author: "Rob Ennals",
     date: "2023-05-19",

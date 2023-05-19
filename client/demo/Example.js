@@ -7,6 +7,7 @@ import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
 
 export const ExampleDemo = {
+    key: 'example',
     name: "Example Demo",    
     author: "Rob Ennals",
     date: "2023-05-04",

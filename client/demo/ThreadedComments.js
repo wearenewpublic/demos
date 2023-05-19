@@ -7,7 +7,8 @@ import { ReplyInput, TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer } from "../data/conversations";
 
 export const ThreadedCommentsDemo = {
-    name: 'Basic Threaded Conversation',
+    key: 'threadedcomments',
+    name: 'Threaded Comments',
     author: 'Rob Ennals',
     date: '2023-05-08',
     description: 'A simple threaded conversation demo. Messages expand in a tree.',

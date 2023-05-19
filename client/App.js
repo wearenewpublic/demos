@@ -82,8 +82,7 @@ function chooseInstanceByKey({demo, instanceKey}) {
 }
 
 function getKeyForDemo(demo) {
-  const screenName = demo.screen.name;
-  return removeScreenSuffix(screenName).toLowerCase();
+  return demo.key
 }
 
 function removeScreenSuffix(str) {
