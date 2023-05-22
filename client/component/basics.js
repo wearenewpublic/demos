@@ -2,10 +2,10 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 
-export function ScrollableScreen({children}) {
+export function ScrollableScreen({children, maxWidth=500}) {
     return <ScrollView>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16}}>
-            <View style={{maxWidth: 500, flexShrink: 1, marginHorizontal: 8}}>
+            <View style={{maxWidth: maxWidth, flexShrink: 1, marginHorizontal: 8}}>
                 {children}
             </View>
         </View>

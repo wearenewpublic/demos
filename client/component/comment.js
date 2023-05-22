@@ -4,7 +4,7 @@ import { Clickable } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
 import { addKey, removeKey } from "../shared/util";
-import { ReplyInput } from "./replyinput";
+import { ReplyInput, TopCommentInput } from "./replyinput";
 
 
 
@@ -286,3 +286,18 @@ const CommentAuthorInfoStyle = StyleSheet.create({
         fontSize: 12
     }
 });
+
+
+export function BasicComments() {
+    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
+    const topLevelComments = comments.filter(comment => !comment.replyTo);
+
+    console.log('comments', comments);
+
+    return <View>
+        <TopCommentInput />
+        {topLevelComments.map(comment => 
+            <Comment key={comment.key} commentKey={comment.key} />
+        )}
+    </View>
+}

@@ -7,10 +7,11 @@ import { VideoResponse } from "./VideoResponse";
 import { SimulatedChat } from "./SimulatedChat";
 import { OpenHouseDemo } from "./OpenHouse";
 import { ParentApproves } from "./ParentApproves";
+import { ArticleCommentsDemo } from "./ArticleComments";
 
 export const demos = [
     ExampleDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo, RuleEnforcerChatDemo, VideoResponse,
-    SimulatedChat, OpenHouseDemo, ParentApproves
+    SimulatedChat, OpenHouseDemo, ParentApproves, ArticleCommentsDemo
 ]
 
 export const defaultPersona = 'angry';
