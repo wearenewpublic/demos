@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { defaultPersona, personas } from "../demo";
+import { defaultPersona, personas } from "../data/personas";
 import { DemoContext } from "../shared/DemoContext";
 
 var global_data = null;
