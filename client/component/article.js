@@ -1,15 +1,10 @@
-import { readFileSync } from "fs";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
-import { UserFace } from "./userface";
 import { Separator } from "./basics";
 
 export function Article({article, children}) {
     const s = ArticleStyle;
     
-    console.log('artcile', article, article.photo);
-    console.log('uri', fileHostDomain + '/photos/' + article.photo);
-
     const paragraphs = article.rawText.trim().split('\n').filter(x=>x);
 
     return <View style={s.outer}>
