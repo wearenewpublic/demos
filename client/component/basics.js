@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -20,7 +21,7 @@ export function WideScreen({children, pad}) {
 
 export function Narrow({children}) {
     return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
-        <View style={{maxWidth: 500, flexShrink: 1, marginHorizontal: 8}}>
+        <View style={{maxWidth: 500, flexShrink: 1, flexGrow: 1, marginHorizontal: 8}}>
             {children}
         </View>
     </View>
@@ -44,7 +45,7 @@ const CardStyle = StyleSheet.create({
 })
 
 export function Clickable({onPress, children, style}) {
-    return <TouchableOpacity onPress={onPress} style={style}>
+    return <TouchableOpacity onPress={onPress} style={style} pointerEvents="box-none">
         {children}
     </TouchableOpacity>
 }
@@ -194,3 +195,45 @@ const EditableTextStyle = StyleSheet.create({
         margin: 8,
     }
 })
+
+
+export function Pill({label, color = '#666', big=false, showCross=false}) {
+    const s = PillStyle
+    return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color}, showCross ? {paddingRight: 4} : null]}>
+        <Text style={[big ? s.bigText : s.text, {color}]}>{label}</Text>
+        {showCross ? 
+            <Entypo name='cross' size={big ? 18 : 12} color={color} />
+        : null}
+    </View>
+}
+const PillStyle = StyleSheet.create({
+    bubble: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        marginRight: 8,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    bigBubble: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 16,
+        paddingRight: 4,
+        paddingVertical: 2,
+        marginRight: 8,
+        marginBottom: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white'
+    },
+    bigText: {
+        fontSize: 16,
+        marginLeft: 10,
+        marginRight: 4
+    },
+    text: {
+        fontSize: 11,
+    }
+})
+

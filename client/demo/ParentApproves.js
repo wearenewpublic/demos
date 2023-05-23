@@ -1,11 +1,11 @@
 import { ScrollView } from "react-native";
-import { Pad, WideScreen } from "../component/basics";
-import { ActionApprove, ActionCollapse, ActionLike, ActionReply, BlingPending, Comment, CommentActionButton, CommentBlingText, CommentContext } from "../component/comment";
-import { addObject, getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
+import { Pad, Pill, WideScreen } from "../component/basics";
+import { ActionApprove, ActionCollapse, ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentContext } from "../component/comment";
+import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { expandDataList } from "../shared/util";
 import { useContext } from "react";
-import { abortion_reply_approves, threaded_abortion_mediated } from "../data/threaded";
+import { abortion_reply_approves } from "../data/threaded";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 
@@ -65,7 +65,7 @@ function getIsVisible({comment}) {
 
 function BlingMaybeBad({comment}) {
     if (comment.maybeBad) {
-        return <CommentBlingText color='red' label='Needs approval' />
+        return <BlingLabel color='red' label='Needs approval' />
     }
 }
 

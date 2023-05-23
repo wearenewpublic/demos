@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, usePersonaKey, useSessionData } from "../util/localdata";
-import { Clickable } from "./basics";
+import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
 import { addKey, removeKey } from "../shared/util";
@@ -88,31 +88,14 @@ export function ActionApprove({commentKey, comment}) {
     }
 }
 
-
-
-export function CommentBlingText({label, color = '#666'}) {
-    const s = CommentBlingTextStyle
-    return <View style={[s.bubble, {borderColor: color}]}>
-        <Text style={[s.text, {color}]}>{label}</Text>
-    </View>
+export function BlingLabel({label}) {
+    return <View style={{marginVertical: 4}}><Pill label={label} /></View>
 }
-const CommentBlingTextStyle = StyleSheet.create({
-    bubble: {
-        borderWidth: StyleSheet.hairlineWidth,
-        borderRadius: 8,
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        marginVertical: 4
-    },
-    text: {
-        fontSize: 11,
-    }
-})
 
 
 export function BlingPending({comment}) {
     if (comment.pending) {
-        return <CommentBlingText label='Posting...' />
+        return <BlingLabel label='Posting...' />
     } else {
         return null;
     }
