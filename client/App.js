@@ -7,11 +7,16 @@ import { DemoListScreen } from './shared/DemoListScreen';
 import { TopBar } from './shared/TopBar';
 import { setUrlPath, useLivePath } from './shared/url';
 import { resetData } from './util/localdata';
+import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+
 
 export default function App() {
   const path = useLivePath();
   const {demoKey, instanceKey} = parsePath(path); 
   const demo = chooseDemoByKey(demoKey);
+  let [fontsLoaded] = useFonts({
+    Montserrat_600SemiBold,
+  });
 
   function onSelectDemo(demo) {
     setUrlPath(getKeyForDemo(demo));

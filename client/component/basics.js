@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 
 export function ScrollableScreen({children, maxWidth=500}) {
     return <ScrollView>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16}}>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
             <View style={{maxWidth: maxWidth, flexShrink: 1, marginHorizontal: 8}}>
                 {children}
             </View>
@@ -15,6 +15,14 @@ export function ScrollableScreen({children, maxWidth=500}) {
 export function WideScreen({children, pad}) {
     return <View style={{flex: 1, margin: pad ? 16 : null}}>
         {children}
+    </View>
+}
+
+export function Narrow({children}) {
+    return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
+        <View style={{maxWidth: 500, flexShrink: 1, marginHorizontal: 8}}>
+            {children}
+        </View>
     </View>
 }
 
@@ -30,7 +38,8 @@ const CardStyle = StyleSheet.create({
     card: {
         borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10,
         shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.5, elevation: 1
+        shadowOpacity: 0.5, elevation: 1,
+        backgroundColor: '#fff'
     }
 })
 

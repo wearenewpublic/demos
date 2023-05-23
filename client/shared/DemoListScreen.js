@@ -1,35 +1,40 @@
-import { StyleSheet, Text, View } from "react-native"
-import { BigTitle, BodyText, Card, Center, Clickable, ScrollableScreen, SmallTitle, TimeText } from "../component/basics"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
+import { BigTitle, BodyText, Card, Center, Clickable, Narrow, ScrollableScreen, Separator, SmallTitle, TimeText } from "../component/basics"
 import { demos } from "../demo"
 import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
 import React from 'react'
+import { NewPublicBodySection, NewPublicTitle, NewPublicTitleBanner, colorNewPublicBackground } from "../component/newpublic";
 
 export function DemoListScreen({onSelectDemo}) {
     const s = DemoListScreenStyle;
     const sortedDemos = demos.sort((a, b) => b.date.localeCompare(a.date));
     return (
-        <ScrollableScreen>
-            <Center>
-                <BigTitle>New Public Demo Garden</BigTitle>
-            </Center>
-            {sortedDemos.map(demo => 
-                <Clickable key={demo.name} onPress={() => onSelectDemo(demo)}>
-                    <Card>
-                        <View style={s.authorLine}>
-                            <SmallTitle>{demo.name}</SmallTitle>
-                            <TimeText time={demo.date} />
-                        </View>
-                        {/* <AuthorLine author={demo.author} date={demo.date} /> */}
-                        <BodyText>{demo.description}</BodyText>
-                        <View style={s.extraLine}>
-                            <TagList tags={demo.tags || []}/>
-                            <Status status={demo.status} />
-                        </View>
-                    </Card>
-                </Clickable>        
-            )}
-        </ScrollableScreen>
+        <ScrollView>
+            <NewPublicTitleBanner>
+                <NewPublicTitle>New Public Demo Garden</NewPublicTitle>
+            </NewPublicTitleBanner>
+            <NewPublicBodySection>
+                <Narrow>
+                {sortedDemos.map(demo => 
+                    <Clickable key={demo.name} onPress={() => onSelectDemo(demo)}>
+                        <Card>
+                            <View style={s.authorLine}>
+                                <SmallTitle>{demo.name}</SmallTitle>
+                                <TimeText time={demo.date} />
+                            </View>
+                            {/* <AuthorLine author={demo.author} date={demo.date} /> */}
+                            <BodyText>{demo.description}</BodyText>
+                            <View style={s.extraLine}>
+                                <TagList tags={demo.tags || []}/>
+                                <Status status={demo.status} />
+                            </View>
+                        </Card>
+                    </Clickable>        
+                )}
+                </Narrow>
+            </NewPublicBodySection>
+        </ScrollView>
     )
 }
 
