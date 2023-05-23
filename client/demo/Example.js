@@ -5,6 +5,7 @@ import { callServerApiAsync } from '../util/servercall';
 import { useState } from 'react';
 import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
+import { statusStartingPoint } from '../data/tags';
 
 export const ExampleDemo = {
     key: 'example',
@@ -13,6 +14,8 @@ export const ExampleDemo = {
     date: "2023-05-04",
     description: "This demo gives examples of how to use the various parts of the demo infrastructure.",
     screen: ExampleScreen,
+    tags: [],
+    status: statusStartingPoint,
     instance: [
         {key: 'silly', name: 'Silly', message: 'I love silliness'},
         {key: 'sensible', name: 'Sensible', message: 'I love sensibleness'}

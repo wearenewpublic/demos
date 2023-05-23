@@ -6,6 +6,7 @@ import { getAllData, modifyObject, setGlobalProperty, useCollection, useGlobalPr
 import { Message, QuietSystemMessage, sendMessage } from "../component/message"
 import { gptProcessAsync } from "../component/chatgpt"
 import { useState } from "react"
+import { statusTutorial, tagConversation } from "../data/tags"
 
 const persona = {
     one: {
@@ -36,6 +37,8 @@ export const SimulatedChat = {
     author: "Rob Ennals",
     date: "2023-05-19",
     description: "Describe personas and have GPT simulate them chatting to each other",
+    tags: [tagConversation],
+    status: statusTutorial,
     screen: SimulatedChatScreen,
     instance: [
         {key: 'politics', name: 'Politics', topic: 'Gun Control', message: {}, persona}        

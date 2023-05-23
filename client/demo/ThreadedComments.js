@@ -6,6 +6,7 @@ import { useCollection, useGlobalProperty } from "../util/localdata";
 import { ReplyInput, TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer } from "../data/conversations";
 import { threaded_abortion_mediated } from "../data/threaded";
+import { statusStartingPoint, tagConversation } from "../data/tags";
 
 export const ThreadedCommentsDemo = {
     key: 'threadedcomments',
@@ -13,6 +14,8 @@ export const ThreadedCommentsDemo = {
     author: 'Rob Ennals',
     date: '2023-05-08',
     description: 'A simple threaded conversation demo. Messages expand in a tree.',
+    tags: [tagConversation],
+    status: statusStartingPoint,
     screen: ThreadedScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},

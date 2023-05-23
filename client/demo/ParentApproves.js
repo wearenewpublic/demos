@@ -7,6 +7,7 @@ import { expandDataList } from "../shared/util";
 import { useContext } from "react";
 import { abortion_reply_approves, threaded_abortion_mediated } from "../data/threaded";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
+import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 
 
 export const ParentApproves = {
@@ -16,6 +17,8 @@ export const ParentApproves = {
     date: '2023-05-19 20:00:00',
     description: 'A likely-mean reply must be approved by the author of the parent comment.',
     screen: ParentApprovesScreen,
+    tags: [tagConversation, tagModeration],
+    status: statusTentative,
     instance: [
         {key: 'abortion', name: 'Abortion', comment: expandDataList(abortion_reply_approves), '$personaKey': 'left'},
     ]

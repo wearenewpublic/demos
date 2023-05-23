@@ -8,6 +8,7 @@ import { Message, QuietSystemMessage, sendMessage } from "../component/message";
 import { ChatInput } from "../component/chatinput";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";
+import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 
 const initialRules = `1. Nobody can say anything disrespectful towards any person or group, including implying that they have bad motivations.
 2. Any links must be accompanied by the date the link was published, and a summary of what the linked document says.
@@ -21,6 +22,8 @@ export const RuleEnforcerChatDemo = {
     author: 'Rob Ennals',
     date: '2023-05-16',
     description: 'A chat app that enforces a list of user-defined rules in a conversation',
+    tags: [tagModeration, tagConversation],
+    status: statusTentative,
     screen: RuleEnforcerChatScreen,
     instance: [
         {key: 'abortion', name: 'Abortion', message: expandDataList(abortion), rules: initialRules},

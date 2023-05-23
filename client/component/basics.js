@@ -20,10 +20,19 @@ export function WideScreen({children, pad}) {
 
 
 export function Card({children, fitted=false}) {
-    return <View style={{borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10, alignSelf: fitted ? 'flex-start' : null}}>
+    const s = CardStyle;
+    return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null]}>
         {children}
     </View>
 }
+
+const CardStyle = StyleSheet.create({
+    card: {
+        borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, margin: 10,
+        shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 0.5, elevation: 1
+    }
+})
 
 export function Clickable({onPress, children, style}) {
     return <TouchableOpacity onPress={onPress} style={style}>

@@ -31,3 +31,11 @@ export function removeKey(collection, key) {
 export function addKey(collection, key, value=true) {
     return {...collection, [key]: value};
 }
+
+export function getHuesForNamedList(list) {
+    const hues = {};
+    list.forEach((item, index) => {
+        hues[item.name] = (index / list.length) * 360;
+    });
+    return hues;
+}

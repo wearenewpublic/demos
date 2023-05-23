@@ -6,6 +6,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { civic_society } from "../data/openhouse_civic";
 import { expandDataList } from "../shared/util";
 import { useContext } from "react";
+import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
 
 const persona = {
     memberAlice: {name: 'Alice (Member)', face: 'face9.jpeg', member: true},
@@ -24,6 +25,8 @@ export const OpenHouseDemo = {
     author: 'Rob Ennals',
     date: '2023-05-19 15:00:00',
     description: 'A conversation where non-members of a group can talk with members, but members are in control',
+    tags: [tagConversation, tagModeration, tagOnboarding],
+    status: statusTentative,
     screen: OpenHouseScreen,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 

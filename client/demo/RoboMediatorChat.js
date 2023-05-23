@@ -7,6 +7,7 @@ import { useCollection } from "../util/localdata";
 import { abortion, soccer } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
+import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 
 export const RoboMediatorChatDemo = {
     key: 'robomediator',
@@ -15,6 +16,8 @@ export const RoboMediatorChatDemo = {
     date: '2023-05-09',
     description: 'A GPT agent takes part in a sequential chat and attempts to mediate in conflicts.',
     screen: RoboMediatorChatScreen,
+    tags: [tagConversation, tagModeration],
+    status: statusTentative,
     instance: [
         {key: 'abortion', name: 'Abortion', message: expandDataList(abortion)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)}
