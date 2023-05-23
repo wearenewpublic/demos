@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native"
-import { BigTitle, BodyText, Card, Clickable, ScrollableScreen, SmallTitle, TimeText } from "../component/basics"
+import { BigTitle, BodyText, Card, Center, Clickable, ScrollableScreen, SmallTitle, TimeText } from "../component/basics"
 import { demos } from "../demo"
 import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
@@ -10,7 +10,9 @@ export function DemoListScreen({onSelectDemo}) {
     const sortedDemos = demos.sort((a, b) => b.date.localeCompare(a.date));
     return (
         <ScrollableScreen>
-            <BigTitle>New Public Demo Garden</BigTitle>
+            <Center>
+                <BigTitle>New Public Demo Garden</BigTitle>
+            </Center>
             {sortedDemos.map(demo => 
                 <Clickable key={demo.name} onPress={() => onSelectDemo(demo)}>
                     <Card>
@@ -36,7 +38,7 @@ const DemoListScreenStyle = StyleSheet.create({
         flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4
     },
     extraLine: {
-        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 8
     }
 });
 
@@ -51,7 +53,7 @@ function TagList({tags}) {
 
 const TagListStyle = StyleSheet.create({
     tagList: { 
-        flexDirection: 'row', flexWrap: 'wrap', marginTop: 8
+        flexDirection: 'row', flexWrap: 'wrap', flex: 1
     }
 });
 
@@ -70,7 +72,8 @@ const TagStyle = StyleSheet.create({
         paddingHorizontal: 8,
         paddingVertical: 2,
         borderRadius: 16,
-        marginRight: 8
+        marginRight: 8,
+        marginTop: 4
     },
     label: {
         color: 'white',
@@ -99,7 +102,8 @@ const StatuStyle = StyleSheet.create({
         // borderLeftWidth: StyleSheet.hairlineWidth,
         marginLeft: 16,
         paddingHorizontal: 8,
-        paddingVertical: 2,
+        paddingVertical: 1,
+        marginTop: 4,
         borderRadius: 4,
         borderColor: '#999',
         borderWidth: StyleSheet.hairlineWidth,
