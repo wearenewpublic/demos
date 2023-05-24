@@ -6,9 +6,9 @@ This is a prototyping space for trying out new designs for social products.
 
 A demo should be a simple throway prototype that makes an idea concrete enough that others can play with it and see what they think of it. As such, demos intentionally have several limitations:
 
-* **No persistent data** - All data is stored locally on the client and reset when you re-load the demo. This avoids the need to worry about breaking existing data when modifying a data, removes the need to worry about abuse, and prevents people from thinking demos are real products.
-* **No login** - You can switch between multiple "Personas" to see how the product looks from their points of view.
-* **Single visual style** - Components don't provide the ability to change their visual styling away from the default theme. This allows demos to focus on the product structure over the visuals, and ensures all components look reasonable when combined.
+* **No persistent data** - All data is stored locally on the client and reset when you re-load the demo. This avoids the need to worry about breaking existing data when modifying a demo, reduces abuse risks, and prevents people from thinking demos are real products.
+* **No login** - You can switch between multiple personas to see how the product looks from their points of view.
+* **Single visual style** - Components don't provide the ability to change their visual styling from the default theme. This allows demos to focus on the product structure over the visuals, and ensures all components look reasonable when combined.
 * **Slowness is okay** - Sometimes it's easier to do things slowly than fast (particularly when using GPT back ends). That's okay for a demo.
 * **Web only** - Making a demo work as a mobile app is extra work. We want to focus on showing the ideas. 
 
@@ -101,7 +101,7 @@ The demo garden uses a very simple data model, with the following functions:
 ## Any other Questions
  
  * Email me at `rob@newpublic.org`. I want to have the demo garden be super easy to use, and I promise to reply to every email.
- 
+
 
 
 
