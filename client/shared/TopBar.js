@@ -3,9 +3,11 @@ import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
 import { Clickable } from "../component/basics";
 import { goBack } from "./url";
+import { setTitle } from "../platform-specific/url";
 
 export function TopBar({title, subtitle, showPersonas}) {
     const s = TopBarStyle;
+    setTitle(title);
     return <View style={{flexDirection: 'row', paddingLeft: 8, justifyContent: 'space-between', alignItems: 'center', borderBottomColor: '#ddd', borderBottomWidth: StyleSheet.hairlineWidth}}>        
         <View style={{flexDirection: 'row', alignItems: 'center'}}>    
             <Clickable onPress={() => goBack()}>

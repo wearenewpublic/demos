@@ -8,6 +8,7 @@ import { TopBar } from './shared/TopBar';
 import { setUrlPath, useLivePath } from './shared/url';
 import { resetData } from './util/localdata';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import { setTitle } from './platform-specific/url';
 
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
   }
 
   if (!demoKey) {
+    setTitle('New Public Demo Garden')
     return <FullScreen>
       <DemoListScreen onSelectDemo={onSelectDemo}/>
     </FullScreen>

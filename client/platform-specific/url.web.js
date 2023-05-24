@@ -10,3 +10,7 @@ export function watchPopState(callback) {
 export function getIsLocalhost() {
     return location.hostname == 'localhost';
 }
+
+export function setTitle(title) {
+    window.document.title = title;
+}
