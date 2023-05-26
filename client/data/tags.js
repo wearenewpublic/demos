@@ -60,5 +60,12 @@ export const statusTutorial = {
     description: 'A demo created for the purpose of illustrating how the demo system works',
 }
 
+export const statusExperiment = {
+    name: 'Experiment',
+    iconName: 'lab-flask',
+    iconSet: Entypo,
+    description: 'Not a usable prototype, but lets you explore an idea.'
+}
+
 export const statuses = [statusTentative, statusConfident, statusStartingPoint, statusTutorial]
 

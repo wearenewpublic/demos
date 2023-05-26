@@ -6,6 +6,12 @@ export function UserFace({userId, size = 32, faint=false}) {
     const persona = useObject('persona', userId);
     const faceImg = persona.face;
     return <Image 
-        style ={{width: size, height: 32, borderRadius: size /2, opacity: faint ? 0.5 : 1}}
+        style ={{width: size, height: size, borderRadius: size /2, opacity: faint ? 0.5 : 1}}
         source={{uri: 'https://new-public-demo.web.app/faces/' + faceImg}} />
+}
+
+export function FaceImage({face, size=32, faint=false}) {
+    return <Image 
+        style ={{width: size, height: size, borderRadius: size /2, opacity: faint ? 0.5 : 1}}
+        source={{uri: 'https://new-public-demo.web.app/faces/' + face}} />
 }

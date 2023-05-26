@@ -8,13 +8,27 @@ import { abortion, soccer } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
+import { authorRobEnnals } from "../data/authors";
+
+const description = `
+An AI agent acts as a mediator between people who are having difficulty getting along.
+
+It is well known that human mediators can be very effective at helping people to resolve their differences,
+however a human mediator is not always available, and human mediation takes up a lot of time.
+
+In this prototype, we explore what happens when an AI agent takes on the role of mediator. 
+The agent detects when people are having a conflict, and attempts to help them resolve it.
+
+When using this demo, we have observed that it can feel "awkward" to have a robot involved in your conversation,
+particularly as a public participant, however the robot can be helpful in resolving conflicts.
+`
 
 export const RoboMediatorChatDemo = {
     key: 'robomediator',
     name: 'RoboMediator Chat',
-    author: 'Rob Ennals',
+    author: authorRobEnnals,
     date: '2023-05-09',
-    description: 'A GPT agent takes part in a sequential chat and attempts to mediate in conflicts.',
+    description,
     screen: RoboMediatorChatScreen,
     tags: [tagConversation, tagModeration],
     status: statusTentative,

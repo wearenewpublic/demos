@@ -33,7 +33,7 @@ export default function App() {
 
   if (!demoKey) {
     setTitle('New Public Demo Garden')
-    return <FullScreen>
+    return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
       <DemoListScreen onSelectDemo={onSelectDemo}/>
     </FullScreen>
   } else if (!demo) {
@@ -42,7 +42,7 @@ export default function App() {
       <Text>Unknown demo: {demoKey}</Text>
     </FullScreen>
   } else if (!instanceKey) {
-    return <FullScreen>
+    return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
       <TopBar title={demo.name} />
       <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
     </FullScreen>
@@ -102,15 +102,15 @@ function getScreenTitle({demo, screenKey, params}) {
 }
 
 
-function FullScreen({children, zIndex=0}) {
-  return <View style={[AppStyle.fullScreen, {zIndex}]}>{children}</View>
+function FullScreen({children, zIndex=0, backgroundColor='white'}) {
+  return <View style={[AppStyle.fullScreen, {zIndex, backgroundColor}]}>{children}</View>
 }
 
 const AppStyle = StyleSheet.create({
   fullScreen: {
     position: 'absolute',
     top: 0, bottom: 0, left: 0, right: 0,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   }
 })
 

@@ -1,6 +1,9 @@
 import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Markdown from "react-native-markdown-display";
+import { collapseDoubleSpaces, stripSingleLineBreaks } from "../shared/util";
+import { FaceImage, UserFace } from "./userface";
 
 
 export function ScrollableScreen({children, maxWidth=500}) {
@@ -50,8 +53,8 @@ export function Clickable({onPress, children, style}) {
     </TouchableOpacity>
 }
 
-export function BigTitle({children}) {
-    return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 8}}>{children}</Text>
+export function BigTitle({children, pad=true}) {
+    return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
 export function SmallTitle({children}) {
@@ -64,6 +67,24 @@ export function SectionTitle({children}) {
 
 export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
+}
+
+export function MarkdownBodyText({text}) {
+    const markdownStyles = {
+        body: {
+            fontSize: 15, lineHeight: 18, color: '#444'
+        }
+    }
+    return <View style={{maxWidth: 500}}>
+        <Markdown style={markdownStyles}>
+            {collapseDoubleSpaces(stripSingleLineBreaks(text))}
+        </Markdown>
+    </View>
+}
+
+export function PreviewText({text, numberOfLines=2}) {
+    const lineLessText = text.replace(/\n/g, ' ').trim()
+    return <Text numberOfLines={numberOfLines} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{lineLessText}</Text>
 }
 
 function formatDate(date) {
@@ -98,6 +119,26 @@ export function TimeText({time}) {
     return <Text style={{fontSize: 12, color: '#999'}}>{formatDate(time)}</Text>
 }
 
+export function AuthorLine({author, time, oneLine=false}) {
+    if (oneLine) {
+        return <HorizBox center>
+            <FaceImage face={author.face} size={16}/>
+            <View style={{marginLeft: 4, flexDirection: 'row'}}>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>{author.name}</Text>
+                <Text style={{fontSize: 12, color: '#999'}}> - {formatDate(time)}</Text>
+            </View>
+        </HorizBox>
+    } else {
+        return <HorizBox center>
+            <FaceImage face={author.face} size={24}/>
+            <View style={{marginLeft: 6}}>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>{author.name}</Text>
+                <Text style={{fontSize: 12, color: '#999'}}>{formatDate(time)}</Text>
+            </View>
+        </HorizBox>
+    }
+}
+
 export function Separator() {
     return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: 16}}/>
 }
@@ -106,8 +147,8 @@ export function Pad({size=8}) {
     return <View style={{height: size, width: size}}/>
 }
 
-export function HorizBox({children}) {
-    return <View style={{flexDirection: 'row'}}>{children}</View>
+export function HorizBox({children, center=false}) {
+    return <View style={{flexDirection: 'row', alignItems: center ? 'center' : 'flex-start'}}>{children}</View>
 }
 
 export function WrapBox({children}) {

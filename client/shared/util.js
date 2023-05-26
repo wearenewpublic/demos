@@ -47,3 +47,15 @@ export function stripSuffix(str, suffix) {
         return str;
     }
 }
+
+export function stripSingleLineBreaks(text) {
+    let result = text.replace(/\n\n/g, '<DOUBLE_LINE_BREAK>');
+    result = result.replace(/\n/g, ' ');
+    result = result.replace(/<DOUBLE_LINE_BREAK>/g, '\n\n');
+    return result;
+}
+
+export function collapseDoubleSpaces(text) {
+    let result = text.replace(/  /g, ' ');
+    return result;
+}

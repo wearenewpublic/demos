@@ -8,8 +8,8 @@ import { goBack } from "./navigate";
 export function TopBar({title, subtitle, showPersonas}) {
     const s = TopBarStyle;
     setTitle(title);
-    return <View style={{flexDirection: 'row', paddingLeft: 8, justifyContent: 'space-between', alignItems: 'center', borderBottomColor: '#ddd', borderBottomWidth: StyleSheet.hairlineWidth}}>        
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>    
+    return <View style={s.topBox}>        
+        <View style={s.leftRow}>    
             <Clickable onPress={() => goBack()}>
                 <Entypo name='chevron-left' size={24} color='#666' />
             </Clickable>
@@ -27,6 +27,19 @@ export function TopBar({title, subtitle, showPersonas}) {
 }
 
 const TopBarStyle = StyleSheet.create({
+    topBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 8, 
+        justifyContent: 'space-between',
+        borderBottomColor: '#ddd', 
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        backgroundColor: 'white'
+    },
+    leftRow: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     oneLineTitle: {
         fontSize: 18, fontWeight: 'bold',
         marginVertical: 8

@@ -7,6 +7,24 @@ import { civic_society } from "../data/openhouse_civic";
 import { expandDataList } from "../shared/util";
 import { useContext } from "react";
 import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
+import { authorRobEnnals } from "../data/authors";
+
+const description = `
+Members of a group can talk with non-members, but messages from non-members will appear in a
+quiet way unless their messages are explicitly promoted by a member.
+
+Often the members of a group will want to be able to engage in conversation with outsiders.
+For example they might want to talk with people who might be future members, or a panel
+of experts might want to talk with members of an audience.
+
+When this is done on conventional platforms, the conversation will often get taken over by
+non-members who misbehave, either by spamming, by being rude, or just posting low value
+content.
+
+This design is influenced by the structure of in-person "panel" events, where a group of 
+experts on stage will invite contributions from the audience, but the panel (or their moderator)
+controls who gets to speak and when.
+`
 
 const persona = {
     memberAlice: {name: 'Alice (Member)', face: 'face9.jpeg', member: true},
@@ -22,9 +40,9 @@ const persona = {
 export const OpenHouseDemo = {
     key: 'openhouse',
     name: 'Open House Conversation',
-    author: 'Rob Ennals',
+    author: authorRobEnnals,
     date: '2023-05-19 15:00:00',
-    description: 'A conversation where non-members of a group can talk with members, but members are in control',
+    description,
     tags: [tagConversation, tagModeration, tagOnboarding],
     status: statusTentative,
     screen: OpenHouseScreen,

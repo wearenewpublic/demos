@@ -7,13 +7,23 @@ import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
 import { statusStartingPoint } from '../data/tags';
 import { goBack, pushSubscreen } from '../shared/navigate';
+import { authorRobEnnals } from '../data/authors';
+
+const description = `
+Examples of how to use the various parts of the demo infrastructure.
+
+If you want to build your own demos then this is a good place to see 
+examples of the various things that the demo environment can do.
+
+More sections will be added to this demo as more features are added to the demo infrastructure.
+`
 
 export const ExampleDemo = {
     key: 'example',
     name: "Example Demo",    
-    author: "Rob Ennals",
+    author: authorRobEnnals,
     date: "2023-05-04",
-    description: "This demo gives examples of how to use the various parts of the demo infrastructure.",
+    description,
     screen: ExampleScreen,
     subscreens: {
         cat: {screen: CatScreen, title: ({name}) => `Cat ${name}`}, 

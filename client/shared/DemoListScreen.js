@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { BigTitle, BodyText, Card, Center, Clickable, Narrow, Pill, ScrollableScreen, Separator, SmallTitle, TimeText } from "../component/basics"
+import { BigTitle, BodyText, Card, Center, Clickable, Narrow, Pill, PreviewText, ScrollableScreen, Separator, SmallTitle, TimeText } from "../component/basics"
 import { demos } from "../demo"
 import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
@@ -43,7 +43,7 @@ export function DemoListScreen({onSelectDemo}) {
                                 <TimeText time={demo.date} />
                             </View>
                             {/* <AuthorLine author={demo.author} date={demo.date} /> */}
-                            <BodyText>{demo.description}</BodyText>
+                            <PreviewText text={demo.description} />
                             <View style={s.extraLine}>
                                 <TagList tags={demo.tags || []} onAddTag={onAddTag} />
                                 <Status status={demo.status} onSelectStatus={setStatusFilter} />

@@ -1,18 +1,33 @@
 import { BigTitle, Pad, ScrollableScreen, WideScreen, WrapBox } from "../component/basics";
 import { VideoPlayer, VideoPost } from "../component/video";
-import { statusStartingPoint, tagAudioVideo } from "../data/tags";
+import { authorRobEnnals } from "../data/authors";
+import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
 import { VideoCamera } from "../platform-specific/videocamera";
 import { expandDataList } from "../shared/util";
 import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
 
+const description = `
+Record a video response to a question.
+
+When you engage with someone entirely over text it can be hard to remember that you are dealing with
+a real person.
+
+For employer-based communities, this can be resolved by having people take part in regular video calls,
+but that can be difficult for more casual communities, where people are not reliable available to talk
+at the same time.
+
+One way to compensate for that is to encourage community members to record short video responses
+to questions and view the video responses left by other community members.
+`
+
 export const VideoResponse = {
     key: 'videoresponse',
     name: 'Video Response',
-    author: 'Rob Ennals',
+    author: authorRobEnnals,
     date: '2023-05-18',
-    description: 'Record a video response to a question.',
+    description,
     tags: [tagAudioVideo],
-    status: statusStartingPoint,
+    status: statusTentative,
     screen: VideoResponseScreen,
     instance: [
         {key: 'kid-names', name: 'How did you choose the names for your kids?', response: expandDataList([

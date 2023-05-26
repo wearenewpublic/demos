@@ -6,7 +6,21 @@ import { getAllData, modifyObject, setGlobalProperty, useCollection, useGlobalPr
 import { Message, QuietSystemMessage, sendMessage } from "../component/message"
 import { gptProcessAsync } from "../component/chatgpt"
 import { useState } from "react"
-import { statusTutorial, tagConversation } from "../data/tags"
+import { statusExperiment, statusTutorial, tagConversation } from "../data/tags"
+import { authorRobEnnals } from "../data/authors"
+
+const description = `
+Describe a set of user personas and see what happens when they have a conversation with each other about a topic.
+
+This isn't a prototype product to play with. Instead it lets you simulate different kinds of conversation
+that might happen. This can be useful for producing concrete examples of how different kinds of people
+might engage with each other about a topic, and the impact that a skilled facilitator or moderator can
+have on how a conversation proceeds.
+
+One signicant limitation with this demo is that, due to GPT's alignment training, it is very reluctant
+to simulate users who are rude and disrepsectful to each other, so it's hard to simulate a conversation
+that goes as badly as real conversations on the internet often do.
+`
 
 const persona = {
     one: {
@@ -34,11 +48,11 @@ const persona = {
 export const SimulatedChat = {
     key: 'simulatedchat',
     name: "Simulated Chat",
-    author: "Rob Ennals",
+    author: authorRobEnnals,
     date: "2023-05-19",
-    description: "Describe personas and have GPT simulate them chatting to each other",
+    description,
     tags: [tagConversation],
-    status: statusTutorial,
+    status: statusExperiment,
     screen: SimulatedChatScreen,
     instance: [
         {key: 'politics', name: 'Politics', topic: 'Gun Control', message: {}, persona}        

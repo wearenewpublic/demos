@@ -6,13 +6,22 @@ import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
 import { abortion, abortion_mediated, ecorp, soccer } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
+import { authorRobEnnals } from "../data/authors";
+
+const description = `
+A starting point for demos that involve messenger-like conversations.
+
+In this example, each message is sent by a particular person, and the messages are sorted by time.
+
+Messages are styled similarly to those in messaging apps like iMessage or Facebook Messenger.
+`
 
 export const ChatDemo = {
     key: 'chat',
     name: 'Basic Chat',
-    author: 'Rob Ennals',
+    author: authorRobEnnals,
     date: '2023-05-04',
-    description: 'A simple chat demo. Starting point for more interesting demos.',
+    description,
     tags: [tagConversation],
     status: statusStartingPoint,
     screen: ChatScreen,

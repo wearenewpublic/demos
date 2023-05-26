@@ -8,14 +8,33 @@ import { useContext } from "react";
 import { abortion_reply_approves } from "../data/threaded";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
+import { authorRobEnnals } from "../data/authors";
+
+
+const description = `
+If the AI thinks your reply is mean, then it will be hidden from other conversaton participants until 
+the author of the parent comment approves it.
+
+This is motivated by the fact that moderators often have to spend a lot of time dealing with 
+cases where users are having a public fight with each other. It isn't practical for a moderator
+to have to manually approve every message that might be mean, but it is practical for the author
+of the parent comment to do so. 
+
+We don't want to require the parent commenter to approve all replies because that could give them 
+the power to suppress valid criticism, and they may not be available to approve replies in a timely
+manner. So we only require approval if the AI thinks the reply is likely to be mean.
+
+One effect of this design is that it encourages people to phrase their replies in a respectful way.
+
+`
 
 
 export const ParentApproves = {
     key: 'parent-approves',
     name: 'Parent Approves',
-    author: 'Rob Ennals',
+    author: authorRobEnnals,
     date: '2023-05-19 20:00:00',
-    description: 'A likely-mean reply must be approved by the author of the parent comment.',
+    description,
     screen: ParentApprovesScreen,
     tags: [tagConversation, tagModeration],
     status: statusTentative,
