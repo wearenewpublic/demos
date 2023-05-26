@@ -4,7 +4,7 @@ import { Message, QuietSystemMessage, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
-import { abortion, soccer } from "../data/conversations";
+import { soccer, trek_vs_wars } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
@@ -33,7 +33,7 @@ export const RoboMediatorChatDemo = {
     tags: [tagConversation, tagModeration],
     status: statusTentative,
     instance: [
-        {key: 'abortion', name: 'Abortion', message: expandDataList(abortion)},
+        {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)}
     ]
 }

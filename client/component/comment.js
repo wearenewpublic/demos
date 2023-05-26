@@ -88,8 +88,8 @@ export function ActionApprove({commentKey, comment}) {
     }
 }
 
-export function BlingLabel({label}) {
-    return <View style={{marginVertical: 4}}><Pill label={label} /></View>
+export function BlingLabel({label, color='#666'}) {
+    return <View style={{marginVertical: 4}}><Pill label={label} color={color} /></View>
 }
 
 

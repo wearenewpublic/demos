@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { abortion, soccer } from "../data/conversations";
+import { soccer, trek_vs_wars } from "../data/conversations";
 import { expandDataList } from "../shared/util";
 import { useCollection, useGlobalProperty } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
@@ -50,7 +50,7 @@ export const RuleEnforcerChatDemo = {
     status: statusTentative,
     screen: RuleEnforcerChatScreen,
     instance: [
-        {key: 'abortion', name: 'Abortion', message: expandDataList(abortion), rules: initialRules},
+        {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules}
     ]
 }

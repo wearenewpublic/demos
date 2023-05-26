@@ -75,7 +75,7 @@ function StackedScreen({screenInstance, index}) {
   const demo = chooseDemoByKey(demoKey);
   const instance = chooseInstanceByKey({demo, instanceKey});
   const screen = getScreen({demo, screenKey});
-  const title = getScreenTitle({demo, screenKey, params}); 
+  const title = getScreenTitle({demo, screenKey, instance, params}); 
 
 return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
       <FullScreen zIndex={index}>
@@ -93,11 +93,14 @@ function getScreen({demo, screenKey}) {
   }
 }
 
-function getScreenTitle({demo, screenKey, params}) {
-  if (!screenKey) {
-    return demo.name;
-  } else {
+function getScreenTitle({demo, instance, screenKey, params}) {
+  console.log('getScreenTitle', {demo, instance, screenKey, params})
+  if (screenKey) {
     return demo.subscreens?.[screenKey]?.title?.(params)
+  } else if (instance) {
+    return instance.name;
+  } else {
+    return demo.name
   }
 }
 

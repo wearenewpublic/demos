@@ -1,4 +1,5 @@
 
+
 export const defaultPersona = 'angry';
 export const personas = {
     'angry': {
@@ -40,5 +41,13 @@ export const personas = {
     'robo': {
         name: 'Robot',
         face: 'robo.jpeg'
+    },
+    'trek': {
+        name: 'Trekkie Trisha',
+        face: 'face7.jpeg'
+    },
+    'wars': {
+        name: 'Star Wars Simon',
+        face: 'face6.jpeg'
     }
 }

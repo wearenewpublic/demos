@@ -5,10 +5,10 @@ import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from
 import { TopCommentInput } from "../component/replyinput";
 import { expandDataList } from "../shared/util";
 import { useContext } from "react";
-import { abortion_reply_approves } from "../data/threaded";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { trek_vs_wars } from "../data/conversations";
 
 
 const description = `
@@ -39,7 +39,7 @@ export const ParentApproves = {
     tags: [tagConversation, tagModeration],
     status: statusTentative,
     instance: [
-        {key: 'abortion', name: 'Abortion', comment: expandDataList(abortion_reply_approves), '$personaKey': 'left'},
+        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'}
     ]
 }
 

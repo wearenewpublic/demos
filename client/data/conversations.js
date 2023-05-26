@@ -13,36 +13,15 @@ exports.soccer = [
     {from: 'boring', text: "I'm going to keep talking because that's what I always do. I keep talking"}
 ]
 
-exports.abortion_mediated = [
-    {from: "left", text: "Abortion is a fundamental human right that should never be taken away."},
-    {from: "right", text: "That's ridiculous. You just enjoy killing babies."},
-    {from: "peacemaker", text: "Let's try to keep the discussion civil. Name-calling won't get us anywhere."},
-    {from: "left", text: "I don't enjoy killing babies. Abortion is a difficult decision that a woman should be able to make for herself."},
-    {from: "right", text: "It's not just about the woman. It's about the life of the unborn child."},
-    {from: "peacemaker", text: "That's a valid point. But we need to acknowledge that the woman's life is also important."},
-    {from: "left", text: "Exactly. Forcing a woman to carry a pregnancy to term can have serious consequences for her physical and mental health."},
-    {from: "right", text: "But what about the sanctity of life? Every life is precious and should be protected."},
-    {from: "peacemaker", text: "I think we can all agree that life is precious. But we need to find a way to balance the rights of the woman and the rights of the unborn child."},
-    {from: "left", text: "That's why we need to ensure that safe and legal abortion services are available to all women."},
-    {from: "right", text: "But we also need to promote alternatives to abortion, like adoption."},
-    {from: "peacemaker", text: "Both of those are valid points. We need to provide women with comprehensive reproductive health care and support all options."},
-    {from: "left", text: "Agreed. And we also need to address the root causes of unplanned pregnancies, like lack of access to birth control and comprehensive sex education."},
-    {from: "right", text: "I can see your point. We need to support families and promote a culture of life."},
-    {from: "peacemaker", text: "It's good that we can find common ground. Let's continue this conversation with respect and understanding."}
-]
+exports.trek_vs_wars = [
+    {key: 'one', from: 'trek', text: "Star Wars is a horrible show that has inflicted untold harm of society. Star Trek is much better."},
+    {key: 'despicable', replyTo: 'one', from: 'wars', maybeBad: true, text: "What rubbish. Star Trek is the fantasy of scary authoritarians who want you to think that harmony under a single world government is something to aim for. If you like Star Trek then you are despicable."},
+    {replyTo: 'despicable', from: 'trek', maybeBad: true, text: "And your supposed better alternative is a world where it's fine to kill millions of people just because some weird little green guy tells you they are bad. How many people do you think died in that Death Star? How many women and children? \n\nYou Star Wars lunatics are willing to justify mass murder on a whim, just so you don't have to deal with any kind of social order."},
+    {key: 'two', from: 'trek', text: "Did you know that Star Wars was Osama Bin Laden's favorite show? That the attack on the twin tours was insipred by the attack on the death star. If you like Star Wars then you aren't in great company.\n\nWhen you show your kids Star Wars movies you are teaching them to be a genocidal terrorist."},
+    {replyTo: 'two', from: 'wars', from: 'wars', text: "Well if Josef Stalin was still alive then I'm sure Star Trek would be his favorite show. All that unifying orderly harmony - it's so authoritarian. \n\nStar Wars is about the need to rebel against authorty, and that's what makes us free citizens rather than robots."},
+    {key: 'nerd', from: 'wars', text: "Does anyone have both a Star Trek poster and a girfriend? Star Trek is for nerdy losers who want to imagine a world where they are in change. Thank god they aren't and never will be. Nerds are the worst."},
+    {replyTo: 'nerd', from: 'trek', maybeBad: true, text: "A 'nerd' is just someone who likes to think about things rationally, rather than just following the orders of whatever depraved leader happens to be socially influencing their group. If it wasn't for nerds then garbage-for-brains people like you would still be living in caves and eating mud."}
+    // {fro}
 
-exports.abortion = [
-    {from: "left", text: "Abortion is a fundamental human right. Women should be able to make their own choices."},
-    {from: "right", text: "No, that's not true. Abortion is murder. It's taking a human life."},
-    {from: "left", text: "It's not murder. It's a woman's right to decide what to do with her own body."},
-    {from: "right", text: "The unborn child is a separate life. It's not just the woman's body."},
-    {from: "left", text: "It's still the woman's decision. No one else should be able to make that choice for her."},
-    {from: "right", text: "But what about the unborn child's right to life? Don't they deserve protection too?"},
-    {from: "left", text: "Of course they do, but the woman's right to choose should take priority."},
-    {from: "right", text: "I disagree. We need to protect innocent life, even if it means limiting a woman's choice."},
-    {from: "left", text: "You're just trying to control women's bodies."},
-    {from: "right", text: "No, I'm trying to protect the unborn child. You're just using the idea of choice to justify killing."},
-    {from: "left", text: "I can't believe you don't see this as a human right issue. You're denying women basic rights."},
-    {from: "right", text: "And I can't believe you're okay with taking a human life."},
 ]
 

@@ -1,16 +1,15 @@
-import { ScrollView, Text } from "react-native"
+import { ScrollView } from "react-native"
 import { Pad, WideScreen } from "../component/basics";
-import { ActionLike, ActionReply, Comment, actionLike, actionReply } from "../component/comment";
+import { Comment } from "../component/comment";
 import { expandDataList } from "../shared/util"
-import { useCollection, useGlobalProperty } from "../util/localdata";
-import { ReplyInput, TopCommentInput } from "../component/replyinput";
-import { ecorp, soccer } from "../data/conversations";
-import { threaded_abortion_mediated } from "../data/threaded";
+import { useCollection } from "../util/localdata";
+import { TopCommentInput } from "../component/replyinput";
+import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 
 const description = `
-This is a starting point for future demos that involve threaded comments.
+A starting point for future demos that involve threaded comments.
 
 In this example, each comment can have other comments that appear as replies to it.
 
@@ -30,7 +29,7 @@ export const ThreadedCommentsDemo = {
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
         {key: 'soccer', name: 'Soccer Team', comment: expandDataList(soccer)},
-        {key: 'abortion-mediated', name: 'Abortion (Mediated)', comment: expandDataList(threaded_abortion_mediated)}
+        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)},
     ]    
 }
 

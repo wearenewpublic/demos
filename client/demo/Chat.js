@@ -4,7 +4,7 @@ import { Message, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../shared/util";
 import { useCollection } from "../util/localdata";
-import { abortion, abortion_mediated, ecorp, soccer } from "../data/conversations";
+import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 
@@ -28,8 +28,7 @@ export const ChatDemo = {
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', message: expandDataList(ecorp)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)},
-        {key: 'abortion', name: 'Abortion', message: expandDataList(abortion)},
-        {key: 'abortion-mediated', name: 'Abortion (mediated)', message: expandDataList(abortion_mediated)},
+        {key: 'starwars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars)}
     ]
 }
 
