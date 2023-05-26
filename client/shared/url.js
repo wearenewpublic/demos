@@ -2,34 +2,32 @@ import { useEffect, useState } from "react";
 import { historyPushState, watchPopState } from "../platform-specific/url";
 
 // TODO: Using a global variable is a hack.  We should use a context instead.
-var global_path_watcher = null;
+var global_url_watcher = null;
 
-export function useLivePath() {
-    const [path, setPath] = useState(window.location.pathname);
+export function useLiveUrl() {
+    const [url, setUrl] = useState(window.location.href);
 
     useEffect(() => {
-        watchPopState(path => {
-            setPath(window.location.pathname);
+        watchPopState(url => {
+            setUrl(window.location.href);
         })
-        global_path_watcher = path => {
-            setPath(path);
+        global_url_watcher = url => {
+            setUrl(url);
         }    
     }, []);
 
-    return path;
+    return url;
 }
 
-export function setUrlPath(path) {
-    historyPushState({state: {path}, url: `/${path}`});
-    if (global_path_watcher) {
-        global_path_watcher('/' + path);
+export function gotoUrl(url) {
+    historyPushState({state: {url}, url: url});
+    if (global_url_watcher) {
+        global_url_watcher(url);
     }
 }
 
-export function goBack() {
-    const path = window.location.pathname;
-    const parts = path.split('/').filter(x => x);
-    parts.pop();
-    const newPath = parts.join('/');
-    setUrlPath(newPath);
+export function gotoPath(path) {
+    
+
 }
+

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
 import { statusStartingPoint } from '../data/tags';
+import { goBack, pushSubscreen } from '../shared/navigate';
 
 export const ExampleDemo = {
     key: 'example',
@@ -14,6 +15,10 @@ export const ExampleDemo = {
     date: "2023-05-04",
     description: "This demo gives examples of how to use the various parts of the demo infrastructure.",
     screen: ExampleScreen,
+    subscreens: {
+        cat: {screen: CatScreen, title: ({name}) => `Cat ${name}`}, 
+        dog: {screen: DogScreen, title: ({name}) => `Dog ${name}`},
+    },
     tags: [],
     status: statusStartingPoint,
     instance: [
@@ -39,6 +44,8 @@ export function ExampleScreen() {
             <ExampleVideoPlayer />
             <Separator />
             <ExampleVideoRecording />
+            <Separator />
+            <ExampleSubscreens />
         </ScrollableScreen>
     );
 }
@@ -128,4 +135,48 @@ function ExampleVideoRecording() {
             />
         : null }
     </View>
+}
+
+function ExampleSubscreens() {
+    return <View>
+        <SmallTitle>Stacked Screens</SmallTitle>
+        <BodyText>
+            A demo can have multiple stacked screens.
+        </BodyText>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Fluffy'})}>Show Cat Fluffy</PrimaryButton>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Tiddles'})}>Show Cat Tiddles</PrimaryButton>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})}>Show Dog Rover</PrimaryButton>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})}>Show Dog Fido</PrimaryButton>
+    </View>
+}
+
+function CatScreen({name}) {
+    return <ScrollableScreen>
+        <BigTitle>My Cat {name}</BigTitle>
+        <BodyText>
+            This is a stacked subscreen. 
+        </BodyText>
+        <Pad/>
+        <PrimaryButton onPress={goBack}>Back</PrimaryButton>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})}>Show Dog Rover</PrimaryButton>
+        <Pad/>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})}>Show Dog Fido</PrimaryButton>
+
+    </ScrollableScreen>
+}
+
+function DogScreen({name}) {
+    return <ScrollableScreen>
+        <BigTitle>My Dog {name}</BigTitle>
+        <BodyText>
+            This is another stacked subscreen. 
+        </BodyText>
+        <Pad/>
+        <PrimaryButton onPress={goBack}>Back</PrimaryButton>
+    </ScrollableScreen>
 }

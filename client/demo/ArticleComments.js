@@ -24,7 +24,7 @@ export const ArticleCommentsDemo = {
 
 export function ArticleCommentsScreen() {
     const article = useGlobalProperty('article');
-    console.log('article', article);
+
     return <ScrollableScreen maxWidth={800}>
         <Article article={article}>
             <SmallTitle>Comments</SmallTitle>

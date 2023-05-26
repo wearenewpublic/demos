@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
 import { Clickable } from "../component/basics";
-import { goBack } from "./url";
 import { setTitle } from "../platform-specific/url";
+import { goBack } from "./navigate";
 
 export function TopBar({title, subtitle, showPersonas}) {
     const s = TopBarStyle;
