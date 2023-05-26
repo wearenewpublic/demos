@@ -107,11 +107,11 @@ function ExampleVideoPlayer() {
         <Pad/>
         <HorizBox>
             <VideoPlayer 
-                uri='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' 
+                uri='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' 
                 posterUri='https://static.tvtropes.org/pmwiki/pub/images/BigBuckBunny.jpg'
                 size={200} />
             <VideoPlayer 
-                uri='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' 
+                uri='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' 
                 posterUri='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Elephants_Dream_s5_both.jpg/1200px-Elephants_Dream_s5_both.jpg'
                 size={200} />
         </HorizBox>
