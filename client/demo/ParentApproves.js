@@ -89,6 +89,7 @@ function BlingMaybeBad({comment}) {
 }
 
 async function postHandlerAsync({text, replyTo}) {
+    console.log('postHandlerAsync', text, replyTo)
     const personaKey = getPersonaKey();
     const commentKey = addObject('comment', {
         from: personaKey, text, replyTo, pending: true

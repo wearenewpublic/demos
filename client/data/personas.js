@@ -20,7 +20,8 @@ export const personas = {
     },
     'leader': {
         name: 'Leader Laura',
-        face: 'face5.jpeg'
+        face: 'face5.jpeg',
+        admin: true
     },
     'silly': {
         name: 'Silly Sarah',

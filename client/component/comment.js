@@ -58,6 +58,7 @@ function likeComment(commentKey, comment, personaKey) {
 
 export function ActionLike({commentKey, comment}) {
     const personaKey = useGlobalProperty('$personaKey');
+    if (comment.from == personaKey) return null;
     const actionLabel = comment?.likes?.[personaKey] ? 'Unlike' : 'Like';
     const likeCount = Object.keys(comment?.likes || {}).length;    
     const likeCountLabel = likeCount ? ' (' + likeCount + ')' : '';

@@ -72,13 +72,19 @@ const ReplyInputStyle = StyleSheet.create({
 
 export function TopCommentInput() {
     const personaKey = useGlobalProperty('$personaKey');
+    const {postHandler} = useContext(CommentContext);
+
     const [text, setText] = useState('');
     const s = ReplyInputStyle;
 
     function onPost() {
-        addObject('comment', {
-            from: personaKey, text
-        })
+        if (postHandler) {
+            postHandler({text});
+        } else {
+            addObject('comment', {
+                text
+            })
+        }
         setText('');
     }
 

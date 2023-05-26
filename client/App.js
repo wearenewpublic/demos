@@ -94,7 +94,6 @@ function getScreen({demo, screenKey}) {
 }
 
 function getScreenTitle({demo, instance, screenKey, params}) {
-  console.log('getScreenTitle', {demo, instance, screenKey, params})
   if (screenKey) {
     return demo.subscreens?.[screenKey]?.title?.(params)
   } else if (instance) {
