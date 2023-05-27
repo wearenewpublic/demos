@@ -41,7 +41,7 @@ export const PrivateRuleEnforcerDemo = {
     key: 'privateruleenforcer',
     name: 'Private Rule Enforcer',
     author: authorRobEnnals,
-    date: '2023-05-26 15:00 PST',
+    date: '2023-05-26',
     description,
     tags: [tagModeration, tagConversation],
     status: statusTentative,
