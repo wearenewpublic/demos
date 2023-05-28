@@ -8,6 +8,8 @@ import { VideoCamera } from '../platform-specific/videocamera';
 import { statusStartingPoint } from '../data/tags';
 import { goBack, pushSubscreen } from '../shared/navigate';
 import { authorRobEnnals } from '../data/authors';
+import { AudioPlayer } from '../component/audio';
+import { AudioRecorder } from '../platform-specific/audiorecorder';
 
 const description = `
 Examples of how to use the various parts of the demo infrastructure.
@@ -54,6 +56,10 @@ export function ExampleScreen() {
             <ExampleVideoPlayer />
             <Separator />
             <ExampleVideoRecording />
+            <Separator />
+            <ExampleAudioPlayer />
+            <Separator />
+            <ExampleAudioRecorder />
             <Separator />
             <ExampleSubscreens />
         </ScrollableScreen>
@@ -147,6 +153,29 @@ function ExampleVideoRecording() {
     </View>
 }
 
+function ExampleAudioPlayer() {
+    return <View>
+        <SmallTitle>Sound Playing</SmallTitle>
+        <BodyText>Demos can play sound.</BodyText>
+        <Pad/>
+        <AudioPlayer uri='https://upload.wikimedia.org/wikipedia/commons/b/b2/Ak-Bongo.ogg' />
+    </View>
+}
+
+function ExampleAudioRecorder() {
+    const [audio, setAudio] = useState(null);
+    console.log('audio', audio);
+    return <View>
+        <SmallTitle>Sound Recording</SmallTitle>
+        <BodyText>Demos can record sound.</BodyText>
+        <Pad/>
+        <AudioRecorder onSubmitRecording={setAudio} />
+        {audio ?
+            <AudioPlayer uri={audio} />
+        : null}
+    </View>
+}
+
 function ExampleSubscreens() {
     return <View>
         <SmallTitle>Stacked Screens</SmallTitle>
@@ -190,3 +219,4 @@ function DogScreen({name}) {
         <PrimaryButton onPress={goBack}>Back</PrimaryButton>
     </ScrollableScreen>
 }
+
