@@ -1,23 +1,25 @@
-import { Entypo } from "@expo/vector-icons";
+import React from "react";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad, PrimaryButton } from "../component/basics";
 
-export function VideoCamera({size=200, action='Record Video', onSubmitRecording}) {
+
+export function AudioRecorder({action='Record Audio', onSubmitRecording}) {
     const s = VideoCameraStyle;
-    const [cameraShown, setCameraShown] = useState(false);
+    const [recorderShown, setRecorderShown] = useState(false);
 
     function onSubmit(url) {
-        setCameraShown(false);
+        setRecorderShown(false);
         onSubmitRecording(url);
     }
 
-    if (cameraShown) {
-        return <LiveVideoCamera size={size} onSubmitRecording={onSubmit} />
+    if (recorderShown) {
+        return <LiveAudioRecorder onSubmitRecording={onSubmit} />
     } else {
         return <PrimaryButton 
-            onPress={() => setCameraShown(true)}
-            icon={<Entypo name='video-camera' size={24} color='white' />}>
+            onPress={() => setRecorderShown(true)}
+            icon={<FontAwesome name='microphone' size={24} color='white' />}>
             {action}
         </PrimaryButton>
     }
@@ -41,8 +43,8 @@ const VideoCameraStyle = StyleSheet.create({
     }
 })
 
-export function LiveVideoCamera({size, onSubmitRecording}) {
-    const videoRef = useRef(null);
+export function LiveAudioRecorder({size, onSubmitRecording}) {
+    const streamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const recordedBlobsRef = useRef([]);
     const [recording, setRecording] = useState(false);  
@@ -54,9 +56,9 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
 
     const startRecording = () => {
         recordedBlobsRef.current = [];
-        const stream = videoRef.current.srcObject;
-        console.log('stream', {stream, videoRef});
-        mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+        const stream = streamRef.current;
+        console.log('stream', {stream, streamRef});
+        mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'audio/webm; codecs=opus' });
 
         mediaRecorderRef.current.ondataavailable = handleDataAvailable;
         mediaRecorderRef.current.onstop = handleStop;
@@ -76,15 +78,16 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     };
 
     const handleStop = () => {
-        const blob = new Blob(recordedBlobsRef.current, { type: 'video/webm' });
+        const blob = new Blob(recordedBlobsRef.current, { type: 'audio/webm' });
         const url = URL.createObjectURL(blob);
         recordedBlobsRef.current = [];
-        console.log('recorderd video uri', url);
+        console.log('recorderd audio uri', url);
         onSubmitRecording(url);
     };
     
     const handleSuccess = (stream) => {
-        videoRef.current.srcObject = stream;
+        streamRef.current = stream;
+        // videoRef.current.srcObject = stream;
         setInitialized(true);
     };
     
@@ -100,11 +103,11 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     
     return (
         <View>
-            <video 
+            {/* <video 
                 ref={videoRef} 
                 style={{width: size, height: size, objectFit: "cover"}} autoPlay muted 
             />
-            <Pad />
+            <Pad /> */}
             {initialized ? 
                 (recording ?
                     <PrimaryButton
@@ -117,7 +120,7 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
 
                 )
             : 
-                <div>Initializing Camera...</div>
+                <div>Initializing Microphone...</div>
             }
         </View>
     );
