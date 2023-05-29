@@ -1,41 +1,104 @@
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
+const Busboy = require('busboy');
+const os = require('os');
+const path = require('path');
+const fs = require('fs');
 const { components } = require("./component");
 const cors = require('cors')({origin: true})
 
-exports.api = functions.https.onRequest(async (request, response) => {
-    if (request.method == 'OPTIONS') {
-        cors(request, response, () => {
+
+exports.api = functions.https.onRequest((req, res) => {
+    const contentType = req.headers['content-type'] || '';
+    console.log('api request', req.method, req.path, contentType);
+    if (req.method == 'OPTIONS') {
+        cors(req, res, () => {
             response.status(200);
         });
         return;
+    } else if (req.method === 'POST') {  
+        if (contentType.includes('multipart/form-data')) {
+            handleMultipartRequest(req, res);
+        } else if (contentType.includes('application/json')) {
+            handleJsonRequest(req, res);
+        } else {
+            res.status(415).send({error: 'Unsupported Content-Type'});
+        }
+    } else {
+        res.status(415).send({error: 'Unsupported HTTP Method'});
     }
+})
 
+function handleMultipartRequest(req, res) {
+    const busboy = Busboy({ headers: req.headers });
+    const tmpdir = os.tmpdir();
+
+    let fileWrites = [];
+    let fields = {};
+
+    busboy.on('field', (fieldname, val) => {
+        fields[fieldname] = val;
+    });
+
+    busboy.on('file', (fieldname, file, filename) => {
+        const filepath = path.join(tmpdir, filename);
+        const writeStream = fs.createWriteStream(filepath);
+        file.pipe(writeStream);
+
+        const promise = new Promise((resolve, reject) => {
+            writeStream.on('finish', resolve);
+            writeStream.on('error', reject);
+        });
+        fields[fieldname] = filepath;
+        fileWrites.push(promise);
+    });
+
+    busboy.on('finish', async () => {
+        await Promise.all(fileWrites);
+
+        const {statusCode, result} = await callApiFunctionAsync(req, fields);
+
+        cors(req, res, () => {
+            res.status(statusCode);
+            res.send(result);
+        });
+    });
+
+    busboy.end(req.rawBody);
+};
+
+async function handleJsonRequest(request, response) {
+    const fields = {...request.query, ...request.body};
+    const {statusCode, result} = await callApiFunctionAsync(request, fields);
+    cors(request, response, () => {
+        console.log('in cors', statusCode, result);
+        response.status(statusCode);
+        response.send(result);
+    })
+}
+    
+
+async function callApiFunctionAsync(request, fields) {
+    console.log('callApiFunctionAsync', request.path, fields);
     const {componentId, apiId} = parsePath(request.path);
 
     const component = components[componentId];
     const apiFunction = component?.apiFunctions?.[apiId];
-    const params = {...request.query, ...request.body};
+    const params = {...request.query, ...fields};
 
     if (!component || !apiFunction) {
-        response.status(400);
-        response.send(JSON.stringify({success: false, error: 'Unknown api', path: request.path, componentId, apiId}));
-        return;
+        return ({statusCode: 400, result: JSON.stringify({success: false, error: 'Unknown api', path: request.path, componentId, apiId})});
     }
 
-    const result = await apiFunction(params); 
-    cors(request, response, () => {
-        if (result.data) {
-            response.status(200);
-            response.send(JSON.stringify({success: true, data: result.data}));
-        } else if (result.error) {
-            response.status(400);
-            response.send(JSON.stringify({success: false, error: result.error}));
-        } else {
-            response.status(500);
-            response.send(JSON.stringify({success: false, error: 'Unknown error'}));
-        }  
-    }); 
-});
+    const apiResult = await apiFunction(params); 
+    if (apiResult.data) {
+        return ({statusCode: 200, result: JSON.stringify({success: true, data: apiResult.data})});
+    } else if (apiResult.error) {
+        return ({statusCode: 400, result: JSON.stringify({success: false, error: apiResult.error})});
+    } else {
+        return ({statusCode: 500, result: JSON.stringify({success: false, error: 'Unknown error'})});
+    }
+}
+
 
 function parsePath(path) {
     var parts = path.split('/').filter(x => x);

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { BigTitle, BodyText, EditableText, HorizBox, Pad, PrimaryButton, ScrollableScreen, SectionTitle, Separator, SmallTitle, WideScreen } from '../component/basics';
 import { setGlobalProperty, useGlobalProperty } from '../util/localdata';
-import { callServerApiAsync } from '../util/servercall';
+import { callServerApiAsync, callServerMultipartApiAsync } from '../util/servercall';
 import { useState } from 'react';
 import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
@@ -51,7 +51,7 @@ export function ExampleScreen() {
             <Separator />
             <ExampleInstanceData />
             <Separator />
-            <ExampleCallBackend />
+            <ExampleCallBackend name={name} />
             <Separator />
             <ExampleVideoPlayer />
             <Separator />
@@ -94,13 +94,19 @@ function ExampleInstanceData() {
 }
 
 
-function ExampleCallBackend() {
+function ExampleCallBackend({name}) {
     const [response, setResponse] = useState('');
 
     async function onCallBackend() {
         const result = await callServerApiAsync('chatgpt', 'hello', {name});
         setResponse(result);
     }
+
+    async function onCallMultipartBackend() {
+        const result = await callServerMultipartApiAsync('chatgpt', 'hello', {name});
+        setResponse('Multipart: ' + result);
+    }
+
 
     return <View>
         <SmallTitle>Backend Calls</SmallTitle>
@@ -109,6 +115,9 @@ function ExampleCallBackend() {
         </BodyText>
         <Pad />
         <PrimaryButton onPress={onCallBackend}>Call Backend</PrimaryButton>
+        <Pad />
+        <PrimaryButton onPress={onCallMultipartBackend}>Call Multipart Backend</PrimaryButton>
+        <Pad />
         <BodyText>{response}</BodyText>                
     </View>
 }
