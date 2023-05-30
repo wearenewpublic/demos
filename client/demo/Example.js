@@ -189,7 +189,7 @@ function ExampleAudioRecorder() {
 
 function ExampleAudioTranscriber() {
     const [audio, setAudio] = useState(null);
-    const [transcription, setTranscription] = useState('hello');
+    const [transcription, setTranscription] = useState(null);
     
     async function onSubmitRecording({blob, url}) {
         setAudio(url);

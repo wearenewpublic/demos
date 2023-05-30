@@ -1,15 +1,56 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Clickable } from './basics';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { BodyText, Card, Clickable, TimeText } from './basics';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { callServerMultipartApiAsync } from '../util/servercall';
+import { useObject } from '../util/localdata';
+import { UserFace } from './userface';
 
 
-export function AudioPlayer({uri}) {
+export function AudioPost({post}) {
+    const s = AudioPostStyle;
+    const user = useObject('persona', post.from);
+    return <Card fitted>
+        <View style={s.authorBox}>
+            <UserFace userId={post.from} size={32} />
+            <View style={s.authorRight}>
+                <Text style={s.authorName}>{user.name}</Text>
+                <TimeText time={post.time} />
+            </View>
+        </View>
+        <Text style={s.text}>{post.text}</Text>
+        <AudioPlayer uri={post.uri} size={200} pill label='Play Audio Response'/>
+    </Card>
+}
+
+const AudioPostStyle = StyleSheet.create({
+    authorBox: {
+        flexDirection: 'row',
+        marginBottom: 8
+    },
+    authorRight: {
+        flex: 1,
+        marginLeft: 8
+    },
+    authorName: {
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+    text: {
+        marginHorizontal: 2,
+        marginBottom: 12,
+        color: '#444'
+
+    }
+})
+
+
+
+export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
     const s = AudioPlayerStyle;
-    const [sound, setSound] = React.useState();
-    const [playing, setPlaying] = React.useState(false);
+    const [sound, setSound] = useState();
+    const [playing, setPlaying] = useState(false);
 
     async function onPlay(){
         setPlaying(true);
@@ -33,11 +74,23 @@ export function AudioPlayer({uri}) {
           : undefined;
       }, [sound]);
 
-    return <View style={s.outer}>
-        <Clickable onPress={playing ? onPause : onPlay}>
-            <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={32} color='#666' />
+    if (pill) {
+        return <Clickable onPress={playing ? onPause : onPlay}>
+            <View style={s.pill}> 
+                <View style={s.outer}>
+                    <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={24} color='#666' />
+                </View>
+                <Text style={s.label}>{label}</Text>
+            </View>
         </Clickable>
-    </View>
+        
+    } else {
+        return <View style={s.outer}>
+            <Clickable onPress={playing ? onPause : onPlay}>
+                <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={32} color='#666' />
+            </Clickable>
+        </View>
+    }
 }
 
 const AudioPlayerStyle = StyleSheet.create({
@@ -49,6 +102,22 @@ const AudioPlayerStyle = StyleSheet.create({
         textAlign: 'center',
         borderColor: '#ddd',
         borderWidth: StyleSheet.hairlineWidth
+    },
+    pill: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: '#ddd',
+        borderWidth: StyleSheet.hairlineWidth,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 24,
+        alignSelf: 'flex-start'
+    },
+    label: {
+        fontSize: 15,
+        color: '#444',
+        marginLeft: 8,
+        marginRight: 6
     }
 })
 

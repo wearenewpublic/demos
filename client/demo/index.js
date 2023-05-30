@@ -9,9 +9,11 @@ import { OpenHouseDemo } from "./OpenHouse";
 import { ParentApproves } from "./ParentApproves";
 import { ArticleCommentsDemo } from "./ArticleComments";
 import { PrivateRuleEnforcerDemo } from "./PrivateRuleEnforcer";
+import { AudioResponseDemo } from "./AudioResponse";
 
 export const demos = [
     ExampleDemo, ChatDemo, ThreadedCommentsDemo, RoboMediatorChatDemo, RuleEnforcerChatDemo, VideoResponse,
-    SimulatedChat, OpenHouseDemo, ParentApproves, ArticleCommentsDemo, PrivateRuleEnforcerDemo
+    SimulatedChat, OpenHouseDemo, ParentApproves, ArticleCommentsDemo, PrivateRuleEnforcerDemo,
+    AudioResponseDemo
 ]
 
