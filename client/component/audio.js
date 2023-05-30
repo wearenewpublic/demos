@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Clickable } from './basics';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import { callServerMultipartApiAsync } from '../util/servercall';
 
 
 export function AudioPlayer({uri}) {
@@ -50,3 +51,12 @@ const AudioPlayerStyle = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth
     }
 })
+
+
+export async function transcribeAudioAsync({blob}) {
+    const result = await callServerMultipartApiAsync('whisper', 'transcribeAudio', {}, {
+        audioFile: {blob, filename: 'audio.webm'}
+    });
+    return result.text;
+
+}

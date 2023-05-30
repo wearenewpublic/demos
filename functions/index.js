@@ -27,7 +27,7 @@ exports.api = functions.https.onRequest((req, res) => {
         res.status(415).send({error: 'Unsupported HTTP Method'});
     }
 })
-
+ 
 function handleMultipartRequest(req, res) {
     const busboy = Busboy({ headers: req.headers });
     const tmpdir = os.tmpdir();
@@ -39,8 +39,8 @@ function handleMultipartRequest(req, res) {
         fields[fieldname] = val;
     });
 
-    busboy.on('file', (fieldname, file, filename) => {
-        const filepath = path.join(tmpdir, filename);
+    busboy.on('file', (fieldname, file, fileInfo) => {
+        const filepath = path.join(tmpdir, fileInfo.filename);
         const writeStream = fs.createWriteStream(filepath);
         file.pipe(writeStream);
 

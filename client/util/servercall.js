@@ -25,14 +25,17 @@ export async function callServerApiAsync(component, funcname, params) {
     }
 }
 
-// TODO: Do user-based authentication, once we have a database
-export async function callServerMultipartApiAsync(component, funcname, params) {
+export async function callServerMultipartApiAsync(component, funcname, params, fileParams) {
     console.log('callMultipartServerApi', component, funcname, params);
     try {
         let formData = new FormData();
         Object.keys(params).forEach(key => {
             formData.append(key, params[key]);
         })
+        Object.keys(fileParams).forEach(key => {
+            const {blob, filename} = fileParams[key];
+            formData.append(key, blob, filename);
+        });
 
         const apiUrl = makeApiUrl(component, funcname);
         console.log('apiUrl', apiUrl);

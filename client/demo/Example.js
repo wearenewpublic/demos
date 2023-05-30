@@ -8,7 +8,7 @@ import { VideoCamera } from '../platform-specific/videocamera';
 import { statusStartingPoint } from '../data/tags';
 import { goBack, pushSubscreen } from '../shared/navigate';
 import { authorRobEnnals } from '../data/authors';
-import { AudioPlayer } from '../component/audio';
+import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { AudioRecorder } from '../platform-specific/audiorecorder';
 
 const description = `
@@ -60,6 +60,8 @@ export function ExampleScreen() {
             <ExampleAudioPlayer />
             <Separator />
             <ExampleAudioRecorder />
+            <Separator />
+            <ExampleAudioTranscriber />
             <Separator />
             <ExampleSubscreens />
         </ScrollableScreen>
@@ -178,9 +180,38 @@ function ExampleAudioRecorder() {
         <SmallTitle>Sound Recording</SmallTitle>
         <BodyText>Demos can record sound.</BodyText>
         <Pad/>
-        <AudioRecorder onSubmitRecording={setAudio} />
+        <AudioRecorder onSubmitRecording={({url}) => setAudio(url)} />
         {audio ?
             <AudioPlayer uri={audio} />
+        : null}
+    </View>
+}
+
+function ExampleAudioTranscriber() {
+    const [audio, setAudio] = useState(null);
+    const [transcription, setTranscription] = useState('hello');
+    
+    async function onSubmitRecording({blob, url}) {
+        setAudio(url);
+        setTranscription('Transcribing...');
+        console.log('onSubmitRecording', blob, url);
+        const text = await transcribeAudioAsync({blob});
+        console.log('transcribed text', text);
+        setTranscription(text);
+    }
+
+    console.log('audio', audio);
+    
+    return <View>
+        <SmallTitle>Speech Transcripton</SmallTitle>
+        <BodyText>Demos can transribe speech to text.</BodyText>
+        <Pad/>
+        <AudioRecorder onSubmitRecording={onSubmitRecording} />
+        {audio ?
+            <AudioPlayer uri={audio} />
+        : null}
+        {transcription ?
+            <BodyText>{transcription}</BodyText> 
         : null}
     </View>
 }

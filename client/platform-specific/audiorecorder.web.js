@@ -82,7 +82,7 @@ export function LiveAudioRecorder({size, onSubmitRecording}) {
         const url = URL.createObjectURL(blob);
         recordedBlobsRef.current = [];
         console.log('recorderd audio uri', url);
-        onSubmitRecording(url);
+        onSubmitRecording({blob, url});
     };
     
     const handleSuccess = (stream) => {
@@ -96,7 +96,7 @@ export function LiveAudioRecorder({size, onSubmitRecording}) {
     };
 
     const initializeMedia = () => {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        navigator.mediaDevices.getUserMedia({ audio: true })
             .then(handleSuccess)
             .catch(handleError);
     };
