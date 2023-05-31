@@ -37,7 +37,7 @@ const persona = {
     guestSarah: {name: 'Sarah', face: 'face8.jpeg'},
 }
 
-export const OpenHouseDemo = {
+export const OpenHousePrototype = {
     key: 'openhouse',
     name: 'Open House Conversation',
     author: authorRobEnnals,

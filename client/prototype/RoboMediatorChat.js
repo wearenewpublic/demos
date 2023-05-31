@@ -19,11 +19,11 @@ however a human mediator is not always available, and human mediation takes up a
 In this prototype, we explore what happens when an AI agent takes on the role of mediator. 
 The agent detects when people are having a conflict, and attempts to help them resolve it.
 
-When using this demo, we have observed that it can feel "awkward" to have a robot involved in your conversation,
+When using this prototype, we have observed that it can feel "awkward" to have a robot involved in your conversation,
 particularly as a public participant, however the robot can be helpful in resolving conflicts.
 `
 
-export const RoboMediatorChatDemo = {
+export const RoboMediatorChatPrototype = {
     key: 'robomediator',
     name: 'RoboMediator Chat',
     author: authorRobEnnals,

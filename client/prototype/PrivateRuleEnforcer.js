@@ -18,11 +18,11 @@ import { cat_club } from "../data/threaded";
 const description = `
 A treaded conversations where rule-violating comments are hidden.
 
-In the rule enforcer demo, we explored the idea of having a bot tell people when they violate rules.
+In the rule enforcer prototype, we explored the idea of having a bot tell people when they violate rules.
 This allows a bot to relieve a moderator of a lot of their moderating burden, but
 it can feel awkward to be publicly called out for breaking a rule.
 
-In this demo, we instead have a bot hide rule-violating comments, and privately inform the user about
+In this prototype, we instead have a bot hide rule-violating comments, and privately inform the user about
 the reason why their comment violated rules.
 
 If the comment author feels the comment was hidden in error, they can click on the "Post Anyway" button,
@@ -37,7 +37,7 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 3. No mentioning of vegetables.
 `
 
-export const PrivateRuleEnforcerDemo = {
+export const PrivateRuleEnforcerPrototype = {
     key: 'privateruleenforcer',
     name: 'Private Rule Enforcer',
     author: authorRobEnnals,

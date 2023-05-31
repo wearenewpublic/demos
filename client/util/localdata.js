@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { defaultPersona, personas } from "../data/personas";
-import { DemoContext } from "../shared/DemoContext";
+import { PrototypeContext } from "../shared/PrototypeContext";
 
 var global_data = null;
 var data_watchers = [];
@@ -8,7 +8,7 @@ var data_watchers = [];
 // TODO: Make this more efficient. Currently it updates everything for every data update.
 
 function useData() {
-    const {demoKey, instance, instanceKey} = useContext(DemoContext);
+    const {prototypeKey, instance, instanceKey} = useContext(PrototypeContext);
     if (!global_data) resetData(instance);
 
     const [data, setData] = useState(global_data);
@@ -22,7 +22,7 @@ function useData() {
         return () => {
             data_watchers = data_watchers.filter(w => w !== watchFunc);
         }
-    }, [demoKey, instanceKey])
+    }, [prototypeKey, instanceKey])
 
     return data;
 }

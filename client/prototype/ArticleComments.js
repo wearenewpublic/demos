@@ -9,19 +9,19 @@ import { expandDataList } from "../shared/util";
 import { useGlobalProperty } from "../util/localdata";
 
 const description = `
-This is a starting point for demos where comments revolve around an article.
+This is a starting point for prototypes where comments revolve around an article.
 
 In this example we attach threaded comments to the bottom of the article.
 This is similar to the way that comments often appear in news articles.
 
-Future demos could explore ways to reduce misbehavior
+Future prototypes could explore ways to reduce misbehavior
 in the comments,
 ways to connect comments on one article to larger conversations about the topic,
 ways to comment with mechanisms other than text, ways for comments to 
 come from a particlar community rather than just individuals, and other such ideas.
 `
 
-export const ArticleCommentsDemo = {
+export const ArticleCommentsPrototype = {
     key: 'article',
     name: 'Article Comments',
     author: authorRobEnnals,

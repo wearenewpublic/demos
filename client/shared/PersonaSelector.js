@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PopupSelector } from "../platform-specific/popup";
-// import { personas } from "../demo";
+// import { personas } from "../prototype";
 import { setGlobalProperty, useGlobalProperty } from "../util/localdata";
 import { UserFace } from "../component/userface";
 

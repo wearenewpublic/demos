@@ -15,14 +15,14 @@ devices, or people who may have limited literacy.
 
 Hearing someone's voice can also help you to feel more connected to them.
 
-This demo allows people to record short audio responses to questions, and to listen to the responses.
+This prototype allows people to record short audio responses to questions, and to listen to the responses.
 
-The demo also shows an automatic text transcription of the audio. This can be helpful for people who
+The prototype also shows an automatic text transcription of the audio. This can be helpful for people who
 would rather not play sound (e.g. they are in a public place). It also makes it easier to quickly
 tell which audio responses you might want to listen to.
 `
 
-export const AudioResponseDemo = {
+export const AudioResponsePrototype = {
     key: 'audioresponse',
     name: 'Audio Response',
     author: authorRobEnnals,
@@ -39,7 +39,7 @@ export const AudioResponseDemo = {
             },
             {
                 from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
-                text: 'My oldest son, we chose the name Isaac, because we wanted a name with the right associations, and we thought, maybe a scientist. And if you are choosing a scientist then Isaac Newton is the obvious person.'
+                text: 'My oldest son, we chose the name Isaac, because we wanted a name with the right associations, and we thought, maybe a scientist. And if you are choosing a scientist then Isaac Newton is the obvious person. And we middle-named him after Alexander Graham Bell, so his middle name is Graham.'
             }
         ])},        
         {key: 'bio', name: 'What is the 30 second story of your life?', response: expandDataList([

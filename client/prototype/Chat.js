@@ -9,14 +9,14 @@ import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 
 const description = `
-A starting point for demos that involve messenger-like conversations.
+A starting point for prototypes that involve messenger-like conversations.
 
 In this example, each message is sent by a particular person, and the messages are sorted by time.
 
 Messages are styled similarly to those in messaging apps like iMessage or Facebook Messenger.
 `
 
-export const ChatDemo = {
+export const ChatPrototype = {
     key: 'chat',
     name: 'Basic Chat',
     author: authorRobEnnals,

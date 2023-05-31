@@ -9,15 +9,15 @@ import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 
 const description = `
-A starting point for future demos that involve threaded comments.
+A starting point for future prototypes that involve threaded comments.
 
 In this example, each comment can have other comments that appear as replies to it.
 
-It is easy for other demos to customize threaded comments to change what actions are available,
+It is easy for other prototypes to customize threaded comments to change what actions are available,
 how they are sorted, and what additional "bling" is attached to them.
 `
 
-export const ThreadedCommentsDemo = {
+export const ThreadedCommentsPrototype = {
     key: 'threadedcomments',
     name: 'Threaded Comments',
     author: authorRobEnnals,

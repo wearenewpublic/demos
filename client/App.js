@@ -1,50 +1,50 @@
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { demos } from './demo';
-import { DemoContext } from './shared/DemoContext';
-import { DemoInstanceListScreen } from './shared/DemoInstanceListScreen';
-import { DemoListScreen } from './shared/DemoListScreen';
+import { prototypes } from './prototype';
+import { PrototypeContext } from './shared/PrototypeContext';
+import { PrototypeInstanceListScreen } from './shared/PrototypeInstanceListScreen';
+import { PrototypeListScreen } from './shared/PrototypeListScreen';
 import { TopBar } from './shared/TopBar';
 import { resetData } from './util/localdata';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import { setTitle } from './platform-specific/url';
 import { gotoUrl, useLiveUrl } from './shared/url';
-import { getScreenStackForUrl, gotoDemo, gotoInstance } from './shared/navigate';
+import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './shared/navigate';
 
 
 export default function App() {
   const url = useLiveUrl();
-  const {demoKey, instanceKey, screenStack} = getScreenStackForUrl(url);
-  const demo = chooseDemoByKey(demoKey);
+  const {prototypeKey, instanceKey, screenStack} = getScreenStackForUrl(url);
+  const prototype = choosePrototypeByKey(prototypeKey);
   let [fontsLoaded] = useFonts({
     Montserrat_600SemiBold,
   });
 
-  function onSelectDemo(demo) {
-    gotoDemo(demo.key);
+  function onSelectPrototype(prototype) {
+    gotoPrototype(prototype.key);
   }
 
   function onSelectInstance(newInstanceKey) {
-    gotoInstance(demoKey, newInstanceKey);
-    const instance = chooseInstanceByKey({demo, instanceKey: newInstanceKey});
+    gotoInstance(prototypeKey, newInstanceKey);
+    const instance = chooseInstanceByKey({prototype, instanceKey: newInstanceKey});
     resetData(instance)
   }
 
-  if (!demoKey) {
-    setTitle('New Public Demo Garden')
+  if (!prototypeKey) {
+    setTitle('New Public Prototype Garden')
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
-      <DemoListScreen onSelectDemo={onSelectDemo}/>
+      <PrototypeListScreen onSelectPrototype={onSelectPrototype}/>
     </FullScreen>
-  } else if (!demo) {
+  } else if (!prototype) {
     return <FullScreen>
-      <TopBar title='Unknown Demo' />
-      <Text>Unknown demo: {demoKey}</Text>
+      <TopBar title='Unknown Prototype' />
+      <Text>Unknown prototype: {prototypeKey}</Text>
     </FullScreen>
   } else if (!instanceKey) {
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
-      <TopBar title={demo.name} />
-      <DemoInstanceListScreen demo={demo} onSelectInstance={onSelectInstance}/>
+      <TopBar title={prototype.name} />
+      <PrototypeInstanceListScreen prototype={prototype} onSelectInstance={onSelectInstance}/>
     </FullScreen>
   } else {
     return <ScreenStack screenStack={screenStack} />
@@ -71,35 +71,35 @@ const ScreenStackStyle = StyleSheet.create({
 
 
 function StackedScreen({screenInstance, index}) {
-  const {demoKey, instanceKey, screenKey, params} = screenInstance;
-  const demo = chooseDemoByKey(demoKey);
-  const instance = chooseInstanceByKey({demo, instanceKey});
-  const screen = getScreen({demo, screenKey});
-  const title = getScreenTitle({demo, screenKey, instance, params}); 
+  const {prototypeKey, instanceKey, screenKey, params} = screenInstance;
+  const prototype = choosePrototypeByKey(prototypeKey);
+  const instance = chooseInstanceByKey({prototype, instanceKey});
+  const screen = getScreen({prototype, screenKey});
+  const title = getScreenTitle({prototype, screenKey, instance, params}); 
 
-return <DemoContext.Provider value={{demoKey, instance, instanceKey}}>
+return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
       <FullScreen zIndex={index}>
-        <TopBar title={title} subtitle={demo.name} showPersonas />
+        <TopBar title={title} subtitle={prototype.name} showPersonas />
         {React.createElement(screen, params)}
       </FullScreen>
-    </DemoContext.Provider>
+    </PrototypeContext.Provider>
 }
 
-function getScreen({demo, screenKey}) {
+function getScreen({prototype, screenKey}) {
   if (!screenKey) {
-    return demo.screen;
+    return prototype.screen;
   } else {
-    return demo.subscreens?.[screenKey]?.screen;
+    return prototype.subscreens?.[screenKey]?.screen;
   }
 }
 
-function getScreenTitle({demo, instance, screenKey, params}) {
+function getScreenTitle({prototype, instance, screenKey, params}) {
   if (screenKey) {
-    return demo.subscreens?.[screenKey]?.title?.(params)
+    return prototype.subscreens?.[screenKey]?.title?.(params)
   } else if (instance) {
     return instance.name;
   } else {
-    return demo.name
+    return prototype.name
   }
 }
 
@@ -116,16 +116,16 @@ const AppStyle = StyleSheet.create({
   }
 })
 
-function chooseDemoByKey(key) {
+function choosePrototypeByKey(key) {
   if (!key) return null;
-  return demos.find(demo => demo.key === key);
+  return prototypes.find(prototype => prototype.key === key);
 }
 
-function chooseInstanceByKey({demo, instanceKey}) {
+function chooseInstanceByKey({prototype, instanceKey}) {
   if (!instanceKey) {
     return null;
   }
-  return demo.instance.find(instance => instance.key === instanceKey);
+  return prototype.instance.find(instance => instance.key === instanceKey);
 }
 
 

@@ -1,15 +1,15 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import { BigTitle, BodyText, Card, Center, Clickable, Narrow, Pill, PreviewText, ScrollableScreen, Separator, SmallTitle, TimeText } from "../component/basics"
-import { demos } from "../demo"
+import { prototypes } from "../prototype"
 import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from 'react'
 import { NewPublicBodySection, NewPublicName, NewPublicTitle, NewPublicTitleBanner, colorNewPublicBackground } from "../component/newpublic";
 import { useSessionData } from "../util/localdata";
 
-export function DemoListScreen({onSelectDemo}) {
-    const s = DemoListScreenStyle;
-    const sortedDemos = demos.sort((a, b) => b.date.localeCompare(a.date));
+export function PrototypeListScreen({onSelectPrototype}) {
+    const s = PrototypeListScreenStyle;
+    const sortedPrototypes = prototypes.sort((a, b) => b.date.localeCompare(a.date));
     const [tagFilters, setTagFilters] = useState([]);
     const [statusFilter, setStatusFilter] = useState(null);
 
@@ -22,31 +22,31 @@ export function DemoListScreen({onSelectDemo}) {
         setTagFilters(tagFilters.filter(t => t !== tag));
     }
 
-    const filteredDemos = getFilteredDemos({demos: sortedDemos, tagFilters, statusFilter});
+    const filteredPrototypes = getFilteredPrototypes({prototypes: sortedPrototypes, tagFilters, statusFilter});
 
     return (
         <ScrollView>
             <NewPublicTitleBanner>
                 <NewPublicName>New_ Public</NewPublicName>
-                <NewPublicTitle>Demo Garden</NewPublicTitle>
+                <NewPublicTitle>Prototype Garden</NewPublicTitle>
             </NewPublicTitleBanner>
             <NewPublicBodySection>
                 <Narrow>
                     <SelectedTagList tags={tagFilters} status={statusFilter} 
                         onRemoveTag={onRemoveTag} 
                         onClearStatusFilter={() => setStatusFilter(null)}/>
-                {filteredDemos.map(demo => 
-                    <Clickable key={demo.name} onPress={() => onSelectDemo(demo)}>
+                {filteredPrototypes.map(prototype => 
+                    <Clickable key={prototype.name} onPress={() => onSelectPrototype(prototype)}>
                         <Card>
                             <View style={s.authorLine}>
-                                <SmallTitle>{demo.name}</SmallTitle>
-                                <TimeText time={demo.date} />
+                                <SmallTitle>{prototype.name}</SmallTitle>
+                                <TimeText time={prototype.date} />
                             </View>
-                            {/* <AuthorLine author={demo.author} date={demo.date} /> */}
-                            <PreviewText text={demo.description} />
+                            {/* <AuthorLine author={prototype.author} date={prototype.date} /> */}
+                            <PreviewText text={prototype.description} />
                             <View style={s.extraLine}>
-                                <TagList tags={demo.tags || []} onAddTag={onAddTag} />
-                                <Status status={demo.status} onSelectStatus={setStatusFilter} />
+                                <TagList tags={prototype.tags || []} onAddTag={onAddTag} />
+                                <Status status={prototype.status} onSelectStatus={setStatusFilter} />
                             </View>
                         </Card>
                     </Clickable>        
@@ -57,7 +57,7 @@ export function DemoListScreen({onSelectDemo}) {
     )
 }
 
-const DemoListScreenStyle = StyleSheet.create({
+const PrototypeListScreenStyle = StyleSheet.create({
     authorLine: {
         flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4
     },
@@ -66,14 +66,14 @@ const DemoListScreenStyle = StyleSheet.create({
     }
 });
 
-function getFilteredDemos({demos, tagFilters, statusFilter}) {
-    if (tagFilters.length === 0 && !statusFilter) return demos;
-    const hasTags = demos.filter(demo => 
-        tagFilters.every(tag => demo.tags.includes(tag) || demo.status === tag)
+function getFilteredPrototypes({prototypes, tagFilters, statusFilter}) {
+    if (tagFilters.length === 0 && !statusFilter) return prototypes;
+    const hasTags = prototypes.filter(prototype => 
+        tagFilters.every(tag => prototype.tags.includes(tag) || prototype.status === tag)
     )
-    const hasStatusAndTags = hasTags.filter(demo => demo.status === statusFilter || !statusFilter);
+    const hasStatusAndTags = hasTags.filter(prototype => prototype.status === statusFilter || !statusFilter);
     return hasStatusAndTags
-    // return demos.filter(demo => demo.tags.some(tag => tagFilters.includes(tag) || demo.status === tag));
+    // return prototypes.filter(prototype => prototype.tags.some(tag => tagFilters.includes(tag) || prototype.status === tag));
 }
 
 

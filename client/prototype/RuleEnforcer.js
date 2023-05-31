@@ -29,7 +29,7 @@ be enforced within their group, and an AI responds to messages that appear to br
 This also allows the human moderator to not "have to feel like a bad guy" because the bot
 can do the awkward rule enforcement for them.
 
-One limitation of this demo is that it feels awkward to have an AI publicly criticise 
+One limitation of this prototype is that it feels awkward to have an AI publicly criticise 
 your behavior. We thus plan to create another prototype that talk to the user in private, 
 before their rule-breaking messages has been shown to others.
 `
@@ -40,7 +40,7 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 4. No mentioning of vegetables.
 `
 
-export const RuleEnforcerChatDemo = {
+export const RuleEnforcerChatPrototype = {
     key: 'ruleenforcer',
     name: 'Rule Enforcer',
     author: authorRobEnnals,

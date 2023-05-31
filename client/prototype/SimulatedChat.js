@@ -17,7 +17,7 @@ that might happen. This can be useful for producing concrete examples of how dif
 might engage with each other about a topic, and the impact that a skilled facilitator or moderator can
 have on how a conversation proceeds.
 
-One signicant limitation with this demo is that, due to GPT's alignment training, it is very reluctant
+One signicant limitation with this prototype is that, due to GPT's alignment training, it is very reluctant
 to simulate users who are rude and disrepsectful to each other, so it's hard to simulate a conversation
 that goes as badly as real conversations on the internet often do.
 `

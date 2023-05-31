@@ -50,14 +50,14 @@ export const statusStartingPoint = {
     name: 'Starting Point',
     iconName: 'controller-play', 
     iconSet: Entypo,
-    description: 'Illustrates a standard social product structure. Useful as a starting point for more interesting demos'
+    description: 'Illustrates a standard social product structure. Useful as a starting point for more interesting prototypes'
 }
 
 export const statusTutorial = {
     name: 'Tutorial',
     iconName: 'book',
     iconSet: Entypo,
-    description: 'A demo created for the purpose of illustrating how the demo system works',
+    description: 'A prototype created for the purpose of illustrating how the prototype system works',
 }
 
 export const statusExperiment = {

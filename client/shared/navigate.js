@@ -25,12 +25,12 @@ export function pushSubscreen(key, params) {
     gotoUrl(makeUrl(parts, query));
 }
 
-export function gotoDemo(demoKey) {
-    gotoUrl(makeUrl([demoKey]));
+export function gotoPrototype(prototypeKey) {
+    gotoUrl(makeUrl([prototypeKey]));
 }
 
-export function gotoInstance(demoKey, instanceKey) {
-    gotoUrl(makeUrl([demoKey, instanceKey]));
+export function gotoInstance(prototypeKey, instanceKey) {
+    gotoUrl(makeUrl([prototypeKey, instanceKey]));
 }
 
 
@@ -74,17 +74,17 @@ export function getScreenStackForUrl(url) {
     const parsedUrl = new URL(url);
     const parts = parsedUrl.pathname.split('/').filter(x => x);
     const query = new URLSearchParams(parsedUrl.search);
-    var [demoKey, instanceKey, ...screenParts] = parts;
+    var [prototypeKey, instanceKey, ...screenParts] = parts;
 
-    if (!demoKey) return {}
-    if (!instanceKey) return {demoKey};
+    if (!prototypeKey) return {}
+    if (!instanceKey) return {prototypeKey};
 
-    var screenStack = [{demoKey, instanceKey, screenKey: null, params: {}}];
+    var screenStack = [{prototypeKey, instanceKey, screenKey: null, params: {}}];
 
     for (var i = 0; i < screenParts.length; i++) {
         const screenKey = screenParts[i];
         const params = getParamsWithSuffix(query, getParamSuffixForIndex(i));
-        screenStack.push({demoKey, instanceKey, screenKey, params});
+        screenStack.push({prototypeKey, instanceKey, screenKey, params});
     }
-    return {demoKey, instanceKey, screenStack};
+    return {prototypeKey, instanceKey, screenStack};
 }
