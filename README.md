@@ -69,7 +69,7 @@ yarn web
 In another terminal, start the back end:
 ```
 cd functions
-yarn functions
+yarn emulate
 ```
 
 
