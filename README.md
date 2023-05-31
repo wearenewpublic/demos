@@ -27,13 +27,15 @@ These are all chosen because they are simple to use, which is a priority for rap
 
 ## Bringing up your Dev Environment
 
+Make sure you have already installed [git](https://github.com/git-guides/install-git) and [yarn](https://classic.yarnpkg.com/lang/en/docs/install).
+
 Clone the prototype garden repository:
 ```
 git clone https://github.com/wearenewpublic/prototypes.git
 cd prototypes
 ```
 
-Install the NPM dependencies:
+Install the package dependencies:
 ```
 cd functions
 yarn
@@ -48,11 +50,14 @@ yarn global add firebase-tools
 yarn global add expo-cli
 ```
 
-Add your GPT key.
+Sign up for an OpenAI key at https://openai.com/blog/openai-api, and find your key at https://platform.openai.com/account/api-keys. This should take less than a minute.
+
+Add your OpenAI key.
 Create a file called `functions/keys.js` with the following content:
 ```
 exports.OPENAI_KEY = 'your OPENAI key'`
 ```
+
 
 ## Running Prototypes
 
