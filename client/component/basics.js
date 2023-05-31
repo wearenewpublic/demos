@@ -159,6 +159,10 @@ export function Center({children, pad=0}) {
     return <View style={{flexDirection: 'row', justifyContent: 'center', margin: pad}}>{children}</View>  
 }
 
+export function PadBox({children, horiz=8, vert=8}) {
+    return <View style={{paddingHorizontal: horiz, paddingVertical: vert}}>{children}</View>
+}
+
 export function PrimaryButton({children, icon, onPress}) {
     return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
@@ -275,6 +279,32 @@ const PillStyle = StyleSheet.create({
     },
     text: {
         fontSize: 11,
+    }
+})
+
+export function ListItem({title, subtitle}) {
+    const s = ListItemStyle;
+    return <View style={s.item}>
+        <Text style={s.title}>{title}</Text>
+        <Text style={s.subtitle}>{subtitle}</Text>
+    </View>
+}
+
+const ListItemStyle = StyleSheet.create({
+    item: {
+        backgroundColor: '#f5f5f5',
+        marginVertical: 4,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 8
+    },
+    title: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginBottom: 2
+    },
+    subtitle: {
+        fontSize: 12
     }
 })
 

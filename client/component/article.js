@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
 import { Separator } from "./basics";
 
-export function Article({article, children}) {
+export function Article({article, embed=null, children}) {
     const s = ArticleStyle;
     
     const paragraphs = article.rawText.trim().split('\n').filter(x=>x);
@@ -29,7 +29,16 @@ export function Article({article, children}) {
             </View>
             <View style={s.pargraphHolder}>
                 {paragraphs.map((paragraph, i) => 
+                    (i == 2 && embed) ? 
+                        <View key={i}>
+                            <View style={s.embed}>
+                                {embed}
+                            </View>
+                            <Text key={i} style={s.paragraph}>{paragraph}</Text>
+                        </View>
+                    :
                     <Text key={i} style={s.paragraph}>{paragraph}</Text>
+
                 )}
             </View>
         </View>
@@ -47,6 +56,11 @@ const ArticleStyle = StyleSheet.create({
     },
     outer: {
     },
+    embed: {
+        marginBottom: 24,
+        marginTop: 8,
+        marginHorizontal: 16
+    },  
     comments: {
         alignSelf: 'center',
     },

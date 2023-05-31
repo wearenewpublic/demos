@@ -43,15 +43,26 @@ export function resetData(instance) {
 }
 
 export function useCollection(typeName, props = {}) {
-    const {sortBy} = props;
+    const {sortBy, filter} = props;
     const data = useData();
     const collection = data[typeName];
     if (!collection) {
         console.error('No such type:', typeName);
     }
-    const sorted = sortMapValuesByProp(collection, sortBy || 'key');
-    if (props.reverse) return sorted.reverse()
-    else return sorted;
+    var result = sortMapValuesByProp(collection, sortBy || 'key');
+    if (props.reverse) {
+        result = result.reverse();
+    }if (filter) {
+        result = result.filter(item => meetsFilter(item, filter))
+    }
+    return result;
+}
+
+function meetsFilter(item, filter) {
+    for (const [key, value] of Object.entries(filter)) {
+        if (item[key] != value) return false;
+    }
+    return true;
 }
 
 export function useCollectionMap(typeName) {

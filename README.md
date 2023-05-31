@@ -78,7 +78,7 @@ yarn functions
 * Choose a prototype that you'd like to use as the starting point for your prototype. E.g. "Chat", "Article", and "ThreadedComments" are specifically designed to be used as starting points.
 * Copy that prototype's file from `client/prototype` into a file with the name of your new prototype.
 * Edit the prototype metadata at the top of the file. Make sure you change the `key` which forms part of it's URL path.
-* Add your prototype to the `prototypes` list in `client/prototyep/index.js`.
+* Add your prototype to the `prototypes` list in `client/prototype/index.js`.
 * Edit the code for the prototype's screen to have the behavior you want.
 
 

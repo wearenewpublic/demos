@@ -272,14 +272,14 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function BasicComments() {
+export function BasicComments({about = null}) {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => !comment.replyTo);
+    const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
 
     console.log('comments', comments);
 
     return <View>
-        <TopCommentInput />
+        <TopCommentInput about={about} />
         {topLevelComments.map(comment => 
             <Comment key={comment.key} commentKey={comment.key} />
         )}

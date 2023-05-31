@@ -70,7 +70,7 @@ const ReplyInputStyle = StyleSheet.create({
     }
 })
 
-export function TopCommentInput() {
+export function TopCommentInput({about=null}) {
     const personaKey = useGlobalProperty('$personaKey');
     const {postHandler} = useContext(CommentContext);
 
@@ -82,7 +82,8 @@ export function TopCommentInput() {
             postHandler({text});
         } else {
             addObject('comment', {
-                text
+                text,
+                replyTo: about
             })
         }
         setText('');
