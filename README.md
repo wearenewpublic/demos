@@ -50,9 +50,8 @@ yarn global add firebase-tools
 yarn global add expo-cli
 ```
 
-Sign up for an OpenAI key at https://openai.com/blog/openai-api, and find your key at https://platform.openai.com/account/api-keys. This should take less than a minute.
+Sign up for an OpenAI key [here](https://openai.com/blog/openai-api).
 
-Add your OpenAI key.
 Create a file called `functions/keys.js` with the following content:
 ```
 exports.OPENAI_KEY = 'your OPENAI key'`
