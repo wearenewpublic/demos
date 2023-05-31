@@ -42,7 +42,7 @@ export const ArticleQuestionsPrototype = {
     key: 'articlequestions',
     name: 'Article Questions',
     author: authorRobEnnals,
-    date: '2023-05-31',
+    date: 'Wed May 31 2023 12:40:00 GMT-0700 (Pacific Daylight Time)',
     description,
     tags: [tagArticle, tagConversation],
     status: statusTentative,
