@@ -276,7 +276,7 @@ export function BasicComments({about = null}) {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
 
-    console.log('comments', comments);
+    // console.log('comments', comments);
 
     return <View>
         <TopCommentInput about={about} />

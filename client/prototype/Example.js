@@ -175,7 +175,6 @@ function ExampleAudioPlayer() {
 
 function ExampleAudioRecorder() {
     const [audio, setAudio] = useState(null);
-    console.log('audio', audio);
     return <View>
         <SmallTitle>Sound Recording</SmallTitle>
         <BodyText>Prototypes can record sound.</BodyText>
@@ -194,14 +193,10 @@ function ExampleAudioTranscriber() {
     async function onSubmitRecording({blob, url}) {
         setAudio(url);
         setTranscription('Transcribing...');
-        console.log('onSubmitRecording', blob, url);
         const text = await transcribeAudioAsync({blob});
-        console.log('transcribed text', text);
         setTranscription(text);
     }
 
-    console.log('audio', audio);
-    
     return <View>
         <SmallTitle>Speech Transcripton</SmallTitle>
         <BodyText>Prototypes can transribe speech to text.</BodyText>

@@ -55,8 +55,6 @@ export function ParentApprovesScreen() {
         topBling: [BlingMaybeBad, BlingPending]
     }
 
-    console.log('comments', comments);
-
     return (
         <WideScreen pad>
             <ScrollView>

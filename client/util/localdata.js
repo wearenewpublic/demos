@@ -14,8 +14,6 @@ function useData() {
     const [data, setData] = useState(global_data);
 
     useEffect(() => {
-        setData(global_data);        
-
         const watchFunc = (newData) => setData(newData);
         data_watchers.push(watchFunc);
 
@@ -39,8 +37,10 @@ function firstPersona(instance) {
 
 export function resetData(instance) {
     const personaKey = firstPersona(instance) || defaultPersona;
-    setGlobalData({persona: deepClone(personas), ['$personaKey']: personaKey, ...deepClone(instance)});    
+    global_data = ({persona: deepClone(personas), ['$personaKey']: personaKey, ...deepClone(instance)});    
 }
+
+export function test_getDataWatchers() {return data_watchers};
 
 export function useCollection(typeName, props = {}) {
     const {sortBy, filter} = props;

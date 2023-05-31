@@ -59,3 +59,9 @@ export function collapseDoubleSpaces(text) {
     let result = text.replace(/  /g, ' ');
     return result;
 }
+
+export async function forEachAsync(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+}

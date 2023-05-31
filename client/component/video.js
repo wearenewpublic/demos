@@ -10,7 +10,7 @@ import { useObject } from "../util/localdata";
 export function VideoPost({post}) {
     const s = VideoPostStyle;
     const user = useObject('persona', post.from);
-    console.log('videopost', post, user, new Date(post.time));
+
     return <Card fitted> 
         <View style={s.authorBox}>
             <UserFace userId={post.from} size={32} />

@@ -65,8 +65,6 @@ export function PrivateRuleEnforcerScreen() {
         topBling: [BlingViolatesRules, BlingPending, BlingForced]
     }
 
-    console.log('comments', comments);
-
     return (
         <WideScreen pad>
             <ScrollView>

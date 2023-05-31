@@ -60,8 +60,6 @@ export function OpenHouseScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo);
     const actions = [ActionLike, ActionReply, ActionPromote, ActionCollapse]
 
-    console.log('comments', comments);
-
     return (
         <WideScreen pad>
             <ScrollView>

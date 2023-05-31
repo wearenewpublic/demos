@@ -121,25 +121,3 @@ const ArticleStyle = StyleSheet.create({
         maxWidth: 500,
     }
 })
-
-function parseArticle(rawArticle) {
-    const lines = rawArticle.split('\n');
-    var title = null;
-    var subtitle = null;
-    var photo = null;
-    var author = null;
-    var date = null;
-    var paragraphs = [];
-    for (const line of lines) {
-        const [key, value] = line.split(':');
-        switch (key.toLowerCase().trim()) {
-            case 'title': title = value.trim(); break;
-            case 'subtitle': subtitle = value.trim(); break;
-            case 'photo': photo = value.trim(); break;
-            case 'author': author = value.trim(); break;
-            case 'date': date = value.trim(); break;
-            default: paragraphs.push(line);
-        }
-    }
-    return {title, subtitle, author, date, photo, paragraphs};
-}

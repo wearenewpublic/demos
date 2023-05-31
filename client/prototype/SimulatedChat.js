@@ -68,8 +68,6 @@ function SimulatedChatScreen() {
     const personas = useGlobalProperty('persona');
     const topic = useGlobalProperty('topic');
 
-    console.log('messages', messages);
-
     async function onGenerate() {
         setStarted(true);
         setInProgress(true);
