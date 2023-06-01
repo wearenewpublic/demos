@@ -25,7 +25,7 @@ export async function callServerApiAsync(component, funcname, params) {
     }
 }
 
-export async function callServerMultipartApiAsync(component, funcname, params, fileParams) {
+export async function callServerMultipartApiAsync(component, funcname, params, fileParams={}) {
     console.log('callMultipartServerApi', component, funcname, params);
     try {
         let formData = new FormData();
@@ -53,7 +53,7 @@ export async function callServerMultipartApiAsync(component, funcname, params, f
             return null;
         }
     } catch (error) {
-        console.error('Error in fetch', component, funcname, params, result.error);
+        console.error('Error in fetch', component, funcname, params, error);
     }
 }
 
