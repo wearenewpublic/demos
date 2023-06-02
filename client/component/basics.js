@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 import Markdown from "react-native-markdown-display";
 import { collapseDoubleSpaces, stripSingleLineBreaks } from "../shared/util";
 import { FaceImage, UserFace } from "./userface";
+import { closeActivePopup } from "../platform-specific/popup.web";
 
 
 export function ScrollableScreen({children, maxWidth=500}) {
@@ -48,7 +49,13 @@ const CardStyle = StyleSheet.create({
 })
 
 export function Clickable({onPress, children, style}) {
-    return <TouchableOpacity onPress={onPress} style={style} pointerEvents="box-none">
+    function onPressInner() {
+        if (onPress) {
+            closeActivePopup();
+            onPress();
+        }
+    }
+    return <TouchableOpacity onPress={onPressInner} style={style} pointerEvents="box-none">
         {children}
     </TouchableOpacity>
 }
@@ -147,8 +154,14 @@ export function Pad({size=8}) {
     return <View style={{height: size, width: size}}/>
 }
 
-export function HorizBox({children, center=false}) {
-    return <View style={{flexDirection: 'row', alignItems: center ? 'center' : 'flex-start'}}>{children}</View>
+export function HorizBox({children, center=false, spread=false}) {
+    return <View style={{
+            flexDirection: 'row', 
+            alignItems: center ? 'center' : 'flex-start', 
+            justifyContent: spread ? 'space-between' : 'flex-start'
+        }}>
+        {children}
+    </View>
 }
 
 export function WrapBox({children}) {
@@ -307,4 +320,5 @@ const ListItemStyle = StyleSheet.create({
         fontSize: 12
     }
 })
+
 

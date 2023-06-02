@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { BigTitle, BodyText, EditableText, HorizBox, Pad, PrimaryButton, ScrollableScreen, SectionTitle, Separator, SmallTitle, WideScreen } from '../component/basics';
+import { BigTitle, BodyText, Card, EditableText, HorizBox, Pad, PrimaryButton, ScrollableScreen, SectionTitle, Separator, SmallTitle, WideScreen } from '../component/basics';
 import { setGlobalProperty, useGlobalProperty } from '../util/localdata';
 import { callServerApiAsync, callServerMultipartApiAsync } from '../util/servercall';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import { goBack, pushSubscreen } from '../shared/navigate';
 import { authorRobEnnals } from '../data/authors';
 import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { AudioRecorder } from '../platform-specific/audiorecorder';
+import { Popup } from '../platform-specific/popup';
 
 const description = `
 Examples of how to use the various parts of the prototype infrastructure.
@@ -52,6 +53,8 @@ export function ExampleScreen() {
             <ExampleInstanceData />
             <Separator />
             <ExampleCallBackend name={name} />
+            <Separator />
+            <ExamplePopup />
             <Separator />
             <ExampleVideoPlayer />
             <Separator />
@@ -254,4 +257,27 @@ function DogScreen({name}) {
         <PrimaryButton onPress={goBack}>Back</PrimaryButton>
     </ScrollableScreen>
 }
+
+export function ExamplePopup() {
+
+    function popup() {
+        return <BodyText>This is a popup. Click outside to make me go away</BodyText>
+    }
+
+    return <View>
+        <SmallTitle>Popup</SmallTitle>
+        <BodyText>Prototypes can show popup menus</BodyText>
+        <Pad/>
+        <HorizBox spread>
+            <Popup popupContent={popup}>
+                <Text>Press me</Text>
+            </Popup>
+            <Popup popupContent={popup}>
+                <Text>Press me</Text>
+            </Popup>
+        </HorizBox>
+    </View>
+}
+
+
 
