@@ -2,15 +2,15 @@ import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { prototypes } from './prototype';
-import { PrototypeContext } from './shared/PrototypeContext';
-import { PrototypeInstanceListScreen } from './shared/PrototypeInstanceListScreen';
-import { PrototypeListScreen } from './shared/PrototypeListScreen';
-import { TopBar } from './shared/TopBar';
+import { PrototypeContext } from './organizer/PrototypeContext';
+import { PrototypeInstanceListScreen } from './organizer/PrototypeInstanceListScreen';
+import { PrototypeListScreen } from './organizer/PrototypeListScreen';
+import { TopBar } from './organizer/TopBar';
 import { resetData } from './util/localdata';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import { setTitle } from './platform-specific/url';
-import { gotoUrl, useLiveUrl } from './shared/url';
-import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './shared/navigate';
+import { gotoUrl, useLiveUrl } from './organizer/url';
+import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './organizer/navigate';
 
 
 export default function App() {

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { defaultPersona, personas } from "../data/personas";
-import { PrototypeContext } from "../shared/PrototypeContext";
+import { PrototypeContext } from "../organizer/PrototypeContext";
 
 var global_data = null;
 var data_watchers = [];

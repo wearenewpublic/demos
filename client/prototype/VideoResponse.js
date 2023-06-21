@@ -3,7 +3,7 @@ import { VideoPlayer, VideoPost } from "../component/video";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
 import { VideoCamera } from "../platform-specific/videocamera";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
 
 const description = `

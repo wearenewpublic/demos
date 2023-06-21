@@ -4,7 +4,7 @@ import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, 
 import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { civic_society } from "../data/openhouse_civic";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { useContext } from "react";
 import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";

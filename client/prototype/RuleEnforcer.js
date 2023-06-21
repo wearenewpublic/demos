@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { soccer, trek_vs_wars } from "../data/conversations";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { useCollection, useGlobalProperty } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
 import { BottomScroller } from "../platform-specific/bottomscroller";

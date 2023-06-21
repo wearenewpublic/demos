@@ -1,5 +1,5 @@
 import { Entypo, FontAwesome, Ionicons } from "@expo/vector-icons"
-import { getHuesForNamedList } from "../shared/util"
+import { getHuesForNamedList } from "../util/util"
 
 
 export const tagConversation = {

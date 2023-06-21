@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { PrototypeContext } from '../../shared/PrototypeContext';
+import { PrototypeContext } from '../../organizer/PrototypeContext';
 import { prototypes } from '..';
 import { resetData } from '../../util/localdata';
 import TestRenderer from 'react-test-renderer'; // ES6
 import { act } from 'react-dom/test-utils';
-import { forEachAsync } from '../../shared/util';
+import { forEachAsync } from '../../util/util';
 
 
 test('All prototype instances render correctly', async () => {

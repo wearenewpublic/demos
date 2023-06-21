@@ -1,4 +1,4 @@
-import { ensureNextKeyGreater, newKey } from "../util/localdata";
+import { ensureNextKeyGreater, newKey } from "./localdata";
 
 export function expandDataList(list) {
     const date = new Date();

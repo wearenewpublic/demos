@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { addObject, getGlobalProperty, getPersonaKey, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
 import { BottomScroller } from "../platform-specific/bottomscroller";

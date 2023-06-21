@@ -2,7 +2,7 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Markdown from "react-native-markdown-display";
-import { collapseDoubleSpaces, stripSingleLineBreaks } from "../shared/util";
+import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 

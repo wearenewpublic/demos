@@ -2,7 +2,7 @@ import { Pad, WideScreen } from "../component/basics";
 import { ChatInput } from "../component/chatinput";
 import { Message, QuietSystemMessage, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { useCollection } from "../util/localdata";
 import { soccer, trek_vs_wars } from "../data/conversations";
 import { useState } from "react";

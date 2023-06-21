@@ -4,8 +4,8 @@ import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, Pa
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagArticle, tagConversation } from "../data/tags";
-import { pushSubscreen } from "../shared/navigate";
-import { expandDataList } from "../shared/util";
+import { pushSubscreen } from "../organizer/navigate";
+import { expandDataList } from "../util/util";
 import { getObject, useCollection, useGlobalProperty, useObject } from "../util/localdata";
 import { BasicComments } from "../component/comment";
 

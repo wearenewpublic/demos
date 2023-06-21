@@ -3,7 +3,7 @@ import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalP
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
-import { addKey, removeKey } from "../shared/util";
+import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 
 

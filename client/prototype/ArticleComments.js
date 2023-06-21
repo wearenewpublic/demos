@@ -5,7 +5,7 @@ import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, tagArticle, tagConversation } from "../data/tags";
 import { godzilla_comments_threaded } from "../data/threaded";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { useGlobalProperty } from "../util/localdata";
 
 const description = `

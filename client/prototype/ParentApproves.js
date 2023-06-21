@@ -3,7 +3,7 @@ import { Pad, Pill, WideScreen } from "../component/basics";
 import { ActionApprove, ActionCollapse, ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentContext } from "../component/comment";
 import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
-import { expandDataList } from "../shared/util";
+import { expandDataList } from "../util/util";
 import { useContext } from "react";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
