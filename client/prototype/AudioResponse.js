@@ -20,6 +20,8 @@ This prototype allows people to record short audio responses to questions, and t
 The prototype also shows an automatic text transcription of the audio. This can be helpful for people who
 would rather not play sound (e.g. they are in a public place). It also makes it easier to quickly
 tell which audio responses you might want to listen to.
+
+NOTE: This prototype currently only works on Chrome, and not on Safari.
 `
 
 export const AudioResponsePrototype = {

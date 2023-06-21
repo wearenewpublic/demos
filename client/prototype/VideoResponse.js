@@ -18,6 +18,8 @@ at the same time.
 
 One way to compensate for that is to encourage community members to record short video responses
 to questions and view the video responses left by other community members.
+
+NOTE: This prototype currently only works on Chrome, and not on Safari.
 `
 
 export const VideoResponse = {

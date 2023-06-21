@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad, PrimaryButton } from "../component/basics";
 
+const video_mimetype = 'video/webm; codecs=vp9';  // this works for Chrome, and Firefox, but not Safari
+
 export function VideoCamera({size=200, action='Record Video', onSubmitRecording}) {
     const s = VideoCameraStyle;
     const [cameraShown, setCameraShown] = useState(false);
@@ -56,7 +58,7 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
         recordedBlobsRef.current = [];
         const stream = videoRef.current.srcObject;
         console.log('stream', {stream, videoRef});
-        mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+        mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: video_mimetype });
 
         mediaRecorderRef.current.ondataavailable = handleDataAvailable;
         mediaRecorderRef.current.onstop = handleStop;
