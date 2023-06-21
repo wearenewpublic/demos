@@ -14,7 +14,7 @@ export function TopBar({title, subtitle, showPersonas}) {
                 <Entypo name='chevron-left' size={24} color='#666' />
             </Clickable>
             <View style={s.titleBox}>
-                <Text style={subtitle ? s.twoLineTitle : s.oneLineTitle}>{title}</Text>
+                <Text numberOfLines={1} style={subtitle ? s.twoLineTitle : s.oneLineTitle}>{title}</Text>
                 {subtitle ? 
                     <Text style={s.subtitle}>{subtitle}</Text>
                 : null}
@@ -34,25 +34,30 @@ const TopBarStyle = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomColor: '#ddd', 
         borderBottomWidth: StyleSheet.hairlineWidth,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     leftRow: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexShrink: 1
     },
     oneLineTitle: {
         fontSize: 18, fontWeight: 'bold',
-        marginVertical: 8
+        marginVertical: 8,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     twoLineTitle: {
-        fontSize: 15, fontWeight: 'bold'
+        fontSize: 15, fontWeight: 'bold',
+        flexShrink: 1
     },
     subtitle: {
         fontSize: 13, color: '#666'
     },
     titleBox: {
         marginVertical: 2,
-        marginLeft: 4
+        marginLeft: 4,
+        flexShrink: 1
     }
 
 })
