@@ -31,8 +31,8 @@ Make sure you have already installed [git](https://github.com/git-guides/install
 
 Clone the prototype garden repository:
 ```
-git clone https://github.com/wearenewpublic/prototypes.git
-cd prototypes
+git clone https://github.com/wearenewpublic/demos.git
+cd demos
 ```
 
 Install the package dependencies:
