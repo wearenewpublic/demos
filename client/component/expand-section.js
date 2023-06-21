@@ -27,7 +27,8 @@ const ExpandSectionStyle = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 8,
         paddingHorizontal: 8,
-        paddingVertical: 4
+        paddingVertical: 4,
+        backgroundColor: 'white'
     },  
     topBar: {
         flexDirection: 'row',

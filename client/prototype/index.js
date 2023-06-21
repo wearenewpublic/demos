@@ -11,10 +11,13 @@ import { ArticleCommentsPrototype } from "./ArticleComments";
 import { PrivateRuleEnforcerPrototype } from "./PrivateRuleEnforcer";
 import { AudioResponsePrototype } from "./AudioResponse";
 import { ArticleQuestionsPrototype } from "./ArticleQuestions";
+import { concept_comments_slider } from "./concepts";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
-    AudioResponsePrototype, ArticleQuestionsPrototype
+    AudioResponsePrototype, ArticleQuestionsPrototype,
+
+    concept_comments_slider
 ]
 

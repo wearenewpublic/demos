@@ -67,5 +67,12 @@ export const statusExperiment = {
     description: 'Not a usable prototype, but lets you explore an idea.'
 }
 
+export const statusConcept = {
+    name: 'Concept',
+    iconName: 'light-bulb',
+    iconSet: Entypo,
+    description: 'Early stage idea in the form of a video or interactive mock. Not yet a usable prototype'
+}
+
 export const statuses = [statusTentative, statusConfident, statusStartingPoint, statusTutorial]
 

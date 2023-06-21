@@ -9,7 +9,7 @@ import { useSessionData } from "../util/localdata";
 
 export function PrototypeListScreen({onSelectPrototype}) {
     const s = PrototypeListScreenStyle;
-    const sortedPrototypes = prototypes.sort((a, b) => b.date.localeCompare(a.date));
+    const sortedPrototypes = prototypes.sort((a, b) => new Date(b.date).valueOf() -  new Date(a.date).valueOf());
     const [tagFilters, setTagFilters] = useState([]);
     const [statusFilter, setStatusFilter] = useState(null);
 

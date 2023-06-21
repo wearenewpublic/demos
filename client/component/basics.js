@@ -76,12 +76,20 @@ export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
 }
 
-export function MarkdownBodyText({text}) {
-    const markdownStyles = {
-        body: {
-            fontSize: 15, lineHeight: 18, color: '#444'
-        }
+const markdownStyles = {
+    body: {
+        fontSize: 15, lineHeight: 18, color: '#444'
+    },
+    heading1: {
+        fontSize: 18, fontWeight: 'bold', marginBottom: 0, marginTop: 8
+    },
+    bullet_list: {
+        marginVertical: 8
     }
+}
+
+
+export function MarkdownBodyText({text}) {
     return <View style={{maxWidth: 500}}>
         <Markdown style={markdownStyles}>
             {collapseDoubleSpaces(stripSingleLineBreaks(text))}
