@@ -10,7 +10,7 @@ import { forEachAsync } from '../../util/util';
 
 test('All prototype instances render correctly', async () => {
     await forEachAsync(prototypes, async prototype => {
-        await forEachAsync(prototype.instance, async instance => {
+        await forEachAsync(prototype.instance || [], async instance => {
             await renderPrototypeInstanceAsync({prototype, instance});
         });
     });

@@ -128,14 +128,17 @@ export const CommentContext = React.createContext({
     topBling: [BlingPending],
     replyComponent: ReplyInput,
     getIsDefaultCollapsed: () => false,
-    getIsVisible: () => true
+    getIsVisible: () => true,
+    getAuthorName: ({comment}) => useObject('persona', comment.from)?.name,
+    getAuthorFace: ({comment}) => <UserFace userId={comment.from} />,
+    commentPlaceholder: 'Write a comment...',
 });
 
 
 export function Comment({commentKey}) {
     const s = CommentStyle;
     const comment = useObject('comment', commentKey);
-    const {actions, replyComponent, getIsDefaultCollapsed} = React.useContext(CommentContext);
+    const {actions, replyComponent, getIsDefaultCollapsed, getAuthorFace} = React.useContext(CommentContext);
     const showReplyComponent = useSessionData('replyToComment') == commentKey;
     const sessionCollapsed = getSessionData(['comment', commentKey, 'collapsed']);
     const collapsed = sessionCollapsed ?? getIsDefaultCollapsed({commentKey, comment});
@@ -147,7 +150,7 @@ export function Comment({commentKey}) {
     if (!collapsed) {
         return <View style={s.commentHolder}>
             <View style={s.commentLeft}>
-                <UserFace userId={comment.from} />
+                {getAuthorFace({comment})}
                 <View style={s.verticalLine} />
             </View>
             <View style={s.commentRight}>
@@ -248,10 +251,12 @@ const RepliesStyle = StyleSheet.create({
 
 function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
+
+    const {getAuthorName} = React.useContext(CommentContext);
     const comment = useObject('comment', commentKey);
-    const user = useObject('persona', comment.from);
+    const authorName = getAuthorName({comment});
     return <View style={s.authorInfoBox}> 
-        <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>{user.name}</Text>
+        <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>{authorName}</Text>
     </View>
 }
 

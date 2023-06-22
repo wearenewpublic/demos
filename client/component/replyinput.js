@@ -5,10 +5,10 @@ import { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 
-export function ReplyInput({commentKey}) {
+export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = useGlobalProperty('$personaKey');
     const [text, setText] = useState('');
-    const {postHandler} = useContext(CommentContext);
+    const {postHandler, getAuthorFace, commentPlaceholder} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     function onPost() {
@@ -19,7 +19,11 @@ export function ReplyInput({commentKey}) {
                 from: personaKey, text, replyTo: commentKey
             })
         }
-        hideReplyInput();
+        if (topLevel) {
+            setText('');
+        } else {
+            hideReplyInput();
+        }
     }
 
     function hideReplyInput() {
@@ -27,19 +31,22 @@ export function ReplyInput({commentKey}) {
     }
 
     return <View style={s.row}>
-        <UserFace userId={personaKey} size={32} />
-        <View style={s.right}>
+        {getAuthorFace({comment: {from: personaKey}})}
+        {/* <UserFace userId={personaKey} size={32} /> */}
+        <View style={[s.right, (topLevel && !text) ? {height: 40} : null]}>
             <TextInput style={s.textInput}
-                placeholder='Write a comment...' 
+                placeholder={commentPlaceholder}
                 placeholderTextColor='#999'
                 value={text}
                 onChangeText={setText}
                 multiline={true}
             />
-            <View style={s.actions}>
-                <PrimaryButton onPress={onPost}>Post</PrimaryButton>
-                <SecondaryButton onPress={hideReplyInput}>Cancel</SecondaryButton>
-            </View>
+            {(!topLevel || text) ? 
+                <View style={s.actions}>
+                    <PrimaryButton onPress={onPost}>Post</PrimaryButton>
+                    <SecondaryButton onPress={hideReplyInput}>Cancel</SecondaryButton>
+                </View>
+            : null}
         </View>
     </View>
 }
@@ -70,41 +77,7 @@ const ReplyInputStyle = StyleSheet.create({
     }
 })
 
-export function TopCommentInput({about=null}) {
-    const personaKey = useGlobalProperty('$personaKey');
-    const {postHandler} = useContext(CommentContext);
-
-    const [text, setText] = useState('');
-    const s = ReplyInputStyle;
-
-    function onPost() {
-        if (postHandler) {
-            postHandler({text});
-        } else {
-            addObject('comment', {
-                text,
-                replyTo: about
-            })
-        }
-        setText('');
-    }
-
-    return <View style={s.row}>
-        <UserFace userId={personaKey} size={32} />
-        <View style={[s.right, !text ? {height: 40} : null]}>
-            <TextInput style={s.textInput}
-                placeholder='Write a comment...' 
-                placeholderTextColor='#999'
-                value={text}
-                onChangeText={setText}
-                multiline={true}
-            />
-            {text ? 
-                <View style={s.actions}>
-                    <PrimaryButton onPress={onPost}>Post</PrimaryButton>
-                    <SecondaryButton onPress={() => setText('')}>Cancel</SecondaryButton>
-                </View>
-            : null}
-        </View>
-    </View>
+export function TopCommentInput({about = null}) {
+    return ReplyInput({commentKey: about, topLevel: true});
 }
+

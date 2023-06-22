@@ -7,6 +7,11 @@ export const tagConversation = {
     description: 'Shows a way of having conversations'
 }
 
+export const tagPrivacy = {
+    name: 'Privacy',
+    description: 'Ways to protect user privacy'
+}
+
 export const tagOnboarding = {
     name: 'Onboarding',
     description: 'Ways to onboard new users'

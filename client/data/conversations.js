@@ -1,6 +1,6 @@
 
 exports.ecorp = [
-    {key: 'welcome', from: 'leader', text: 'Welcome to the E-Corp Alumni chat room!'},
+    {key: 'welcome', from: 'leader', public: true, text: 'Welcome to the E-Corp Alumni chat room!'},
     {key: 'hate', from: 'angry', replyTo: 'welcome', text: 'I hate E-Corp!'},
     {from: 'peacemaker', replyTo: 'hate', text: 'What concerns do you have? What would you like to see E-Corp do differently?'},
 ]
