@@ -48,6 +48,7 @@ export const SemiAnonymous = {
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
             description: 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.',
+            '$personaKey': 'guestLarry',
             persona, comment: expandDataList(civic_society)},
     ],
     screen: SemiAnonymousScreen    
