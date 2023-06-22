@@ -15,3 +15,7 @@ export function FaceImage({face, size=32, faint=false}) {
         style ={{width: size, height: size, borderRadius: size /2, opacity: faint ? 0.5 : 1}}
         source={{uri: 'https://new-public-demo.web.app/faces/' + face}} />
 }
+
+export function AnonymousFace({faint}) {
+    return <FaceImage face='anonymous.jpeg' faint={faint} />
+}

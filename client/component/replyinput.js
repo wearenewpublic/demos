@@ -1,14 +1,14 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { UserFace } from "./userface";
 import { addObject, setSessionData, useGlobalProperty } from "../util/localdata";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 
 export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = useGlobalProperty('$personaKey');
     const [text, setText] = useState('');
-    const {postHandler, getAuthorFace, commentPlaceholder} = useContext(CommentContext);
+    const {postHandler, getAuthorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     function onPost() {
@@ -33,14 +33,23 @@ export function ReplyInput({commentKey, topLevel = false}) {
     return <View style={s.row}>
         {getAuthorFace({comment: {from: personaKey}})}
         {/* <UserFace userId={personaKey} size={32} /> */}
-        <View style={[s.right, (topLevel && !text) ? {height: 40} : null]}>
-            <TextInput style={s.textInput}
-                placeholder={commentPlaceholder}
-                placeholderTextColor='#999'
-                value={text}
-                onChangeText={setText}
-                multiline={true}
-            />
+        <View style={s.right}>
+            <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
+                <TextInput style={s.textInput}
+                    placeholder={commentPlaceholder}
+                    placeholderTextColor='#999'
+                    value={text}
+                    onChangeText={setText}
+                    multiline={true}
+                />
+            </View>
+            {(!topLevel || text) ?
+                <View>
+                    {replyWidgets.map((widget, idx) => 
+                        React.createElement(widget, {key: idx, replyTo: commentKey})
+                    )}
+                </View>
+            : null}
             {(!topLevel || text) ? 
                 <View style={s.actions}>
                     <PrimaryButton onPress={onPost}>Post</PrimaryButton>
@@ -61,9 +70,12 @@ const ReplyInputStyle = StyleSheet.create({
         fontSize: 15, lineHeight: 20,
         height: 150,
     },
+    textInputWrapper: {
+        height: 150,
+    },
     right: {
         flex: 1,
-        height: 150,
+        // height: 150,
         maxWidth: 500
     },
     row: {

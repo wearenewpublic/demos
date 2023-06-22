@@ -130,8 +130,9 @@ export const CommentContext = React.createContext({
     getIsDefaultCollapsed: () => false,
     getIsVisible: () => true,
     getAuthorName: ({comment}) => useObject('persona', comment.from)?.name,
-    getAuthorFace: ({comment}) => <UserFace userId={comment.from} />,
+    getAuthorFace: ({comment, faint}) => <UserFace userId={comment.from} faint={faint} />,
     commentPlaceholder: 'Write a comment...',
+    replyWidgets: []
 });
 
 
@@ -198,11 +199,12 @@ const CommentStyle = StyleSheet.create({
 function CollapsedComment({commentKey, onPress}) {
     const s = CollapsedCommentStyle;
     const comment = useObject('comment', commentKey);
+    const {getAuthorFace} = React.useContext(CommentContext);
 
     return <Clickable onPress={onPress}>
         <View style={s.commentHolder}>
             <View style={s.commentLeft}>
-                <UserFace userId={comment.from} faint />
+                {getAuthorFace({comment, faint: true})}
             </View>
             <View style={s.commentRight}>
                 <CommentAuthorInfo commentKey={commentKey} collapsed />

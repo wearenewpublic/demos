@@ -13,11 +13,12 @@ import { AudioResponsePrototype } from "./AudioResponse";
 import { ArticleQuestionsPrototype } from "./ArticleQuestions";
 import { concept_comments_slider } from "./concepts";
 import { OptionallyAnonymous } from "./OptionallyAnonymous";
+import { SemiAnonymous } from "./SemiAnonymous";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
-    AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous,
+    AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
 
     concept_comments_slider
 ]

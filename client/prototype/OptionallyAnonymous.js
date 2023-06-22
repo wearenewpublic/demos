@@ -78,11 +78,11 @@ function getAuthorName({comment}) {
     }
 }
 
-function getAuthorFace({comment}) {
+function getAuthorFace({comment, faint}) {
     if (comment.public) {
-        return <UserFace userId={comment.from} />
+        return <UserFace userId={comment.from} faint={faint} />
     } else {
-        return <AnonymousFace />;
+        return <AnonymousFace faint={faint} />;
     }
 }
 
