@@ -2,7 +2,7 @@ import { ScrollView } from "react-native";
 import { Pad, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
-import { tagConversation, tagPrivacy } from "../data/tags";
+import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
@@ -28,6 +28,7 @@ export const OptionallyAnonymous = {
     key: 'optionallyanonymous',
     name: 'Optionally Anonymous',
     author: authorRobEnnals,
+    status: statusTentative,
     date: 'Wed Jun 21 2023 20:14:05 GMT-0700 (Pacific Daylight Time)',
     tags: [tagConversation, tagPrivacy],
     description,

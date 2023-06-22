@@ -32,7 +32,8 @@ export const tagAudioVideo = {
     description: 'Explores conversation types other than text'
 }
 
-export const tags = [tagConversation, tagOnboarding, tagModeration, tagArticle, tagAudioVideo]
+export const tags = [tagConversation, tagOnboarding, tagModeration, tagArticle, 
+    tagAudioVideo, tagPrivacy]
 
 export const tagHues = getHuesForNamedList(tags);
 
