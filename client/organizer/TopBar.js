@@ -1,9 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
-import { Clickable } from "../component/basics";
+import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, SecondaryButton, SmallTitle } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
-import { goBack } from "./navigate";
+import { goBack, gotoPrototype, pushSubscreen } from "./navigate";
+import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
+import { FaceImage, UserFace } from "../component/userface";
+import { Popup } from "../platform-specific/popup";
 
 export function TopBar({title, subtitle, showPersonas}) {
     const s = TopBarStyle;
@@ -22,7 +25,9 @@ export function TopBar({title, subtitle, showPersonas}) {
         </View>
         {showPersonas ? 
             <PersonaSelector />
-        : null}
+        : 
+            <UserInfo />
+        }
     </View>
 }
 
@@ -62,3 +67,45 @@ const TopBarStyle = StyleSheet.create({
 
 })
 
+
+function UserInfo() {
+    const s = UserInfoStyle;
+    const fbUser = useFirebaseUser();
+
+    function popup() {
+        return <View>
+            <HorizBox center>
+                <FaceImage photoUrl={fbUser.photoURL} size={80} />
+                <View style={s.right}>
+                    <Text style={s.title}>{fbUser.displayName}</Text>
+                    <Text style={s.email}>{fbUser.email}</Text>
+                </View>
+            </HorizBox>
+            <Pad/>
+            <Center>   
+                <PrimaryButton onPress={firebaseSignOut}>Sign Out</PrimaryButton>
+            </Center>
+        </View>
+    }
+
+    if (fbUser) {
+        return <Popup popupContent={popup}>
+            <PadBox vert={0}>
+                <FaceImage photoUrl={fbUser.photoURL} size={32} />
+            </PadBox>
+        </Popup>
+    } else {        
+        return <SecondaryButton onPress={() => pushSubscreen('login') }>
+            Log In
+        </SecondaryButton>
+    }
+}
+
+const UserInfoStyle = StyleSheet.create({
+    title: {
+        fontSize: 18, fontWeight: 'bold',
+    },
+    right: {
+        marginLeft: 12
+    }
+});

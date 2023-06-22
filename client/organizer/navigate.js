@@ -12,7 +12,7 @@ export function goBack() {
     gotoUrl(makeUrl(parts, query));
 }
 
-export function pushSubscreen(key, params) {
+export function pushSubscreen(key, params = {}) {
     const parts = window.location.pathname.split('/').filter(x => x);
     const query = new URLSearchParams(window.location.search);
     parts.push(key);

@@ -11,6 +11,7 @@ import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat'
 import { setTitle } from './platform-specific/url';
 import { gotoUrl, useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './organizer/navigate';
+import { LoginScreen } from './organizer/Login';
 
 
 export default function App() {
@@ -72,17 +73,25 @@ const ScreenStackStyle = StyleSheet.create({
 
 function StackedScreen({screenInstance, index}) {
   const {prototypeKey, instanceKey, screenKey, params} = screenInstance;
+
+  if (prototypeKey == 'login' || instanceKey == 'login' || screenKey == 'login') {
+    return <FullScreen zIndex={index}>
+        <TopBar title='Log In' />
+        <LoginScreen />
+    </FullScreen>
+  }
+
   const prototype = choosePrototypeByKey(prototypeKey);
   const instance = chooseInstanceByKey({prototype, instanceKey});
-  const screen = getScreen({prototype, screenKey});
+  const screen = getScreen({prototype, screenKey, instanceKey});
   const title = getScreenTitle({prototype, screenKey, instance, params}); 
 
-return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
+  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
       <FullScreen zIndex={index}>
         <TopBar title={title} subtitle={prototype.name} showPersonas />
         {React.createElement(screen, params)}
       </FullScreen>
-    </PrototypeContext.Provider>
+  </PrototypeContext.Provider>
 }
 
 function getScreen({prototype, screenKey}) {

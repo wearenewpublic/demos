@@ -8,7 +8,7 @@ import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { useContext } from "react";
-import { FaceImage, UserFace } from "../component/userface";
+import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -84,10 +84,6 @@ function getAuthorFace({comment, faint}) {
     } else {
         return <AnonymousFace faint={faint} />;
     }
-}
-
-function AnonymousFace() {
-    return <FaceImage face='anonymous.jpeg' />
 }
 
 function ActionToggleAnonymous({comment}) {
