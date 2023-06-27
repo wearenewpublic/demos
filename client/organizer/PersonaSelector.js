@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PopupSelector } from "../platform-specific/popup";
 // import { personas } from "../prototype";
-import { setGlobalProperty, useGlobalProperty } from "../util/localdata";
+import { setGlobalProperty, setSessionData, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import { UserFace } from "../component/userface";
 
 export function PersonaSelector() {
     const s = PersonaSelectorStyle;
-    const selectedPersona = useGlobalProperty('$personaKey');
+    const selectedPersona = usePersonaKey();
     const allPersonas = useGlobalProperty('persona');
     const itemKeys = Object.keys(allPersonas);    
     const items = itemKeys.map(key => ({key, label: allPersonas[key].name}));
     return <View style={s.row}>
         <PopupSelector value={selectedPersona} items={items} 
-            onSelect={personalKey => setGlobalProperty('$personaKey', personalKey)} 
+            onSelect={personalKey => setSessionData('personaKey', personalKey)} 
         />
         <UserFace userId={selectedPersona} size={32} />
     </View>

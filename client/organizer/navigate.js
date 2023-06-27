@@ -25,6 +25,10 @@ export function pushSubscreen(key, params = {}) {
     gotoUrl(makeUrl(parts, query));
 }
 
+export function gotoLogin() {
+    pushSubscreen('login');
+}
+
 export function gotoPrototype(prototypeKey) {
     gotoUrl(makeUrl([prototypeKey]));
 }

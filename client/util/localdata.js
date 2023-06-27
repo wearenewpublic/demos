@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { defaultPersona, personas } from "../data/personas";
 import { PrototypeContext } from "../organizer/PrototypeContext";
+import { getFirebaseUser, onAuthStateChanged, onFbUserChanged, useFirebaseUser } from "./firebase";
 
 var global_data = null;
+var global_instance = null;
 var data_watchers = [];
 
 // TODO: Make this more efficient. Currently it updates everything for every data update.
@@ -32,12 +34,36 @@ function firstPersona(instance) {
         const keys = Object.keys(instance.persona);
         return keys[0];
     }
-
 }
 
+
+function getInitialPersonaKey(instance) {
+    if (instance.isLive) {
+        return getFirebaseUser()?.uid || null;
+    } else {
+        return instance['$personaKey'] || firstPersona(instance) || defaultPersona;
+    }
+}
+
+
+
+onFbUserChanged(user => {
+    console.log('user', user);
+    const personaKey = getPersonaKey();
+    if (user && personaKey != user.uid) {
+        setSessionData('personaKey', user.uid);
+    }
+})
+
 export function resetData(instance) {
-    const personaKey = firstPersona(instance) || defaultPersona;
-    global_data = ({persona: deepClone(personas), ['$personaKey']: personaKey, ...deepClone(instance)});    
+    const personaKey = getInitialPersonaKey(instance);
+    global_instance = instance;
+    global_data = ({
+        persona: deepClone(instance.personas || personas), 
+        ['$session']: {personaKey}, 
+        ...deepClone(instance)
+    });    
+    console.log('global_data', global_data);
 }
 
 export function test_getDataWatchers() {return data_watchers};
@@ -83,9 +109,20 @@ export function useGlobalProperty(key) {
 
 export function addObject(typename, value) {
     const key = newKey();
-    const from = getGlobalProperty('$personaKey');
-    setObject(typename, key, {from, ...value, key, time: Date.now()});
+    const personaKey = getPersonaKey();
+    const fbUser = getFirebaseUser();
+    // console.log('about to write', {personaKey, fbUser, myPersona})
+    if (fbUser && personaKey == fbUser.uid) {
+        const myPersona = getObject('persona', personaKey);
+        if (!myPersona || myPersona.photoUrl != fbUser.photoURL || myPersona.name != fbUser.displayName) {
+            setObject('persona', personaKey, {photoUrl: fbUser.photoURL, name: fbUser.displayName});
+        }
+    } 
+    setObject(typename, key, {from:personaKey, ...value, key, time: Date.now()});
     notifyDataWatchers();
+
+    console.log('global_data', global_data);
+
     return key
 }
 
@@ -113,7 +150,11 @@ function pathToName(path) {
 }
 
 export function useSessionData(path) {
-    return useObject('$session', pathToName(path))
+    if (typeof(path) == 'string') {
+        return useObject('$session', path);
+    } else {
+        return useObject('$session', pathToName(path))
+    }
 }
 
 export function setSessionData(path, value) {
@@ -121,7 +162,11 @@ export function setSessionData(path, value) {
 }
 
 export function getSessionData(path) {
-    return global_data['$session']?.[pathToName(path)];
+    if (typeof(path) == 'string') {
+        return global_data['$session']?.[path]
+    } else {
+        return global_data['$session']?.[pathToName(path)]
+    };
 }
 
 export function setGlobalData(data) {
@@ -142,11 +187,11 @@ export function getAllData() {
 }
 
 export function usePersonaKey() {
-    return useGlobalProperty('$personaKey');
+    return useSessionData('personaKey');
 }
 
 export function getPersonaKey() {
-    return getGlobalProperty('$personaKey');
+    return getSessionData('personaKey');
 }
 
 

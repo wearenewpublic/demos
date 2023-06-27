@@ -12,6 +12,7 @@ import { setTitle } from './platform-specific/url';
 import { gotoUrl, useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './organizer/navigate';
 import { LoginScreen } from './organizer/Login';
+import { useFirebaseUser } from './util/firebase';
 
 
 export default function App() {
@@ -73,6 +74,7 @@ const ScreenStackStyle = StyleSheet.create({
 
 function StackedScreen({screenInstance, index}) {
   const {prototypeKey, instanceKey, screenKey, params} = screenInstance;
+  const fbUser = useFirebaseUser();
 
   if (prototypeKey == 'login' || instanceKey == 'login' || screenKey == 'login') {
     return <FullScreen zIndex={index}>
@@ -86,9 +88,9 @@ function StackedScreen({screenInstance, index}) {
   const screen = getScreen({prototype, screenKey, instanceKey});
   const title = getScreenTitle({prototype, screenKey, instance, params}); 
 
-  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
+  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey, fbUser}}>
       <FullScreen zIndex={index}>
-        <TopBar title={title} subtitle={prototype.name} showPersonas />
+        <TopBar title={title} subtitle={prototype.name} showPersonas={!instance.isLive} />
         {React.createElement(screen, params)}
       </FullScreen>
   </PrototypeContext.Provider>
@@ -134,7 +136,13 @@ function chooseInstanceByKey({prototype, instanceKey}) {
   if (!instanceKey) {
     return null;
   }
-  return prototype.instance.find(instance => instance.key === instanceKey);
+  const rolePlayInstance = prototype.instance?.find(instance => instance.key === instanceKey);
+  if (rolePlayInstance) {
+    return rolePlayInstance;
+  } else {
+    const liveInstance = prototype.liveInstance?.find(instance => instance.key === instanceKey);
+    return {...liveInstance, isLive: true};
+  }
 }
 
 

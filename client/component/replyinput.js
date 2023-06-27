@@ -1,12 +1,13 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { UserFace } from "./userface";
-import { addObject, setSessionData, useGlobalProperty } from "../util/localdata";
+import { addObject, setSessionData, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import React, { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
+import { gotoLogin } from "../organizer/navigate";
 
 export function ReplyInput({commentKey, topLevel = false}) {
-    const personaKey = useGlobalProperty('$personaKey');
+    const personaKey = usePersonaKey();
     const [text, setText] = useState('');
     const {postHandler, getAuthorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
@@ -28,6 +29,10 @@ export function ReplyInput({commentKey, topLevel = false}) {
 
     function hideReplyInput() {
         setSessionData('replyToComment', null);
+    }
+
+    if (!personaKey) {
+        return <LoginToComment />
     }
 
     return <View style={s.row}>
@@ -93,3 +98,6 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
+function LoginToComment() {
+    return <PrimaryButton onPress={gotoLogin}>Login to comment</PrimaryButton>
+}

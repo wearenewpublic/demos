@@ -17,10 +17,13 @@ const auth = getAuth(app);
 
 console.log('firebase initialized', {app, auth});
 
+var global_firebaseUser = null;
+
 export function useFirebaseUser() {
     const [user, setUser] = useState(null);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+            global_firebaseUser = user;
             console.log('auth state', user);
             setUser(user);
         });
@@ -29,12 +32,21 @@ export function useFirebaseUser() {
     return user;           
 }
 
+export function getFirebaseUser() {
+    return global_firebaseUser;
+}
+
 onAuthStateChanged(auth, (user) => {
+    global_firebaseUser = user;
     console.log('auth state', user);
 });
 
 export function firebaseSignOut() {
     auth.signOut();
+}
+
+export function onFbUserChanged(callback) {
+    onAuthStateChanged(auth, callback);
 }
 
 export {auth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword};

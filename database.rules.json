@@ -1,0 +1,16 @@
+{
+    "rules": {
+        "prototype": {
+            "$prototype": {
+                "$instance": {
+                    ".read": true,
+                    ".write": true
+                }
+            }
+        },
+        ".read": false,
+        ".write": false  
+    }
+  }
+
+  

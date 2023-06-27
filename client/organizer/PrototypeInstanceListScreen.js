@@ -30,6 +30,19 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                         ))}      
                     </View>
                 : null}
+                {prototype.liveInstance ?
+                    <View>
+                        <Center><SectionTitle>Live Instances</SectionTitle></Center>
+                        {prototype.liveInstance.map(instance => (
+                            <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
+                                <Card>
+                                    <SmallTitle>{instance.name}</SmallTitle>
+                                </Card>
+                            </Clickable>
+                        ))}      
+                    </View>
+                : null}
+
                 {prototype.video ? 
                     <View>
                         <Center><SectionTitle>Concept Videos</SectionTitle></Center>

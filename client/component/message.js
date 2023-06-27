@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
-import { addObject, getGlobalProperty, newKey, setGlobalProperty, useGlobalProperty, useObject } from "../util/localdata";
+import { addObject, getGlobalProperty, getPersonaKey, newKey, setGlobalProperty, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { UserFace } from "./userface";
 
 export function Message({messageKey}) {
     const s = MessageStyles;
     const message = useObject('message', messageKey);
-    const currentUser = useGlobalProperty('$personaKey');
+    const currentUser = usePersonaKey();
     const fromMe = message.from == currentUser;
     return <View style={[s.messageHolder, fromMe ? s.myMessageHolder : {}]}> 
         {fromMe ? null : 
@@ -87,6 +87,6 @@ const QuietSystemMessageStyle = StyleSheet.create({
 });
 
 export function sendMessage({text, from=null}) {    
-    console.log('sendMessage', text, from, getGlobalProperty('$personaKey'));
-    addObject('message', {from: from || getGlobalProperty('$personaKey'), text})
+    console.log('sendMessage', text, from, getPersonaKey());
+    addObject('message', {from: from || getPersonaKey(), text})
 }

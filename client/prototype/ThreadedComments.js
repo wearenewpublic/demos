@@ -30,6 +30,9 @@ export const ThreadedCommentsPrototype = {
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
         {key: 'soccer', name: 'Soccer Team', comment: expandDataList(soccer)},
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)},
+    ],
+    liveInstance: [
+        {key: 'live', name: 'Live Conversation', comment: {}}
     ]    
 }
 

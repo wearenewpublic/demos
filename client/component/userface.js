@@ -1,11 +1,18 @@
 import { Image, StyleSheet } from "react-native";
-import { useGlobalProperty, useObject } from "../util/localdata"
+import { getPersonaKey, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata"
+import { PrototypeContext } from "../organizer/PrototypeContext";
+import { useContext } from "react";
 
 export function UserFace({userId, size = 32, faint=false}) {
-    // const personaKey = useGlobalProperty('$personaKey')
     const persona = useObject('persona', userId);
-    const face = persona.face;
-    return <FaceImage face={face} photoUrl={persona.photoUrl} size={size} faint={faint} />
+    const {instance, fbUser} = useContext(PrototypeContext);
+    const meKey = usePersonaKey();
+    if (meKey == userId && instance.isLive && fbUser) {
+        return <FaceImage photoUrl={fbUser.photoURL} size={size} faint={faint} />
+    } else {
+        const face = persona?.face;
+        return <FaceImage face={face} photoUrl={persona?.photoUrl} size={size} faint={faint} />
+    }
 }
 
 export function FaceImage({face, photoUrl=null, size=32, faint=false}) {

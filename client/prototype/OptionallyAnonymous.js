@@ -87,7 +87,7 @@ function getAuthorFace({comment, faint}) {
 }
 
 function ActionToggleAnonymous({comment}) {
-    const personaKey = getPersonaKey();
+    const personaKey = usePersonaKey();
     if (comment.from != personaKey) {
         return null;
     }

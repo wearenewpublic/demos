@@ -1,4 +1,4 @@
-import { getGlobalProperty, getObject } from "../util/localdata";
+import { getGlobalProperty, getObject, getPersonaKey } from "../util/localdata";
 import { callServerApiAsync } from "../util/servercall";
 const JSON5 = require('json5');
 
@@ -25,7 +25,7 @@ export async function gptProcessAsync({promptKey, params}) {
 
 
 export function messagesToGptString({messages, newMessageText}) {
-    const personaKey = getGlobalProperty('$personaKey');
+    const personaKey = getPersonaKey()
     const allMessages = [...messages, {text: newMessageText, from: personaKey}];
     return allMessages.map(message => getObject('persona', message.from)?.name + ': ' + JSON.stringify(message.text)).join('\n\n');
 }
