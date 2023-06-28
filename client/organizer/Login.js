@@ -1,6 +1,6 @@
 import React from 'react';
 import { GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, auth } from '../util/firebase';
-import { goBack } from './navigate';
+import { goBack } from '../util/navigate';
 import { Center, Clickable, Pad } from '../component/basics';
 import { Image, View } from 'react-native';
 

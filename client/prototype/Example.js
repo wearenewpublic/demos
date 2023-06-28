@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { VideoPlayer } from '../component/video';
 import { VideoCamera } from '../platform-specific/videocamera';
 import { statusStartingPoint } from '../data/tags';
-import { goBack, pushSubscreen } from '../organizer/navigate';
+import { goBack, pushSubscreen } from '../util/navigate';
 import { authorRobEnnals } from '../data/authors';
 import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { AudioRecorder } from '../platform-specific/audiorecorder';

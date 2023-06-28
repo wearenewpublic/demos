@@ -4,7 +4,7 @@ import { addObject, setSessionData, useGlobalProperty, usePersonaKey } from "../
 import React, { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
-import { gotoLogin } from "../organizer/navigate";
+import { gotoLogin } from "../util/navigate";
 
 export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = usePersonaKey();

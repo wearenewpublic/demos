@@ -10,7 +10,7 @@ import { resetData } from './util/localdata';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import { setTitle } from './platform-specific/url';
 import { gotoUrl, useLiveUrl } from './organizer/url';
-import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './organizer/navigate';
+import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
 import { LoginScreen } from './organizer/Login';
 import { useFirebaseUser } from './util/firebase';
 

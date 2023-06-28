@@ -15,8 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-console.log('firebase initialized', {app, auth});
-
 var global_firebaseUser = null;
 
 export function useFirebaseUser() {

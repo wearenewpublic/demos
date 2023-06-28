@@ -3,7 +3,7 @@ import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
 import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, SecondaryButton, SmallTitle } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
-import { goBack, gotoPrototype, pushSubscreen } from "./navigate";
+import { goBack, gotoPrototype, pushSubscreen } from "../util/navigate";
 import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
 import { FaceImage, UserFace } from "../component/userface";
 import { Popup } from "../platform-specific/popup";

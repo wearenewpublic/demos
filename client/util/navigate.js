@@ -1,5 +1,5 @@
-import { gotoUrl } from "./url";
-import { stripSuffix } from "../util/util";
+import { gotoUrl } from "../organizer/url";
+import { stripSuffix } from "./util";
 
 
 export function goBack() {

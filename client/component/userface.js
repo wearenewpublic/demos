@@ -3,6 +3,7 @@ import { getPersonaKey, useGlobalProperty, useObject, usePersonaKey } from "../u
 import { PrototypeContext } from "../organizer/PrototypeContext";
 import { useContext } from "react";
 
+// Special case for self-face, since current user may not be in the persona list
 export function UserFace({userId, size = 32, faint=false}) {
     const persona = useObject('persona', userId);
     const {instance, fbUser} = useContext(PrototypeContext);
