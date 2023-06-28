@@ -7,6 +7,7 @@ import TestRenderer from 'react-test-renderer'; // ES6
 import { act } from 'react-dom/test-utils';
 import { forEachAsync } from '../../util/util';
 
+jest.mock('../../util/firebase');
 
 test('All prototype instances render correctly', async () => {
     await forEachAsync(prototypes, async prototype => {

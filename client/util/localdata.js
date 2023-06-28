@@ -63,7 +63,6 @@ export function resetData(instance) {
         ['$session']: {personaKey}, 
         ...deepClone(instance)
     });    
-    console.log('global_data', global_data);
 }
 
 export function test_getDataWatchers() {return data_watchers};
