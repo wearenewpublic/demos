@@ -5,6 +5,7 @@ import Markdown from "react-native-markdown-display";
 import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
+import { setTitle } from "../platform-specific/url";
 
 
 export function ScrollableScreen({children, maxWidth=500}) {
@@ -329,4 +330,7 @@ const ListItemStyle = StyleSheet.create({
     }
 })
 
-
+export function ScreenTitleText({title}) {
+    setTitle(title);
+    return <Text>{title}</Text>    
+}

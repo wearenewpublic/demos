@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Article } from "../component/article";
-import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScrollableScreen, SmallTitle, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitle, WideScreen } from "../component/basics";
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagArticle, tagConversation } from "../data/tags";
@@ -49,7 +49,10 @@ export const ArticleQuestionsPrototype = {
     status: statusTentative,
     screen: ArticleQuestionsScreen,
     subscreens: {
-        question: {screen: QuestionScreen, title: ({questionKey}) => getObject('question', questionKey).text},
+        question: {
+            screen: QuestionScreen, 
+            title: ArticleQuestionTitle
+        }
     },
     instance: [
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
@@ -59,6 +62,11 @@ export const ArticleQuestionsPrototype = {
     ]
 }
 
+function ArticleQuestionTitle({questionKey}) {
+    const question = useObject('question', questionKey);
+    console.log('QuestionTitle', questionKey, question)
+    return <ScreenTitleText title={question?.text} />
+}
 
 export function ArticleQuestionsScreen() {
     const article = useGlobalProperty('article');
@@ -93,7 +101,7 @@ function QuestionSummary({questionKey}) {
 function QuestionScreen({questionKey}) {
     const question = useObject('question', questionKey);
     return <WideScreen pad>
-        <BigTitle>{question.text}</BigTitle>
-        <BasicComments about={question.key} />
+        <BigTitle>{question?.text}</BigTitle>
+        <BasicComments about={question?.key} />
     </WideScreen>
 }

@@ -3,12 +3,13 @@ import { Pad, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
-import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
+// import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
+import { useCollection, useDatastore, usePersonaKey } from "../util/datastore";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -88,12 +89,14 @@ function getAuthorFace({comment, faint}) {
 
 function ActionToggleAnonymous({comment}) {
     const personaKey = usePersonaKey();
+    const datastore = useDatastore();
+
     if (comment.from != personaKey) {
         return null;
     }
 
     function toggleAnonymous() {
-        modifyObject('comment', comment.key, comment => ({...comment, public: !comment.public}))
+        datastore.modifyObject('comment', comment.key, comment => ({...comment, public: !comment.public}))
     }
 
     return <CommentActionButton key='anon' label={comment.public ? 'Go Anonymous' : 'Reveal Identity'} onPress={toggleAnonymous} />

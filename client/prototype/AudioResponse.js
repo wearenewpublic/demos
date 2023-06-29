@@ -3,8 +3,9 @@ import { BigTitle, Pad, ScrollableScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagAudioVideo, tagConversation } from "../data/tags";
 import { AudioRecorder } from "../platform-specific/audiorecorder";
+import { useCollection, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
-import { addObject, modifyObject, useCollection, useGlobalProperty } from "../util/localdata";
+// import { addObject, modifyObject, useCollection, useGlobalProperty } from "../util/localdata";
 
 
 const description = `
@@ -53,12 +54,13 @@ export const AudioResponsePrototype = {
 function AudioResponseScreen() {
     const responses = useCollection('response', {sortBy: 'time'});
     const name = useGlobalProperty('name');
+    const datastore = useDatastore();
 
     async function onSubmitRecording({blob, url}){
         console.log('onSubmitRecording', blob, url);
-        const key = addObject('response', {uri: url, text: 'Transcribing...'});
+        const key = datastore.addObject('response', {uri: url, text: 'Transcribing...'});
         const text = await transcribeAudioAsync({blob});
-        modifyObject('response', key, response => ({...response, text}));
+        datastore.modifyObject('response', key, response => ({...response, text}));
         console.log('done respose', key, text);
     }
 

@@ -1,23 +1,27 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
-import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, SecondaryButton, SmallTitle } from "../component/basics";
+import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, SmallTitle } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
 import { goBack, gotoPrototype, pushSubscreen } from "../util/navigate";
 import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
 import { FaceImage, UserFace } from "../component/userface";
 import { Popup } from "../platform-specific/popup";
+import { useDatastore } from "../util/datastore";
 
-export function TopBar({title, subtitle, showPersonas}) {
+export function TopBar({title, subtitle, showPersonas, params}) {
     const s = TopBarStyle;
-    setTitle(title);
     return <View style={s.topBox}>        
         <View style={s.leftRow}>    
             <Clickable onPress={() => goBack()}>
                 <Entypo name='chevron-left' size={24} color='#666' />
             </Clickable>
             <View style={s.titleBox}>
-                <Text numberOfLines={1} style={subtitle ? s.twoLineTitle : s.oneLineTitle}>{title}</Text>
+                <Text numberOfLines={1} style={subtitle ? s.twoLineTitle : s.oneLineTitle}>
+                    {typeof(title) == 'string' ?
+                        <ScreenTitleText title={title}/>
+                    : title}
+                </Text>
                 {subtitle ? 
                     <Text style={s.subtitle}>{subtitle}</Text>
                 : null}

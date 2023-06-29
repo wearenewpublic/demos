@@ -92,7 +92,7 @@ function StackedScreen({screenInstance, index}) {
   return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
     <Datastore instance={instance} instanceKey={instanceKey} prototypeKey={prototypeKey} isLive={instance.isLive}>
       <FullScreen zIndex={index}>
-        <TopBar title={title} subtitle={prototype.name} showPersonas={!instance.isLive} />
+        <TopBar title={title} params={params} subtitle={prototype.name} showPersonas={!instance.isLive} />
         {React.createElement(screen, params)}
       </FullScreen>
     </Datastore>
@@ -109,7 +109,12 @@ function getScreen({prototype, screenKey}) {
 
 function getScreenTitle({prototype, instance, screenKey, params}) {
   if (screenKey) {
-    return prototype.subscreens?.[screenKey]?.title?.(params)
+    const title = prototype.subscreens?.[screenKey]?.title;
+    if (typeof(title) == 'string') {
+      return title;
+    } else {
+      return React.createElement(prototype.subscreens?.[screenKey]?.title, params);
+    }
   } else if (instance) {
     return instance.name;
   } else {
