@@ -13,6 +13,7 @@ import { gotoUrl, useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
 import { LoginScreen } from './organizer/Login';
 import { useFirebaseUser } from './util/firebase';
+import { Datastore } from './util/datastore';
 
 
 export default function App() {
@@ -74,7 +75,7 @@ const ScreenStackStyle = StyleSheet.create({
 
 function StackedScreen({screenInstance, index}) {
   const {prototypeKey, instanceKey, screenKey, params} = screenInstance;
-  const fbUser = useFirebaseUser();
+  // const fbUser = useFirebaseUser();
 
   if (prototypeKey == 'login' || instanceKey == 'login' || screenKey == 'login') {
     return <FullScreen zIndex={index}>
@@ -88,11 +89,13 @@ function StackedScreen({screenInstance, index}) {
   const screen = getScreen({prototype, screenKey, instanceKey});
   const title = getScreenTitle({prototype, screenKey, instance, params}); 
 
-  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey, fbUser}}>
+  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
+    <Datastore instance={instance} instanceKey={instanceKey} prototypeKey={prototypeKey} isLive={instance.isLive}>
       <FullScreen zIndex={index}>
         <TopBar title={title} subtitle={prototype.name} showPersonas={!instance.isLive} />
         {React.createElement(screen, params)}
       </FullScreen>
+    </Datastore>
   </PrototypeContext.Provider>
 }
 

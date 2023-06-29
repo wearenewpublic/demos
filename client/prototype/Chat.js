@@ -3,10 +3,11 @@ import { ChatInput } from "../component/chatinput";
 import { Message, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../util/util";
-import { useCollection } from "../util/localdata";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { useCollection, useDatastore } from "../util/datastore";
+import { addObject } from "../util/localdata";
 
 const description = `
 A starting point for prototypes that involve messenger-like conversations.
@@ -34,9 +35,14 @@ export const ChatPrototype = {
 
 export function ChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
+    const datastore = useDatastore();
+
+    console.log('ChatScreen', {messages, datastore, dataTree: datastore.dataTree, dataMessages: datastore.dataTree.message});
 
     function onSend(text) {
-        sendMessage({text});
+        console.log('adding message', text);
+        datastore.addObject('message', {text});
+        console.log('added', datastore);
     }
 
     return (

@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { soccer, trek_vs_wars } from "../data/conversations";
 import { expandDataList } from "../util/util";
-import { useCollection, useGlobalProperty } from "../util/localdata";
+// import { useCollection, useGlobalProperty } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
 import { BottomScroller } from "../platform-specific/bottomscroller";
-import { Message, QuietSystemMessage, sendMessage } from "../component/message";
+import { Message, QuietSystemMessage } from "../component/message";
 import { ChatInput } from "../component/chatinput";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 
 const description = `
 A chat app that enforces a list of user-defined rules in a conversation.
@@ -59,16 +60,16 @@ export const RuleEnforcerChatPrototype = {
 export function RuleEnforcerChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
     const [inProgress, setInProgress] = useState(false);
-    const initialRules = useGlobalProperty('rules');
-    const [rules, setRules] = useState(initialRules);
-
+    const rules = useGlobalProperty('rules');
+    const datastore = useDatastore();
+    
     async function onSend(text) {
         setInProgress(true);
-        sendMessage({text});
+        datastore.addObject('message', {text});
 
         const response = await gptProcessAsync({promptKey: 'ruleenforcer', params: {text, rules}});
         if (response.breaksRule && response.explanation) {
-            sendMessage({text: response.explanation, from: 'robo'});
+            datastore.addObject('message', {text: response.explanation, from: 'robo'});
         }
         setInProgress(false);
     }
@@ -78,7 +79,8 @@ export function RuleEnforcerChatScreen() {
             <ExpandSection title='Group Rules'>
                 <EditableText 
                     value={rules} 
-                    onChange={setRules} placeholder='Enter rules for your group' 
+                    onChange={text => datastore.setGlobalProperty('rules', text)} 
+                    placeholder='Enter rules for your group' 
                 />                
             </ExpandSection>
             <BottomScroller>

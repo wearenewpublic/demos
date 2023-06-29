@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-import { addObject, getGlobalProperty, getPersonaKey, newKey, setGlobalProperty, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
+// import { addObject, getGlobalProperty, getPersonaKey, newKey, setGlobalProperty, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { UserFace } from "./userface";
+import { useObject, usePersonaKey } from "../util/datastore";
 
 export function Message({messageKey}) {
     const s = MessageStyles;
@@ -86,7 +87,7 @@ const QuietSystemMessageStyle = StyleSheet.create({
     }
 });
 
-export function sendMessage({text, from=null}) {    
-    console.log('sendMessage', text, from, getPersonaKey());
-    addObject('message', {from: from || getPersonaKey(), text})
-}
+// export function sendMessage({text, from=null}) {    
+//     console.log('sendMessage', text, from, getPersonaKey());
+//     addObject('message', {from: from || getPersonaKey(), text})
+// }

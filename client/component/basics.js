@@ -219,7 +219,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
          ]} 
-            value={text ?? value}
+            value={text ?? value ?? ''}
             placeholder={placeholder}
             placeholderTextColor='#999'
             multiline={multiline} 

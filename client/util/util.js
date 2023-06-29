@@ -1,3 +1,4 @@
+import { ensureNextLocalKeyGreater } from "./datastore";
 import { ensureNextKeyGreater, newKey } from "./localdata";
 
 export function expandDataList(list) {
@@ -11,6 +12,7 @@ export function expandDataList(list) {
 
         const key = item.key || newKey();
         ensureNextKeyGreater(key);
+        ensureNextLocalKeyGreater(key);
         collection[key] = {
             ...item,
             key,

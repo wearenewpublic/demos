@@ -1,11 +1,7 @@
-import { useContext, useState } from "react";
-import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
+import { useContext } from "react";
 import { expandDataList } from "../util/util";
-import { addObject, getGlobalProperty, getPersonaKey, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, usePersonaKey } from "../util/localdata";
+// import { addObject, getGlobalProperty, getPersonaKey, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
-import { BottomScroller } from "../platform-specific/bottomscroller";
-import { Message, QuietSystemMessage, sendMessage } from "../component/message";
-import { ChatInput } from "../component/chatinput";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
@@ -14,6 +10,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { ScrollView } from "react-native";
 import { cat_club } from "../data/threaded";
+import { useCollection, useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
 
 const description = `
 A treaded conversations where rule-violating comments are hidden.
@@ -55,8 +52,9 @@ export const PrivateRuleEnforcerPrototype = {
 export function PrivateRuleEnforcerScreen() {
     const commentContext = useContext(CommentContext);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({comment}));
     const rules = useGlobalProperty('rules');
+    const datastore = useDatastore();
+    const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({datastore, comment}));
 
     const commentConfig = {...commentContext, 
         postHandler: postHandlerAsync, 
@@ -71,7 +69,7 @@ export function PrivateRuleEnforcerScreen() {
                 <ExpandSection title='Group Rules'>
                     <EditableText 
                         value={rules} 
-                        onChange={newRules => setGlobalProperty('rules', newRules)} placeholder='Enter rules for your group' 
+                        onChange={newRules => datastore.setGlobalProperty('rules', newRules)} placeholder='Enter rules for your group' 
                     />                
                 </ExpandSection>
                 <Pad size={8} />
@@ -86,20 +84,20 @@ export function PrivateRuleEnforcerScreen() {
     )   
 }
 
-async function postHandlerAsync({text, replyTo}) {
-    const rules = getGlobalProperty('rules');
-    const personaKey = getPersonaKey();
-    const commentKey = addObject('comment', {
+async function postHandlerAsync({datastore, text, replyTo}) {
+    const rules = datastore.getGlobalProperty('rules');
+    const personaKey = datastore.getPersonaKey();
+    const commentKey = datastore.addObject('comment', {
         from: personaKey, text, replyTo, pending: true
     })
     console.log('post', text, replyTo, commentKey);
     const response = await gptProcessAsync({promptKey: 'ruleenforcer', params: {text, rules}});
     console.log('response', response);
     if (response.breaksRule && response.explanation) {
-        addObject('comment', {text: response.explanation, from: 'robo', replyTo: commentKey});
-        modifyObject('comment', commentKey, comment => ({...comment, maybeBad: true, pending: false}))
+        datastore.addObject('comment', {text: response.explanation, from: 'robo', replyTo: commentKey});
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, maybeBad: true, pending: false}))
     } else {
-        modifyObject('comment', commentKey, comment => ({...comment, pending: false}))        
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, pending: false}))        
     }
 }
 
@@ -116,8 +114,8 @@ function BlingForced({comment}) {
 }
 
 
-function getIsVisible({comment}) {
-    const personaKey = getPersonaKey();
+function getIsVisible({datastore, comment}) {
+    const personaKey = datastore.getPersonaKey();
     if (comment.maybeBad || comment.pending) {
         return (comment.from == personaKey || personaKey == 'leader') 
     } else {
@@ -127,8 +125,9 @@ function getIsVisible({comment}) {
 
 export function ActionPostAnyway({commentKey, comment}) {
     const personaKey = usePersonaKey();
+    const datastore = useDatastore();
     function onPostAnyway() {
-        modifyObject('comment', commentKey, comment => ({...comment, postAnyway: true, maybeBad: false}))    
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, postAnyway: true, maybeBad: false}))    
     }
 
     if (comment.maybeBad && comment.from == personaKey) {

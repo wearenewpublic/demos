@@ -3,8 +3,9 @@ import { VideoPlayer, VideoPost } from "../component/video";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
 import { VideoCamera } from "../platform-specific/videocamera";
+import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
-import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
+// import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
 
 const description = `
 Record a video response to a question.
@@ -45,10 +46,11 @@ export const VideoResponse = {
 function VideoResponseScreen() {
     const responses = useCollection('response', {sortBy: 'time'});
     const name = useGlobalProperty('name');
+    const datastore = useDatastore();
 
     function onSubmitRecording(uri) {
         console.log('submitting recording', uri);
-        addObject('response', {uri});
+        datastore.addObject('response', {uri});
     }
 
     return <ScrollableScreen>

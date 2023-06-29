@@ -2,12 +2,13 @@ import { Card, Center, EditableText, Pad, PrimaryButton, WideScreen } from "../c
 import {View} from 'react-native'
 import { ExpandSection } from "../component/expand-section"
 import { BottomScroller } from "../platform-specific/bottomscroller"
-import { getAllData, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, useObject } from "../util/localdata"
+// import { getAllData, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, useObject } from "../util/localdata"
 import { Message, QuietSystemMessage, sendMessage } from "../component/message"
 import { gptProcessAsync } from "../component/chatgpt"
 import { useState } from "react"
 import { statusExperiment, statusTutorial, tagConversation } from "../data/tags"
 import { authorRobEnnals } from "../data/authors"
+import { useCollection, useDatastore, useGlobalProperty, useObject } from "../util/datastore"
 
 const description = `
 Describe a set of user personas and see what happens when they have a conversation with each other about a topic.
@@ -67,6 +68,7 @@ function SimulatedChatScreen() {
     const [inProgress, setInProgress] = useState(false);
     const personas = useGlobalProperty('persona');
     const topic = useGlobalProperty('topic');
+    const datastore = useDatastore();
 
     async function onGenerate() {
         setStarted(true);
@@ -85,7 +87,7 @@ function SimulatedChatScreen() {
         const gptMessages = await gptProcessAsync({promptKey:'simulatedchat', params});
         const newMessages = addPersonaKeysToMessages({personas, gptMessages});
         newMessages.forEach(message => {
-            sendMessage(message);
+            datastore.addObject('message', message);
         })
         setInProgress(false);
     }
@@ -93,9 +95,9 @@ function SimulatedChatScreen() {
     return (
         <WideScreen>
             <Pad />
-            <EditableText value={topic} 
+            <EditableText value={topic || ''} 
                 label='Discussion Topic'
-                onChange={text => setGlobalProperty('topic', text)} 
+                onChange={text => datastore.setGlobalProperty('topic', text)} 
                 multiline={false}
                 placeholder='Enter topic of conversation' 
             />
@@ -133,11 +135,13 @@ function addPersonaKeysToMessages({personas, gptMessages}) {
 }
 
 function PersonaDescription({personaKey}) {
+    const datastore = useDatastore();
+
     function onSetName(name) {
-        modifyObject('persona', personaKey, persona => ({...persona, name}))
+        datastore.modifyObject('persona', personaKey, persona => ({...persona, name}))
     }
     function onSetPersonality(personality) {
-        modifyObject('persona', personaKey, persona => ({...persona, personality}))
+        datastore.modifyObject('persona', personaKey, persona => ({...persona, personality}))
     }
 
     const persona = useObject('persona', personaKey);
@@ -145,7 +149,7 @@ function PersonaDescription({personaKey}) {
     return <View>
         <Pad size={12} />
         <EditableText
-            value={persona.name} 
+            value={persona?.name || ''} 
             onChange={onSetName} 
             placrehoder={`Enter name of person ${personaKey}`}
             multiline={false}
@@ -153,7 +157,7 @@ function PersonaDescription({personaKey}) {
         />
         <EditableText 
             height={80}
-            value={persona.personality} 
+            value={persona?.personality || ''} 
             onChange={onSetPersonality} 
             placeholder={`Enter personality of person ${personaKey}`} 
             flatTop

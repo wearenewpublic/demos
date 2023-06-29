@@ -1,22 +1,24 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { UserFace } from "./userface";
-import { addObject, setSessionData, useGlobalProperty, usePersonaKey } from "../util/localdata";
+// import { addObject, setSessionData, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import React, { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
+import { useDatastore, usePersonaKey } from "../util/datastore";
 
 export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = usePersonaKey();
+    const datastore = useDatastore();
     const [text, setText] = useState('');
     const {postHandler, getAuthorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     function onPost() {
         if (postHandler) {
-            postHandler({text, replyTo: commentKey});
+            postHandler({datastore, text, replyTo: commentKey});
         } else {
-            addObject('comment', {
+            datastore.addObject('comment', {
                 from: personaKey, text, replyTo: commentKey
             })
         }
@@ -28,7 +30,7 @@ export function ReplyInput({commentKey, topLevel = false}) {
     }
 
     function hideReplyInput() {
-        setSessionData('replyToComment', null);
+        datastore.setSessionData('replyToComment', null);
     }
 
     if (!personaKey) {
@@ -37,7 +39,6 @@ export function ReplyInput({commentKey, topLevel = false}) {
 
     return <View style={s.row}>
         {getAuthorFace({comment: {from: personaKey}})}
-        {/* <UserFace userId={personaKey} size={32} /> */}
         <View style={s.right}>
             <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
                 <TextInput style={s.textInput}

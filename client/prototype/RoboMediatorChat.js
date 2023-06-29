@@ -1,14 +1,15 @@
 import { Pad, WideScreen } from "../component/basics";
 import { ChatInput } from "../component/chatinput";
-import { Message, QuietSystemMessage, sendMessage } from "../component/message";
+import { Message, QuietSystemMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../util/util";
-import { useCollection } from "../util/localdata";
+// import { useCollection } from "../util/localdata";
 import { soccer, trek_vs_wars } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { useCollection, useDatastore } from "../util/datastore";
 
 const description = `
 An AI agent acts as a mediator between people who are having difficulty getting along.
@@ -41,16 +42,17 @@ export const RoboMediatorChatPrototype = {
 export function RoboMediatorChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
     const [inProgress, setInProgress] = useState(false);
+    const datastore = useDatastore();
 
     async function onSend(text) {
         setInProgress(true);
-        sendMessage({text});
+        datastore.addObject('message', {text});
 
         const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'conflict', text});
         if (isUnproductiveMessage) {
             const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'mediator', messages, newMessageText: text});
             if (gptMessageText) {
-                sendMessage({text: gptMessageText, from: 'robo'})
+                datastore.addObject('message', {text: gptMessageText, from: 'robo'})
             }    
         }
 

@@ -2,11 +2,12 @@ import { ScrollView } from "react-native"
 import { Pad, WideScreen } from "../component/basics";
 import { Comment } from "../component/comment";
 import { expandDataList } from "../util/util"
-import { useCollection } from "../util/localdata";
+// import { useCollection } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { useCollection } from "../util/datastore";
 
 const description = `
 A starting point for future prototypes that involve threaded comments.

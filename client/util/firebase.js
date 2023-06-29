@@ -44,7 +44,11 @@ export function firebaseSignOut() {
 }
 
 export function onFbUserChanged(callback) {
-    onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, callback);
+}
+
+export function newKey() {
+	return push(ref(database)).key;
 }
 
 export {auth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword};

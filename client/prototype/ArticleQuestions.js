@@ -6,8 +6,9 @@ import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagArticle, tagConversation } from "../data/tags";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
-import { getObject, useCollection, useGlobalProperty, useObject } from "../util/localdata";
+// import { getObject, useCollection, useGlobalProperty, useObject } from "../util/localdata";
 import { BasicComments } from "../component/comment";
+import { useCollection, useGlobalProperty, useObject } from "../util/datastore";
 
 const description = `
 Respond to questions that relate to an article.

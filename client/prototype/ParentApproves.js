@@ -1,7 +1,7 @@
 import { ScrollView } from "react-native";
 import { Pad, Pill, WideScreen } from "../component/basics";
 import { ActionApprove, ActionCollapse, ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentContext } from "../component/comment";
-import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from "../util/localdata";
+// import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
@@ -9,6 +9,8 @@ import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
+import { useCollection } from "../util/datastore";
+import { getPersonaKey } from "../util/localdata";
 
 
 const description = `
@@ -70,9 +72,9 @@ export function ParentApprovesScreen() {
     )   
 }
 
-function getIsVisible({comment}) {
-    const personaKey = getPersonaKey();
-    const parentComment = getObject('comment', comment.replyTo);    
+function getIsVisible({datastore, comment}) {
+    const personaKey = datastore.getPersonaKey();
+    const parentComment = datastore.getObject('comment', comment.replyTo);    
     if (comment.maybeBad || comment.pending) {
         return (comment.from == personaKey || parentComment.from == personaKey) 
     } else {
@@ -86,17 +88,17 @@ function BlingMaybeBad({comment}) {
     }
 }
 
-async function postHandlerAsync({text, replyTo}) {
+async function postHandlerAsync({datastore, text, replyTo}) {
     console.log('postHandlerAsync', text, replyTo)
-    const personaKey = getPersonaKey();
-    const commentKey = addObject('comment', {
+    const personaKey = datastore.getPersonaKey();
+    const commentKey = datastore.addObject('comment', {
         from: personaKey, text, replyTo, pending: true
     })
     const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'conflict', text});
     if (isUnproductiveMessage) {
-        modifyObject('comment', commentKey, comment => ({...comment, maybeBad: true, pending: false}))
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, maybeBad: true, pending: false}))
     } else {
-        modifyObject('comment', commentKey, comment => ({...comment, pending: false}))        
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, pending: false}))        
     }
 }
 

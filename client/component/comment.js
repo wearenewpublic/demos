@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
-import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, usePersonaKey, useSessionData } from "../util/localdata";
+// import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, usePersonaKey, useSessionData } from "../util/localdata";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
-
+import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 
 
 export function CommentActionButton({label, onPress}) {
@@ -41,34 +41,42 @@ const CommentDataTextStyle = StyleSheet.create({
 })
 
 
-function replyToComment(commentKey) {
-    setSessionData('replyToComment', commentKey);
-}
 
 export function ActionReply({commentKey}) {
+    const datastore = useDatastore();
+
+    function replyToComment(commentKey) {
+        datastore.setSessionData('replyToComment', commentKey);
+    }
+    
     return <CommentActionButton key='reply' label='Reply' onPress={() => replyToComment(commentKey)} />
 }
 
-function likeComment(commentKey, comment, personaKey) {
-    const shouldLike = !comment.likes?.[personaKey];
-    modifyObject('comment', commentKey, comment => ({
-        ...comment, likes: shouldLike ? addKey(comment.likes, personaKey) : removeKey(comment.likes, personaKey)
-    }))
-}
 
 export function ActionLike({commentKey, comment}) {
     const personaKey = usePersonaKey();
+    const datastore = useDatastore();
     if (comment.from == personaKey) return null;
     const actionLabel = comment?.likes?.[personaKey] ? 'Unlike' : 'Like';
     const likeCount = Object.keys(comment?.likes || {}).length;    
     const likeCountLabel = likeCount ? ' (' + likeCount + ')' : '';
+
+    function likeComment(commentKey, comment, personaKey) {
+        const shouldLike = !comment.likes?.[personaKey];
+        datastore.modifyObject('comment', commentKey, comment => ({
+            ...comment, likes: shouldLike ? addKey(comment.likes, personaKey) : removeKey(comment.likes, personaKey)
+        }))
+    }
+    
     return <CommentActionButton key='like' label={actionLabel + likeCountLabel} onPress={() => likeComment(commentKey, comment, personaKey)} />
 }
 
 
 export function ActionCollapse({commentKey}) {
+    const datastore = useDatastore();
+
     function onCollapse() {
-        setSessionData(['comment', commentKey, 'collapsed'], true);
+        datastore.setSessionData(['comment', commentKey, 'collapsed'], true);
     }
     return <CommentActionButton key='collapse' label='Collapse' onPress={onCollapse} />
 }
@@ -76,10 +84,11 @@ export function ActionCollapse({commentKey}) {
 export function ActionApprove({commentKey, comment}) {
     const personaKey = usePersonaKey();
     const parentComment = useObject('comment', comment.replyTo);    
+    const datastore = useDatastore();
 
     function onApprove() {
         console.log('approve', commentKey, comment);
-        modifyObject('comment', commentKey, comment => ({...comment, maybeBad: false}))    
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, maybeBad: false}))    
     }
 
     if (comment.maybeBad && parentComment?.from == personaKey) {
@@ -129,7 +138,7 @@ export const CommentContext = React.createContext({
     replyComponent: ReplyInput,
     getIsDefaultCollapsed: () => false,
     getIsVisible: () => true,
-    getAuthorName: ({comment}) => useObject('persona', comment.from)?.name,
+    getAuthorName: ({datastore, comment}) => datastore.getObject('persona', comment.from)?.name,
     getAuthorFace: ({comment, faint}) => <UserFace userId={comment.from} faint={faint} />,
     commentPlaceholder: 'Write a comment...',
     replyWidgets: []
@@ -139,13 +148,14 @@ export const CommentContext = React.createContext({
 export function Comment({commentKey}) {
     const s = CommentStyle;
     const comment = useObject('comment', commentKey);
+    const datastore = useDatastore();
     const {actions, replyComponent, getIsDefaultCollapsed, getAuthorFace} = React.useContext(CommentContext);
     const showReplyComponent = useSessionData('replyToComment') == commentKey;
-    const sessionCollapsed = getSessionData(['comment', commentKey, 'collapsed']);
-    const collapsed = sessionCollapsed ?? getIsDefaultCollapsed({commentKey, comment});
+    const sessionCollapsed = useSessionData(['comment', commentKey, 'collapsed']);
+    const collapsed = sessionCollapsed ?? getIsDefaultCollapsed({datastore, commentKey, comment});
 
     function onExpand() {
-        setSessionData(['comment', commentKey, 'collapsed'], false);
+        datastore.setSessionData(['comment', commentKey, 'collapsed'], false);
     }
 
     if (!collapsed) {
@@ -236,9 +246,10 @@ const CollapsedCommentStyle = StyleSheet.create({
 
 function Replies({commentKey}) {
     const s = RepliesStyle;
+    const datastore = useDatastore();
     const {getIsVisible} = React.useContext(CommentContext);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const replies = comments.filter(c => c.replyTo == commentKey && getIsVisible({comment: c}));
+    const replies = comments.filter(c => c.replyTo == commentKey && getIsVisible({datastore, comment: c}));
     return <View style={s.repliesHolder}>
         {replies.map(reply => 
             <Comment key={reply.key} commentKey={reply.key} />
@@ -255,8 +266,10 @@ function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
 
     const {getAuthorName} = React.useContext(CommentContext);
+    const datastore = useDatastore();
     const comment = useObject('comment', commentKey);
-    const authorName = getAuthorName({comment});
+
+    const authorName = getAuthorName({datastore, comment});
     return <View style={s.authorInfoBox}> 
         <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>{authorName}</Text>
     </View>

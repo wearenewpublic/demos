@@ -47,13 +47,13 @@ function getInitialPersonaKey(instance) {
 
 
 
-onFbUserChanged(user => {
-    console.log('user', user);
-    const personaKey = getPersonaKey();
-    if (user && personaKey != user.uid) {
-        setSessionData('personaKey', user.uid);
-    }
-})
+// onFbUserChanged(user => {
+//     console.log('user', user);
+//     const personaKey = getPersonaKey();
+//     if (user && personaKey != user.uid) {
+//         setSessionData('personaKey', user.uid);
+//     }
+// })
 
 export function resetData(instance) {
     const personaKey = getInitialPersonaKey(instance);

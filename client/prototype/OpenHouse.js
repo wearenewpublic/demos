@@ -1,13 +1,14 @@
 import { ScrollView } from "react-native";
 import { BodyText, Pad, Separator, WideScreen } from "../component/basics";
 import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText } from "../component/comment";
-import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
+// import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { civic_society } from "../data/openhouse_civic";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
 import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
+import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 
 const description = `
 Members of a group can talk with non-members, but messages from non-members will appear in a
@@ -77,8 +78,8 @@ export function OpenHouseScreen() {
     )   
 }
 
-function getIsDefaultCollapsed({comment}) {
-    const fromMember = getObject('persona', comment.from)?.member;
+function getIsDefaultCollapsed({datastore, comment}) {
+    const fromMember = datastore.getObject('persona', comment.from)?.member;
     return !fromMember && !comment.promotedBy;
 }
 
@@ -87,9 +88,10 @@ export function ActionPromote({commentKey, comment}) {
     const myPersona = useObject('persona', personaKey);
     const fromPersona = useObject('persona', comment?.from);
     const boosterName = useObject('persona', comment?.promotedBy)?.name;
+    const datastore = useDatastore();
 
     function onPromote(promote) {
-        modifyObject('comment', commentKey, comment => ({...comment, promotedBy: promote ? personaKey : null}))    
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, promotedBy: promote ? personaKey : null}))    
     }
 
     if (fromPersona.member) {

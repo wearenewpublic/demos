@@ -5,7 +5,9 @@ import { Separator } from "./basics";
 export function Article({article, embed=null, children}) {
     const s = ArticleStyle;
     
-    const paragraphs = article.rawText.trim().split('\n').filter(x=>x);
+    if (!article) return null;
+
+    const paragraphs = article?.rawText?.trim()?.split('\n')?.filter(x=>x);
 
     return <View style={s.outer}>
         <View style={s.narrowSection}>

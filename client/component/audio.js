@@ -4,8 +4,9 @@ import { BodyText, Card, Clickable, TimeText } from './basics';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { callServerMultipartApiAsync } from '../util/servercall';
-import { useObject } from '../util/localdata';
+// import { useObject } from '../util/localdata';
 import { UserFace } from './userface';
+import { useObject } from '../util/datastore';
 
 
 export function AudioPost({post}) {
@@ -15,7 +16,7 @@ export function AudioPost({post}) {
         <View style={s.authorBox}>
             <UserFace userId={post.from} size={32} />
             <View style={s.authorRight}>
-                <Text style={s.authorName}>{user.name}</Text>
+                <Text style={s.authorName}>{user?.name}</Text>
                 <TimeText time={post.time} />
             </View>
         </View>
