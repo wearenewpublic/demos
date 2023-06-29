@@ -3,7 +3,7 @@ import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
-import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
+// import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
@@ -11,6 +11,8 @@ import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society } from "../data/openhouse_civic";
 import { QuietSystemMessage } from "../component/message";
+import { useCollection, useObject, usePersonaKey } from "../util/datastore";
+// import { useObject, usePersonaKey } from "../util/datastore";
 
 const description = `
 Be anonymous to the public, but not to group members.
@@ -61,11 +63,12 @@ export function SemiAnonymousScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo);
 
     const commentConfig = {...commentContext,
-        getAuthorName, getAuthorFace,
+        authorName: AuthorName, authorFace: AuthorFace,
         commentPlaceholder: 'Write a semi-anonymous comment',
         replyWidgets: [SemiAnonymousExplain]
     }
 
+    console.log('comments', comments);
 
     return (
         <WideScreen pad>
@@ -82,35 +85,41 @@ export function SemiAnonymousScreen() {
     )
 }
 
-function getIsPublic({comment}) {
-    const personaKey = getPersonaKey();
-    const fromMember = getObject('persona', comment.from)?.member;
-    const userIsMember = getObject('persona', personaKey)?.member;
-    return comment.public || fromMember || userIsMember;
+function getIsPublic({mePersona, authorPersona, comment}) {
+    return comment?.public || authorPersona?.member || mePersona?.member;
 }
 
-function getAuthorName({comment}) {
-    const personaKey = getPersonaKey();
-    if (getIsPublic({comment})) {
-        return getObject('persona', comment.from)?.name;
-    } else if (comment.from == personaKey) {
+function AuthorName({comment}) {
+    const personaKey = usePersonaKey();
+    const mePersona = useObject('persona', personaKey);
+    const authorPersona = useObject('persona', comment?.from);
+    const isPublic = getIsPublic({mePersona, authorPersona, comment});
+
+    if (isPublic) {
+        return authorPersona?.name;
+    } else if (comment?.from == personaKey) {
         return 'You Semi-Anonymously';
     } else {
         return 'Anonymous Guest';
     }
 }
 
-function getAuthorFace({comment, faint}) {
-    if (getIsPublic({comment})) {
-        return <UserFace userId={comment.from} faint={faint} />
+function AuthorFace({comment, faint}) {
+    const personaKey = usePersonaKey();
+    const mePersona = useObject('persona', personaKey);
+    const authorPersona = useObject('persona', comment?.from);
+    const isPublic = getIsPublic({mePersona, authorPersona, comment});
+
+    if (isPublic) {
+        return <UserFace userId={comment?.from} faint={faint} />
     } else {
         return <AnonymousFace faint={faint} />;
     }
 }
 
 function SemiAnonymousExplain() {
-    const personaKey = getPersonaKey();
-    const userIsMember = getObject('persona', personaKey)?.member;
+    const personaKey = usePersonaKey();
+    const userIsMember = useObject('persona', personaKey)?.member;
     if (userIsMember) {
         return <PadBox vert={0} horiz={16} >
             <QuietSystemMessage>As a member, your identity is always public</QuietSystemMessage>

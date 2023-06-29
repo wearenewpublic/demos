@@ -56,7 +56,7 @@ export function ActionReply({commentKey}) {
 export function ActionLike({commentKey, comment}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
-    if (comment.from == personaKey) return null;
+    if (comment?.from == personaKey) return null;
     const actionLabel = comment?.likes?.[personaKey] ? 'Unlike' : 'Like';
     const likeCount = Object.keys(comment?.likes || {}).length;    
     const likeCountLabel = likeCount ? ' (' + likeCount + ')' : '';
@@ -104,7 +104,7 @@ export function BlingLabel({label, color='#666'}) {
 
 
 export function BlingPending({comment}) {
-    if (comment.pending) {
+    if (comment?.pending) {
         return <BlingLabel label='Posting...' />
     } else {
         return null;
@@ -138,18 +138,27 @@ export const CommentContext = React.createContext({
     replyComponent: ReplyInput,
     getIsDefaultCollapsed: () => false,
     getIsVisible: () => true,
-    getAuthorName: ({datastore, comment}) => datastore.getObject('persona', comment.from)?.name,
-    getAuthorFace: ({comment, faint}) => <UserFace userId={comment.from} faint={faint} />,
+    authorName: AuthorName,
+    authorFace: AuthorFace,
     commentPlaceholder: 'Write a comment...',
     replyWidgets: []
 });
+
+function AuthorName({comment}) {
+    const persona = useObject('persona', comment.from);
+    return <Text>{persona?.name}</Text>
+}
+
+function AuthorFace({comment, faint}) {
+    return <UserFace userId={comment.from} faint={faint} />
+}
 
 
 export function Comment({commentKey}) {
     const s = CommentStyle;
     const comment = useObject('comment', commentKey);
     const datastore = useDatastore();
-    const {actions, replyComponent, getIsDefaultCollapsed, getAuthorFace} = React.useContext(CommentContext);
+    const {actions, replyComponent, getIsDefaultCollapsed, authorFace} = React.useContext(CommentContext);
     const showReplyComponent = useSessionData('replyToComment') == commentKey;
     const sessionCollapsed = useSessionData(['comment', commentKey, 'collapsed']);
     const collapsed = sessionCollapsed ?? getIsDefaultCollapsed({datastore, commentKey, comment});
@@ -161,14 +170,14 @@ export function Comment({commentKey}) {
     if (!collapsed) {
         return <View style={s.commentHolder}>
             <View style={s.commentLeft}>
-                {getAuthorFace({comment})}
+                {React.createElement(authorFace, {comment})}
                 <View style={s.verticalLine} />
             </View>
             <View style={s.commentRight}>
                 <View style={s.commentBox}>
                     <CommentAuthorInfo commentKey={commentKey} />
                     <TopBlingBar commentKey={commentKey} comment={comment} />
-                    <Text style={s.text}>{comment.text}</Text>
+                    <Text style={s.text}>{comment?.text}</Text>
                     <ActionBar actions={actions} commentKey={commentKey} comment={comment} />
                 </View>
                 {showReplyComponent ? React.createElement(replyComponent, {commentKey}) : null}
@@ -209,12 +218,12 @@ const CommentStyle = StyleSheet.create({
 function CollapsedComment({commentKey, onPress}) {
     const s = CollapsedCommentStyle;
     const comment = useObject('comment', commentKey);
-    const {getAuthorFace} = React.useContext(CommentContext);
+    const {authorFace} = React.useContext(CommentContext);
 
     return <Clickable onPress={onPress}>
         <View style={s.commentHolder}>
             <View style={s.commentLeft}>
-                {getAuthorFace({comment, faint: true})}
+                {React.createElement(authorFace, {comment, faint: true})}
             </View>
             <View style={s.commentRight}>
                 <CommentAuthorInfo commentKey={commentKey} collapsed />
@@ -235,7 +244,7 @@ const CollapsedCommentStyle = StyleSheet.create({
         maxWidth: 500
     },
     commentRight: {
-        flex: 1,
+        flex: 1, 
         marginLeft: 12
     },
     commentBox: {
@@ -265,13 +274,13 @@ const RepliesStyle = StyleSheet.create({
 function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
 
-    const {getAuthorName} = React.useContext(CommentContext);
-    const datastore = useDatastore();
+    const {authorName} = React.useContext(CommentContext);
     const comment = useObject('comment', commentKey);
 
-    const authorName = getAuthorName({datastore, comment});
     return <View style={s.authorInfoBox}> 
-        <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>{authorName}</Text>
+        <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>
+            {React.createElement(authorName, {comment})}
+        </Text>
     </View>
 }
 

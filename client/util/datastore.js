@@ -16,22 +16,17 @@ export class Datastore extends React.Component {
     fbWatchReleaser = null;
 
     componentDidMount() {
-        console.log('Datastore.componentDidMount', this.props);
         this.resetData();
         if (this.props.isLive) {
-            console.log('watching fb user');
             this.fbWatchReleaser = onFbUserChanged(user => {
                 this.setSessionData('personaKey', user.uid);
-                console.log('got fb user', user);
             })
         }
     }
     componentWillUnmount() {
-        console.log('unmount');
         this.fbWatchReleaser && this.fbWatchReleaser();
     }
     componentDidUpdate(prevProps) {
-        console.log('componentDidUpdate', prevProps, this.props);
         if (prevProps.instanceKey != this.props.instanceKey || prevProps.prototypeKey != this.props.prototypeKey) {
             this.resetData();
         }
@@ -57,7 +52,7 @@ export class Datastore extends React.Component {
         this.dataWatchers = this.dataWatchers.filter(w => w !== watchFunc);
     }
     notifyWatchers() {
-        console.log('notifyWatchers', this.dataWatchers);
+        // console.log('notifyWatchers', this.dataWatchers);
         this.dataWatchers.forEach(w => w());
     }
 

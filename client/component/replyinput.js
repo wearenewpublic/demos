@@ -11,7 +11,7 @@ export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [text, setText] = useState('');
-    const {postHandler, getAuthorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
+    const {postHandler, authorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     function onPost() {
@@ -38,7 +38,7 @@ export function ReplyInput({commentKey, topLevel = false}) {
     }
 
     return <View style={s.row}>
-        {getAuthorFace({comment: {from: personaKey}})}
+        {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
             <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
                 <TextInput style={s.textInput}

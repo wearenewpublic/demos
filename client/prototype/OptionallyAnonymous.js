@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { Pad, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
@@ -9,7 +9,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
-import { useCollection, useDatastore, usePersonaKey } from "../util/datastore";
+import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -47,7 +47,7 @@ export function OptionallyAnonymousScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo);
 
     const commentConfig = {...commentContext,
-        getAuthorName, getAuthorFace,
+        authorName: AuthorName, authorFace: AuthorFace,
         commentPlaceholder: 'Write an anonymous comment',
         actions: [ActionReply, ActionLike, ActionToggleAnonymous],
     }
@@ -68,18 +68,19 @@ export function OptionallyAnonymousScreen() {
     )
 }
 
-function getAuthorName({comment}) {
-    const personaKey = getPersonaKey();
+function AuthorName({comment}) {
+    const personaKey = usePersonaKey();
+    const authorPersona = useObject('persona', comment.from);
     if (comment.public) {
-        return getObject('persona', comment.from)?.name;
+        return <Text>{authorPersona?.name}</Text>;
     } else if (comment.from == personaKey) {
-        return 'You Anonymously';
+        return <Text>You Anonymously</Text>;
     } else {
-        return 'Anonymous';
+        return <Text>Anonymous</Text>;
     }
 }
 
-function getAuthorFace({comment, faint}) {
+function AuthorFace({comment, faint}) {
     if (comment.public) {
         return <UserFace userId={comment.from} faint={faint} />
     } else {

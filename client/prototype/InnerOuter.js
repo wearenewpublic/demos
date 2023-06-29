@@ -3,12 +3,13 @@ import { BodyText, EditableText, Pad, SectionTitle, WideScreen } from "../compon
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
-import { getObject, getPersonaKey, setGlobalData, setGlobalProperty, useCollection, useGlobalProperty } from "../util/localdata";
+// import { getObject, getPersonaKey, setGlobalData, setGlobalProperty, useCollection, useGlobalProperty } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { Comment, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
+import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -64,7 +65,9 @@ function InnerOuterScreen() {
     const commentContext = useContext(CommentContext);
     const conclusion = useGlobalProperty('conclusion');
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({comment}));
+    const datastore = useDatastore();
+
+    const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({datastore, comment}));
 
     const commentConfig = {...commentContext,
         getIsVisible
@@ -101,18 +104,18 @@ function InnerOuterScreen() {
 }
 
 
-function getIsVisible({comment}) {
-    const personaKey = getPersonaKey();
-    const userIsMember = getObject('persona', personaKey)?.member;
+function getIsVisible({datastore, comment}) {
+    const personaKey = datastore.getPersonaKey();
+    const userIsMember = datastore.getObject('persona', personaKey)?.member;
 
     if (userIsMember) {
         return true;
     } else if (!comment) {
         return false;
-    } else if (comment.from == personaKey) {
+    } else if (comment?.from == personaKey) {
         return true;
     } else {
-        return getIsVisible({comment: getObject('comment', comment.replyTo)});
+        return getIsVisible({datastore, comment: datastore.getObject('comment', comment?.replyTo)});
     }
 }
 
