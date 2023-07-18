@@ -3,7 +3,7 @@ import { BigTitle, Pad, ScrollableScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagAudioVideo, tagConversation } from "../data/tags";
 import { AudioRecorder } from "../platform-specific/audiorecorder";
-import { useCollection, useGlobalProperty } from "../util/datastore";
+import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
 
 

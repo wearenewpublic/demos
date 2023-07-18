@@ -10,7 +10,7 @@ import { authorRobEnnals } from '../data/authors';
 import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { AudioRecorder } from '../platform-specific/audiorecorder';
 import { Popup } from '../platform-specific/popup';
-import { useGlobalProperty } from '../util/datastore';
+import { useDatastore, useGlobalProperty } from '../util/datastore';
 
 const description = `
 Examples of how to use the various parts of the prototype infrastructure.
