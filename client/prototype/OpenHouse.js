@@ -1,7 +1,6 @@
 import { ScrollView } from "react-native";
 import { BodyText, Pad, Separator, WideScreen } from "../component/basics";
 import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText } from "../component/comment";
-// import { getObject, modifyObject, useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { civic_society } from "../data/openhouse_civic";
 import { expandDataList } from "../util/util";

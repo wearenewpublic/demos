@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { expandDataList } from "../util/util";
-// import { addObject, getGlobalProperty, getPersonaKey, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import { EditableText, Pad, WideScreen } from "../component/basics";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";

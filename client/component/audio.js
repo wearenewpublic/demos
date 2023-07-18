@@ -4,7 +4,6 @@ import { BodyText, Card, Clickable, TimeText } from './basics';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { callServerMultipartApiAsync } from '../util/servercall';
-// import { useObject } from '../util/localdata';
 import { UserFace } from './userface';
 import { useObject } from '../util/datastore';
 

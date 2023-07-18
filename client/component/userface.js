@@ -1,5 +1,4 @@
 import { Image, StyleSheet } from "react-native";
-// import { getPersonaKey, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata"
 import { PrototypeContext } from "../organizer/PrototypeContext";
 import { useContext } from "react";
 import { useObject, usePersonaKey } from "../util/datastore";

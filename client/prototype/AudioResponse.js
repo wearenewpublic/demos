@@ -5,7 +5,6 @@ import { statusTentative, tagAudioVideo, tagConversation } from "../data/tags";
 import { AudioRecorder } from "../platform-specific/audiorecorder";
 import { useCollection, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
-// import { addObject, modifyObject, useCollection, useGlobalProperty } from "../util/localdata";
 
 
 const description = `

@@ -3,7 +3,6 @@ import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
-// import { getObject, getPersonaKey, modifyObject, useCollection, useObject, usePersonaKey } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";

@@ -5,7 +5,6 @@ import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tag
 import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
-// import { addObject, getAllData, useCollection, useGlobalProperty } from "../util/localdata"
 
 const description = `
 Record a video response to a question.

@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { BigTitle, BodyText, Card, EditableText, HorizBox, Pad, PrimaryButton, ScrollableScreen, SectionTitle, Separator, SmallTitle, WideScreen } from '../component/basics';
-import { setGlobalProperty, useGlobalProperty } from '../util/localdata';
 import { callServerApiAsync, callServerMultipartApiAsync } from '../util/servercall';
 import { useState } from 'react';
 import { VideoPlayer } from '../component/video';
@@ -11,6 +10,7 @@ import { authorRobEnnals } from '../data/authors';
 import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { AudioRecorder } from '../platform-specific/audiorecorder';
 import { Popup } from '../platform-specific/popup';
+import { useGlobalProperty } from '../util/datastore';
 
 const description = `
 Examples of how to use the various parts of the prototype infrastructure.
@@ -75,12 +75,13 @@ export function ExampleScreen() {
 function ExampleInstanceData() {
     const name = useGlobalProperty('name');
     const message = useGlobalProperty('message');
+    const datastore = useDatastore();
 
     function setName(text) {
-        setGlobalProperty('name', text)
+        datastore.setGlobalProperty('name', text)
     }
     function setMessage(text) {
-        setGlobalProperty('message', text)
+        datastore.setGlobalProperty('message', text)
     }
 
 

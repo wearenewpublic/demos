@@ -4,7 +4,7 @@ import { Card, Clickable, TimeText } from "./basics";
 import { useRef, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { UserFace } from "./userface";
-import { useObject } from "../util/localdata";
+import { useObject } from "../util/datastore";
 
 
 export function VideoPost({post}) {

@@ -2,7 +2,6 @@ import { Card, Center, EditableText, Pad, PrimaryButton, WideScreen } from "../c
 import {View} from 'react-native'
 import { ExpandSection } from "../component/expand-section"
 import { BottomScroller } from "../platform-specific/bottomscroller"
-// import { getAllData, modifyObject, setGlobalProperty, useCollection, useGlobalProperty, useObject } from "../util/localdata"
 import { Message, QuietSystemMessage, sendMessage } from "../component/message"
 import { gptProcessAsync } from "../component/chatgpt"
 import { useState } from "react"

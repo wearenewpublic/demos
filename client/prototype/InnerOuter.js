@@ -3,7 +3,6 @@ import { BodyText, EditableText, Pad, SectionTitle, WideScreen } from "../compon
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars, trek_vs_wars_french } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
-// import { getObject, getPersonaKey, setGlobalData, setGlobalProperty, useCollection, useGlobalProperty } from "../util/localdata";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { Comment, CommentContext } from "../component/comment";

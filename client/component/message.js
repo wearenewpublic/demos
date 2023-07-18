@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-// import { addObject, getGlobalProperty, getPersonaKey, newKey, setGlobalProperty, useGlobalProperty, useObject, usePersonaKey } from "../util/localdata";
 import { UserFace } from "./userface";
 import { useObject, usePersonaKey } from "../util/datastore";
 

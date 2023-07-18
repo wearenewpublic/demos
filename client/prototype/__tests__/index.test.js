@@ -2,10 +2,10 @@
 import React from 'react';
 import { PrototypeContext } from '../../organizer/PrototypeContext';
 import { prototypes } from '..';
-import { resetData } from '../../util/localdata';
 import TestRenderer from 'react-test-renderer'; // ES6
 import { act } from 'react-dom/test-utils';
 import { forEachAsync } from '../../util/util';
+import { Datastore } from '../../util/datastore';
 
 jest.mock('../../util/firebase');
 
@@ -18,11 +18,12 @@ test('All prototype instances render correctly', async () => {
 });
 
 async function renderPrototypeInstanceAsync({prototype, instance}) {
-    resetData(instance);
     await act(async () => {
-        const renderer = await TestRenderer.create(
+        const renderer = await TestRenderer.create(            
             <PrototypeContext.Provider value={{prototype, instance, instanceKey: instance.key}}>
-                <prototype.screen />
+                <Datastore instance={instance} instanceKey={instanceKey} prototypeKey={prototype.key} isLive={instance.isLive}>
+                    <prototype.screen />
+                </Datastore>
             </PrototypeContext.Provider>
         );    
         await renderer.unmount();

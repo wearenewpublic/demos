@@ -7,7 +7,6 @@ import { statusStartingPoint, tagArticle, tagConversation } from "../data/tags";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
-// import { useGlobalProperty } from "../util/localdata";
 
 const description = `
 This is a starting point for prototypes where comments revolve around an article.

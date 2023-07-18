@@ -7,7 +7,6 @@ import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore } from "../util/datastore";
-import { addObject } from "../util/localdata";
 
 const description = `
 A starting point for prototypes that involve messenger-like conversations.

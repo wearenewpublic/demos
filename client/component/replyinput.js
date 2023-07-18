@@ -1,6 +1,4 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { UserFace } from "./userface";
-// import { addObject, setSessionData, useGlobalProperty, usePersonaKey } from "../util/localdata";
 import React, { useContext, useState } from "react";
 import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";

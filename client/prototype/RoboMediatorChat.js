@@ -3,7 +3,6 @@ import { ChatInput } from "../component/chatinput";
 import { Message, QuietSystemMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../util/util";
-// import { useCollection } from "../util/localdata";
 import { soccer, trek_vs_wars } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
@@ -50,7 +49,7 @@ export function RoboMediatorChatScreen() {
 
         const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'conflict', text});
         if (isUnproductiveMessage) {
-            const gptMessageText = await askGptToRespondToConversationAsync({promptKey: 'mediator', messages, newMessageText: text});
+            const gptMessageText = await askGptToRespondToConversationAsync({datastore, promptKey: 'mediator', messages, newMessageText: text});
             if (gptMessageText) {
                 datastore.addObject('message', {text: gptMessageText, from: 'robo'})
             }    

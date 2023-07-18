@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-// import { getSessionData, modifyObject, setSessionData, useCollection, useGlobalProperty, useObject, usePersonaKey, useSessionData } from "../util/localdata";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React from "react";

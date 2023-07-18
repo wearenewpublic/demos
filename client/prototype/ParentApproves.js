@@ -1,7 +1,6 @@
 import { ScrollView } from "react-native";
 import { Pad, Pill, WideScreen } from "../component/basics";
 import { ActionApprove, ActionCollapse, ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentContext } from "../component/comment";
-// import { addObject, getObject, getPersonaKey, modifyObject, useCollection } from "../util/localdata";
 import { TopCommentInput } from "../component/replyinput";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
@@ -10,7 +9,6 @@ import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
 import { useCollection } from "../util/datastore";
-import { getPersonaKey } from "../util/localdata";
 
 
 const description = `

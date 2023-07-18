@@ -5,7 +5,6 @@ import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from 'react'
 import { NewPublicBodySection, NewPublicName, NewPublicTitle, NewPublicTitleBanner, colorNewPublicBackground } from "../component/newpublic";
-import { useSessionData } from "../util/localdata";
 
 export function PrototypeListScreen({onSelectPrototype}) {
     const s = PrototypeListScreenStyle;
