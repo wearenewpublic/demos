@@ -22,7 +22,6 @@ export function useFirebaseUser() {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             global_firebaseUser = user;
-            console.log('auth state', user);
             setUser(user);
         });
         return unsubscribe;

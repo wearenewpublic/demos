@@ -46,17 +46,49 @@ function DocumentLevelComponent({children}) {
     );
 }
 
+var global_clickTargetRef = null;
+var global_popupRef = null;
+
+
+function global_layoutPopup() {
+    if (!global_clickTargetRef || !global_popupRef) return;
+    if (!global_popupRef.current) {
+        requestAnimationFrame(global_layoutPopup);
+        return;
+    }
+
+    const node  = global_popupRef.current;
+    const rect = global_clickTargetRef.current.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
+    if (rect.top > windowHeight / 2) {
+        node.style.top = null;
+        node.style.bottom = (windowHeight - rect.top) + 'px';       
+    } else {
+        node.style.top = rect.bottom + 'px';
+        node.style.bottom = null;
+    }
+    if (rect.left > windowWidth / 2) {
+        node.style.right = (windowWidth - rect.right) + 'px';
+        node.style.left = null;
+    } else {
+        node.style.left = rect.left + 'px';
+        node.style.right = null;
+    }
+    if (rect.left > windowWidth / 2) {
+        node.style.maxWidth = (rect.left - 16) + 'px';
+    } else {
+        node.style.maxWidth = (windowWidth - rect.right - 16) + 'px';
+    }
+    requestAnimationFrame(global_layoutPopup);
+}
 
 export function Popup({popupContent, children}) {
     const s = PopupButtonStyle;
     const [shown, setShown] = useState(false);
-    const [left, setLeft] = useState(null);
-    const [right, setRight] = useState(null);
-    const [top, setTop] = useState(null);
-    const [bottom, setBottom] = useState(null);
-    const [maxWidth, setMaxWidth] = useState(0);
     const popupRef = React.useRef(null);
-    const clickTargetRef = React.useRef(null);  
+    const clickTargetRef = React.useRef(null);      
 
     const closePopup = useCallback(() => {
         setShown(false);
@@ -77,55 +109,31 @@ export function Popup({popupContent, children}) {
 
     function handleClickOutside(event) {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
-            cancelAnimationFrame(layoutPopup);
+            global_clickTargetRef = null;
+            global_popupRef = null;
             setShown(false);
         }
-    }
-
-    function layoutPopup() {
-        const rect = clickTargetRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const windowWidth = window.innerWidth;
-
-        document.addEventListener('click', handleClickOutside);
-        if (rect.top > windowHeight / 2) {
-            setTop(null);
-            setBottom(windowHeight - rect.top);
-        } else {
-            setTop(rect.bottom);
-            setBottom(null);
-        }
-        if (rect.left > windowWidth / 2) {
-            setRight(windowWidth - rect.right);
-            setLeft(null);
-        } else {
-            setLeft(rect.left);
-            setRight(null);
-        }
-        if (rect.left > windowWidth / 2) {
-          setMaxWidth(rect.left - 16);
-        } else {
-          setMaxWidth(windowWidth - rect.right - 16);
-        }
-        requestAnimationFrame(layoutPopup);
     }
 
     const onClickShow = useCallback(() => {
-        if (shown) {
-            setShown(false);
-            cancelAnimationFrame(layoutPopup);  
-            return;
-        };
-        layoutPopup();
-        // setUp(rect.top > windowHeight / 2);
-        // setLeft(rect.left > windowWidth / 2);
-        setShown(true);
+        setShown(!shown);
     })
 
     useEffect(() => {
+        if (shown) {
+            global_clickTargetRef = clickTargetRef;
+            global_popupRef = popupRef;
+            global_layoutPopup();
+        } else {
+            global_clickTargetRef = null;
+            global_popupRef = null;   
+        }
+    }, [shown]);
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
         return () => {
             document.removeEventListener('click', handleClickOutside);
-            cancelAnimationFrame(layoutPopup);
         };
       }, []);
 
@@ -137,8 +145,7 @@ export function Popup({popupContent, children}) {
         </View> 
         {shown ? 
             <DocumentLevelComponent>
-                <View ref={popupRef} 
-                    style={[s.popup, {left, right, top, bottom, maxWidth}]}>
+                <View ref={popupRef} style = {s.popup} >
                     {shown ? popupContent() : null}
                 </View>
             </DocumentLevelComponent>
