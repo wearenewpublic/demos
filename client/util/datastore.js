@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { defaultPersona, personas } from '../data/personas';
-import { onAuthStateChanged } from 'firebase/auth';
 import { getFirebaseUser, onFbUserChanged } from './firebase';
 
 const DatastoreContext = React.createContext({});
@@ -41,7 +40,6 @@ export class Datastore extends React.Component {
             ...deepClone(instance)
         }
         this.sessionData = {personaKey}
-        console.log('resetData', deepClone({dataTree: this.dataTree, sessionData: this.sessionData}));
         this.notifyWatchers();
     }
 
@@ -52,7 +50,6 @@ export class Datastore extends React.Component {
         this.dataWatchers = this.dataWatchers.filter(w => w !== watchFunc);
     }
     notifyWatchers() {
-        // console.log('notifyWatchers', this.dataWatchers);
         this.dataWatchers.forEach(w => w());
     }
 

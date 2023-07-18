@@ -67,7 +67,7 @@ export function SemiAnonymousScreen() {
         replyWidgets: [SemiAnonymousExplain]
     }
 
-    console.log('comments', comments);
+    // console.log('comments', comments);
 
     return (
         <WideScreen pad>

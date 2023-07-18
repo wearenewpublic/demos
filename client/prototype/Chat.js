@@ -36,8 +36,6 @@ export function ChatScreen() {
     const messages = useCollection('message', {sortBy: 'time'});
     const datastore = useDatastore();
 
-    console.log('ChatScreen', {messages, datastore, dataTree: datastore.dataTree, dataMessages: datastore.dataTree.message});
-
     function onSend(text) {
         console.log('adding message', text);
         datastore.addObject('message', {text});
