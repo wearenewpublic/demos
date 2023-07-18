@@ -1,18 +1,15 @@
 import React from 'react';
-import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { prototypes } from './prototype';
 import { PrototypeContext } from './organizer/PrototypeContext';
 import { PrototypeInstanceListScreen } from './organizer/PrototypeInstanceListScreen';
 import { PrototypeListScreen } from './organizer/PrototypeListScreen';
 import { TopBar } from './organizer/TopBar';
-import { resetData } from './util/localdata';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import { setTitle } from './platform-specific/url';
-import { gotoUrl, useLiveUrl } from './organizer/url';
+import { useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
 import { LoginScreen } from './organizer/Login';
-import { useFirebaseUser } from './util/firebase';
 import { Datastore } from './util/datastore';
 
 
@@ -24,20 +21,14 @@ export default function App() {
     Montserrat_600SemiBold,
   });
 
-  function onSelectPrototype(prototype) {
-    gotoPrototype(prototype.key);
-  }
-
   function onSelectInstance(newInstanceKey) {
     gotoInstance(prototypeKey, newInstanceKey);
-    const instance = chooseInstanceByKey({prototype, instanceKey: newInstanceKey});
-    resetData(instance)
   }
 
   if (!prototypeKey) {
     setTitle('New Public Prototype Garden')
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
-      <PrototypeListScreen onSelectPrototype={onSelectPrototype}/>
+      <PrototypeListScreen onSelectPrototype={newPrototype => gotoPrototype(newPrototype.key)}/>
     </FullScreen>
   } else if (!prototype) {
     return <FullScreen>
