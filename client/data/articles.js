@@ -26,3 +26,21 @@ As night falls over Manhattan, the battle to bring the colossal creature under c
 The city that never sleeps finds itself grappling with an unprecedented nightmare. The question on everyone's mind: will Manhattan ever be the same again? Only time will tell, as New Yorkers band together to rebuild their beloved city, standing strong in the face of unimaginable destruction and the lingering threat of the giant radioactive lizard that roams their streets.
 `
 }
+
+export const godzilla_questions = [
+    {key: 'you', text: 'Were you there? What was your experience of the Giant Lizard attack?'},
+    {key: 'deal', text: 'How should we deal with the Giant Lizard?'},
+    {key: 'prevent', text: 'How should New York better prepare for future giant monster threats?'},
+    {key: 'future', text: 'Should we expect future giant monster attacks?'},
+]
+
+export const godzilla_comments = [
+    {replyTo: 'you', from: 'angry', text: 'I was there and saw the lizard. It stepped on the back of my car while I was sitting in the front seat. Would have killed me if it had stepped a few feet further forward. I was lucky to escape with my life.'},
+    {replyTo: 'you', from: 'timid', text: 'I watched it from the window of my apartment. I was terrified that it was going to push my building over'},
+    {replyTo: 'deal', from: 'angry', text: 'We should kill it with nuclear weapons. It might destroy the city, but it is more important to kill the lizard than to save ourselves.'},
+    {replyTo: 'deal', from: 'timid', text: 'We should try to capture it and put it in a zoo. It is a rare and valuable creature.'},
+    {replyTo: 'prevent', from: 'angry', text: 'We should build a giant wall around the city to keep the monsters out.'},
+    {replyTo: 'future', from: 'boring', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
+]
+
+

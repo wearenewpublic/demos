@@ -1,13 +1,17 @@
 import { View } from "react-native";
 import { Article } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitle, WideScreen } from "../component/basics";
-import { godzilla_article } from "../data/articles/godzilla";
+import { godzilla_article, godzilla_comments, godzilla_questions } from "../data/articles";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagArticle, tagConversation } from "../data/tags";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
 import { BasicComments } from "../component/comment";
 import { useCollection, useGlobalProperty, useObject } from "../util/datastore";
+import { godzilla_article_german, godzilla_comments_german, godzilla_questions_german } from "../data/translations/german/articles_german";
+import { godzilla_article_french, godzilla_comments_french, godzilla_questions_french } from "../data/translations/french/articles_french";
+import { angryGerman, boringGerman, timidGerman } from "../data/translations/german/personas_german";
+import { angryFrench, boringFrench, timidFrench } from "../data/translations/french/personas_french";
 
 const description = `
 Respond to questions that relate to an article.
@@ -21,22 +25,6 @@ be about those questions rather than the article itself. Multiple articles might
 questions might be more "evergreen" than the article. Well chosen questions can also prompt people to provide
 information that might be valuable to readers or to journalists who want to create future articles on the topic.
 `
-
-const godzilla_questions = [
-    {key: 'you', text: 'Were you there? What was your experience of the Giant Lizard attack?'},
-    {key: 'deal', text: 'How should we deal with the Giant Lizard?'},
-    {key: 'prevent', text: 'How should New York better prepare for future giant monster threats?'},
-    {key: 'future', text: 'Should we expect future giant monster attacks?'},
-]
-
-const godzilla_comments = [
-    {replyTo: 'you', from: 'angry', text: 'I was there and saw the lizard. It stepped on the back of my car while I was sitting in the front seat. Would have killed me if it had stepped a few feet further forward. I was lucky to escape with my life.'},
-    {replyTo: 'you', from: 'timid', text: 'I watched it from the window of my apartment. I was terrified that it was going to push my building over'},
-    {replyTo: 'deal', from: 'angry', text: 'We should kill it with nuclear weapons. It might destroy the city, but it is more important to kill the lizard than to save ourselves.'},
-    {replyTo: 'deal', from: 'timid', text: 'We should try to capture it and put it in a zoo. It is a rare and valuable creature.'},
-    {replyTo: 'prevent', from: 'angry', text: 'We should build a giant wall around the city to keep the monsters out.'},
-    {replyTo: 'future', from: 'boring', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
-]
 
 export const ArticleQuestionsPrototype = {
     key: 'articlequestions',
@@ -57,7 +45,17 @@ export const ArticleQuestionsPrototype = {
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
             question: expandDataList(godzilla_questions),
             comment: expandDataList(godzilla_comments)
-        }
+        },
+        {key: 'godzilla-german', name: 'German Godzilla', article: godzilla_article_german, 
+            personaList: [angryGerman, timidGerman, boringGerman],
+            question: expandDataList(godzilla_questions_german),
+            comment: expandDataList(godzilla_comments_german)
+        },
+        {key: 'godzilla-french', name: 'French Godzilla', article: godzilla_article_french, 
+            personaList: [angryFrench, timidFrench, boringFrench],
+            question: expandDataList(godzilla_questions_french),
+            comment: expandDataList(godzilla_comments_french)
+        },
     ]
 }
 

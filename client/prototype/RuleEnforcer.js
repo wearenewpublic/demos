@@ -10,6 +10,7 @@ import { gptProcessAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
+import { trek_vs_wars_german } from "../data/translations/german/conversations_german";
 
 const description = `
 A chat app that enforces a list of user-defined rules in a conversation.
@@ -40,6 +41,12 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 4. No mentioning of vegetables.
 `
 
+const initialRules_german = `1. Niemand darf einer Person oder Gruppe gegenüber etwas Respektloses sagen, einschließlich der Unterstellung, dass sie schlechte Absichten hat.
+2. Alle Links müssen mit dem Datum der Veröffentlichung des Links und einer Zusammenfassung des Inhalts des verlinkten Dokuments versehen sein.
+3. Keine Kritik an Katzen.
+4. Keine Erwähnung von Gemüse.
+`
+
 export const RuleEnforcerChatPrototype = {
     key: 'ruleenforcer',
     name: 'Rule Enforcer',
@@ -51,7 +58,8 @@ export const RuleEnforcerChatPrototype = {
     screen: RuleEnforcerChatScreen,
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},
-        {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules}
+        {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules},
+        {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', message: expandDataList(trek_vs_wars_german), rules: initialRules_german},
     ]
 }
 

@@ -66,3 +66,7 @@ export async function forEachAsync(array, callback) {
         await callback(array[index], index, array);
     }
 }
+
+export function deepClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}

@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
-import { defaultPersona, personas } from '../data/personas';
+import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
 import { getFirebaseUser, onFbUserChanged } from './firebase';
+import { deepClone } from './util';
 
 const DatastoreContext = React.createContext({});
 
@@ -36,7 +37,7 @@ export class Datastore extends React.Component {
 
         const personaKey = getInitialPersonaKey(instance);
         this.dataTree = {
-            persona: deepClone(instance.personas || personas),
+            persona: personaListToMap(instance.personaList || defaultPersonaList),
             ...deepClone(instance)
         }
         this.sessionData = {personaKey}
@@ -241,6 +242,3 @@ function pathToName(path) {
     }
 }
 
-function deepClone(obj) {
-    return JSON.parse(JSON.stringify(obj));
-}

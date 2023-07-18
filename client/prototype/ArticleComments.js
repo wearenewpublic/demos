@@ -1,7 +1,7 @@
 import { Article } from "../component/article"
 import { BodyText, Pad, ScrollableScreen, SmallTitle } from "../component/basics"
 import { BasicComments } from "../component/comment";
-import { godzilla_article } from "../data/articles/godzilla";
+import { godzilla_article } from "../data/articles";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, tagArticle, tagConversation } from "../data/tags";
 import { godzilla_comments_threaded } from "../data/threaded";

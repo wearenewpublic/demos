@@ -1,7 +1,7 @@
 import { ScrollView } from "react-native";
 import { BodyText, EditableText, Pad, SectionTitle, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
-import { trek_vs_wars, trek_vs_wars_french } from "../data/conversations";
+import { trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
@@ -9,6 +9,7 @@ import { Comment, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
+import { trek_vs_wars_french } from "../data/translations/french/conversations_french";
 
 const description = `
 A private conversation that generates a public conclusion.
