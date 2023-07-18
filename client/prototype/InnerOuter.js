@@ -1,7 +1,7 @@
 import { ScrollView } from "react-native";
 import { BodyText, EditableText, Pad, SectionTitle, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
-import { trek_vs_wars } from "../data/conversations";
+import { trek_vs_wars, trek_vs_wars_french } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 // import { getObject, getPersonaKey, setGlobalData, setGlobalProperty, useCollection, useGlobalProperty } from "../util/localdata";
 import { expandDataList } from "../util/util";
@@ -55,8 +55,13 @@ export const InnerOuter = {
     date: 'Wed Jun 21 2023 21:14:05 GMT-0700 (Pacific Daylight Time)',
     description,
     instance: [
-        {key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
-        persona, name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
+        {
+            key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
+            persona, name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
+        {
+            key: 'wars_french', conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
+            persona, name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
+
     ],
     screen: InnerOuterScreen   
 }
@@ -79,7 +84,7 @@ function InnerOuterScreen() {
                 <SectionTitle>Public Conclusion</SectionTitle>
                 <EditableText 
                         value={conclusion} 
-                        onChange={x => setGlobalProperty('conclusion', x)} 
+                        onChange={x => datastore.setGlobalProperty('conclusion', x)} 
                         placeholder='What is your group conclusion?' 
                 />                
                 <Pad size={24}/>
