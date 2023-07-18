@@ -2,8 +2,8 @@ import { BigTitle, Pad, ScrollableScreen, WideScreen, WrapBox } from "../compone
 import { VideoPlayer, VideoPost } from "../component/video";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
-import { angryFrench, boringFrench, peacemakerFrench } from "../data/translations/french/personas_french";
-import { angryGerman, boringGerman, peacemakerGerman } from "../data/translations/german/personas_german";
+import { angryFrench, boringFrench, peacemakerFrench } from "../translations/french/personas_french";
+import { angryGerman, boringGerman, peacemakerGerman } from "../translations/german/personas_german";
 import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";

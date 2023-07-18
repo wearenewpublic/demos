@@ -10,7 +10,7 @@ import { gptProcessAsync } from "../component/chatgpt";
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
-import { trek_vs_wars_german } from "../data/translations/german/conversations_german";
+import { trek_vs_wars_german } from "../translations/german/conversations_german";
 
 const description = `
 A chat app that enforces a list of user-defined rules in a conversation.

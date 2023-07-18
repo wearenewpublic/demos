@@ -9,7 +9,7 @@ import { Comment, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
-import { trek_vs_wars_french } from "../data/translations/french/conversations_french";
+import { trek_vs_wars_french } from "../translations/french/conversations_french";
 
 const description = `
 A private conversation that generates a public conclusion.

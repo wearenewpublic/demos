@@ -8,10 +8,10 @@ import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
 import { BasicComments } from "../component/comment";
 import { useCollection, useGlobalProperty, useObject } from "../util/datastore";
-import { godzilla_article_german, godzilla_comments_german, godzilla_questions_german } from "../data/translations/german/articles_german";
-import { godzilla_article_french, godzilla_comments_french, godzilla_questions_french } from "../data/translations/french/articles_french";
-import { angryGerman, boringGerman, timidGerman } from "../data/translations/german/personas_german";
-import { angryFrench, boringFrench, timidFrench } from "../data/translations/french/personas_french";
+import { godzilla_article_german, godzilla_comments_german, godzilla_questions_german } from "../translations/german/articles_german";
+import { godzilla_article_french, godzilla_comments_french, godzilla_questions_french } from "../translations/french/articles_french";
+import { angryGerman, boringGerman, timidGerman } from "../translations/german/personas_german";
+import { angryFrench, boringFrench, timidFrench } from "../translations/french/personas_french";
 
 const description = `
 Respond to questions that relate to an article.
