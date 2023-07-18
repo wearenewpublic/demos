@@ -49,7 +49,6 @@ function DocumentLevelComponent({children}) {
 var global_clickTargetRef = null;
 var global_popupRef = null;
 
-
 function global_layoutPopup() {
     if (!global_clickTargetRef || !global_popupRef) return;
     if (!global_popupRef.current) {
@@ -83,6 +82,7 @@ function global_layoutPopup() {
     }
     requestAnimationFrame(global_layoutPopup);
 }
+
 
 export function Popup({popupContent, children}) {
     const s = PopupButtonStyle;
