@@ -109,7 +109,7 @@ function SimulatedChatScreen() {
             </ExpandSection>
             {started ? null :
                 <Center pad={8}>    
-                    <PrimaryButton onPress={onGenerate}>Generate Simulated Conversation</PrimaryButton>
+                    <PrimaryButton onPress={onGenerate} text='Generate Simulated Conversation' />
                 </Center>
             }
             {inProgress ?

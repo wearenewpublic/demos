@@ -5,12 +5,13 @@ import React from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
+import { TranslatableText } from "./translation";
 
 
 export function CommentActionButton({label, onPress}) {
     const s = CommentActionButtonStyle;
     return <Clickable style={s.clicker}>
-        <Text style={s.text} onPress={onPress}>{label}</Text>
+        <TranslatableText style={s.text} onPress={onPress} text={label} />
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({

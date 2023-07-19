@@ -87,7 +87,7 @@ function UserInfo() {
             </HorizBox>
             <Pad/>
             <Center>   
-                <PrimaryButton onPress={firebaseSignOut}>Sign Out</PrimaryButton>
+                <PrimaryButton onPress={firebaseSignOut} text='Sign Out' />
             </Center>
         </View>
     }
@@ -99,9 +99,7 @@ function UserInfo() {
             </PadBox>
         </Popup>
     } else {        
-        return <SecondaryButton onPress={() => pushSubscreen('login') }>
-            Log In
-        </SecondaryButton>
+        return <SecondaryButton onPress={() => pushSubscreen('login')} text='Log In' />
     }
 }
 

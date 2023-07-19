@@ -12,6 +12,7 @@ import { godzilla_article_german, godzilla_comments_german, godzilla_questions_g
 import { godzilla_article_french, godzilla_comments_french, godzilla_questions_french } from "../translations/french/articles_french";
 import { angryGerman, boringGerman, timidGerman } from "../translations/german/personas_german";
 import { angryFrench, boringFrench, timidFrench } from "../translations/french/personas_french";
+import { languageFrench, languageGerman, useTranslation } from "../component/translation";
 
 const description = `
 Respond to questions that relate to an article.
@@ -47,11 +48,13 @@ export const ArticleQuestionsPrototype = {
             comment: expandDataList(godzilla_comments)
         },
         {key: 'godzilla-german', name: 'German Godzilla', article: godzilla_article_german, 
+            language: languageGerman,
             personaList: [angryGerman, timidGerman, boringGerman],
             question: expandDataList(godzilla_questions_german),
             comment: expandDataList(godzilla_comments_german)
         },
         {key: 'godzilla-french', name: 'French Godzilla', article: godzilla_article_french, 
+            language: languageFrench,
             personaList: [angryFrench, timidFrench, boringFrench],
             question: expandDataList(godzilla_questions_french),
             comment: expandDataList(godzilla_comments_french)
@@ -71,7 +74,7 @@ export function ArticleQuestionsScreen() {
     return <ScrollableScreen maxWidth={800}>
         <Article article={article} embed={<QuestionList />}>
             <Center>
-                <SmallTitle>Questions</SmallTitle>
+                <SmallTitle text='Questions'/>
             </Center>
             <Pad/>
             <QuestionList />
@@ -89,9 +92,10 @@ function QuestionList() {
 function QuestionSummary({questionKey}) {
     const question = useObject('question', questionKey);
     const questionReplies = useCollection('comment', {filter: {replyTo: questionKey}});
+    const tResponses = useTranslation('responses');
 
     return <Clickable onPress={() => pushSubscreen('question', {questionKey})}>
-        <ListItem title={question.text} subtitle={questionReplies.length + ' responses'} />
+        <ListItem title={question.text} subtitle={questionReplies.length + ' ' + tResponses} />
     </Clickable>
 }
 

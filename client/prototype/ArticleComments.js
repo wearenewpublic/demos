@@ -40,7 +40,7 @@ export function ArticleCommentsScreen() {
 
     return <ScrollableScreen maxWidth={800}>
         <Article article={article}>
-            <SmallTitle>Comments</SmallTitle>
+            <SmallTitle text='Comments'/>
             <BasicComments />
             <Pad size={32} />
         </Article>

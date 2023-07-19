@@ -70,3 +70,10 @@ export async function forEachAsync(array, callback) {
 export function deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+
+export function formatString(template, values) {
+    return template.replace(/{([^}]+)}/g, (match, key) => {
+      return values.hasOwnProperty(key) ? values[key] : match;
+    });
+}
+

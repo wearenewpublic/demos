@@ -84,9 +84,9 @@ function ExampleInstanceData() {
         datastore.setGlobalProperty('message', text)
     }
 
-
+    // TODO: SectionTitle should be able to take a pattern and params
     return <View>
-        <SectionTitle>{name} Instance Data</SectionTitle>
+        <SectionTitle text={'{name} Instance Data'} formatParams={{name}}/>
         <BodyText>
             A prototype can have multiple different instances, each of which are initialized with different data.
             For example this prototype has the name "{name}" and the message "{message}", which you can change using the
@@ -115,14 +115,14 @@ function ExampleCallBackend({name}) {
 
 
     return <View>
-        <SmallTitle>Backend Calls</SmallTitle>
+        <SmallTitle text='Backend Calls'/>
         <BodyText> 
             A prototype can make calls to a back end. This can be useful for calling APIs like GPT.                   
         </BodyText>
         <Pad />
-        <PrimaryButton onPress={onCallBackend}>Call Backend</PrimaryButton>
+        <PrimaryButton onPress={onCallBackend} text='Call Backend'/>
         <Pad />
-        <PrimaryButton onPress={onCallMultipartBackend}>Call Multipart Backend</PrimaryButton>
+        <PrimaryButton onPress={onCallMultipartBackend} text='Call Multipart Backend' />
         <Pad />
         <BodyText>{response}</BodyText>                
     </View>
@@ -131,7 +131,7 @@ function ExampleCallBackend({name}) {
 
 function ExampleVideoPlayer() {
     return <View>
-        <SmallTitle>Video Playing</SmallTitle>
+        <SmallTitle text='Video Playing'/>
         <BodyText>
             Prototypes can play video.
         </BodyText>
@@ -153,7 +153,7 @@ function ExampleVideoPlayer() {
 function ExampleVideoRecording() {
     const [video, setVideo] = useState(null);
     return <View>
-        <SmallTitle>Video Recording</SmallTitle>
+        <SmallTitle text='Video Recording'/>
         <BodyText>
             Prototypes can record video.
         </BodyText>
@@ -170,7 +170,7 @@ function ExampleVideoRecording() {
 
 function ExampleAudioPlayer() {
     return <View>
-        <SmallTitle>Sound Playing</SmallTitle>
+        <SmallTitle text='Sound Playing' />
         <BodyText>Prototypes can play sound.</BodyText>
         <Pad/>
         <AudioPlayer uri='https://upload.wikimedia.org/wikipedia/commons/b/b2/Ak-Bongo.ogg' />
@@ -180,7 +180,7 @@ function ExampleAudioPlayer() {
 function ExampleAudioRecorder() {
     const [audio, setAudio] = useState(null);
     return <View>
-        <SmallTitle>Sound Recording</SmallTitle>
+        <SmallTitle text='Sound Recording' />
         <BodyText>Prototypes can record sound.</BodyText>
         <Pad/>
         <AudioRecorder onSubmitRecording={({url}) => setAudio(url)} />
@@ -202,7 +202,7 @@ function ExampleAudioTranscriber() {
     }
 
     return <View>
-        <SmallTitle>Speech Transcripton</SmallTitle>
+        <SmallTitle text='Speech Transcripton' />
         <BodyText>Prototypes can transribe speech to text.</BodyText>
         <Pad/>
         <AudioRecorder onSubmitRecording={onSubmitRecording} />
@@ -217,18 +217,18 @@ function ExampleAudioTranscriber() {
 
 function ExampleSubscreens() {
     return <View>
-        <SmallTitle>Stacked Screens</SmallTitle>
+        <SmallTitle text='Stacked Screens'/>
         <BodyText>
             A prototype can have multiple stacked screens.
         </BodyText>
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Fluffy'})}>Show Cat Fluffy</PrimaryButton>
+        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Fluffy'})} text='Show Cat Fluffy'/>
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Tiddles'})}>Show Cat Tiddles</PrimaryButton>
+        <PrimaryButton onPress={() => pushSubscreen('cat', {name: 'Tiddles'})} text='Show Cat Tiddles' />
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})}>Show Dog Rover</PrimaryButton>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})} text='Show Dog Rover'/>
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})}>Show Dog Fido</PrimaryButton>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})} text='Show Dog Fido'/>
     </View>
 }
 
@@ -239,12 +239,11 @@ function CatScreen({name}) {
             This is a stacked subscreen. 
         </BodyText>
         <Pad/>
-        <PrimaryButton onPress={goBack}>Back</PrimaryButton>
+        <PrimaryButton onPress={goBack} text='Back'/>
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})}>Show Dog Rover</PrimaryButton>
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Rover'})} text='Show Dog Rover' />
         <Pad/>
-        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})}>Show Dog Fido</PrimaryButton>
-
+        <PrimaryButton onPress={() => pushSubscreen('dog', {name: 'Fido'})} text='Show Dog Fido' />
     </ScrollableScreen>
 }
 
@@ -255,7 +254,7 @@ function DogScreen({name}) {
             This is another stacked subscreen. 
         </BodyText>
         <Pad/>
-        <PrimaryButton onPress={goBack}>Back</PrimaryButton>
+        <PrimaryButton onPress={goBack} text='Back' />
     </ScrollableScreen>
 }
 
@@ -266,7 +265,7 @@ export function ExamplePopup() {
     }
 
     return <View>
-        <SmallTitle>Popup</SmallTitle>
+        <SmallTitle text='Popup'/>
         <BodyText>Prototypes can show popup menus</BodyText>
         <Pad/>
         <HorizBox spread>

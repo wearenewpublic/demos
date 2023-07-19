@@ -2,15 +2,17 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad } from "./basics";
+import { useTranslation } from "./translation";
 
 export function ExpandSection({title, children}) {
     const s = ExpandSectionStyle;
     const [expanded, setExpanded] = useState(false);
+    const tTitle = useTranslation(title);
 
     return <View style={s.outer}>
         <Clickable onPress={() => setExpanded(!expanded)}>
             <View style={s.topBar}>
-                <Text style={s.title}>{title}</Text>
+                <Text style={s.title}>{tTitle}</Text>
                 <Entypo name={expanded ? 'chevron-up' : 'chevron-down'} size={16} color='#999' />
             </View>
         </Clickable>

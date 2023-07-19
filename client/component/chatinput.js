@@ -2,9 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Platform, StyleSheet, TextInput, View } from "react-native";
 import { Clickable } from "./basics";
+import { useTranslation } from "./translation";
 
 export function ChatInput({onSend}) {
     const [text, setText] = useState('');
+    const placeholder = useTranslation('Type a message');
     const s = ChatInputStyle;
 
     async function onPressSend() {
@@ -27,7 +29,7 @@ export function ChatInput({onSend}) {
         <TextInput style={s.textInput} 
             value={text}
             onChangeText={setText}
-            placeholder='Type a message'
+            placeholder={placeholder}
             placeholderTextColor='#999'
             onKeyPress={onKeyPress}
         />

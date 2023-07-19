@@ -35,7 +35,6 @@ export function getFirebaseUser() {
 
 onAuthStateChanged(auth, (user) => {
     global_firebaseUser = user;
-    console.log('auth state', user);
 });
 
 export function firebaseSignOut() {

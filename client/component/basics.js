@@ -6,6 +6,7 @@ import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 import { setTitle } from "../platform-specific/url";
+import { TranslatableText } from "./translation";
 
 
 export function ScrollableScreen({children, maxWidth=500}) {
@@ -65,12 +66,14 @@ export function BigTitle({children, pad=true}) {
     return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
-export function SmallTitle({children}) {
-    return <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}}>{children}</Text>
+export function SmallTitle({text, formatParams}) {
+    return <TranslatableText style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
+        text={text} formatParams={formatParams} />
 }
 
-export function SectionTitle({children}) {
-    return <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 8}}>{children}</Text>
+export function SectionTitle({text, formatParams}) {
+    return <TranslatableText style={{fontSize: 15, fontWeight: 'bold', marginBottom: 8}} 
+        text={text} formatParams={formatParams} />
 }
 
 export function BodyText({children}) {
@@ -185,19 +188,19 @@ export function PadBox({children, horiz=8, vert=8}) {
     return <View style={{paddingHorizontal: horiz, paddingVertical: vert}}>{children}</View>
 }
 
-export function PrimaryButton({children, icon, onPress}) {
+export function PrimaryButton({text, icon, onPress}) {
     return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
             {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
-            <Text style={{color: 'white'}}>{children}</Text>
+            <TranslatableText style={{color: 'white'}} text={text} />
         </View>
     </Clickable>
 }
 
-export function SecondaryButton({children, onPress}) {
+export function SecondaryButton({text, onPress}) {
     return <Clickable onPress={onPress}>
         <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666'}}>
-            <Text style={{color: '#666'}}>{children}</Text>
+            <TranslatableText style={{color: '#666'}} text={text} />
         </View>
     </Clickable>
 }
@@ -215,7 +218,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
-        {label ? <Text style={s.label}>{label}</Text> : null}
+        {label ? <TranslatableText style={s.label} text={label}/> : null}
         <TextInput style={[s.textInput, {height: multiline ? height : 40}, 
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
@@ -228,8 +231,8 @@ export function EditableText({value, label, action='Update', height=150, placeho
         />
         {text ? 
             <View style={s.actions}>
-                <PrimaryButton onPress={() => {onChange(text); setText(null)}}>{action}</PrimaryButton>
-                <SecondaryButton onPress={() => setText(null)}>Cancel</SecondaryButton>
+                <PrimaryButton onPress={() => {onChange(text); setText(null)}} text={action} />
+                <SecondaryButton onPress={() => setText(null)} text='Cancel' />
             </View>
         : null}
     </View>

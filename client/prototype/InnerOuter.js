@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
+import { languageFrench } from "../component/translation";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -59,7 +60,8 @@ export const InnerOuter = {
             key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
             persona, name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
         {
-            key: 'wars_french', conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
+            key: 'wars_french', language: languageFrench,
+            conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
             persona, name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
 
     ],
@@ -81,7 +83,7 @@ function InnerOuterScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
-                <SectionTitle>Public Conclusion</SectionTitle>
+                <SectionTitle text='Public Conclusion'/>
                 <EditableText 
                         value={conclusion} 
                         onChange={x => datastore.setGlobalProperty('conclusion', x)} 
@@ -89,7 +91,7 @@ function InnerOuterScreen() {
                 />                
                 <Pad size={24}/>
 
-                <SectionTitle>Private Conversation</SectionTitle>
+                <SectionTitle text='Private Conversation'/>
 
                 <TopCommentInput />
                 <CommentContext.Provider value={commentConfig}> 
@@ -99,10 +101,7 @@ function InnerOuterScreen() {
                 </CommentContext.Provider>
 
                 <Pad size={24}/>
-                <QuietSystemMessage>
-                    Non-members can only see messages they posted, or 
-                    replies to their messages.
-                </QuietSystemMessage>
+                <QuietSystemMessage text='Non-members can only see messages they posted, or replies to their messages.'/>
             </ScrollView>
         </WideScreen>
     )

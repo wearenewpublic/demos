@@ -4,6 +4,7 @@ import { PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
+import { useTranslation } from "./translation";
 
 export function ReplyInput({commentKey, topLevel = false}) {
     const personaKey = usePersonaKey();
@@ -11,6 +12,8 @@ export function ReplyInput({commentKey, topLevel = false}) {
     const [text, setText] = useState('');
     const {postHandler, authorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
+
+    const placeholerText = useTranslation(commentPlaceholder);
 
     function onPost() {
         if (postHandler) {
@@ -40,7 +43,7 @@ export function ReplyInput({commentKey, topLevel = false}) {
         <View style={s.right}>
             <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
                 <TextInput style={s.textInput}
-                    placeholder={commentPlaceholder}
+                    placeholder={placeholerText}
                     placeholderTextColor='#999'
                     value={text}
                     onChangeText={setText}
@@ -56,8 +59,8 @@ export function ReplyInput({commentKey, topLevel = false}) {
             : null}
             {(!topLevel || text) ? 
                 <View style={s.actions}>
-                    <PrimaryButton onPress={onPost}>Post</PrimaryButton>
-                    <SecondaryButton onPress={hideReplyInput}>Cancel</SecondaryButton>
+                    <PrimaryButton onPress={onPost} text='Post'/>
+                    <SecondaryButton onPress={hideReplyInput} text='Cancel' />
                 </View>
             : null}
         </View>
@@ -98,5 +101,5 @@ export function TopCommentInput({about = null}) {
 }
 
 function LoginToComment() {
-    return <PrimaryButton onPress={gotoLogin}>Login to comment</PrimaryButton>
+    return <PrimaryButton onPress={gotoLogin} text='Login to comment' />
 }

@@ -16,15 +16,14 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                     <BigTitle pad={false}>{prototype.name}</BigTitle>
                     <MarkdownBodyText text={prototype.description} />      
                 </Card>
-                {/* <Separator />          */}
                 <Pad />
                 {prototype.instance ?
                     <View>
-                        <Center><SectionTitle>Role Play Instances</SectionTitle></Center>
+                        <Center><SectionTitle text='Role Play Instances' /></Center>
                         {prototype.instance.map(instance => (
                             <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
                                 <Card>
-                                    <SmallTitle>{instance.name}</SmallTitle>
+                                    <SmallTitle text={instance.name}/>
                                 </Card>
                             </Clickable>
                         ))}      
@@ -32,11 +31,11 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                 : null}
                 {prototype.liveInstance ?
                     <View>
-                        <Center><SectionTitle>Live Instances</SectionTitle></Center>
+                        <Center><SectionTitle text='Live Instances'/></Center>
                         {prototype.liveInstance.map(instance => (
                             <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
                                 <Card>
-                                    <SmallTitle>{instance.name}</SmallTitle>
+                                    <SmallTitle text={instance.name} />
                                 </Card>
                             </Clickable>
                         ))}      
@@ -45,7 +44,7 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
 
                 {prototype.video ? 
                     <View>
-                        <Center><SectionTitle>Concept Videos</SectionTitle></Center>
+                        <Center><SectionTitle text='Concept Videos'/></Center>
                         {prototype.video.map(video => 
                             <VideoPreview key={video.name} video={video} />
                         )}      

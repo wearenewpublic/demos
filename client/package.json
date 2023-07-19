@@ -7,6 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "web-clear": "expo start -c --web",
     "webbuild": "npx expo export:web",
     "test": "jest",
     "coverage": "jest --coverage"

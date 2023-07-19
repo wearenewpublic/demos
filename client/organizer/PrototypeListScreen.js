@@ -38,7 +38,7 @@ export function PrototypeListScreen({onSelectPrototype}) {
                     <Clickable key={prototype.name} onPress={() => onSelectPrototype(prototype)}>
                         <Card>
                             <View style={s.authorLine}>
-                                <SmallTitle>{prototype.name}</SmallTitle>
+                                <SmallTitle text={prototype.name}/>
                                 <TimeText time={prototype.date} />
                             </View>
                             {/* <AuthorLine author={prototype.author} date={prototype.date} /> */}
