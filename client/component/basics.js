@@ -337,3 +337,19 @@ export function ScreenTitleText({title}) {
     setTitle(title);
     return <Text>{title}</Text>    
 }
+
+export function LoadingScreen() {
+    const s = LoadingScreenStyle;
+    return <View style={s.outer}><TranslatableText style={s.text} text='Loading...' /></View>
+}
+
+const LoadingScreenStyle = StyleSheet.create({
+    outer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    text: {
+        color: '#666'
+    }
+});

@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getDatabase, onValue, push, ref, set } from "firebase/database";
 import { useEffect, useState } from 'react';
 
 const firebaseConfig = {
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const database = getDatabase(app);
 
 var global_firebaseUser = null;
 
@@ -45,8 +47,24 @@ export function onFbUserChanged(callback) {
     return onAuthStateChanged(auth, callback);
 }
 
-export function newKey() {
+export function firebaseNewKey() {
 	return push(ref(database)).key;
+}
+
+export function firebaseWrite(pathList, data) {
+    const pathString = makeFirebasePath(pathList);
+    set(ref(database, pathString), data);
+}
+
+export function firebaseWatchValue(pathList, callback) {
+    const pathString = makeFirebasePath(pathList);
+    return onValue(ref(database, pathString), snapshot => {
+        callback(snapshot.val())
+    });
+}
+
+function makeFirebasePath(pathList) {
+    return pathList.join('/');
 }
 
 export {auth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithEmailAndPassword};

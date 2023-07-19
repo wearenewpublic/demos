@@ -2,9 +2,11 @@
     "rules": {
         "prototype": {
             "$prototype": {
-                "$instance": {
-                    ".read": true,
-                    ".write": true
+                "instance": {
+                    "$instance": {
+                        ".read": true,
+                        ".write": true
+                    }
                 }
             }
         },

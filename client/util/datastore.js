@@ -1,19 +1,24 @@
 
 import React, { useEffect, useState } from 'react';
 import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
-import { getFirebaseUser, onFbUserChanged } from './firebase';
+import { firebaseNewKey, firebaseWatchValue, firebaseWrite, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
+import { Text } from 'react-native';
+import { LoadingScreen } from '../component/basics';
 
 const DatastoreContext = React.createContext({});
 
 // TODO: Make this more efficient: Currently every data update updates everything.
 
 export class Datastore extends React.Component {
+    state = {loaded: false}
+
     dataTree = {};
     sessionData = {};
 
     dataWatchers = [];
-    fbWatchReleaser = null;
+    fbUserWatchReleaser = null;
+    fbDataWatchReleaser = null;
 
     componentDidMount() {
         this.resetData();
@@ -22,9 +27,13 @@ export class Datastore extends React.Component {
                 this.setSessionData('personaKey', user.uid);
             })
         }
+        if (!this.props.isLive) {
+            this.setState({loaded: true});
+        }
     }
     componentWillUnmount() {
-        this.fbWatchReleaser && this.fbWatchReleaser();
+        this.fbUserWatchReleaser && this.fbUserWatchReleaser();
+        this.fbDataWatchReleaser && this.fbDataWatchReleaser();
     }
     componentDidUpdate(prevProps) {
         if (prevProps.instanceKey != this.props.instanceKey || prevProps.prototypeKey != this.props.prototypeKey) {
@@ -33,7 +42,7 @@ export class Datastore extends React.Component {
     }
 
     resetData() {
-        const {instance} = this.props;
+        const {instance, instanceKey, prototypeKey, isLive} = this.props;
 
         const personaKey = getInitialPersonaKey(instance);
         this.dataTree = {
@@ -42,6 +51,14 @@ export class Datastore extends React.Component {
         }
         this.sessionData = {personaKey}
         this.notifyWatchers();
+        if (isLive) {
+            this.fbDataWatchReleaser && this.fbDataWatchReleaser();
+            this.fbDataWatchReleaser = firebaseWatchValue(['prototype', prototypeKey, 'instance', instanceKey], data => {
+                this.dataTree = {...this.dataTree, ...data?.collection, ...data?.global};
+                this.notifyWatchers();
+                this.setState({loaded: true})
+            });
+        }
     }
 
     watch(watchFunc) {
@@ -69,14 +86,25 @@ export class Datastore extends React.Component {
         return this.dataTree[typeName]?.[key];
     }
     setObject(typeName, key, value) {
+        const {prototypeKey, instanceKey, isLive} = this.props;
         const typeData = {...this.dataTree[typeName], [key]: value};
-        this.setGlobalProperty(typeName, typeData);
+        this.dataTree = {...this.dataTree, [typeName]: typeData};
+        this.notifyWatchers();
+
+        if (isLive) {
+            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], value);
+        }
     }
     addObject(typeName, value) {
-        const key = newKey();
+        const {prototypeKey, instanceKey, isLive} = this.props;
+        const key = isLive ? firebaseNewKey() : newLocalKey();
         const personaKey = this.getPersonaKey();
         this.addCurrentUser();
-        this.setObject(typeName, key, {key, from: personaKey, time: Date.now(), ...value});
+        const objectData = {key, from: personaKey, time: Date.now(), ...value};
+        this.setObject(typeName, key, objectData);
+        if (isLive) {
+            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], objectData);
+        }
         return key;
     }
     modifyObject(typename, key, modFunc) {
@@ -100,14 +128,24 @@ export class Datastore extends React.Component {
         return this.dataTree[key];
     }
     setGlobalProperty(key, value) {
+        const {prototypeKey, instanceKey, isLive} = this.props;
         this.dataTree = {...this.dataTree, [key]: value};
         this.notifyWatchers();
+        if (isLive) {
+            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
+        }
+
     }
         
     render() {
+        const {loaded} = this.state;
+        if (loaded) {
         return <DatastoreContext.Provider value={this}>
             {this.props.children}
         </DatastoreContext.Provider>
+        } else {
+            return <LoadingScreen />
+        }
     }
 }
 
@@ -203,7 +241,7 @@ function sortArrayByProp(array, prop) {
 
 
 var global_nextKey = 0;
-export function newKey() {
+export function newLocalKey() {
     global_nextKey++;
     return global_nextKey;
 }

@@ -19,4 +19,5 @@ export const ui_translations_german = {
     'Play Audio Response': 'Audioantwort abspielen',
     'Stop Audio Response': 'Audioantwort stoppen',
     'By': 'Von',
+    'Loading...': 'Laden...',
     };

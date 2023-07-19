@@ -38,4 +38,5 @@ export const ui_translations_french = {
     'Anonymous Guest': 'Invité anonyme',
     'You Semi-Anonymously': 'Vous semi-anonymement',
     'As a member, your identity is always public': 'En tant que membre, votre identité est toujours publique',
+    'Loading...': 'Chargement...',
 }

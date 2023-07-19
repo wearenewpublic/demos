@@ -1,4 +1,4 @@
-import { ensureNextLocalKeyGreater, newKey } from "./datastore";
+import { ensureNextLocalKeyGreater, newLocalKey } from "./datastore";
 
 export function expandDataList(list) {
     const date = new Date();
@@ -9,7 +9,7 @@ export function expandDataList(list) {
     list.forEach(item => {
         date.setMinutes(date.getMinutes() + 1);
 
-        const key = item.key || newKey();
+        const key = item.key || newLocalKey();
         // ensureNextKeyGreater(key);
         ensureNextLocalKeyGreater(key);
         collection[key] = {
