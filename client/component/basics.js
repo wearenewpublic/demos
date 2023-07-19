@@ -270,7 +270,7 @@ const EditableTextStyle = StyleSheet.create({
 export function Pill({label, color = '#666', big=false, showCross=false}) {
     const s = PillStyle
     return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color}, showCross ? {paddingRight: 4} : null]}>
-        <Text style={[big ? s.bigText : s.text, {color}]}>{label}</Text>
+        <TranslatableText style={[big ? s.bigText : s.text, {color}]} text={label} />
         {showCross ? 
             <Entypo name='cross' size={big ? 18 : 12} color={color} />
         : null}

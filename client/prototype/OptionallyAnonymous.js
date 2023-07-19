@@ -9,6 +9,8 @@ import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext }
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
+import { trek_vs_wars_french } from "../translations/french/conversations_french";
+import { TranslatableText, languageFrench } from "../component/translation";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -35,6 +37,8 @@ export const OptionallyAnonymous = {
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
+        {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language: languageFrench, comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
+
     ],
     screen: OptionallyAnonymousScreen    
 }
@@ -73,9 +77,9 @@ function AuthorName({comment}) {
     if (comment.public) {
         return <Text>{authorPersona?.name}</Text>;
     } else if (comment.from == personaKey) {
-        return <Text>You Anonymously</Text>;
+        return <TranslatableText text='You Anonymously' />;
     } else {
-        return <Text>Anonymous</Text>;
+        return <TranslatableText text='Anonymous' />;
     }
 }
 

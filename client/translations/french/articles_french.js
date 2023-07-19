@@ -38,10 +38,10 @@ export const godzilla_questions_french = [
 ]
 
 export const godzilla_comments_french = [
-    {replyTo: 'you', from: 'angry', text: 'I was there and saw the lizard. It stepped on the back of my car while I was sitting in the front seat. Would have killed me if it had stepped a few feet further forward. I was lucky to escape with my life.'},
-    {replyTo: 'you', from: 'timid', text: 'I watched it from the window of my apartment. I was terrified that it was going to push my building over'},
+    {replyTo: 'you', from: 'angry', text: "J'étais là et j'ai vu le lézard. Il a marché sur l'arrière de ma voiture alors que j'étais assis sur le siège avant. Ça m'aurait tué s'il avait avancé de quelques mètres. J'ai eu la chance de m'en sortir avec ma vie."},
+    {replyTo: 'you', from: 'timid', text: "Je l'ai regardé de la fenêtre de mon appartement. J'étais terrifié à l'idée que cela fasse basculer mon immeuble"},
     {replyTo: 'deal', from: 'angry', text: 'Nous devrions le tuer avec des armes nucléaires. Cela pourrait détruire la ville, mais il est plus important de tuer le lézard que de nous sauver nous-mêmes.'},
     {replyTo: 'deal', from: 'timid', text: "Nous devrions essayer de le capturer et de le placer dans un zoo. C'est une créature rare et précieuse."},
-    {replyTo: 'prevent', from: 'angry', text: 'We should build a giant wall around the city to keep the monsters out.'},
-    {replyTo: 'future', from: 'boring', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
+    {replyTo: 'prevent', from: 'angry', text: "Nous devrions construire un mur géant autour de la ville pour empêcher les monstres d'entrer."},
+    {replyTo: 'future', from: 'boring', text: "Je pense que cela était un événement isolé. Je ne pense pas que nous devrions nous inquiéter des attaques futures. Je me base sur le fait qu'il n'y a pas eu d'autres attaques de monstres géants au cours des 50 dernières années.\n\nEn fait, je pense que nous pourrions simplement nous imaginer celle-ci."},
 ]

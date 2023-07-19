@@ -7,6 +7,7 @@ import { angryGerman, boringGerman, peacemakerGerman } from "../translations/ger
 import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
+import { languageFrench, languageGerman } from "../component/translation";
 
 const description = `
 Record a video response to a question.
@@ -41,14 +42,16 @@ export const VideoResponse = {
         {key: 'bio', name: 'What is the 30 second story of your life?', response: expandDataList([
             {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
         ])},
-        {key: 'bio-german', name: 'Was ist die 30-Sekunden-Geschichte deines Lebens?', 
+        {key: 'bio-german', name: 'Was ist die 30-Sekunden-Geschichte deines Lebens? (German)', 
             personaList: [boringGerman, peacemakerGerman, angryGerman],
+            language: languageGerman,
             response: expandDataList([
                 {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
             ]
         )},
-        {key: 'bio-french', name: "Quelle est l'histoire de votre vie en 30 secondes?", 
+        {key: 'bio-french', name: "Quelle est l'histoire de votre vie en 30 secondes? (French)", 
             personaList: [boringFrench, peacemakerFrench, angryFrench],
+            language: languageFrench,
             response: expandDataList([
                 {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
             ]

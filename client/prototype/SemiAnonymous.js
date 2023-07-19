@@ -1,7 +1,6 @@
-import { ScrollView } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
-import { ecorp, trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
@@ -11,7 +10,8 @@ import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society } from "../data/openhouse_civic";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useObject, usePersonaKey } from "../util/datastore";
-// import { useObject, usePersonaKey } from "../util/datastore";
+import { TranslatableText, languageFrench } from "../component/translation";
+import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic";
 
 const description = `
 Be anonymous to the public, but not to group members.
@@ -51,6 +51,11 @@ export const SemiAnonymous = {
             description: 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.',
             '$personaKey': 'guestLarry',
             persona, comment: expandDataList(civic_society)},
+        {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
+            description: civic_society_description_french,
+            '$personaKey': 'guestLarry',
+            persona, comment: expandDataList(civic_society_french)},
+
     ],
     screen: SemiAnonymousScreen    
 }
@@ -95,11 +100,11 @@ function AuthorName({comment}) {
     const isPublic = getIsPublic({mePersona, authorPersona, comment});
 
     if (isPublic) {
-        return authorPersona?.name;
+        return <Text>{authorPersona?.name}</Text>;
     } else if (comment?.from == personaKey) {
-        return 'You Semi-Anonymously';
+        return <TranslatableText text='You Semi-Anonymously' />;
     } else {
-        return 'Anonymous Guest';
+        return <TranslatableText text='Anonymous Guest' />;
     }
 }
 
@@ -121,11 +126,11 @@ function SemiAnonymousExplain() {
     const userIsMember = useObject('persona', personaKey)?.member;
     if (userIsMember) {
         return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage>As a member, your identity is always public</QuietSystemMessage>
+            <QuietSystemMessage text='As a member, your identity is always public' />
         </PadBox>
     } else {
         return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage>Group members will see your name, but you will be anonymous to everyone else</QuietSystemMessage>
+            <QuietSystemMessage text='Group members will see your name, but you will be anonymous to everyone else'/>
         </PadBox>
     }
 }

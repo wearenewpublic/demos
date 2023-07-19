@@ -10,6 +10,8 @@ import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActi
 import { ScrollView } from "react-native";
 import { cat_club } from "../data/threaded";
 import { useCollection, useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
+import { languageFrench } from "../component/translation";
+import { cat_club_french } from "../translations/french/threaded_french";
 
 const description = `
 A treaded conversations where rule-violating comments are hidden.
@@ -44,6 +46,9 @@ export const PrivateRuleEnforcerPrototype = {
     screen: PrivateRuleEnforcerScreen,
     instance: [
         {key: 'cats', name: 'The Cat Club', comment: expandDataList(cat_club), rules: initialRules},
+        {key: 'cats-french', name: 'The Cat Club (French)', language: languageFrench,
+         comment: expandDataList(cat_club_french), rules: initialRules},
+
     ]
 }
 

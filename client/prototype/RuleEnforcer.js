@@ -11,7 +11,8 @@ import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
-import { languageGerman } from "../component/translation";
+import { languageFrench, languageGerman } from "../component/translation";
+import { trek_vs_wars_french } from "../translations/french/conversations_french";
 
 const description = `
 A chat app that enforces a list of user-defined rules in a conversation.
@@ -48,6 +49,11 @@ const initialRules_german = `1. Niemand darf einer Person oder Gruppe gegenüber
 4. Keine Erwähnung von Gemüse.
 `
 
+const initialRules_french = `1. Personne ne peut dire quoi que ce soit de irrespectueux envers une personne ou un groupe, y compris insinuer qu'ils ont de mauvaises motivations.
+2. Tous les liens doivent être accompagnés de la date de publication du lien et d'un résumé du contenu du document lié.
+3. Aucune critique envers les chats.
+4. Interdiction de mentionner des légumes.`
+
 export const RuleEnforcerChatPrototype = {
     key: 'ruleenforcer',
     name: 'Rule Enforcer',
@@ -61,6 +67,8 @@ export const RuleEnforcerChatPrototype = {
         {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules},
         {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language:languageGerman, message: expandDataList(trek_vs_wars_german), rules: initialRules_german},
+        {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language:languageFrench, message: expandDataList(trek_vs_wars_french), rules: initialRules_french},
+
     ]
 }
 
@@ -98,7 +106,7 @@ export function RuleEnforcerChatScreen() {
                 )}
             </BottomScroller>
             {inProgress ? 
-                <QuietSystemMessage>RoboMediator is thinking...</QuietSystemMessage>
+                <QuietSystemMessage text='RoboMediator is thinking...' />
             : null}
             <ChatInput onSend={onSend} />
         </WideScreen>

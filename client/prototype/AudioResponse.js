@@ -7,6 +7,7 @@ import { angryGerman, boringGerman, peacemakerGerman } from "../translations/ger
 import { AudioRecorder } from "../platform-specific/audiorecorder";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
+import { languageFrench, languageGerman } from "../component/translation";
 
 
 const description = `
@@ -51,6 +52,7 @@ export const AudioResponsePrototype = {
         ])},
         {
             key: 'kid-names-german', 
+            language: languageGerman,
             personaList: [boringGerman, peacemakerGerman, angryGerman],
             name: 'Wie haben Sie die Namen für Ihre Kinder ausgewählt?', response: expandDataList([
             {
@@ -64,6 +66,7 @@ export const AudioResponsePrototype = {
         ])},       
         {   
             key: 'kid-names-french', 
+            language: languageFrench,
             personaList: [boringFrench, peacemakerFrench, angryFrench],
             name: 'Comment avez-vous choisi les prénoms de vos enfants?', response: expandDataList([
             {

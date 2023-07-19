@@ -16,4 +16,7 @@ export const ui_translations_german = {
     'responses': 'antworten',
     'Type a message': 'Nachricht eingeben',
     'Group Rules': 'Gruppenregeln',
+    'Play Audio Response': 'Audioantwort abspielen',
+    'Stop Audio Response': 'Audioantwort stoppen',
+    'By': 'Von',
     };

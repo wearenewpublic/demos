@@ -113,7 +113,7 @@ function SimulatedChatScreen() {
                 </Center>
             }
             {inProgress ?
-                <QuietSystemMessage>Generating (this may take over a minute)...</QuietSystemMessage>
+                <QuietSystemMessage text='Generating (this may take over a minute)...'/>
             : null}
             <BottomScroller>
                 <Pad size={8} />
