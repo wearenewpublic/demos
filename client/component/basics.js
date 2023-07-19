@@ -214,12 +214,20 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
+export function AutoSizeTextInput({value, onChange, placeholder, style, ...props}) {
+    const [height, setHeight] = useState(0);
+    return <TextInput value={value} onChangeText={onChange} placeholder={placeholder} 
+        multiline={true} style={[style, {height: Math.max(40, height)}]} 
+        onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)} {...props} />
+}
+
+
 export function EditableText({value, label, action='Update', height=150, placeholder, onChange, multiline=true, flatTop=false, flatBottom=false}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
         {label ? <TranslatableText style={s.label} text={label}/> : null}
-        <TextInput style={[s.textInput, {height: multiline ? height : 40}, 
+        <AutoSizeTextInput style={[s.textInput, {height: multiline ? height : 40}, 
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
          ]} 
