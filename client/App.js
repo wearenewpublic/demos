@@ -41,17 +41,23 @@ export default function App() {
       <PrototypeInstanceListScreen prototype={prototype} onSelectInstance={onSelectInstance}/>
     </FullScreen>
   } else {
-    return <ScreenStack screenStack={screenStack} />
+    return <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
   }
 }
 
 
-function ScreenStack({screenStack}) {
+function ScreenStack({screenStack, prototypeKey, instanceKey}) {
   const s = ScreenStackStyle;
+  const prototype = choosePrototypeByKey(prototypeKey);
+  const instance = chooseInstanceByKey({prototype, instanceKey});
   return <View style={s.stackHolder}>
-    {screenStack.map((screenInstance, index) => 
-      <StackedScreen screenInstance={screenInstance} index={index} key={index} />
-    )}
+    <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
+      <Datastore instance={instance} instanceKey={instanceKey} prototypeKey={prototypeKey} isLive={instance.isLive}>
+        {screenStack.map((screenInstance, index) => 
+          <StackedScreen screenInstance={screenInstance} index={index} key={index} />
+        )}
+      </Datastore>
+    </PrototypeContext.Provider>
   </View>
 }
 
@@ -66,7 +72,6 @@ const ScreenStackStyle = StyleSheet.create({
 
 function StackedScreen({screenInstance, index}) {
   const {prototypeKey, instanceKey, screenKey, params} = screenInstance;
-  // const fbUser = useFirebaseUser();
 
   if (prototypeKey == 'login' || instanceKey == 'login' || screenKey == 'login') {
     return <FullScreen zIndex={index}>
@@ -80,14 +85,10 @@ function StackedScreen({screenInstance, index}) {
   const screen = getScreen({prototype, screenKey, instanceKey});
   const title = getScreenTitle({prototype, screenKey, instance, params}); 
 
-  return <PrototypeContext.Provider value={{prototypeKey, instance, instanceKey}}>
-    <Datastore instance={instance} instanceKey={instanceKey} prototypeKey={prototypeKey} isLive={instance.isLive}>
-      <FullScreen zIndex={index}>
-        <TopBar title={title} params={params} subtitle={prototype.name} showPersonas={!instance.isLive} />
-        {React.createElement(screen, params)}
-      </FullScreen>
-    </Datastore>
-  </PrototypeContext.Provider>
+  return <FullScreen zIndex={index}>
+    <TopBar title={title} params={params} subtitle={prototype.name} showPersonas={!instance.isLive} />
+      {React.createElement(screen, params)}
+  </FullScreen>  
 }
 
 function getScreen({prototype, screenKey}) {
