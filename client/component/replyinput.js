@@ -1,19 +1,19 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { PrimaryButton, SecondaryButton } from "./basics";
+import { Card, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
 import { useTranslation } from "./translation";
 
-export function ReplyInput({commentKey, topLevel = false}) {
+export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [text, setText] = useState('');
     const {postHandler, authorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
-    const placeholerText = useTranslation(commentPlaceholder);
+    const placeholderText = useTranslation(commentPlaceholder);
 
     function onPost() {
         if (postHandler) {
@@ -38,12 +38,12 @@ export function ReplyInput({commentKey, topLevel = false}) {
         return <LoginToComment />
     }
 
-    return <View style={s.row}>
+    return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
             <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
                 <TextInput style={s.textInput}
-                    placeholder={placeholerText}
+                    placeholder={placeholderText}
                     placeholderTextColor='#999'
                     value={text}
                     onChangeText={setText}
@@ -86,7 +86,6 @@ const ReplyInputStyle = StyleSheet.create({
         maxWidth: 500
     },
     row: {
-        marginTop: 16,
         flexDirection: 'row',
     },
     actions: {
@@ -99,6 +98,19 @@ const ReplyInputStyle = StyleSheet.create({
 export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
+
+export function PostInput() {
+    const commentContext = useContext(CommentContext);
+    function postHandler({datastore, text}) {
+        datastore.addObject('post', {text})
+    }
+    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:"What's on your mind?"}}>
+        <Card>
+            <ReplyInput topLevel topPad={false} />
+        </Card>
+    </CommentContext.Provider>
+}
+
 
 function LoginToComment() {
     return <PrimaryButton onPress={gotoLogin} text='Login to comment' />

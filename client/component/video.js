@@ -5,22 +5,12 @@ import { useRef, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { UserFace } from "./userface";
 import { useObject } from "../util/datastore";
-
+import { Post } from "./post";
 
 export function VideoPost({post}) {
-    const s = VideoPostStyle;
-    const user = useObject('persona', post.from);
-
-    return <Card fitted> 
-        <View style={s.authorBox}>
-            <UserFace userId={post.from} size={32} />
-            <View style={s.authorRight}>
-                <Text style={s.authorName}>{user.name}</Text>
-                <TimeText time={post.time} />
-            </View>
-        </View>
+    return <Post fitted post={post}>
         <VideoPlayer uri={post.uri} size={200}/>
-    </Card>
+    </Post>
 }
 
 const VideoPostStyle = StyleSheet.create({

@@ -8,10 +8,10 @@ import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData }
 import { TranslatableText } from "./translation";
 
 
-export function CommentActionButton({label, onPress}) {
+export function CommentActionButton({label, formatParams, onPress}) {
     const s = CommentActionButtonStyle;
     return <Clickable style={s.clicker}>
-        <TranslatableText style={s.text} onPress={onPress} text={label} />
+        <TranslatableText style={s.text} onPress={onPress} text={label} formatParams={formatParams} />
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({
@@ -68,7 +68,7 @@ export function ActionLike({commentKey, comment}) {
         }))
     }
     
-    return <CommentActionButton key='like' label={actionLabel + likeCountLabel} onPress={() => likeComment(commentKey, comment, personaKey)} />
+    return <CommentActionButton key='like' label={actionLabel + '{likeCountLabel}'} formatParams={{likeCountLabel}} onPress={() => likeComment(commentKey, comment, personaKey)} />
 }
 
 

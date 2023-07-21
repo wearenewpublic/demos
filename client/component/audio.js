@@ -7,46 +7,14 @@ import { callServerMultipartApiAsync } from '../util/servercall';
 import { UserFace } from './userface';
 import { useObject } from '../util/datastore';
 import { TranslatableText } from './translation';
+import { Post } from './post';
 
 
 export function AudioPost({post}) {
-    const s = AudioPostStyle;
-    const user = useObject('persona', post.from);
-    return <Card fitted>
-        <View style={s.authorBox}>
-            <UserFace userId={post.from} size={32} />
-            <View style={s.authorRight}>
-                <Text style={s.authorName}>{user?.name}</Text>
-                <TimeText time={post.time} />
-            </View>
-        </View>
-        <Text style={s.text}>{post.text}</Text>
+    return <Post post={post} childpad>
         <AudioPlayer uri={post.uri} size={200} pill label='Play Audio Response'/>
-    </Card>
+    </Post>
 }
-
-const AudioPostStyle = StyleSheet.create({
-    authorBox: {
-        flexDirection: 'row',
-        marginBottom: 8
-    },
-    authorRight: {
-        flex: 1,
-        marginLeft: 8
-    },
-    authorName: {
-        fontSize: 15,
-        fontWeight: 'bold'
-    },
-    text: {
-        marginHorizontal: 2,
-        marginBottom: 12,
-        color: '#444'
-
-    }
-})
-
-
 
 export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
     const s = AudioPlayerStyle;

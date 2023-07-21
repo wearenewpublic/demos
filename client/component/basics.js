@@ -9,8 +9,8 @@ import { setTitle } from "../platform-specific/url";
 import { TranslatableText } from "./translation";
 
 
-export function ScrollableScreen({children, maxWidth=500}) {
-    return <ScrollView>
+export function ScrollableScreen({children, grey, maxWidth=500}) {
+    return <ScrollView style={{backgroundColor: grey ? '#EFF2F5' : null}}>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
             <View style={{maxWidth: maxWidth, flexShrink: 1, marginHorizontal: 8}}>
                 {children}
@@ -39,6 +39,14 @@ export function Card({children, fitted=false}) {
     return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null]}>
         {children}
     </View>
+}
+
+export function MaybeCard({children, isCard}) {
+    if (isCard) {
+        return <Card>{children}</Card>
+    } else {
+        return children;
+    }
 }
 
 const CardStyle = StyleSheet.create({
@@ -158,8 +166,8 @@ export function AuthorLine({author, time, oneLine=false}) {
     }
 }
 
-export function Separator() {
-    return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: 16}}/>
+export function Separator({pad=16}) {
+    return <View style={{borderBottomWidth: 1, borderColor: '#ddd', marginVertical: pad}}/>
 }
 
 export function Pad({size=8}) {
@@ -361,3 +369,7 @@ const LoadingScreenStyle = StyleSheet.create({
         color: '#666'
     }
 });
+
+export function PluralText({count, singular, plural}) {
+    return <Text>{count} <TranslatableText text={count === 1 ? singular : plural}/></Text>
+}
