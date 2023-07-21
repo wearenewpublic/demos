@@ -64,7 +64,6 @@ export const ArticleQuestionsPrototype = {
 
 function ArticleQuestionTitle({questionKey}) {
     const question = useObject('question', questionKey);
-    console.log('QuestionTitle', questionKey, question)
     return <ScreenTitleText title={question?.text} />
 }
 

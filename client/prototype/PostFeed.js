@@ -1,8 +1,7 @@
-import { push } from "firebase/database";
-import { Narrow, Pad, ScreenTitleText, ScrollableScreen, SectionTitle, WideScreen } from "../component/basics";
+import { Narrow, Pad, ScreenTitleText, ScrollableScreen, WideScreen } from "../component/basics";
 import { BasicComments } from "../component/comment";
-import { Post, PostActionComment, PostActionLike, PostCommentsPreview } from "../component/post";
-import { TranslatableText, useTranslation } from "../component/translation";
+import { Post, PostActionComment, PostActionLike } from "../component/post";
+import { useTranslation } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
 import { post_parents, post_parents_comments } from "../data/posts";
 import { statusStartingPoint } from "../data/tags";

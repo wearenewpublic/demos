@@ -39,4 +39,6 @@ export const ui_translations_french = {
     'You Semi-Anonymously': 'Vous semi-anonymement',
     'As a member, your identity is always public': 'En tant que membre, votre identité est toujours publique',
     'Loading...': 'Chargement...',
+    'Like{likeCountLabel}': "J'aime{likeCountLabel}",
+    'Unlike{likeCountLabel}': "Je n'aime pas{likeCountLabel}",
 }

@@ -1,10 +1,9 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Card, Clickable, MaybeCard, PluralText, Separator, TimeText } from "./basics";
+import { Clickable, MaybeCard, PluralText, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 import { UserFace } from "./userface";
-import { TransactionResult } from "firebase/database";
 import { TranslatableText } from "./translation";
-import { AntDesign, Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { pushSubscreen } from "../util/navigate";
 import { addKey, removeKey } from "../util/util";
