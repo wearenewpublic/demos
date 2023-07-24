@@ -1,13 +1,16 @@
 import { ScrollView } from "react-native";
 import { BodyText, Pad, Separator, WideScreen } from "../component/basics";
-import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText } from "../component/comment";
+import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText, MemberAuthorBling } from "../component/comment";
 import { TopCommentInput } from "../component/replyinput";
-import { civic_society } from "../data/openhouse_civic";
+import { civic_society, civic_society_description } from "../data/openhouse_civic";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
 import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
+import { languageFrench, languageGerman } from "../component/translation";
+import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic_french";
+import { civic_society_description_german, civic_society_german } from "../translations/german/openhouse_civic_german";
 
 const description = `
 Members of a group can talk with non-members, but messages from non-members will appear in a
@@ -27,9 +30,9 @@ controls who gets to speak and when.
 `
 
 const persona = {
-    memberAlice: {name: 'Alice (Member)', face: 'face9.jpeg', member: true},
-    memberBob: {name: 'Bob (Member)', face: 'face10.jpeg', member: true},
-    memberLaura: {name: 'Laura (Member)', face: 'face5.jpeg', member: true},
+    memberAlice: {name: 'Alice', label: 'Member', face: 'face9.jpeg', member: true},
+    memberBob: {name: 'Bob', label: 'Member', face: 'face10.jpeg', member: true},
+    memberLaura: {name: 'Laura', label: 'Member', face: 'face5.jpeg', member: true},
     guestNatalie: {name: 'Natalie', face: 'face4.jpeg'},
     guestTim: {name: 'Tim', face: 'face2.jpeg'},
     guestLarry: {name: 'Larry', face: 'face6.jpeg'},
@@ -48,8 +51,19 @@ export const OpenHousePrototype = {
     screen: OpenHouseScreen,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
-            description: 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.',
-            persona, comment: expandDataList(civic_society)},
+            description: civic_society_description,
+            persona, comment: expandDataList(civic_society)
+        },
+        {
+            key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
+            description: civic_society_description_french,
+            persona, comment: expandDataList(civic_society_french)
+        },
+        {
+            key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
+            description: civic_society_description_german,
+            persona, comment: expandDataList(civic_society_german)
+        },
     ]
 }
 
@@ -67,7 +81,7 @@ export function OpenHouseScreen() {
                 <Separator />
                 <Pad size={8} />
                 <TopCommentInput />
-                <CommentContext.Provider value={{...commentContext, actions, getIsDefaultCollapsed}}> 
+                <CommentContext.Provider value={{...commentContext, actions, getIsDefaultCollapsed, authorBling: [MemberAuthorBling]}}> 
                     {topLevelComments.map(comment => 
                         <Comment key={comment.key} commentKey={comment.key} />
                     )}
@@ -100,7 +114,7 @@ export function ActionPromote({commentKey, comment}) {
     } else if (comment.promotedBy == personaKey) {
         return <CommentActionButton key='promote' label='Un-Promote' onPress={() => onPromote(false)} />
     } else if (comment.promotedBy) {
-        return <CommentDataText key='promote' label={`Promoted by ${boosterName}`} />
+        return <CommentDataText key='promote' text='Promoted by {boosterName}' formatParams={{boosterName}} />
     } else {
         return null;
     }      

@@ -10,8 +10,11 @@ import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActi
 import { ScrollView } from "react-native";
 import { cat_club } from "../data/threaded";
 import { useCollection, useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
-import { languageFrench } from "../component/translation";
+import { languageFrench, languageGerman } from "../component/translation";
 import { cat_club_french } from "../translations/french/threaded_french";
+import { cat_club_german } from "../translations/german/threaded_german";
+import { initialRules_french } from "../translations/french/rules_french";
+import { initialRules_german } from "../translations/german/rules_german";
 
 const description = `
 A treaded conversations where rule-violating comments are hidden.
@@ -46,9 +49,14 @@ export const PrivateRuleEnforcerPrototype = {
     screen: PrivateRuleEnforcerScreen,
     instance: [
         {key: 'cats', name: 'The Cat Club', comment: expandDataList(cat_club), rules: initialRules},
-        {key: 'cats-french', name: 'The Cat Club (French)', language: languageFrench,
-         comment: expandDataList(cat_club_french), rules: initialRules},
-
+        {
+            key: 'cats-french', name: 'The Cat Club (French)', language: languageFrench,
+            comment: expandDataList(cat_club_french), rules: initialRules_french
+        },
+        {
+            key: 'cats-german', name: 'The Cat Club (German)', language: languageGerman,
+            comment: expandDataList(cat_club_german), rules: initialRules_german
+        },
     ]
 }
 
@@ -70,7 +78,7 @@ export function PrivateRuleEnforcerScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
-                <ExpandSection title='Group Rules'>
+                <ExpandSection title='Group Rules' defaultOpen>
                     <EditableText 
                         value={rules} 
                         onChange={newRules => datastore.setGlobalProperty('rules', newRules)} placeholder='Enter rules for your group' 

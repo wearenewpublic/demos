@@ -4,9 +4,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad } from "./basics";
 import { useTranslation } from "./translation";
 
-export function ExpandSection({title, children}) {
+export function ExpandSection({title, defaultOpen=false, children}) {
     const s = ExpandSectionStyle;
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(defaultOpen);
     const tTitle = useTranslation(title);
 
     return <View style={s.outer}>

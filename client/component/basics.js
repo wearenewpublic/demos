@@ -6,7 +6,7 @@ import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 import { setTitle } from "../platform-specific/url";
-import { TranslatableText } from "./translation";
+import { TranslatableText, translateText, useLanguage } from "./translation";
 
 
 export function ScrollableScreen({children, grey, maxWidth=500}) {
@@ -114,23 +114,23 @@ export function PreviewText({text, numberOfLines=2}) {
     return <Text numberOfLines={numberOfLines} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{lineLessText}</Text>
 }
 
-function formatDate(date) {
+function formatDate(date, language = 'english') {
     const currentDate = new Date();
     const inputDate = new Date(date);
 
     const diffInSeconds = Math.floor((currentDate - inputDate) / 1000);
 
     if (diffInSeconds < 60) {
-        return 'Just now';
+        return translateText({text: 'Just now', language});
     } else if (diffInSeconds < 3600) {
         const minutes = Math.floor(diffInSeconds / 60);
-        return `${minutes}m ago`;
+        return translateText({text: '{minutes}m ago', language, formatParams:{minutes}});
     } else if (diffInSeconds < 86400) {
         const hours = Math.floor(diffInSeconds / 3600);
-        return `${hours}h ago`;
+        return translateText({text: '{hours}h ago', language, formatParams:{hours}});
     } else if (diffInSeconds < 2592000) {
         const days = Math.floor(diffInSeconds / 86400);
-        return `${days}d ago`;
+        return translateText({text: '{days}d ago', language, formatParams:{days}});
     } else {
         const formattedDate = inputDate.toLocaleDateString('en-US', {
         month: 'short',
@@ -147,6 +147,7 @@ export function TimeText({time}) {
 }
 
 export function AuthorLine({author, time, oneLine=false}) {
+    const language = useLanguage()
     if (oneLine) {
         return <HorizBox center>
             <FaceImage face={author.face} size={16}/>
@@ -297,7 +298,7 @@ const PillStyle = StyleSheet.create({
         borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 8,
         paddingHorizontal: 6,
-        paddingVertical: 2,
+        paddingVertical: 1,
         marginRight: 8,
         flexDirection: 'row',
         alignItems: 'center'

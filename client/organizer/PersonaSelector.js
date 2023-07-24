@@ -2,14 +2,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { PopupSelector } from "../platform-specific/popup";
 import { UserFace } from "../component/userface";
 import { useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
+import { translateText, useLanguage } from "../component/translation";
 
 export function PersonaSelector() {
     const s = PersonaSelectorStyle;
     const selectedPersona = usePersonaKey();
     const allPersonas = useGlobalProperty('persona');
+    const language = useLanguage();
     const datastore = useDatastore();
     const itemKeys = Object.keys(allPersonas || {});    
-    const items = itemKeys.map(key => ({key, label: allPersonas[key].name}));
+    const items = itemKeys.map(key => ({key, label: getPersonaName({language, personas: allPersonas, personaKey: key})}));
     return <View style={s.row}>
         <PopupSelector value={selectedPersona} items={items} 
             onSelect={personalKey => datastore.setSessionData('personaKey', personalKey)} 
@@ -25,3 +27,13 @@ const PersonaSelectorStyle = StyleSheet.create({
         marginRight: 8
     }
 })
+
+function getPersonaName({language, personas, personaKey}) {
+    const persona = personas[personaKey];
+    if (persona.label) {
+        const tLabel = translateText({text: persona.label, language});
+        return persona.name + ' (' + tLabel + ')';
+    } else {
+        return persona.name;
+    }
+}

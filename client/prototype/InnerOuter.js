@@ -5,12 +5,16 @@ import { trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
-import { Comment, CommentContext } from "../component/comment";
+import { Comment, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
-import { languageFrench } from "../component/translation";
+import { languageFrench, languageGerman } from "../component/translation";
+import { trek_vs_wars_german } from "../translations/german/conversations_german";
+import { personaGuest, personaTrek, personaWars } from "../data/personas";
+import { guestFrench } from "../translations/french/personas_french";
+import { guestGerman } from "../translations/german/personas_german";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -31,22 +35,6 @@ This allows outsiders to contribute to your conversation (and maybe get invited
 to become members) while still keeping the conversation largely private.
 `
 
-const persona = {
-    'trek': {
-        name: 'Trekkie Trisha (Member)', member: true,
-        face: 'face7.jpeg'
-    },
-    'wars': {
-        name: 'Star Wars Simon (Member)', member: true,
-        face: 'face6.jpeg'
-    },
-    'guest': {
-        name: 'Guest Garry',
-        face: 'face2.jpeg'
-    }
-}
-
-
 export const InnerOuter = {
     key: 'innerouter',
     name: 'Inner/Outer',
@@ -58,11 +46,20 @@ export const InnerOuter = {
     instance: [
         {
             key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
-            persona, name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
+            personaList: [personaTrek, personaWars, personaGuest], 
+            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
         {
             key: 'wars_french', language: languageFrench,
+            personaList: [personaTrek, personaWars, guestFrench],
             conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
-            persona, name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
+            name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'
+        },
+        {
+            key: 'wars_german', language: languageGerman,
+            personaList: [personaTrek, personaWars, guestGerman],
+            conclusion: "Star Wars und Star Trek sind beide gute Filme, aber sie erfassen unterschiedliche Aspekte davon, wie die Welt funktioniert.",
+            name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german), '$personaKey': 'wars'
+        }
 
     ],
     screen: InnerOuterScreen   
@@ -77,7 +74,7 @@ function InnerOuterScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({datastore, comment}));
 
     const commentConfig = {...commentContext,
-        getIsVisible
+        getIsVisible, authorBling: [GuestAuthorBling]
     }
 
     return (

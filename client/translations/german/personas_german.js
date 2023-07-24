@@ -21,3 +21,9 @@ export const boringGerman = {
     name: 'Langweiliger Bob',
     face: 'face10.jpeg'
 }
+
+export const guestGerman = {
+    key: 'guest',
+    name: 'Gast Garry',
+    face: 'face2.jpeg'
+}

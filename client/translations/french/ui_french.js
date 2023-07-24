@@ -41,4 +41,8 @@ export const ui_translations_french = {
     'Loading...': 'Chargement...',
     'Like{likeCountLabel}': "J'aime{likeCountLabel}",
     'Unlike{likeCountLabel}': "Je n'aime pas{likeCountLabel}",
+    'Promote': 'Promouvoir',
+    'member': 'membre',
+    'Promoted by {boosterName}': 'Promu par {boosterName}',
+    'Un-Promote': 'Dé-promouvoir',
 }

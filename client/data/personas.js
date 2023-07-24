@@ -65,14 +65,23 @@ import { deepClone } from "../util/util";
   export const personaTrek = {
     key: 'trek',
     name: 'Trekkie Trisha',
-    face: 'face7.jpeg'
+    face: 'face7.jpeg',
+    member: true
   };
   
   export const personaWars = {
     key: 'wars',
     name: 'Star Wars Simon',
-    face: 'face6.jpeg'
+    face: 'face6.jpeg',
+    member: true
   };
+
+  export const personaGuest = {
+    key: 'guest',
+    name: 'Guest Garry',
+    face: 'face2.jpeg',
+    member: false
+  }
   
 
 

@@ -14,7 +14,7 @@ const ui_translations_for_language = {
     french: ui_translations_french
 }
 
-function translateText({text, language, formatParams}) {
+export function translateText({text, language, formatParams}) {
     const translations = ui_translations_for_language[language];
     var translatedText = translations ? translations[text] : text;
 
@@ -25,6 +25,11 @@ function translateText({text, language, formatParams}) {
         translatedText = formatString(translatedText || text, formatParams);
     }
     return translatedText || text;
+}
+
+export function useLanguage() {
+    const {instance} = useContext(PrototypeContext);
+    return instance?.language;
 }
 
 export function useTranslation(text, formatParams) {

@@ -1,4 +1,6 @@
 
+export const civic_society_description = 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.'
+
 export const civic_society = [
     {
         "from": "guestLarry",

@@ -10,7 +10,8 @@ import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
-import { TranslatableText, languageFrench } from "../component/translation";
+import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
+import { trek_vs_wars_german } from "../translations/german/conversations_german";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -38,7 +39,7 @@ export const OptionallyAnonymous = {
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
         {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language: languageFrench, comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
-
+        {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language: languageGerman, comment: expandDataList(trek_vs_wars_german), '$personaKey': 'wars'},
     ],
     screen: OptionallyAnonymousScreen    
 }

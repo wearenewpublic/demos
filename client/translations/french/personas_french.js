@@ -23,3 +23,8 @@ export const boringFrench = {
     face: 'face10.jpeg'
 }
 
+export const guestFrench = {
+    key: 'guest',
+    name: 'Invité Garry',
+    face: 'face2.jpeg'
+}

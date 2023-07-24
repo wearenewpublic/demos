@@ -4,14 +4,15 @@ import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
-import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
+import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society } from "../data/openhouse_civic";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useObject, usePersonaKey } from "../util/datastore";
-import { TranslatableText, languageFrench } from "../component/translation";
-import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic";
+import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
+import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic_french";
+import { civic_society_description_german, civic_society_german } from "../translations/german/openhouse_civic_german";
 
 const description = `
 Be anonymous to the public, but not to group members.
@@ -27,9 +28,9 @@ the smaller set of group members to hold you accountable for your actions.
 `
 
 const persona = {
-    memberAlice: {name: 'Alice (Member)', face: 'face9.jpeg', member: true},
-    memberBob: {name: 'Bob (Member)', face: 'face10.jpeg', member: true},
-    memberLaura: {name: 'Laura (Member)', face: 'face5.jpeg', member: true},
+    memberAlice: {name: 'Alice', label: 'Member', face: 'face9.jpeg', member: true},
+    memberBob: {name: 'Bob', label: 'Member', face: 'face10.jpeg', member: true},
+    memberLaura: {name: 'Laura', label: 'Member', face: 'face5.jpeg', member: true},
     guestNatalie: {name: 'Natalie', face: 'face4.jpeg'},
     guestTim: {name: 'Tim', face: 'face2.jpeg'},
     guestLarry: {name: 'Larry', face: 'face6.jpeg'},
@@ -54,8 +55,13 @@ export const SemiAnonymous = {
         {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
             description: civic_society_description_french,
             '$personaKey': 'guestLarry',
-            persona, comment: expandDataList(civic_society_french)},
-
+            persona, comment: expandDataList(civic_society_french)
+        },
+        {key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
+            description: civic_society_description_german,
+            '$personaKey': 'guestLarry',
+            persona, comment: expandDataList(civic_society_german)
+        },
     ],
     screen: SemiAnonymousScreen    
 }
@@ -69,7 +75,8 @@ export function SemiAnonymousScreen() {
     const commentConfig = {...commentContext,
         authorName: AuthorName, authorFace: AuthorFace,
         commentPlaceholder: 'Write a semi-anonymous comment',
-        replyWidgets: [SemiAnonymousExplain]
+        replyWidgets: [SemiAnonymousExplain],
+        authorBling: [MemberAuthorBling]
     }
 
     // console.log('comments', comments);

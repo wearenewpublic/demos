@@ -27,8 +27,8 @@ const CommentActionButtonStyle = StyleSheet.create({
     }
 })
 
-export function CommentDataText({label}) {
-    return <Text style={CommentDataTextStyle.text}>{label}</Text>
+export function CommentDataText({text, formatParams}) {
+    return <TranslatableText style={CommentDataTextStyle.text} text={text} formatParams={formatParams} />
 }
 const CommentDataTextStyle = StyleSheet.create({
     text: {
@@ -130,6 +130,33 @@ function TopBlingBar({commentKey, comment}) {
     </View>
 }
 
+function NullAuthorBling({comment}) {
+    return null;
+}
+
+function AuthorBlingLabel({label, color='#666'}) {
+    return <Pill label={label} style={{color}} />
+}
+
+export function MemberAuthorBling({comment}) {
+    const author = useObject('persona', comment.from);
+    if (author?.member) {
+        return <AuthorBlingLabel label='Member' color='#666' />
+    } else {
+        return null;
+    }
+}
+
+export function GuestAuthorBling({comment}) {
+    const author = useObject('persona', comment.from);
+    if (!author?.member) {
+        return <AuthorBlingLabel label='Guest' color='#666' />
+    } else {
+        return null;
+    }
+}
+
+
 
 
 export const CommentContext = React.createContext({
@@ -140,6 +167,7 @@ export const CommentContext = React.createContext({
     getIsVisible: () => true,
     authorName: AuthorName,
     authorFace: AuthorFace,
+    authorBling: [],
     commentPlaceholder: 'Write a comment...',
     replyWidgets: []
 });
@@ -274,13 +302,18 @@ const RepliesStyle = StyleSheet.create({
 function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
 
-    const {authorName} = React.useContext(CommentContext);
+    const {authorName, authorBling} = React.useContext(CommentContext);
     const comment = useObject('comment', commentKey);
 
     return <View style={s.authorInfoBox}> 
         <Text style={collapsed ? s.collapsedAuthorName : s.authorName}>
             {React.createElement(authorName, {comment})}
         </Text>
+        <View style={{flexDirection: 'row', marginLeft: 4}}>
+            {authorBling.map((bling, idx) => 
+                React.createElement(bling, {key: idx, comment})
+            )}
+        </View>
     </View>
 }
 
