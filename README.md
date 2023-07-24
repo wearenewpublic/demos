@@ -87,12 +87,14 @@ yarn emulate
 The prototype garden uses a very simple data model, with the following functions:
 * **useCollection** - Fetch items from a particular table, given sorting rules. This function is a React hook, and so your component will automatically refresh when data changes.
 * **useObject** - Fetch an individual data item by its key.
-* **addObject** - Add a new object to a table. The ``from``, ``time``, and ``key`` fields are automatically filled in with the current user, time, and object key so you don't need to provide them. 
+* **addObject** - Add a new object to a table. The `from`, `time`, and `key` fields are automatically filled in with the current user, time, and object key so you don't need to provide them. 
 * **modifyObject** - Modify an object in a table. For prototyes there are no security rules here. When we introduce one time products we will add constraints on what can be modified.
 * **usePersona** - Get the current user.
 * **useGlobalData** - Get a global variable that isn't part of a collection
 * **useSessionData** - Get a variable that is specific to this particular user session.
-* **getCollection/Object etc** - Non-hook equivalents of the `use` functions that can be used in a callback.
+* **useDatastore** - Get a `datastore` object that can be used to modify the datastore from inside a callback.
+* **datastore.getCollection/Object etc** - Non-hook equivalents of the `use` functions that can be used to read data within a callback.
+* **datastore.addObject/setObject/modifyObject** - Methods to modify the state from within a callback, in response to user actions.
 
 
 ## Using GPT 
@@ -103,17 +105,17 @@ The prototype garden uses a very simple data model, with the following functions
 * Tell your prompt to produce it's final output as JSON format (see the other prompts for examples)
 * In your client code, call `gptProcessAsync({promptKey, $params})` 
 
+
+## Internationalization
+
+Each prototype instance specifies the language that it is in using the `language` field. This can currently be one of `languageEnglish`, `languageFrench`, or `languageGerman`.
+
+If a string is a hard-coded UI string rather than user content, it should be displayed using `<TranslatableText>` rather than `<Text>`. If a translation is missing for a string then you'll see a message in the javascript console. You can add new translation by editing `translations/[language]/ui_[language].js`.
+
+You can also place translated versions of example content from the `data` directory in equivalently named files in `translations`.
+
+
 ## Any other Questions
  
- * Email me at `rob@newpublic.org`. I want to have the prototype garden be super easy to use, and I promise to reply to every email.
-
-
-
-
-
-
-
-
-
-
+ * Email me at `rob@newpublic.org`. I want to have the prototype garden be super easy to use, and I promise to reply to every email. Don't worry about asking stupid questions. If this code isn't super-easy to understand then that means I need to make it clearer.
 
