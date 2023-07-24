@@ -7,7 +7,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
-import { civic_society } from "../data/openhouse_civic";
+import { civic_society, civic_society_description } from "../data/openhouse_civic";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useObject, usePersonaKey } from "../util/datastore";
 import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
@@ -49,16 +49,13 @@ export const SemiAnonymous = {
     description,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
-            description: 'Welcome to our monthly Open House. This is a great opportunity for non-members to hang out with members, learn about what we do, and see if the Civic Society is a good community for you.',
             '$personaKey': 'guestLarry',
             persona, comment: expandDataList(civic_society)},
         {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
-            description: civic_society_description_french,
             '$personaKey': 'guestLarry',
             persona, comment: expandDataList(civic_society_french)
         },
         {key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
-            description: civic_society_description_german,
             '$personaKey': 'guestLarry',
             persona, comment: expandDataList(civic_society_german)
         },
