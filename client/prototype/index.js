@@ -16,12 +16,13 @@ import { OptionallyAnonymous } from "./OptionallyAnonymous";
 import { SemiAnonymous } from "./SemiAnonymous";
 import { InnerOuter } from "./InnerOuter";
 import { PostFeedPrototype } from "./PostFeed";
+import { QuestionAnswerPrototype } from "./QuestionAnswer";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
-    InnerOuter, PostFeedPrototype,
+    InnerOuter, PostFeedPrototype, QuestionAnswerPrototype,
 
     concept_comments_slider
 ]

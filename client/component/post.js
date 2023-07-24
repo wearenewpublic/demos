@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeCard, PluralText, Separator, TimeText } from "./basics";
+import { Clickable, MaybeCard, Pad, PluralText, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 import { UserFace } from "./userface";
 import { TranslatableText } from "./translation";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { pushSubscreen } from "../util/navigate";
 import { addKey, removeKey } from "../util/util";
@@ -28,7 +28,8 @@ export function Post({post, fitted=false, childpad=false, noCard=false, actions,
         <LikesLine post={post} />
         {actions ? 
             <View>
-                <Separator pad={12} />
+                <Pad size={12} />
+                {/* <Separator pad={8} /> */}
                 <View style={s.actionBar}>
                     {actions.map((Action, i) => <Action key={i} post={post} />)}
                 </View>
@@ -48,7 +49,8 @@ export function Post({post, fitted=false, childpad=false, noCard=false, actions,
 const PostStyle = StyleSheet.create({
     actionBar: {
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        marginLeft: 8
+        // justifyContent: 'space'
     },
     authorBox: {
         flexDirection: 'row',
@@ -68,6 +70,7 @@ const PostStyle = StyleSheet.create({
     text: {
         marginHorizontal: 2,
         // marginBottom: 12,
+        fontSize: 16,
         color: '#444'
     }
 })
@@ -106,7 +109,7 @@ export function CommentPreview({comment}) {
     return <View style={s.commentPreview}>
         <UserFace userId={comment.from} size={32} />
         <View style={s.commentPreviewRight}>
-            <Text style={s.author}>{user.name}</Text>
+            <Text style={s.author}>{user?.name}</Text>
             <Text numberOfLines={1} style={s.text}>{comment.text}</Text>
         </View>
     </View>
@@ -134,14 +137,14 @@ const CommentPreviewStyle = StyleSheet.create({
 });
 
 
-export function PostActionButton({iconName, iconSet, label, onPress}) {
+export function PostActionButton({iconName, iconSet, label, formatParams, onPress}) {
     const s = PostActionButtonStyle;
     return <Clickable onPress={onPress}>
         <View style={s.actionButton}>
             {iconSet ?
-                React.createElement(iconSet, {name: iconName, size: 16, color: '#666'})
+                React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
             : null}   
-            <TranslatableText style={s.actionLabel} text={label} />
+            <TranslatableText style={s.actionLabel} text={label} formatParams={formatParams} />
         </View>
     </Clickable>
 }
@@ -149,12 +152,13 @@ export function PostActionButton({iconName, iconSet, label, onPress}) {
 const PostActionButtonStyle = StyleSheet.create({
     actionButton: {
         flexDirection: 'row',
+        marginRight: 32
     },
     actionLabel: {
         marginLeft: 4,
         color: '#666',
-        fontSize: 16
-    }
+        fontSize: 14
+    },
 });
 
 
@@ -170,6 +174,22 @@ export function PostActionLike({post}) {
     }
     return <PostActionButton iconName='thumbs-up' iconSet={Feather} label={actionLabel} onPress={likePost} />
 }
+
+export function PostActionUpvote({post}) {
+    const datastore = useDatastore();
+    const personaKey = usePersonaKey();
+    const hasUpvote = post.upvotes?.[personaKey];
+    const actionLabel = hasUpvote ? 'Upvoted{countString}' : 'Upvote{countString}';
+    const upvoteCount = Object.keys(post.upvotes || {}).length;
+    const countString = upvoteCount == 0 ? '' : ' (' + upvoteCount.toString() + ')';
+    function upvotePost() {
+        datastore.modifyObject('post', post.key, post => ({
+            ...post, upvotes: hasUpvote ? removeKey(post.upvotes, personaKey) : addKey(post.upvotes, personaKey)
+        }));
+    }
+    return <PostActionButton iconName='arrow-up' iconSet={FontAwesome5} label={actionLabel} formatParams={{countString}} onPress={upvotePost} />
+}
+
 
 export function PostActionComment({post}) {
     return <PostActionButton iconName='comment-o' iconSet={FontAwesome} label='Comment' onPress={() => pushSubscreen('post', {postKey: post.key})} />
