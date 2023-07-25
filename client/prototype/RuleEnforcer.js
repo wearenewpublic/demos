@@ -92,7 +92,7 @@ export function RuleEnforcerChatScreen() {
 
     return (
         <WideScreen>
-            <ExpandSection title='Group Rules'>
+            <ExpandSection title='Group Rules' defaultOpen>
                 <EditableText 
                     value={rules} 
                     onChange={text => datastore.setGlobalProperty('rules', text)} 

@@ -70,6 +70,14 @@ export function Clickable({onPress, children, style}) {
     </TouchableOpacity>
 }
 
+export function MaybeClickable({onPress, children, style, isClickable}) {
+    if (!isClickable) {
+        return <View style={style}>{children}</View>
+    } else {
+        return <Clickable onPress={onPress} style={style}>{children}</Clickable>
+    }
+}
+
 export function BigTitle({children, pad=true}) {
     return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
@@ -225,9 +233,18 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
 
 export function AutoSizeTextInput({value, onChange, placeholder, style, ...props}) {
     const [height, setHeight] = useState(0);
-    return <TextInput value={value} onChangeText={onChange} placeholder={placeholder} 
-        multiline={true} style={[style, {height: Math.max(40, height)}]} 
-        onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)} {...props} />
+
+    function onContentSizeChange(e) {
+        setHeight(e.nativeEvent.contentSize.height);
+    }
+
+    const styleHeight = Math.max(40, height);
+
+    return <View style={{height: styleHeight}}>
+        <TextInput value={value} onChangeText={onChange} placeholder={placeholder} 
+            multiline={true} style={[style, {height: styleHeight}]} 
+            onContentSizeChange={onContentSizeChange} {...props} />
+    </View>
 }
 
 
@@ -236,7 +253,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
     const [text, setText] = useState(null);
     return <View style={s.outer}>
         {label ? <TranslatableText style={s.label} text={label}/> : null}
-        <AutoSizeTextInput style={[s.textInput, {height: multiline ? height : 40}, 
+        <AutoSizeTextInput style={[s.textInput, 
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
          ]} 

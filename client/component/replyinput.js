@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { Card, PrimaryButton, SecondaryButton } from "./basics";
+import { AutoSizeTextInput, Card, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
@@ -10,7 +10,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [text, setText] = useState('');
-    const {postHandler, authorFace, commentPlaceholder, replyWidgets} = useContext(CommentContext);
+    const {postHandler, authorFace, commentPlaceholder, replyWidgets, editWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
@@ -41,15 +41,13 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
-            <View style={[s.textInputWrapper, (topLevel && !text) ? {height: 40} : null]}>
-                <TextInput style={s.textInput}
-                    placeholder={placeholderText}
-                    placeholderTextColor='#999'
-                    value={text}
-                    onChangeText={setText}
-                    multiline={true}
-                />
-            </View>
+            <AutoSizeTextInput style={s.textInput}
+                placeholder={placeholderText}
+                placeholderTextColor='#999'
+                value={text}
+                onChangeText={setText}
+                multiline={true}
+            />
             {(!topLevel || text) ?
                 <View>
                     {replyWidgets.map((widget, idx) => 
@@ -82,7 +80,6 @@ const ReplyInputStyle = StyleSheet.create({
     },
     right: {
         flex: 1,
-        // height: 150,
         maxWidth: 500
     },
     row: {
@@ -99,12 +96,12 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?"}) {
+export function PostInput({placeholder = "What\'s on your mind?", editWidgets=[]}) {
     const commentContext = useContext(CommentContext);
     function postHandler({datastore, text}) {
         datastore.addObject('post', {text})
     }
-    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder}}>
+    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, editWidgets}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>

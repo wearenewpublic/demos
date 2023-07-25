@@ -1,16 +1,24 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Clickable, MaybeCard, Pad, PluralText, Separator, TimeText } from "./basics";
-import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
+import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { UserFace } from "./userface";
 import { TranslatableText } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { pushSubscreen } from "../util/navigate";
 import { addKey, removeKey } from "../util/util";
+import { AutoSizeTextInput } from "./basics";
+import { SectionTitle } from "./basics";
+import { PrimaryButton } from "./basics";
+import { SecondaryButton } from "./basics";
 
-export function Post({post, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, children}) {
+export function Post({post, editWidgets=[], fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
+    const editedPost = useSessionData('editPost');
+    if (editedPost == post.key) {
+        return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} fitted={fitted} noCard={noCard} />
+    }
     return <MaybeCard fitted={fitted} isCard={!noCard}>
         <View style={s.authorBox}>
             <UserFace userId={post.from} size={32} />
@@ -19,6 +27,9 @@ export function Post({post, fitted=false, childpad=false, noCard=false, actions,
                 <TimeText time={post.time} />
             </View>
         </View>
+        {topBling ?
+           <View style={{marginBottom: 8}}>{topBling}</View>
+        : null} 
         {post.text ? 
             <Text style={s.text}>{post.text}</Text>
         : null}
@@ -74,6 +85,56 @@ const PostStyle = StyleSheet.create({
         color: '#444'
     }
 })
+
+export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noCard=false}) {
+    const s = PostEditorStyle;
+    const [post, setPost] = useState(oldPostData);
+    const datastore = useDatastore();
+
+    function onSave() {
+        datastore.modifyObject('post', postKey, () => post);
+        datastore.setSessionData('editPost', null);
+    }
+
+    function onCancel() {
+        datastore.setSessionData('editPost', null);
+    }
+
+    return <MaybeCard fitted={fitted} isCard={!noCard}>
+        <SectionTitle text='Editing Post' />
+
+        <View>
+            {editWidgets.map((Widget, i) => <View key={i} style={{marginBottom: 8}}>
+                <Widget key={i} value={post} onChange={setPost} />
+            </View>)}
+        </View>
+
+        <AutoSizeTextInput style={s.textInput} value={post.text} onPostChanged={text => setPost({...post, text})} />
+
+        <View style={s.actions}>
+            <PrimaryButton onPress={onSave} text='Save Changes' />
+            <SecondaryButton onPress={onCancel} text='Cancel' />
+        </View>
+    </MaybeCard>
+}
+
+const PostEditorStyle = StyleSheet.create({
+    textInput: {
+        flex: 1,
+        borderRadius: 8, 
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: '#ddd', padding: 8,
+        marginHorizontal: 0,
+        fontSize: 15, lineHeight: 20,
+        height: 150,
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 8,
+    }
+})
+
 
 export function PostCommentsPreview({post, onPress}) {
     const s = PostCommentsPreviewStyle;
@@ -178,6 +239,7 @@ export function PostActionLike({post}) {
 export function PostActionUpvote({post}) {
     const datastore = useDatastore();
     const personaKey = usePersonaKey();
+    if (personaKey == post.from) return null;
     const hasUpvote = post.upvotes?.[personaKey];
     const actionLabel = hasUpvote ? 'Upvoted{countString}' : 'Upvote{countString}';
     const upvoteCount = Object.keys(post.upvotes || {}).length;
@@ -188,6 +250,19 @@ export function PostActionUpvote({post}) {
         }));
     }
     return <PostActionButton iconName='arrow-up' iconSet={FontAwesome5} label={actionLabel} formatParams={{countString}} onPress={upvotePost} />
+}
+
+export function PostActionEdit({post}) {
+    const datastore = useDatastore();
+    const personaKey = usePersonaKey();
+
+    if (personaKey != post.from) return null;
+
+    function onEdit() {
+        datastore.setSessionData('editPost', post.key);
+    }
+
+    return <PostActionButton iconName='edit' iconSet={FontAwesome} label='Edit' onPress={onEdit} />
 }
 
 

@@ -1,6 +1,6 @@
 import { Narrow, Pad, ScreenTitleText, ScrollableScreen, WideScreen } from "../component/basics";
 import { BasicComments } from "../component/comment";
-import { Post, PostActionComment, PostActionLike } from "../component/post";
+import { Post, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
 import { useTranslation } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
 import { post_parents, post_parents_comments } from "../data/posts";
@@ -36,7 +36,7 @@ export function PostFeedScreen() {
     return <ScrollableScreen grey>
         <PostInput />
         {posts.map(post =>
-            <Post key={post.key} post={post} actions={[PostActionLike, PostActionComment]}
+            <Post key={post.key} post={post} actions={[PostActionLike, PostActionComment, PostActionEdit]}
                hasComments onComment={() => pushSubscreen('post', {postKey: post.key})}/>
         )}
     </ScrollableScreen>

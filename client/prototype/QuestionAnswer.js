@@ -2,7 +2,7 @@ import { Card } from "../component/basics";
 import { BigTitle, Narrow, Pad, ScreenTitleText, ScrollableScreen, WideScreen } from "../component/basics";
 import { BasicComments } from "../component/comment";
 import { QuietSystemMessage } from "../component/message";
-import { Post, PostActionComment, PostActionLike, PostActionUpvate, PostActionUpvote } from "../component/post";
+import { Post, PostActionComment, PostActionEdit, PostActionLike, PostActionUpvate, PostActionUpvote } from "../component/post";
 import { PostInput } from "../component/replyinput";
 import { useTranslation } from "../component/translation";
 import { answer_godzilla, answer_godzilla_comments } from "../data/answer";
@@ -57,7 +57,7 @@ export function QuestionAnswerScreen() {
             <PostInput placeholder="What's your answer?" />
         }
         {sortedPosts.map(post =>
-            <Post key={post.key} post={post} actions={[PostActionUpvote, PostActionComment]}
+            <Post key={post.key} post={post} actions={[PostActionUpvote, PostActionComment, PostActionEdit]}
                hasComments onComment={() => pushSubscreen('post', {postKey: post.key})}/>
         )}
     </ScrollableScreen>   
