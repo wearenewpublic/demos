@@ -9,28 +9,27 @@ import { useTranslation } from "./translation";
 export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
-    const [text, setText] = useState('');
-    const {postHandler, authorFace, commentPlaceholder, replyWidgets, editWidgets} = useContext(CommentContext);
+    const [post, setPost] = useState({text: '', replyTo: commentKey});
+    const {postHandler, authorFace, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
 
     function onPost() {
         if (postHandler) {
-            postHandler({datastore, text, replyTo: commentKey});
+            postHandler({datastore, post});
         } else {
-            datastore.addObject('comment', {
-                from: personaKey, text, replyTo: commentKey
-            })
+            datastore.addObject('comment', post);
         }
         if (topLevel) {
-            setText('');
+            setPost({text: '', replyTo: commentKey});
         } else {
             hideReplyInput();
         }
     }
 
     function hideReplyInput() {
+        setPost({text: '', replyTo: commentKey})
         datastore.setSessionData('replyToComment', null);
     }
 
@@ -41,21 +40,28 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
-            <AutoSizeTextInput style={s.textInput}
-                placeholder={placeholderText}
-                placeholderTextColor='#999'
-                value={text}
-                onChangeText={setText}
-                multiline={true}
-            />
-            {(!topLevel || text) ?
-                <View>
-                    {replyWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey})
+            {(!topLevel || post.text) ?
+                <View style={s.widgetBar}>
+                    {replyTopWidgets.map((widget, idx) => 
+                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
                     )}
                 </View>
             : null}
-            {(!topLevel || text) ? 
+            <AutoSizeTextInput style={s.textInput}
+                placeholder={placeholderText}
+                placeholderTextColor='#999'
+                value={post.text}
+                onChangeText={text => setPost({...post, text})}
+                multiline={true}
+            />
+            {(!topLevel || post.text) ?
+                <View style={s.widgetBar}>
+                    {replyWidgets.map((widget, idx) => 
+                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
+                    )}
+                </View>
+            : null}
+            {(!topLevel || post.text) ? 
                 <View style={s.actions}>
                     <PrimaryButton onPress={onPost} text='Post'/>
                     <SecondaryButton onPress={hideReplyInput} text='Cancel' />
@@ -89,6 +95,10 @@ const ReplyInputStyle = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         margin: 8,
+    },
+    widgetBar: {
+        marginLeft: 8,
+        marginBottom: 8,
     }
 })
 
@@ -96,12 +106,12 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", editWidgets=[]}) {
+export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}) {
     const commentContext = useContext(CommentContext);
-    function postHandler({datastore, text}) {
-        datastore.addObject('post', {text})
+    function postHandler({datastore, post}) {
+        datastore.addObject('post', post)
     }
-    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, editWidgets}}>
+    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>

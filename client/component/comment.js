@@ -169,7 +169,9 @@ export const CommentContext = React.createContext({
     authorFace: AuthorFace,
     authorBling: [],
     commentPlaceholder: 'Write a comment...',
-    replyWidgets: []
+    replyWidgets: [],
+    replyTopWidgets: [],
+    editExtras: [],
 });
 
 function AuthorName({comment}) {

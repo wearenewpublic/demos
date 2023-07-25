@@ -1,7 +1,8 @@
-import { BigTitle, ScrollableScreen } from "../component/basics";
+import { useState } from "react";
+import { BigTitle, Card, ScrollableScreen, SectionTitle } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
-import { RatingWithLabel, SpectrumRating } from "../component/rating";
+import { RatingSummary, RatingWithLabel, SpectrumRating } from "../component/rating";
 import { PostInput } from "../component/replyinput";
 import { TranslatableText } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
@@ -36,18 +37,33 @@ function CommentSliderScreen() {
     const sideOne = useGlobalProperty('sideOne');
     const sideTwo = useGlobalProperty('sideTwo');
     const personaKey = usePersonaKey();
+    const [selection, setSelection] = useState(null);
     const hasAnswered = posts.some(post => post.from == personaKey);
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
+    const ratingCounts = countRatings(posts);
+    var shownPosts = posts;
+    if (selection) {
+        shownPosts = posts.filter(post => post.slide == selection);
+    }
 
     return <ScrollableScreen grey>
         <BigTitle>{question}</BigTitle>
         {hasAnswered ? 
             <QuietSystemMessage text='You have already written an opinion' />
         :
-            <PostInput placeholder="What's your opinion?" editExtras={[EditRating]} />
+            <PostInput placeholder="What's your opinion?" topWidgets={[EditRating]} />
         }
 
-        {posts.map(post => 
+        <Card>
+            <SectionTitle text='Filter by Opinion' />
+            <RatingSummary labelSet={ratingLabels} ratingCounts={ratingCounts} selection={selection} onChangeSelection={setSelection} />
+        </Card>
+
+        {selection ?
+            <QuietSystemMessage text='Showing only posts with selected opinion'/>
+        :null}
+
+        {shownPosts.map(post => 
             <Post key={post.key} post={post} actions={[PostActionLike, PostActionEdit]}
                 editWidgets={[EditRating]}
                 topBling={<RatingWithLabel value={post.slide} labelSet={ratingLabels} />}
@@ -67,12 +83,21 @@ function getRatingLabels({sideOne, sideTwo}) {
     return ratingLabels;
 }
 
-function EditRating({value, onChange}) {
+function countRatings(posts) {
+    var ratingCounts = [0,0,0,0,0];
+    for (const post of posts) {
+        ratingCounts[post.slide-1] += 1;
+    }
+    return ratingCounts;
+}
+
+function EditRating({post, onPostChanged}) {
     const sideOne = useGlobalProperty('sideOne');
     const sideTwo = useGlobalProperty('sideTwo');
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
 
-    return <RatingWithLabel value={value.slide} editable labelSet={ratingLabels} 
-        onChangeValue={slide => onChange({...value, slide})} />
+    return <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
+        placeholder='Rate your opinion'
+        onChangeValue={slide => onPostChanged({...post, slide})} />
 }
 

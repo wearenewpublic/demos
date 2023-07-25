@@ -86,17 +86,16 @@ function BlingMaybeBad({comment}) {
     }
 }
 
-async function postHandlerAsync({datastore, text, replyTo}) {
-    console.log('postHandlerAsync', text, replyTo)
+async function postHandlerAsync({datastore, post}) {
+    console.log('postHandlerAsync', post);
+    const {text, replyTo} = post;
     const personaKey = datastore.getPersonaKey();
-    const commentKey = datastore.addObject('comment', {
-        from: personaKey, text, replyTo, pending: true
-    })
+    const commentKey = datastore.addObject('comment', {...post, pending: true});
     const isUnproductiveMessage = await askGptToEvaluateMessageTextAsync({promptKey: 'conflict', text});
     if (isUnproductiveMessage) {
         datastore.modifyObject('comment', commentKey, comment => ({...comment, maybeBad: true, pending: false}))
     } else {
-        datastore.modifyObject('comment', commentKey, comment => ({...comment, pending: false}))        
+        datastore.modifyObject('comment', commentKey, comment => ({...comment, pending: false}))
     }
 }
 

@@ -96,12 +96,10 @@ export function PrivateRuleEnforcerScreen() {
     )   
 }
 
-async function postHandlerAsync({datastore, text, replyTo}) {
+async function postHandlerAsync({datastore, post}) {
+    const {text, replyTo} = post;
     const rules = datastore.getGlobalProperty('rules');
-    const personaKey = datastore.getPersonaKey();
-    const commentKey = datastore.addObject('comment', {
-        from: personaKey, text, replyTo, pending: true
-    })
+    const commentKey = datastore.addObject('comment', {...post, pending: true});
     console.log('post', text, replyTo, commentKey);
     const response = await gptProcessAsync({promptKey: 'ruleenforcer', params: {text, rules}});
     console.log('response', response);

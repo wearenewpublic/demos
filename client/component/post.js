@@ -105,11 +105,11 @@ export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noC
 
         <View>
             {editWidgets.map((Widget, i) => <View key={i} style={{marginBottom: 8}}>
-                <Widget key={i} value={post} onChange={setPost} />
+                <Widget key={i} post={post} onPostChanged={setPost} />
             </View>)}
         </View>
 
-        <AutoSizeTextInput style={s.textInput} value={post.text} onPostChanged={text => setPost({...post, text})} />
+        <AutoSizeTextInput style={s.textInput} value={post.text} onChange={text => setPost({...post, text})} />
 
         <View style={s.actions}>
             <PrimaryButton onPress={onSave} text='Save Changes' />
@@ -132,7 +132,7 @@ const PostEditorStyle = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         margin: 8,
-    }
+    },
 })
 
 
