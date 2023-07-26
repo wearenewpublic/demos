@@ -77,3 +77,19 @@ export function formatString(template, values) {
     });
 }
 
+export function toTitleCase(text) {
+    // Split the text into an array of words using space as the delimiter
+    const words = text.split(' ');
+  
+    // Capitalize the first letter of each word and convert the rest to lowercase
+    const titleCaseText = words.map(word => {
+      if (word.length > 0) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+      return word;
+    });
+  
+    // Join the words back together to form the final title case text
+    return titleCaseText.join(' ');
+  }
+  

@@ -13,6 +13,12 @@ export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
     return response?.judgement || false;
 }
 
+export async function askGptToEvaluateConversationAsync({datastore, promptKey, messages, newMessageText, startPost}) {
+    const messagesText = messagesToGptString({datastore, messages, newMessageText, startPost});
+    const response = await gptProcessAsync({promptKey, params: {messagesText}});
+    return response?.judgement || null;
+}
+
 export async function gptProcessAsync({promptKey, params}) {
     console.log('gptProcess', {promptKey, params});
     const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, params});
@@ -23,8 +29,11 @@ export async function gptProcessAsync({promptKey, params}) {
 }
 
 
-export function messagesToGptString({datastore, messages, newMessageText}) {
+export function messagesToGptString({datastore, messages, newMessageText, startPost}) {
     const personaKey = datastore.getPersonaKey();
+    if (startPost) {
+        messages = [startPost, ...messages];
+    }
     const allMessages = [...messages, {text: newMessageText, from: personaKey}];
     return allMessages.map(message => datastore.getObject('persona', message.from)?.name + ': ' + JSON.stringify(message.text)).join('\n\n');
 }

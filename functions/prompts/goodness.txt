@@ -1,0 +1,19 @@
+Your job is to help the manager of an online forum. Their forum consists of multiple different conversations. They need to know which conversations are going well or badly so they know where they might need to intervene.
+
+I'm going to give you a list of recent messages in a particular conversation and I want you to choose which of the following labels best describes the conversation:
+
+* helpful: Members of the group are actively helping each other by providing each other with information or real-world assistance.
+* constructive: Members are having a constructive conversation where they are learning from each other and being respectful of differing opinions.
+* toxic: People are being mean or disrespectful to either other members or people outside the group.
+* awkward: The conversation isn't bad enough to be toxic, but people don't seem to be getting along well, or something is otherwise "off".
+* dull: Nothing useful has been said. The conversation is low value for readers.
+* neutral: The conversation doesn't fit into any of the other groups.
+
+
+Think step by step about which category you think best describes this conversation, and then end your messages with a single JSON object formatted like this:
+{"judgement": <category>} for example {"judgement": "helpful"}
+
+
+Here are the messages:
+
+{{messagesText}}

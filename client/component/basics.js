@@ -318,7 +318,8 @@ const PillStyle = StyleSheet.create({
         paddingVertical: 1,
         marginRight: 8,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        alignSelf: 'flex-start'
     },
     bigBubble: {
         borderWidth: StyleSheet.hairlineWidth,
@@ -329,7 +330,8 @@ const PillStyle = StyleSheet.create({
         marginBottom: 4,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        alignSelf: 'flex-start'
     },
     bigText: {
         fontSize: 16,

@@ -112,6 +112,11 @@ export class Datastore extends React.Component {
         const newObject = modFunc(object);
         this.setObject(typename, key, newObject);
     }
+    updateObject(typename, key, value) {
+        const object = this.getObject(typename, key);
+        const newObject = {...object, ...value};
+        this.setObject(typename, key, newObject);
+    }
 
     addCurrentUser() {
         if (this.props.isLive) {
