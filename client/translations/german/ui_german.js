@@ -1,6 +1,7 @@
 
 export const ui_translations_german = {
     'Like': 'Gefällt mir',
+    'Unlike': 'Gefällt mir nicht',
     'Reply': 'Antworten',
     'Collapse': 'Ausblenden',
     'Write a comment...': 'Kommentar schreiben...',
@@ -41,4 +42,18 @@ export const ui_translations_german = {
     'Promote': 'Fördern',
     'Promoted by {boosterName}': 'Fördert von {boosterName}',
     'Un-Promote': 'Nicht fördern',
+    "What's your opinion?": 'Was ist Ihre Meinung?',
+    'Filter by Region': 'Nach Region filtern',
+    '{minutes}m ago': 'Vor {minutes}m',
+    '{hours}h ago': 'Vor {hours}h',
+    'Select your region': 'Wählen Sie Ihre Region',
+    'Edit': 'Bearbeiten',
+    'Editing Post': 'Bearbeiten des Beitrags',
+    'Save Changes': 'Änderungen speichern',
+    'Just now': 'Gerade eben',
+    'You have already written an opinion': 'Sie haben bereits eine Meinung geschrieben',
+    'Showing only posts from {regionName}' : 'Zeige nur Beiträge aus {regionName}',
+    'person': 'Person',
+    'liked this': 'gefällt das',
+
 };

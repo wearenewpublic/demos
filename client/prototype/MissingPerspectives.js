@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { authorRobEnnals } from "../data/authors";
 import { post_starwars } from "../data/posts";
 import { statusTentative } from "../data/tags";
@@ -8,9 +8,12 @@ import { BigTitle, Card, Pad, Pill, ScrollableScreen, SectionTitle } from "../co
 import { QuietSystemMessage } from "../component/message";
 import { PostInput } from "../component/replyinput";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
-import { squaremapNamesUsa, squaremapUsa } from "../data/squaremaps";
+import { squaremapCanada, squaremapFrance, squaremapGermany, squaremapNamesCanada, squaremapNamesCanadaFrench, squaremapNamesFrance, squaremapNamesGermany, squaremapNamesUsa, squaremapUsa } from "../data/squaremaps";
 import { SquareMap } from "../component/squaremap";
 import { PopupSelector } from "../platform-specific/popup";
+import { post_starwars_canada, post_starwars_france } from "../translations/french/posts_french";
+import { languageFrench, languageGerman, useTranslation } from "../component/translation";
+import { post_starwars_german } from "../translations/german/posts_german";
 
 export const MissingPerspectivesPrototype = {
     key: 'missingperspectives',
@@ -23,13 +26,31 @@ export const MissingPerspectivesPrototype = {
     screen: MissingPerspectivesScreen,
     instance: [
         {
-            key: 'wars', name: 'Star Wars',
+            key: 'wars', name: 'Star Wars USA',
             regions: squaremapUsa, regionNames: squaremapNamesUsa,
             question: 'Which is better. Star Wars or Star Trek?',
-            sideOne: 'Pro Star Wars',
-            sideTwo: 'Pro Star Trek',
             post: expandDataList(post_starwars)
-        }
+        },
+        {
+            key: 'wars-canada', name: 'Star Wars Canada (French)', language: languageFrench,
+            regions: squaremapCanada, regionNames: squaremapNamesCanadaFrench,
+            question: 'Lequel est meilleur. Star Wars ou Star Trek?',
+            post: expandDataList(post_starwars_canada)
+        },
+        {
+            key: 'wars-france', name: 'Star Wars France (French)', language: languageFrench,
+            regions: squaremapFrance, regionNames: squaremapNamesFrance,
+            question: 'Lequel est meilleur. Star Wars ou Star Trek?',
+            post: expandDataList(post_starwars_france)
+        },
+        {
+            key: 'wars-germany', name: 'Star Wars (German)', language: languageGerman,
+            regions: squaremapGermany, regionNames: squaremapNamesGermany,
+            question: 'Was ist besser, Star Wars oder Star Trek?',
+            post: expandDataList(post_starwars_german)
+        },
+
+
     ]
 }
 
@@ -75,14 +96,15 @@ function MissingPerspectivesScreen() {
 }
 
 function RegionBling({region, regionNames}) {
-    return <Pill label={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
+    return <Pill notranslate label={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
 }
 
 
 function EditRegion({post, onPostChanged}) {
     const regionNames = useGlobalProperty('regionNames');
     const regionItems = Object.keys(regionNames).map(key => ({key, label: key + ': ' + regionNames[key]}));
-    const unknown = {key: 'unknown', label: 'Select your region'};
+    const tSelect = useTranslation('Select your region');
+    const unknown = {key: 'unknown', label: tSelect};
 
     return <PopupSelector value={post.region} items={[unknown, ...regionItems]} 
         onSelect={region => onPostChanged({...post, region})} /> 

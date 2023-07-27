@@ -1,6 +1,7 @@
 
 export const ui_translations_french = {
     'Like': "J'aime",
+    'Unlike': "Je n'aime pas",
     'Reply': 'Répondre',
     'Collapse': 'Réduire',
     'Write a comment': 'écrire un commentaire',
@@ -45,4 +46,18 @@ export const ui_translations_french = {
     'member': 'membre',
     'Promoted by {boosterName}': 'Promu par {boosterName}',
     'Un-Promote': 'Dé-promouvoir',
+    "What's your opinion?": 'Quel est votre avis?',
+    'Filter by Region': 'Filtrer par Région',
+    '{minutes}m ago': 'Il y a {minutes}m',
+    '{hours}h ago': 'Il y a {hours}h',
+    'Select your region': 'Sélectionnez votre région',
+    'Edit': 'Modifier',
+    'Edit Post': 'Modifier le message',
+    'Editing Post': 'Modification du message',
+    'Save Changes': 'Sauvegarder les modifications',
+    'Just now': 'À l\'instant',
+    'person': 'personne',
+    'liked this': 'aimé ça',
+    'You have already written an opinion': 'Vous avez déjà écrit un avis',
+    'Showing only posts from {regionName}': 'Affichage uniquement des messages de {regionName}',
 }

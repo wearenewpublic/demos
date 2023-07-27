@@ -51,26 +51,30 @@ function RegionCell({regionKey, regionNames, regionCounts, maxCount, selection, 
 
 const RegionCellStyles = StyleSheet.create({
     cell: {
-        width: 32,
-        height: 32,
+        width: 28,
+        height: 28,
         backgroundColor: '#eee',
         borderColor: '#ddd',
         borderWidth: 1,
         borderRadius: 4,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 2
+        margin: 1
     } ,
     selectedCell: {
         borderWidth: 3,
         // borderColor: '#77C7F6',
         borderColor: '#444',
-        margin: 2,
+        borderRadius: 8,
+        margin: 1,
     },
     emptyCell: {
-        width: 32,
-        height: 32,
-        margin: 2
+        width: 28,
+        height: 28,
+        margin: 1
+    },
+    label: {
+        fontSize: 12
     }
 }) 
 
