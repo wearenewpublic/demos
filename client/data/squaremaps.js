@@ -101,8 +101,7 @@ export const squaremapNamesCanadaFrench = {
     'YT': 'Yukon'
   };
 
-// 16
-export const squaremapGermany = `
+export const OLD_squaremapGermany = `
   ,SH,MV
 HB,HM,BE
 NI,ST,BB
@@ -110,6 +109,15 @@ NW,HE,TH,SN
 RP,BW,BY
 SL
 `
+
+export const squaremapGermany = `
+  ,  ,  ,SH
+  ,  ,HB,HH,MV
+  ,NW,NI,ST,BB,BE
+SL,RP,HE,TH,SN
+  ,  ,BW,BY
+`
+
 
 export const squaremapNamesGermany = {
     'BW': 'Baden-Württemberg',
