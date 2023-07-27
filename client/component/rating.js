@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeClickable } from "./basics";
+import { BackgroundBar, Clickable, MaybeClickable } from "./basics";
 import { TranslatableText } from "./translation";
 
 
@@ -71,31 +71,31 @@ export function RatingSummary({labelSet, ratingCounts, selection, onChangeSelect
     </View>
 }
 
-function BackgroundBar({count, maxCount}) {
-    const s = BarStyle;
-    return <View style={s.frame}>
-        <View style={[s.filled, {flex: count}]} />
-        <View style={[s.empty, {flex: Math.max(maxCount, 4) - count}]} />
-    </View>
-}
-const BarStyle = StyleSheet.create({
-    frame: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: -1,
-        flexDirection: 'row',
-        borderRadius: 10,
-    },
-    filled: {
-        backgroundColor: '#77C7F6',
-        borderRadius: 4,
-    },
-    empty: {
-    }
-});
+// function BackgroundBar({count, maxCount}) {
+//     const s = BarStyle;
+//     return <View style={s.frame}>
+//         <View style={[s.filled, {flex: count}]} />
+//         <View style={[s.empty, {flex: Math.max(maxCount, 4) - count}]} />
+//     </View>
+// }
+// const BarStyle = StyleSheet.create({
+//     frame: {
+//         position: 'absolute',
+//         left: 0,
+//         top: 0,
+//         right: 0,
+//         bottom: 0,
+//         zIndex: -1,
+//         flexDirection: 'row',
+//         borderRadius: 10,
+//     },
+//     filled: {
+//         backgroundColor: '#77C7F6',
+//         borderRadius: 4,
+//     },
+//     empty: {
+//     }
+// });
 
 function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected, onChangeSelection}) {
     const s = RatingSummaryItemStyle;

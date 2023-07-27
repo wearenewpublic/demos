@@ -74,9 +74,9 @@ const MessageAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function QuietSystemMessage({text}) {
+export function QuietSystemMessage({text, formatParams}) {
     const s = QuietSystemMessageStyle;
-    return <TranslatableText style={s.text} text={text} />
+    return <TranslatableText style={s.text} text={text} formatParams={formatParams} />
 }
 
 const QuietSystemMessageStyle = StyleSheet.create({

@@ -393,3 +393,31 @@ const LoadingScreenStyle = StyleSheet.create({
 export function PluralText({count, singular, plural}) {
     return <Text>{count} <TranslatableText text={count === 1 ? singular : plural}/></Text>
 }
+
+export function BackgroundBar({count, maxCount}) {
+    const s = BarStyle;
+    return <View style={s.frame}>
+        <View style={[s.filled, {flex: count}]} />
+        <View style={[s.empty, {flex: Math.max(maxCount, 4) - count}]} />
+    </View>
+}
+const BarStyle = StyleSheet.create({
+    frame: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: -1,
+        flexDirection: 'row',
+        borderRadius: 10,
+    },
+    filled: {
+        backgroundColor: '#77C7F6',
+        borderRadius: 4,
+    },
+    empty: {
+    }
+});
+
+
