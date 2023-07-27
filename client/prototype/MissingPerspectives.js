@@ -32,8 +32,20 @@ export const MissingPerspectivesPrototype = {
             post: expandDataList(post_starwars)
         },
         {
+            key: 'wars-binary', name: 'Star Wars USA Binary', binary: true,
+            regions: squaremapUsa, regionNames: squaremapNamesUsa,
+            question: 'Which is better. Star Wars or Star Trek?',
+            post: expandDataList(post_starwars)
+        },
+        {
             key: 'wars-canada', name: 'Star Wars Canada (French)', language: languageFrench,
             regions: squaremapCanada, regionNames: squaremapNamesCanadaFrench,
+            question: 'Lequel est meilleur. Star Wars ou Star Trek?',
+            post: expandDataList(post_starwars_canada)
+        },
+        {
+            key: 'wars-canada-binary', name: 'Star Wars Canada Binary (French)', language: languageFrench,
+            regions: squaremapCanada, regionNames: squaremapNamesCanadaFrench, binary: true,
             question: 'Lequel est meilleur. Star Wars ou Star Trek?',
             post: expandDataList(post_starwars_canada)
         },
@@ -44,11 +56,24 @@ export const MissingPerspectivesPrototype = {
             post: expandDataList(post_starwars_france)
         },
         {
+            key: 'wars-france-binary', name: 'Star Wars France Binary (French)', language: languageFrench, binary: true,
+            regions: squaremapFrance, regionNames: squaremapNamesFrance,
+            question: 'Lequel est meilleur. Star Wars ou Star Trek?',
+            post: expandDataList(post_starwars_france)
+        },
+        {
             key: 'wars-germany', name: 'Star Wars (German)', language: languageGerman,
             regions: squaremapGermany, regionNames: squaremapNamesGermany,
             question: 'Was ist besser, Star Wars oder Star Trek?',
             post: expandDataList(post_starwars_german)
         },
+        {
+            key: 'wars-germany-binary', name: 'Star Wars Binary (German)', language: languageGerman, binary: true,
+            regions: squaremapGermany, regionNames: squaremapNamesGermany,
+            question: 'Was ist besser, Star Wars oder Star Trek?',
+            post: expandDataList(post_starwars_german)
+        },
+
 
 
     ]
@@ -59,6 +84,7 @@ function MissingPerspectivesScreen() {
     const question = useGlobalProperty('question');
     const regions = useGlobalProperty('regions');
     const regionNames = useGlobalProperty('regionNames');
+    const binary = useGlobalProperty('binary');
     const personaKey = usePersonaKey();
     const [selection, setSelection] = useState(null);
     const hasAnswered = posts.some(post => post.from == personaKey);
@@ -79,7 +105,7 @@ function MissingPerspectivesScreen() {
         <Card>
             <SectionTitle text='Filter by Region' />
             <Pad/>
-            <SquareMap regions={regions} regionNames={regionNames} posts={posts} selection={selection} onChangeSelection={setSelection} />
+            <SquareMap regions={regions} regionNames={regionNames} posts={posts} selection={selection} onChangeSelection={setSelection} binary={binary} />
         </Card>
 
         {selection ?

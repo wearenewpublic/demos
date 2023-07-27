@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { BackgroundBar, Clickable } from "./basics";
 
-export function SquareMap({regions, regionNames, posts, selection, onChangeSelection}) {
+export function SquareMap({regions, regionNames, posts, selection, binary=false, onChangeSelection}) {
     const s = SquareMapStyle;
     const regionRows = regions.split('\n').filter(x=>x);
     const regionCounts = getRegionCounts(posts);
@@ -9,7 +9,7 @@ export function SquareMap({regions, regionNames, posts, selection, onChangeSelec
 
     return <View style={s.outer}>
         {regionRows.map((row, rowIndex) => 
-            <RegionRow key={rowIndex} row={row} rowIndex={rowIndex} regionCounts={regionCounts} maxCount={maxCount} regionNames={regionNames} selection={selection} onChangeSelection={onChangeSelection} />
+            <RegionRow key={rowIndex} row={row} binary={binary} rowIndex={rowIndex} regionCounts={regionCounts} maxCount={maxCount} regionNames={regionNames} selection={selection} onChangeSelection={onChangeSelection} />
         )}
     </View>
 }
@@ -28,25 +28,35 @@ const SquareMapStyle = StyleSheet.create({
     }
 })
 
-function RegionRow({row, rowIndex, regionNames, regionCounts, maxCount, selection, onChangeSelection}) {
+function RegionRow({row, rowIndex, binary, regionNames, regionCounts, maxCount, selection, onChangeSelection}) {
     const regionKeys = row.split(',');
     return <View style={{flexDirection: 'row'}}>
         {regionKeys.map((regionKey, regionIndex) => 
-            <RegionCell key={regionIndex} regionKey={regionKey} regionNames={regionNames} regionCounts={regionCounts} maxCount={maxCount} selection={selection} onChangeSelection={onChangeSelection} />
+            <RegionCell key={regionIndex} binary={binary} regionKey={regionKey} regionNames={regionNames} regionCounts={regionCounts} maxCount={maxCount} selection={selection} onChangeSelection={onChangeSelection} />
         )}
     </View>
 }
 
-function RegionCell({regionKey, regionNames, regionCounts, maxCount, selection, onChangeSelection}) {
+function RegionCell({regionKey, regionNames, binary, regionCounts, maxCount, selection, onChangeSelection}) {
     const s = RegionCellStyles;
     const selected = selection == regionKey;
+    const count = regionCounts[regionKey];
     if (regionKey.trim() == '') return <View style={s.emptyCell} />
-    return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}> 
-        <View style={[s.cell, selected ? s.selectedCell : null]}>
-            <Text style={s.label}>{regionKey}</Text>
-            <BackgroundBar count={regionCounts[regionKey] ?? 0} maxCount={maxCount} />
-        </View>
-    </Clickable>
+    if (binary) {
+        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}> 
+            <View style={[s.cell, count ? s.activeCell : null, selected ? s.selectedCell : null]}>
+                <Text style={s.label}>{regionKey}</Text>
+                <BackgroundBar count={regionCounts[regionKey] ?? 0} maxCount={maxCount} />
+            </View>
+        </Clickable>
+    } else {
+        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}> 
+            <View style={[s.cell, selected ? s.selectedCell : null]}>
+                <Text style={s.label}>{regionKey}</Text>
+                <BackgroundBar count={count ?? 0} maxCount={maxCount} />
+            </View>
+        </Clickable>
+    }
 }
 
 const RegionCellStyles = StyleSheet.create({
@@ -61,6 +71,9 @@ const RegionCellStyles = StyleSheet.create({
         alignItems: 'center',
         margin: 1
     } ,
+    activeCell: {
+        backgroundColor: '#77C7F6'
+    },
     selectedCell: {
         borderWidth: 3,
         // borderColor: '#77C7F6',
