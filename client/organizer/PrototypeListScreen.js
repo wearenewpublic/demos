@@ -5,6 +5,8 @@ import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from 'react'
 import { NewPublicBodySection, NewPublicName, NewPublicTitle, NewPublicTitleBanner, colorNewPublicBackground } from "../component/newpublic";
+import { WebLink } from "../platform-specific/url";
+import { makePrototypeUrl } from "../util/navigate";
 
 export function PrototypeListScreen({onSelectPrototype}) {
     const s = PrototypeListScreenStyle;
@@ -35,7 +37,8 @@ export function PrototypeListScreen({onSelectPrototype}) {
                         onRemoveTag={onRemoveTag} 
                         onClearStatusFilter={() => setStatusFilter(null)}/>
                 {filteredPrototypes.map(prototype => 
-                    <Clickable key={prototype.name} onPress={() => onSelectPrototype(prototype)}>
+                    <WebLink key={prototype.name} url={makePrototypeUrl(prototype.key)}>
+                    {/* <Clickable key={prototype.name} onPress={() => onSelectPrototype(prototype)}> */}
                         <Card>
                             <View style={s.authorLine}>
                                 <SmallTitle text={prototype.name}/>
@@ -48,7 +51,8 @@ export function PrototypeListScreen({onSelectPrototype}) {
                                 <Status status={prototype.status} onSelectStatus={setStatusFilter} />
                             </View>
                         </Card>
-                    </Clickable>        
+                    </WebLink>
+                    // </Clickable>        
                 )}
                 </Narrow>
             </NewPublicBodySection>

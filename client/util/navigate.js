@@ -33,6 +33,10 @@ export function gotoPrototype(prototypeKey) {
     gotoUrl(makeUrl([prototypeKey]));
 }
 
+export function makePrototypeUrl(prototypeKey) {
+    return makeUrl([prototypeKey]);
+}
+
 export function gotoInstance(prototypeKey, instanceKey) {
     gotoUrl(makeUrl([prototypeKey, instanceKey]));
 }

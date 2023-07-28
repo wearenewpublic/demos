@@ -14,3 +14,7 @@ export function getIsLocalhost() {
 export function setTitle(title) {
     window.document.title = title;
 }
+
+export function WebLink({url, children}) {
+    return <a href={url} style={{textDecoration: 'none'}} target='_blank'>{children}</a>;
+}

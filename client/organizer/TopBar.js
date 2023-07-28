@@ -9,13 +9,15 @@ import { FaceImage, UserFace } from "../component/userface";
 import { Popup } from "../platform-specific/popup";
 import { useDatastore } from "../util/datastore";
 
-export function TopBar({title, subtitle, showPersonas, params}) {
+export function TopBar({title, subtitle, showPersonas, showBack=true, params}) {
     const s = TopBarStyle;
     return <View style={s.topBox}>        
         <View style={s.leftRow}>    
-            <Clickable onPress={() => goBack()}>
-                <Entypo name='chevron-left' size={24} color='#666' />
-            </Clickable>
+            {showBack ? 
+                <Clickable onPress={() => goBack()}>
+                    <Entypo name='chevron-left' size={24} color='#666' />
+                </Clickable>
+            : null}
             <View style={s.titleBox}>
                 <Text numberOfLines={1} style={subtitle ? s.twoLineTitle : s.oneLineTitle}>
                     {typeof(title) == 'string' ?

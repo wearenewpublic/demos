@@ -6,7 +6,7 @@ import { PrototypeInstanceListScreen } from './organizer/PrototypeInstanceListSc
 import { PrototypeListScreen } from './organizer/PrototypeListScreen';
 import { TopBar } from './organizer/TopBar';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import { setTitle } from './platform-specific/url';
+import { getIsLocalhost, setTitle } from './platform-specific/url';
 import { useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
 import { LoginScreen } from './organizer/Login';
@@ -26,10 +26,15 @@ export default function App() {
   }
 
   if (!prototypeKey) {
-    setTitle('New Public Prototype Garden')
+    return <FullScreen>
+      <Text>You need a prototype URL to see a prototype</Text>
+    </FullScreen>
+  } else if (prototypeKey == 'all' && getIsLocalhost()) {
+    setTitle('Prototype Organizer')
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
       <PrototypeListScreen onSelectPrototype={newPrototype => gotoPrototype(newPrototype.key)}/>
     </FullScreen>
+
   } else if (!prototype) {
     return <FullScreen>
       <TopBar title='Unknown Prototype' />
@@ -37,7 +42,7 @@ export default function App() {
     </FullScreen>
   } else if (!instanceKey) {
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
-      <TopBar title={prototype.name} />
+      <TopBar title={prototype.name} showBack={false} />
       <PrototypeInstanceListScreen prototype={prototype} onSelectInstance={onSelectInstance}/>
     </FullScreen>
   } else {
