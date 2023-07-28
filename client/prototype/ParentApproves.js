@@ -39,7 +39,7 @@ export const ParentApproves = {
     tags: [tagConversation, tagModeration],
     status: statusTentative,
     instance: [
-        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'}
+        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'}
     ]
 }
 

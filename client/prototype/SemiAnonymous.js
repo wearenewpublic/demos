@@ -13,6 +13,7 @@ import { useCollection, useObject, usePersonaKey } from "../util/datastore";
 import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
 import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic_french";
 import { civic_society_description_german, civic_society_german } from "../translations/german/openhouse_civic_german";
+import { memberPersonaList } from "../data/personas";
 
 const description = `
 Be anonymous to the public, but not to group members.
@@ -49,15 +50,15 @@ export const SemiAnonymous = {
     description,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
-            '$personaKey': 'guestLarry',
-            persona, comment: expandDataList(civic_society)},
+            personaList: memberPersonaList, '$personaKey': 'e',
+            comment: expandDataList(civic_society)},
         {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
-            '$personaKey': 'guestLarry',
-            persona, comment: expandDataList(civic_society_french)
+            personaList: memberPersonaList, '$personaKey': 'e',
+            comment: expandDataList(civic_society_french)
         },
         {key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
-            '$personaKey': 'guestLarry',
-            persona, comment: expandDataList(civic_society_german)
+            personaList: memberPersonaList, '$personaKey': 'e',
+            comment: expandDataList(civic_society_german)
         },
     ],
     screen: SemiAnonymousScreen    

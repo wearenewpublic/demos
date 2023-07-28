@@ -2,8 +2,6 @@ import { AudioPost, transcribeAudioAsync } from "../component/audio";
 import { BigTitle, Pad, ScrollableScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { statusTentative, tagAudioVideo, tagConversation } from "../data/tags";
-import { angryFrench, boringFrench, peacemakerFrench } from "../translations/french/personas_french";
-import { angryGerman, boringGerman, peacemakerGerman } from "../translations/german/personas_german";
 import { AudioRecorder } from "../platform-specific/audiorecorder";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
@@ -39,42 +37,40 @@ export const AudioResponsePrototype = {
     instance: [
         {key: 'kid-names', name: 'How did you choose the names for your kids?', response: expandDataList([
             {
-                from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
+                from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
                 text: 'One two three four'
             },
             {
-                from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
+                from: 'f', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
                 text: 'My oldest son, we chose the name Isaac, because we wanted a name with the right associations, and we thought, maybe a scientist. And if you are choosing a scientist then Isaac Newton is the obvious person. And we middle-named him after Alexander Graham Bell, so his middle name is Graham.'
             },
         ])},        
         {key: 'bio', name: 'What is the 30 second story of your life?', response: expandDataList([
-            {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', text: 'One two three four'}
+            {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', text: 'One two three four'}
         ])},
         {
             key: 'kid-names-german', 
             language: languageGerman,
-            personaList: [boringGerman, peacemakerGerman, angryGerman],
             name: 'Wie haben Sie die Namen für Ihre Kinder ausgewählt?', response: expandDataList([
             {
-                from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
+                from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
                 text: 'Eins zwei drei vier'
             },
             {
-                from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
+                from: 'f', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
                 text: 'Für meinen ältesten Sohn haben wir den Namen Isaac gewählt, weil wir einen Namen mit den richtigen Assoziationen wollten, und wir dachten, vielleicht ein Wissenschaftler. Und wenn man sich für einen Wissenschaftler entscheidet, dann ist Isaac Newton die naheliegende Person. Und wir haben ihn in der Mitte nach Alexander Graham Bell benannt, sein zweiter Vorname ist also Graham.'
             }
         ])},       
         {   
             key: 'kid-names-french', 
             language: languageFrench,
-            personaList: [boringFrench, peacemakerFrench, angryFrench],
             name: 'Comment avez-vous choisi les prénoms de vos enfants?', response: expandDataList([
             {
-                from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
+                from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm', 
                 text: 'Un deux trois quatre'
             },
             {
-                from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
+                from: 'f', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm',
                 text: "Pour mon fils aîné, nous avons choisi le nom d'Isaac, parce que nous voulions un nom avec les bonnes associations, et nous avons pensé, peut-être, à un scientifique. Et si vous choisissez un scientifique, Isaac Newton est la personne la plus évidente. Et nous lui avons donné le deuxième prénom d'Alexander Graham Bell, donc son deuxième prénom est Graham."
             }
         ])}, 

@@ -12,9 +12,7 @@ import { useCollection, useDatastore, useGlobalProperty } from "../util/datastor
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
 import { languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
-import { personaGuest, personaTrek, personaWars } from "../data/personas";
-import { guestFrench } from "../translations/french/personas_french";
-import { guestGerman } from "../translations/german/personas_german";
+import { memberPersonaList } from "../data/personas";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -46,19 +44,19 @@ export const InnerOuter = {
     instance: [
         {
             key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
-            personaList: [personaTrek, personaWars, personaGuest], 
-            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
+            personaList: memberPersonaList,
+            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'},
         {
             key: 'wars_french', language: languageFrench,
-            personaList: [personaTrek, personaWars, guestFrench],
+            personaList: memberPersonaList,
             conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
-            name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'
+            name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'b'
         },
         {
             key: 'wars_german', language: languageGerman,
-            personaList: [personaTrek, personaWars, guestGerman],
+            personaList: memberPersonaList,
             conclusion: "Star Wars und Star Trek sind beide gute Filme, aber sie erfassen unterschiedliche Aspekte davon, wie die Welt funktioniert.",
-            name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german), '$personaKey': 'wars'
+            name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german), '$personaKey': 'b'
         }
 
     ],

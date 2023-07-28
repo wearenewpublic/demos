@@ -35,7 +35,7 @@ export const ExamplePrototype = {
     tags: [],
     status: statusStartingPoint,
     instance: [
-        {key: 'silly', name: 'Silly', message: 'I love silliness'},
+        {key: 'g', name: 'Silly', message: 'I love silliness'},
         {key: 'sensible', name: 'Sensible', message: 'I love sensibleness'}
     ]
 }

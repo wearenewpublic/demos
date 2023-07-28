@@ -1,99 +1,128 @@
 import { deepClone } from "../util/util";
 
-  
-  export const personaAngry = {
-    key: 'angry',
-    name: 'Angry Alice',
+
+  export const personaA = {
+    key: 'a',
+    name: 'Alice Adams',
     face: 'face9.jpeg'
   };
-  
-  export const personaNew = {
-    key: 'new',
-    name: 'Newbie Natalie',
-    face: 'face4.jpeg'
+
+  export const personaB = {
+    key: 'b',
+    name: 'Bob Bauer',
+    face: 'face10.jpeg'
   };
-  
-  export const personaTimid = {
-    key: 'timid',
-    name: 'Timid Tim',
+
+  export const personaC = {
+    key: 'c',
+    name: 'Camila Costa',
+    face: 'face7.jpeg',
+    member: true
+  };
+
+  export const memberA = {
+    key: 'a',
+    name: 'Alice Adams',
+    face: 'face9.jpeg',
+    member: true,
+    label: 'Member'
+  };
+
+  export const memberB = {
+    key: 'b',
+    name: 'Bob Bauer',
+    face: 'face10.jpeg',
+    member: true,
+    label: 'Member'
+  };
+
+  export const memberC = {
+    key: 'c',
+    name: 'Camila Costa',
+    face: 'face7.jpeg',
+    member: true,
+    label: 'Member'
+  };
+
+  export const personaD = {
+    key: 'd',
+    name: 'Daniel Dubois',
     face: 'face2.jpeg'
   };
-  
-  export const personaPeacemaker = {
-    key: 'peacemaker',
-    name: 'Peacemaker Pete',
+
+  export const personaE = {
+    key: 'e',
+    name: 'Emeka Eze',
+    face: 'face4.jpeg'
+  };
+
+  export const personaF = {
+    key: 'f',
+    name: 'Finn Fischer',
     face: 'face3.jpeg'
   };
-  
-  export const personaLeader = {
-    key: 'leader',
-    name: 'Leader Laura',
+
+  export const personaG = {
+    key: 'g',
+    name: 'Grace Gomes',
+    face: 'face8.jpeg'
+  };
+
+  export const personaH = {
+    key: 'h',
+    name: 'Hiroshi Hasegawa',
+    face: 'face6.jpeg',
+    member: true
+  };
+
+  export const personaIngrid = {
+    key: 'i',
+    name: 'Ingrid Ishida',
     face: 'face5.jpeg',
     admin: true
   };
-  
-  export const personaSilly = {
-    key: 'silly',
-    name: 'Silly Sarah',
-    face: 'face8.jpeg'
-  };
-  
-  export const personaBoring = {
-    key: 'boring',
-    name: 'Boring Bob',
-    face: 'face10.jpeg'
-  };
-  
-  export const personaLeft = {
-    key: 'left',
-    name: 'Lefty Larry',
+
+  export const personaJ = {
+    key: 'j',
+    name: 'Jamal Joubert',
     face: 'face6.jpeg'
   };
-  
-  export const personaRight = {
-    key: 'right',
-    name: 'Righty Rita',
+
+  export const personaK = {
+    key: 'k',
+    name: 'Keita Khan',
     face: 'face7.jpeg'
   };
-  
+
+  export const personaL = {
+    key: 'l',
+    name: 'Larry Leclerc',
+    face: 'face2.jpeg',
+    member: false
+  }
+
   export const personaRobo = {
     key: 'robo',
     name: 'Robot',
     face: 'robo.jpeg'
   };
-  
-  export const personaTrek = {
-    key: 'trek',
-    name: 'Trekkie Trisha',
-    face: 'face7.jpeg',
-    member: true
-  };
-  
-  export const personaWars = {
-    key: 'wars',
-    name: 'Star Wars Simon',
-    face: 'face6.jpeg',
-    member: true
-  };
-
-  export const personaGuest = {
-    key: 'guest',
-    name: 'Guest Garry',
-    face: 'face2.jpeg',
-    member: false
-  }
-  
 
 
-export const defaultPersona = 'angry';
 
-export const defaultPersonaList = [personaAngry, personaNew, personaTimid, personaPeacemaker, personaLeader, 
-    personaSilly, personaBoring, personaLeft, personaRight, personaRobo, personaTrek, personaWars]
+
+
+export const defaultPersona = 'a';
+
+export const defaultPersonaList = [personaA, personaB, personaC, personaD, personaE, personaF, 
+    personaG, personaH, personaIngrid,personaJ, personaK, personaL, personaRobo]
+
+export const memberPersonaList = [memberA, memberB, memberC, personaD, personaE, personaF,
+    personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
 
 
 export function personaListToMap(personas) {
     const result = {};
     personas.forEach(persona => result[persona.key] = deepClone(persona));
     return result;
-}    
+}
 

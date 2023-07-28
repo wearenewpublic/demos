@@ -2,8 +2,6 @@ import { BigTitle, Pad, ScrollableScreen, WideScreen, WrapBox } from "../compone
 import { VideoPlayer, VideoPost } from "../component/video";
 import { authorRobEnnals } from "../data/authors";
 import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
-import { angryFrench, boringFrench, peacemakerFrench } from "../translations/french/personas_french";
-import { angryGerman, boringGerman, peacemakerGerman } from "../translations/german/personas_german";
 import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
@@ -36,24 +34,22 @@ export const VideoResponse = {
     screen: VideoResponseScreen,
     instance: [
         {key: 'kid-names', name: 'How did you choose the names for your kids?', response: expandDataList([
-            {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'},
-            {from: 'peacemaker', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm'}
+            {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'},
+            {from: 'f', uri: 'https://new-public-demo.web.app/videos/Rob_Isaac_name.webm'}
         ])},        
         {key: 'bio', name: 'What is the 30 second story of your life?', response: expandDataList([
-            {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
+            {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
         ])},
         {key: 'bio-german', name: 'Was ist die 30-Sekunden-Geschichte deines Lebens? (German)', 
-            personaList: [boringGerman, peacemakerGerman, angryGerman],
             language: languageGerman,
             response: expandDataList([
-                {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
+                {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
             ]
         )},
         {key: 'bio-french', name: "Quelle est l'histoire de votre vie en 30 secondes? (French)", 
-            personaList: [boringFrench, peacemakerFrench, angryFrench],
             language: languageFrench,
             response: expandDataList([
-                {from: 'boring', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
+                {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
             ]
         )},
     ]

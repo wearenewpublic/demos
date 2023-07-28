@@ -11,6 +11,7 @@ import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKe
 import { languageFrench, languageGerman } from "../component/translation";
 import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic_french";
 import { civic_society_description_german, civic_society_german } from "../translations/german/openhouse_civic_german";
+import { memberPersonaList } from "../data/personas";
 
 const description = `
 Members of a group can talk with non-members, but messages from non-members will appear in a
@@ -35,7 +36,7 @@ const persona = {
     memberLaura: {name: 'Laura', label: 'Member', face: 'face5.jpeg', member: true},
     guestNatalie: {name: 'Natalie', face: 'face4.jpeg'},
     guestTim: {name: 'Tim', face: 'face2.jpeg'},
-    guestLarry: {name: 'Larry', face: 'face6.jpeg'},
+    guestLarry: {name: 'Laura', face: 'face6.jpeg'},
     guestRita: {name: 'Rita', face: 'face7.jpeg'},
     guestSarah: {name: 'Sarah', face: 'face8.jpeg'},
 }
@@ -52,17 +53,20 @@ export const OpenHousePrototype = {
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
             description: civic_society_description,
-            persona, comment: expandDataList(civic_society)
+            personaList: memberPersonaList,
+            comment: expandDataList(civic_society)
         },
         {
             key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
             description: civic_society_description_french,
-            persona, comment: expandDataList(civic_society_french)
+            personaList: memberPersonaList,
+            comment: expandDataList(civic_society_french)
         },
         {
             key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
             description: civic_society_description_german,
-            persona, comment: expandDataList(civic_society_german)
+            personaList: memberPersonaList,
+            comment: expandDataList(civic_society_german)
         },
     ]
 }

@@ -1,7 +1,7 @@
 
 export const cat_club_french = [
     {
-        "from": "timid",
+        "from": 'd',
         "text": "Moi aussi. Mon chat s'appelle Tiddles.",
         "replyTo": 175,
         "key": 196,
@@ -15,7 +15,7 @@ export const cat_club_french = [
         "time": 1685141071260
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "J'aime donner de la laitue à mon chat.",
         "replyTo": 175,
         "pending": false,
@@ -24,14 +24,14 @@ export const cat_club_french = [
         "maybeBad": true
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "J'adore les chats. Mon chat s'appelle Fluffy.",
         "pending": false,
         "key": 175,
         "time": 1685140951260
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "Vous devez voir ça : https://www.womansday.com/life/g32979681/cute-cat-photos/",
         "pending": false,
         "key": 193,

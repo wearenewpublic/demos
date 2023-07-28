@@ -38,10 +38,10 @@ export const godzilla_questions_french = [
 ]
 
 export const godzilla_comments_french = [
-    {replyTo: 'you', from: 'angry', text: "J'étais là et j'ai vu le lézard. Il a marché sur l'arrière de ma voiture alors que j'étais assis sur le siège avant. Ça m'aurait tué s'il avait avancé de quelques mètres. J'ai eu la chance de m'en sortir avec ma vie."},
-    {replyTo: 'you', from: 'timid', text: "Je l'ai regardé de la fenêtre de mon appartement. J'étais terrifié à l'idée que cela fasse basculer mon immeuble"},
-    {replyTo: 'deal', from: 'angry', text: 'Nous devrions le tuer avec des armes nucléaires. Cela pourrait détruire la ville, mais il est plus important de tuer le lézard que de nous sauver nous-mêmes.'},
-    {replyTo: 'deal', from: 'timid', text: "Nous devrions essayer de le capturer et de le placer dans un zoo. C'est une créature rare et précieuse."},
-    {replyTo: 'prevent', from: 'angry', text: "Nous devrions construire un mur géant autour de la ville pour empêcher les monstres d'entrer."},
-    {replyTo: 'future', from: 'boring', text: "Je pense que cela était un événement isolé. Je ne pense pas que nous devrions nous inquiéter des attaques futures. Je me base sur le fait qu'il n'y a pas eu d'autres attaques de monstres géants au cours des 50 dernières années.\n\nEn fait, je pense que nous pourrions simplement nous imaginer celle-ci."},
+    {replyTo: 'you', from: 'a', text: "J'étais là et j'ai vu le lézard. Il a marché sur l'arrière de ma voiture alors que j'étais assis sur le siège avant. Ça m'aurait tué s'il avait avancé de quelques mètres. J'ai eu la chance de m'en sortir avec ma vie."},
+    {replyTo: 'you', from: 'd', text: "Je l'ai regardé de la fenêtre de mon appartement. J'étais terrifié à l'idée que cela fasse basculer mon immeuble"},
+    {replyTo: 'deal', from: 'a', text: 'Nous devrions le tuer avec des armes nucléaires. Cela pourrait détruire la ville, mais il est plus important de tuer le lézard que de nous sauver nous-mêmes.'},
+    {replyTo: 'deal', from: 'd', text: "Nous devrions essayer de le capturer et de le placer dans un zoo. C'est une créature rare et précieuse."},
+    {replyTo: 'prevent', from: 'a', text: "Nous devrions construire un mur géant autour de la ville pour empêcher les monstres d'entrer."},
+    {replyTo: 'future', from: 'b', text: "Je pense que cela était un événement isolé. Je ne pense pas que nous devrions nous inquiéter des attaques futures. Je me base sur le fait qu'il n'y a pas eu d'autres attaques de monstres géants au cours des 50 dernières années.\n\nEn fait, je pense que nous pourrions simplement nous imaginer celle-ci."},
 ]

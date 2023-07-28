@@ -1,6 +1,6 @@
 export const cat_club_german = [
     {
-        "from": "timid",
+        "from": 'd',
         "text": "Ich auch. Meine Katze heißt Tiddles.",
         "replyTo": 175,
         "key": 196,
@@ -14,7 +14,7 @@ export const cat_club_german = [
         "time": 1685141071260
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "Ich füttere meine Katze gern mit Salat.",
         "replyTo": 175,
         "pending": false,
@@ -23,14 +23,14 @@ export const cat_club_german = [
         "maybeBad": true
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "Ich liebe Katzen. Meine Katze heißt Fluffy.",
         "pending": false,
         "key": 175,
         "time": 1685140951260
     },
     {
-        "from": "angry",
+        "from": 'a',
         "text": "Das müssen Sie sehen: https://www.womansday.com/life/g32979681/cute-cat-photos/",
         "pending": false,
         "key": 193,

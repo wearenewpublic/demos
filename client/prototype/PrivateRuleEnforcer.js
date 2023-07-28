@@ -127,7 +127,7 @@ function BlingForced({comment}) {
 function getIsVisible({datastore, comment}) {
     const personaKey = datastore.getPersonaKey();
     if (comment.maybeBad || comment.pending) {
-        return (comment.from == personaKey || personaKey == 'leader') 
+        return (comment.from == personaKey || personaKey == 'i') 
     } else {
         return true;
     }

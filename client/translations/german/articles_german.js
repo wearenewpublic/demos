@@ -37,10 +37,10 @@ export const godzilla_questions_german = [
 ]
 
 export const godzilla_comments_german = [
-    {replyTo: 'you', from: 'angry', text: 'I was there and saw the lizard. It stepped on the back of my car while I was sitting in the front seat. Would have killed me if it had stepped a few feet further forward. I was lucky to escape with my life.'},
-    {replyTo: 'you', from: 'timid', text: 'I watched it from the window of my apartment. I was terrified that it was going to push my building over'},
-    {replyTo: 'deal', from: 'angry', text: 'Wir sollten sie mit Atomwaffen töten. Es könnte die Stadt zerstören, aber es ist wichtiger, die Echse zu töten, als uns selbst zu retten.'},
-    {replyTo: 'deal', from: 'timid', text: 'Wir sollten versuchen, ihn zu fangen und in einen Zoo zu bringen. Es ist eine seltene und wertvolle Kreatur.'},
-    {replyTo: 'prevent', from: 'angry', text: 'We should build a giant wall around the city to keep the monsters out.'},
-    {replyTo: 'future', from: 'boring', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
+    {replyTo: 'you', from: 'a', text: 'I was there and saw the lizard. It stepped on the back of my car while I was sitting in the front seat. Would have killed me if it had stepped a few feet further forward. I was lucky to escape with my life.'},
+    {replyTo: 'you', from: 'd', text: 'I watched it from the window of my apartment. I was terrified that it was going to push my building over'},
+    {replyTo: 'deal', from: 'a', text: 'Wir sollten sie mit Atomwaffen töten. Es könnte die Stadt zerstören, aber es ist wichtiger, die Echse zu töten, als uns selbst zu retten.'},
+    {replyTo: 'deal', from: 'd', text: 'Wir sollten versuchen, ihn zu fangen und in einen Zoo zu bringen. Es ist eine seltene und wertvolle Kreatur.'},
+    {replyTo: 'prevent', from: 'a', text: 'We should build a giant wall around the city to keep the monsters out.'},
+    {replyTo: 'future', from: 'b', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
 ]

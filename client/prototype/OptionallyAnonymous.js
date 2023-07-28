@@ -37,9 +37,9 @@ export const OptionallyAnonymous = {
     description,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
-        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'wars'},
-        {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language: languageFrench, comment: expandDataList(trek_vs_wars_french), '$personaKey': 'wars'},
-        {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language: languageGerman, comment: expandDataList(trek_vs_wars_german), '$personaKey': 'wars'},
+        {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'},
+        {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language: languageFrench, comment: expandDataList(trek_vs_wars_french), '$personaKey': 'b'},
+        {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language: languageGerman, comment: expandDataList(trek_vs_wars_german), '$personaKey': 'b'},
     ],
     screen: OptionallyAnonymousScreen    
 }

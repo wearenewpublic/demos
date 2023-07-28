@@ -64,7 +64,7 @@ export const RuleEnforcerChatPrototype = {
     status: statusTentative,
     screen: RuleEnforcerChatScreen,
     instance: [
-        {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},
+        {key: 'b', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules},
         {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language:languageGerman, message: expandDataList(trek_vs_wars_german), rules: initialRules_german},
         {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language:languageFrench, message: expandDataList(trek_vs_wars_french), rules: initialRules_french},
