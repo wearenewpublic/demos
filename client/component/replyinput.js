@@ -34,7 +34,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     }
 
     if (!personaKey) {
-        return <LoginToComment />
+        return <View style={{marginTop: topPad ? 16 : 0}}><LoginToComment /></View>
     }
 
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
@@ -120,5 +120,5 @@ export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}
 
 
 function LoginToComment() {
-    return <PrimaryButton onPress={gotoLogin} label='Login to comment' />
+    return <PrimaryButton onPress={gotoLogin} label='Log in to comment' />
 }

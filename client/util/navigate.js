@@ -1,4 +1,4 @@
-import { gotoUrl } from "../organizer/url";
+import { gotoUrl, replaceUrl } from "../organizer/url";
 import { stripSuffix } from "./util";
 
 
@@ -37,8 +37,13 @@ export function makePrototypeUrl(prototypeKey) {
     return makeUrl([prototypeKey]);
 }
 
-export function gotoInstance(prototypeKey, instanceKey) {
+export function gotoInstance({prototypeKey, instanceKey}) {
+    console.log('gotoInstance', prototypeKey, instanceKey);
     gotoUrl(makeUrl([prototypeKey, instanceKey]));
+}
+
+export function replaceInstance({prototypeKey, instanceKey}) {
+    replaceUrl(makeUrl([prototypeKey, instanceKey]));
 }
 
 

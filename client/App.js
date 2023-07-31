@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useTransition } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { prototypes } from './prototype';
 import { PrototypeContext } from './organizer/PrototypeContext';
@@ -10,7 +10,9 @@ import { getIsLocalhost, setTitle } from './platform-specific/url';
 import { useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
 import { LoginScreen } from './organizer/Login';
-import { Datastore } from './util/datastore';
+import { Datastore, useGlobalProperty } from './util/datastore';
+import { NewLiveInstanceScreen } from './organizer/NewLiveInstance';
+import { ScreenTitleText } from './component/basics';
 
 
 export default function App() {
@@ -22,7 +24,7 @@ export default function App() {
   });
 
   function onSelectInstance(newInstanceKey) {
-    gotoInstance(prototypeKey, newInstanceKey);
+    gotoInstance({prototypeKey, instanceKey: newInstanceKey});
   }
 
   if (!prototypeKey) {
@@ -34,7 +36,6 @@ export default function App() {
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
       <PrototypeListScreen onSelectPrototype={newPrototype => gotoPrototype(newPrototype.key)}/>
     </FullScreen>
-
   } else if (!prototype) {
     return <FullScreen>
       <TopBar title='Unknown Prototype' />
@@ -44,6 +45,11 @@ export default function App() {
     return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
       <TopBar title={prototype.name} showBack={false} />
       <PrototypeInstanceListScreen prototype={prototype} onSelectInstance={onSelectInstance}/>
+    </FullScreen>
+  } else if (instanceKey == 'new') {
+    return <FullScreen backgroundColor='hsl(218, 100%, 96%)'>
+      <TopBar title='New Live Instance' subtitle={prototype.name} />
+      <NewLiveInstanceScreen prototype={prototype} />
     </FullScreen>
   } else {
     return <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
@@ -105,6 +111,7 @@ function getScreen({prototype, screenKey}) {
 }
 
 function getScreenTitle({prototype, instance, screenKey, params}) {
+  const name = useGlobalProperty('name');
   if (screenKey) {
     const title = prototype.subscreens?.[screenKey]?.title;
     if (typeof(title) == 'string') {
@@ -113,12 +120,11 @@ function getScreenTitle({prototype, instance, screenKey, params}) {
       return React.createElement(prototype.subscreens?.[screenKey]?.title, params);
     }
   } else if (instance) {
-    return instance.name;
+    return name;
   } else {
     return prototype.name
   }
 }
-
 
 function FullScreen({children, zIndex=0, backgroundColor='white'}) {
   return <View style={[AppStyle.fullScreen, {zIndex, backgroundColor}]}>{children}</View>

@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
-import { firebaseNewKey, firebaseWatchValue, firebaseWrite, getFirebaseUser, onFbUserChanged } from './firebase';
+import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
 import { Text } from 'react-native';
 import { LoadingScreen } from '../component/basics';
@@ -55,6 +55,7 @@ export class Datastore extends React.Component {
             this.fbDataWatchReleaser && this.fbDataWatchReleaser();
             this.fbDataWatchReleaser = firebaseWatchValue(['prototype', prototypeKey, 'instance', instanceKey], data => {
                 this.dataTree = {...this.dataTree, ...data?.collection, ...data?.global};
+                console.log('datatree', this.dataTree);
                 this.notifyWatchers();
                 this.setState({loaded: true})
             });
@@ -92,7 +93,7 @@ export class Datastore extends React.Component {
         this.notifyWatchers();
 
         if (isLive) {
-            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], value);
+            firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], value);
         }
     }
     addObject(typeName, value) {
@@ -103,7 +104,7 @@ export class Datastore extends React.Component {
         const objectData = {key, from: personaKey, time: Date.now(), ...value};
         this.setObject(typeName, key, objectData);
         if (isLive) {
-            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], objectData);
+            firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], objectData);
         }
         return key;
     }
@@ -137,7 +138,7 @@ export class Datastore extends React.Component {
         this.dataTree = {...this.dataTree, [key]: value};
         this.notifyWatchers();
         if (isLive) {
-            firebaseWrite(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
+            firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
         }
 
     }

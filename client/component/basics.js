@@ -249,6 +249,45 @@ export function AutoSizeTextInput({value, onChange, placeholder, style, ...props
 }
 
 
+export function OneLineTextInput({value, onChange, placeholder, ...props}) {
+    const s = OneLineTextInputStyle;
+    return <TextInput value={value} style={s.textInput} placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
+}
+
+const OneLineTextInputStyle = StyleSheet.create({
+    textInput: {
+        flexShrink: 0,
+        maxWidth: 500,
+        marginLeft: 4, marginRight: 4,
+        borderRadius: 8, 
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: '#ddd', padding: 8,
+        marginHorizontal: 8,
+        fontSize: 15, lineHeight: 20,
+    },
+})
+
+export function FormField({label, children}) {
+    const s = FormFieldStyle;
+    return <View style={s.outer}>
+        <TranslatableLabel label={label} style={s.label}/>
+        {children}
+    </View>
+}
+const FormFieldStyle = StyleSheet.create({
+    outer: {
+        marginBottom: 8
+    },
+    label: {
+        marginLeft: 12,
+        fontWeight: 'bold',
+        fontSize: 12,
+        marginBottom: 2
+    }
+}) 
+
+
+
 export function EditableText({value, label, action='Update', height=150, placeholder, onChange, multiline=true, flatTop=false, flatBottom=false}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);

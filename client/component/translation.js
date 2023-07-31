@@ -35,6 +35,7 @@ export function useLanguage() {
 export function useTranslation(label, formatParams) {
     const {instance} = useContext(PrototypeContext);
     const language = instance?.language;
+    if (label == null) return null;
     return translateLabel({label, language, formatParams});
 }
 

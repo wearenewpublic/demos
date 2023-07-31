@@ -51,9 +51,9 @@ export function firebaseNewKey() {
 	return push(ref(database)).key;
 }
 
-export function firebaseWrite(pathList, data) {
+export function firebaseWriteAsync(pathList, data) {
     const pathString = makeFirebasePath(pathList);
-    set(ref(database, pathString), data);
+    return set(ref(database, pathString), data);
 }
 
 export function firebaseWatchValue(pathList, callback) {

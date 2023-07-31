@@ -93,3 +93,17 @@ export function toTitleCase(text) {
     return titleCaseText.join(' ');
   }
   
+  export function generateRandomKey(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const randomArray = new Uint32Array(length);
+    window.crypto.getRandomValues(randomArray);
+  
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = randomArray[i] % characters.length;
+      result += characters.charAt(randomIndex);
+    }
+  
+    return result;
+  }
+  

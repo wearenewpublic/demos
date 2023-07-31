@@ -33,7 +33,8 @@ export const ThreadedCommentsPrototype = {
     ],
     liveInstance: [
         {key: 'live', name: 'Live Conversation', comment: {}}
-    ]    
+    ],
+    newInstanceParams: []    
 }
 
 export function ThreadedScreen() {
