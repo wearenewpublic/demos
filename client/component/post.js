@@ -1,14 +1,14 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeCard, Pad, PluralText, Separator, TimeText } from "./basics";
+import { Clickable, MaybeCard, Pad, PluralLabel, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { UserFace } from "./userface";
-import { TranslatableText } from "./translation";
+import { TranslatableLabel } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { pushSubscreen } from "../util/navigate";
 import { addKey, removeKey } from "../util/util";
 import { AutoSizeTextInput } from "./basics";
-import { SectionTitle } from "./basics";
+import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
@@ -101,7 +101,7 @@ export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noC
     }
 
     return <MaybeCard fitted={fitted} isCard={!noCard}>
-        <SectionTitle text='Editing Post' />
+        <SectionTitleLabel label='Editing Post' />
 
         <View>
             {editWidgets.map((Widget, i) => <View key={i} style={{marginBottom: 8}}>
@@ -112,8 +112,8 @@ export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noC
         <AutoSizeTextInput style={s.textInput} value={post.text} onChange={text => setPost({...post, text})} />
 
         <View style={s.actions}>
-            <PrimaryButton onPress={onSave} text='Save Changes' />
-            <SecondaryButton onPress={onCancel} text='Cancel' />
+            <PrimaryButton onPress={onSave} label='Save Changes' />
+            <SecondaryButton onPress={onCancel} label='Cancel' />
         </View>
     </MaybeCard>
 }
@@ -149,7 +149,7 @@ export function PostCommentsPreview({post, onPress}) {
             <CommentPreview comment={shownComment} />
         : null}
         {commentCount > 1 ?
-            <Text style={s.moreText}>View <PluralText count={commentCount} singular='more comment' plural='more comments' /></Text>
+            <Text style={s.moreText}>View <PluralLabel count={commentCount} singular='more comment' plural='more comments' /></Text>
         : null}
     </Clickable>
 }
@@ -205,7 +205,7 @@ export function PostActionButton({iconName, iconSet, label, formatParams, onPres
             {iconSet ?
                 React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
             : null}   
-            <TranslatableText style={s.actionLabel} text={label} formatParams={formatParams} />
+            <TranslatableLabel style={s.actionLabel} label={label} formatParams={formatParams} />
         </View>
     </Clickable>
 }
@@ -275,7 +275,7 @@ export function LikesLine({post}) {
     if (!post.likes) return null;
     const likeCount = Object.keys(post.likes).length;
     if (likeCount == 0) return null;
-    return <Text style={s.text}><PluralText count={likeCount} singular='person' plural='people'/> <TranslatableText text='liked this'/> </Text>
+    return <Text style={s.text}><PluralLabel count={likeCount} singular='person' plural='people'/> <TranslatableLabel label='liked this'/> </Text>
 }
 
 const LikeLineStyle = StyleSheet.create({

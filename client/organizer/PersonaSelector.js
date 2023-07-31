@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { PopupSelector } from "../platform-specific/popup";
 import { UserFace } from "../component/userface";
 import { useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
-import { translateText, useLanguage } from "../component/translation";
+import { translateLabel, useLanguage } from "../component/translation";
 
 export function PersonaSelector() {
     const s = PersonaSelectorStyle;
@@ -31,7 +31,7 @@ const PersonaSelectorStyle = StyleSheet.create({
 function getPersonaName({language, personas, personaKey}) {
     const persona = personas[personaKey];
     if (persona.label) {
-        const tLabel = translateText({text: persona.label, language});
+        const tLabel = translateLabel({label: persona.label, language});
         return persona.name + ' (' + tLabel + ')';
     } else {
         return persona.name;

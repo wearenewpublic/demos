@@ -14,17 +14,17 @@ const ui_translations_for_language = {
     french: ui_translations_french
 }
 
-export function translateText({text, language, formatParams}) {
+export function translateLabel({label, language, formatParams}) {
     const translations = ui_translations_for_language[language];
-    var translatedText = translations ? translations[text] : text;
+    var translatedText = translations ? translations[label] : label;
 
     if (!translatedText && language != languageEnglish && language) {
-        console.log('No translation for ' + text + ' in ' + language);
+        console.log('No translation for ' + label + ' in ' + language);
     }
     if (formatParams) {
-        translatedText = formatString(translatedText || text, formatParams);
+        translatedText = formatString(translatedText || label, formatParams);
     }
-    return translatedText || text;
+    return translatedText || label;
 }
 
 export function useLanguage() {
@@ -32,15 +32,21 @@ export function useLanguage() {
     return instance?.language;
 }
 
-export function useTranslation(text, formatParams) {
+export function useTranslation(label, formatParams) {
     const {instance} = useContext(PrototypeContext);
     const language = instance?.language;
-    return translateText({text, language, formatParams});
+    return translateLabel({label, language, formatParams});
 }
 
-export function TranslatableText({text, formatParams, style, ...props}) {
-    const translatedText = useTranslation(text, formatParams);
-    return <Text style={style} {...props}>{translatedText || text}</Text>
+export function TranslatableLabel({label, formatParams, style, ...props}) {
+    try {
+        const translatedLabel = useTranslation(label, formatParams);
+        return <Text style={style} {...props}>{translatedLabel || label}</Text>
+    } catch (e) {
+        console.log('Error translating ' + label, e);
+        throw Error('Error translating ' + label + ': ' + e);
+        // return <Text style={style} {...props}>{label}</Text>
+    }
 }
 
 

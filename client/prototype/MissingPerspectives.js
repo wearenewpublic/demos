@@ -4,7 +4,7 @@ import { post_starwars } from "../data/posts";
 import { statusTentative } from "../data/tags";
 import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { expandDataList } from "../util/util";
-import { BigTitle, Card, Pad, Pill, ScrollableScreen, SectionTitle } from "../component/basics";
+import { BigTitle, Card, Pad, Pill, ScrollableScreen, SectionTitleLabel } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
 import { PostInput } from "../component/replyinput";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
@@ -97,19 +97,19 @@ function MissingPerspectivesScreen() {
     return <ScrollableScreen grey>
         <BigTitle>{question}</BigTitle>
         {hasAnswered ? 
-            <QuietSystemMessage text='You have already written an opinion' />
+            <QuietSystemMessage label='You have already written an opinion' />
         :
             <PostInput placeholder="What's your opinion?"  topWidgets={[EditRegion]} />
         }
 
         <Card>
-            <SectionTitle text='Filter by Region' />
+            <SectionTitleLabel label='Filter by Region' />
             <Pad/>
             <SquareMap regions={regions} regionNames={regionNames} posts={posts} selection={selection} onChangeSelection={setSelection} binary={binary} />
         </Card>
 
         {selection ?
-            <QuietSystemMessage text='Showing only posts from {regionName}' formatParams={{regionName: regionNames[selection]}} />
+            <QuietSystemMessage label='Showing only posts from {regionName}' formatParams={{regionName: regionNames[selection]}} />
         :null}
 
         {shownPosts.map(post => 

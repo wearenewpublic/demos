@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
 import { Separator } from "./basics";
-import { TranslatableText } from "./translation";
+import { TranslatableLabel } from "./translation";
 
 export function Article({article, embed=null, children}) {
     const s = ArticleStyle;
@@ -26,7 +26,7 @@ export function Article({article, embed=null, children}) {
                 <Image style={s.authorFace}
                     source={{uri: fileHostDomain + '/faces/' + article.authorFace}} />
                 <View>
-                    <Text style={s.authorName}><TranslatableText text='By'/> {article.author}</Text>
+                    <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author}</Text>
                     <Text style={s.date}>{article.date}</Text>
                 </View>
             </View>

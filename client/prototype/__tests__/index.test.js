@@ -12,6 +12,7 @@ jest.mock('../../util/firebase');
 test('All prototype instances render correctly', async () => {
     await forEachAsync(prototypes, async prototype => {
         await forEachAsync(prototype.instance || [], async instance => {
+            // console.log('Rendering ' + prototype.name + ' ' + instance.name);
             await renderPrototypeInstanceAsync({prototype, instance});
         });
     });

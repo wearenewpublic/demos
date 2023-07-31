@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { BigTitle, Card, ScrollableScreen, SectionTitle } from "../component/basics";
+import { BigTitle, Card, ScrollableScreen, SectionTitleLabel } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
 import { RatingSummary, RatingWithLabel, SpectrumRating } from "../component/rating";
 import { PostInput } from "../component/replyinput";
-import { TranslatableText } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
 import { post_starwars } from "../data/posts";
 import { statusTentative } from "../data/tags";
@@ -49,18 +48,18 @@ function CommentSliderScreen() {
     return <ScrollableScreen grey>
         <BigTitle>{question}</BigTitle>
         {hasAnswered ? 
-            <QuietSystemMessage text='You have already written an opinion' />
+            <QuietSystemMessage label='You have already written an opinion' />
         :
             <PostInput placeholder="What's your opinion?" topWidgets={[EditRating]} />
         }
 
         <Card>
-            <SectionTitle text='Filter by Opinion' />
+            <SectionTitleLabel label='Filter by Opinion' />
             <RatingSummary labelSet={ratingLabels} ratingCounts={ratingCounts} selection={selection} onChangeSelection={setSelection} />
         </Card>
 
         {selection ?
-            <QuietSystemMessage text='Showing only posts with selected opinion'/>
+            <QuietSystemMessage label='Showing only posts with selected opinion'/>
         :null}
 
         {shownPosts.map(post => 

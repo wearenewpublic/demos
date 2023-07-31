@@ -109,11 +109,11 @@ function SimulatedChatScreen() {
             </ExpandSection>
             {started ? null :
                 <Center pad={8}>    
-                    <PrimaryButton onPress={onGenerate} text='Generate Simulated Conversation' />
+                    <PrimaryButton onPress={onGenerate} label='Generate Simulated Conversation' />
                 </Center>
             }
             {inProgress ?
-                <QuietSystemMessage text='Generating (this may take over a minute)...'/>
+                <QuietSystemMessage label='Generating (this may take over a minute)...'/>
             : null}
             <BottomScroller>
                 <Pad size={8} />

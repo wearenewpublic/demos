@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import { BigTitle, BodyText, Card, Center, Clickable, Narrow, Pill, PreviewText, ScrollableScreen, Separator, SmallTitle, TimeText } from "../component/basics"
+import { BigTitle, BodyText, Card, Center, Clickable, Narrow, Pill, PreviewText, ScrollableScreen, Separator, SmallTitleLabel, TimeText } from "../component/basics"
 import { prototypes } from "../prototype"
 import { tagHues } from "../data/tags";
 import { Entypo } from "@expo/vector-icons";
@@ -41,7 +41,7 @@ export function PrototypeListScreen({onSelectPrototype}) {
                     {/* <Clickable key={prototype.name} onPress={() => onSelectPrototype(prototype)}> */}
                         <Card>
                             <View style={s.authorLine}>
-                                <SmallTitle text={prototype.name}/>
+                                <SmallTitleLabel label={prototype.name}/>
                                 <TimeText time={prototype.date} />
                             </View>
                             {/* <AuthorLine author={prototype.author} date={prototype.date} /> */}

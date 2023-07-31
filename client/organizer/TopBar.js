@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
 import { Entypo } from "@expo/vector-icons";
-import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, SmallTitle } from "../component/basics";
+import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, SmallTitleLabel } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
 import { goBack, gotoPrototype, pushSubscreen } from "../util/navigate";
 import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
@@ -89,7 +89,7 @@ function UserInfo() {
             </HorizBox>
             <Pad/>
             <Center>   
-                <PrimaryButton onPress={firebaseSignOut} text='Sign Out' />
+                <PrimaryButton onPress={firebaseSignOut} label='Sign Out' />
             </Center>
         </View>
     }
@@ -101,7 +101,7 @@ function UserInfo() {
             </PadBox>
         </Popup>
     } else {        
-        return <SecondaryButton onPress={() => pushSubscreen('login')} text='Log In' />
+        return <SecondaryButton onPress={() => pushSubscreen('login')} label='Log In' />
     }
 }
 

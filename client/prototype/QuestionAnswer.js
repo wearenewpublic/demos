@@ -52,7 +52,7 @@ export function QuestionAnswerScreen() {
             <BigTitle>{question}</BigTitle>
         {/* </Card> */}
         {hasAnswered ? 
-            <QuietSystemMessage text='You have already answered this question' />
+            <QuietSystemMessage label='You have already answered this question' />
         :
             <PostInput placeholder="What's your answer?" />
         }

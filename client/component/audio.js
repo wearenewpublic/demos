@@ -6,7 +6,7 @@ import { Audio } from 'expo-av';
 import { callServerMultipartApiAsync } from '../util/servercall';
 import { UserFace } from './userface';
 import { useObject } from '../util/datastore';
-import { TranslatableText } from './translation';
+import { TranslatableLabel } from './translation';
 import { Post } from './post';
 
 
@@ -49,7 +49,7 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
                 <View style={s.outer}>
                     <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={24} color='#666' />
                 </View>
-                <TranslatableText style={s.label} text={label}/>
+                <TranslatableLabel style={s.label} label={label}/>
             </View>
         </Clickable>
         

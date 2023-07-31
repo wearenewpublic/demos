@@ -1,5 +1,5 @@
 import { ScrollView } from "react-native";
-import { BodyText, EditableText, Pad, SectionTitle, WideScreen } from "../component/basics";
+import { BodyText, EditableText, Pad, SectionTitleLabel, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
 import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
@@ -79,7 +79,7 @@ function InnerOuterScreen() {
         <WideScreen pad>
             <ScrollView>
                 <Pad size={12}/>
-                <SectionTitle text='Public Conclusion'/>
+                <SectionTitleLabel label='Public Conclusion'/>
                 <Pad size={4}/>
                 <EditableText 
                         value={conclusion} 
@@ -88,7 +88,7 @@ function InnerOuterScreen() {
                 />                
                 <Pad size={24}/>
 
-                <SectionTitle text='Private Conversation'/>
+                <SectionTitleLabel label='Private Conversation'/>
 
                 <TopCommentInput />
                 <CommentContext.Provider value={commentConfig}> 
@@ -98,7 +98,7 @@ function InnerOuterScreen() {
                 </CommentContext.Provider>
 
                 <Pad size={24}/>
-                <QuietSystemMessage text='Non-members can only see messages they posted, or replies to their messages.'/>
+                <QuietSystemMessage label='Non-members can only see messages they posted, or replies to their messages.'/>
             </ScrollView>
         </WideScreen>
     )

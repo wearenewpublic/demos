@@ -20,7 +20,7 @@ export function VideoCamera({size=200, action='Record Video', onSubmitRecording}
         return <PrimaryButton 
             onPress={() => setCameraShown(true)}
             icon={<Entypo name='video-camera' size={24} color='white' />}
-            text={action}/>
+            label={action}/>
     }
 }
 
@@ -110,11 +110,11 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
                 (recording ?
                     <PrimaryButton
                         icon={<Entypo name='controller-stop' size={24} color='white' />} 
-                        onPress={stopRecording} text='Stop Recording' />
+                        onPress={stopRecording} label='Stop Recording' />
                 :
                    <PrimaryButton 
                         icon={<Entypo name='controller-record' size={24} color='white' />} 
-                        onPress={startRecording} text='Start Recording' />
+                        onPress={startRecording} label='Start Recording' />
                 )
             : 
                 <div>Initializing Camera...</div>

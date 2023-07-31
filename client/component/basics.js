@@ -6,7 +6,7 @@ import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 import { setTitle } from "../platform-specific/url";
-import { TranslatableText, translateText, useLanguage } from "./translation";
+import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
 
 
 export function ScrollableScreen({children, grey, maxWidth=500}) {
@@ -82,14 +82,14 @@ export function BigTitle({children, pad=true}) {
     return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
-export function SmallTitle({text, formatParams}) {
-    return <TranslatableText style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
-        text={text} formatParams={formatParams} />
+export function SmallTitleLabel({label, formatParams}) {
+    return <TranslatableLabel style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
+        label={label} formatParams={formatParams} />
 }
 
-export function SectionTitle({text, formatParams}) {
-    return <TranslatableText style={{fontSize: 15, fontWeight: 'bold', marginBottom: 8}} 
-        text={text} formatParams={formatParams} />
+export function SectionTitleLabel({label, formatParams}) {
+    return <TranslatableLabel style={{fontSize: 15, fontWeight: 'bold', marginBottom: 8}} 
+        label={label} formatParams={formatParams} />
 }
 
 export function BodyText({children}) {
@@ -129,16 +129,16 @@ function formatDate(date, language = 'english') {
     const diffInSeconds = Math.floor((currentDate - inputDate) / 1000);
 
     if (diffInSeconds < 60) {
-        return translateText({text: 'Just now', language});
+        return translateLabel({label: 'Just now', language});
     } else if (diffInSeconds < 3600) {
         const minutes = Math.floor(diffInSeconds / 60);
-        return translateText({text: '{minutes}m ago', language, formatParams:{minutes}});
+        return translateLabel({label: '{minutes}m ago', language, formatParams:{minutes}});
     } else if (diffInSeconds < 86400) {
         const hours = Math.floor(diffInSeconds / 3600);
-        return translateText({text: '{hours}h ago', language, formatParams:{hours}});
+        return translateLabel({label: '{hours}h ago', language, formatParams:{hours}});
     } else if (diffInSeconds < 2592000) {
         const days = Math.floor(diffInSeconds / 86400);
-        return translateText({text: '{days}d ago', language, formatParams:{days}});
+        return translateLabel({label: '{days}d ago', language, formatParams:{days}});
     } else {
         const formattedDate = inputDate.toLocaleDateString('en-US', {
         month: 'short',
@@ -206,19 +206,19 @@ export function PadBox({children, horiz=8, vert=8}) {
     return <View style={{paddingHorizontal: horiz, paddingVertical: vert}}>{children}</View>
 }
 
-export function PrimaryButton({text, icon, onPress}) {
+export function PrimaryButton({label, icon, onPress}) {
     return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
             {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
-            <TranslatableText style={{color: 'white'}} text={text} />
+            <TranslatableLabel style={{color: 'white'}} label={label} />
         </View>
     </Clickable>
 }
 
-export function SecondaryButton({text, onPress}) {
+export function SecondaryButton({label, onPress}) {
     return <Clickable onPress={onPress}>
         <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666'}}>
-            <TranslatableText style={{color: '#666'}} text={text} />
+            <TranslatableLabel style={{color: '#666'}} label={label} />
         </View>
     </Clickable>
 }
@@ -253,7 +253,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
-        {label ? <TranslatableText style={s.label} text={label}/> : null}
+        {label ? <TranslatableLabel style={s.label} label={label}/> : null}
         <AutoSizeTextInput style={[s.textInput, 
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
@@ -266,7 +266,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
         />
         {text ? 
             <View style={s.actions}>
-                <PrimaryButton onPress={() => {onChange(text); setText(null)}} text={action} />
+                <PrimaryButton onPress={() => {onChange(text); setText(null)}} label={action} />
                 <SecondaryButton onPress={() => setText(null)} text='Cancel' />
             </View>
         : null}
@@ -308,7 +308,7 @@ export function Pill({label, color = '#666', big=false, showCross=false, notrans
         {notranslate ? 
             <Text style={[big ? s.bigText : s.text, {color}]}>{label}</Text>
         :
-            <TranslatableText style={[big ? s.bigText : s.text, {color}]} text={label} />
+            <TranslatableLabel style={[big ? s.bigText : s.text, {color}]} label={label} />
         }
         {showCross ? 
             <Entypo name='cross' size={big ? 18 : 12} color={color} />
@@ -381,7 +381,7 @@ export function ScreenTitleText({title}) {
 
 export function LoadingScreen() {
     const s = LoadingScreenStyle;
-    return <View style={s.outer}><TranslatableText style={s.text} text='Loading...' /></View>
+    return <View style={s.outer}><TranslatableLabel style={s.text} label='Loading...' /></View>
 }
 
 const LoadingScreenStyle = StyleSheet.create({
@@ -395,8 +395,8 @@ const LoadingScreenStyle = StyleSheet.create({
     }
 });
 
-export function PluralText({count, singular, plural}) {
-    return <Text>{count} <TranslatableText text={count === 1 ? singular : plural}/></Text>
+export function PluralLabel({count, singular, plural}) {
+    return <Text>{count} <TranslatableLabel label={count === 1 ? singular : plural}/></Text>
 }
 
 export function BackgroundBar({count, maxCount}) {

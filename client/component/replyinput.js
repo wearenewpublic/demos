@@ -63,8 +63,8 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
             : null}
             {(!topLevel || post.text) ? 
                 <View style={s.actions}>
-                    <PrimaryButton onPress={onPost} text='Post'/>
-                    <SecondaryButton onPress={hideReplyInput} text='Cancel' />
+                    <PrimaryButton onPress={onPost} label='Post'/>
+                    <SecondaryButton onPress={hideReplyInput} label='Cancel' />
                 </View>
             : null}
         </View>
@@ -120,5 +120,5 @@ export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}
 
 
 function LoginToComment() {
-    return <PrimaryButton onPress={gotoLogin} text='Login to comment' />
+    return <PrimaryButton onPress={gotoLogin} label='Login to comment' />
 }

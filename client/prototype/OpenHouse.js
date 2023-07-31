@@ -1,6 +1,6 @@
 import { ScrollView } from "react-native";
 import { BodyText, Pad, Separator, WideScreen } from "../component/basics";
-import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataText, MemberAuthorBling } from "../component/comment";
+import { ActionCollapse, ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, CommentDataLabel, MemberAuthorBling } from "../component/comment";
 import { TopCommentInput } from "../component/replyinput";
 import { civic_society, civic_society_description } from "../data/openhouse_civic";
 import { expandDataList } from "../util/util";
@@ -118,7 +118,7 @@ export function ActionPromote({commentKey, comment}) {
     } else if (comment.promotedBy == personaKey) {
         return <CommentActionButton key='promote' label='Un-Promote' onPress={() => onPromote(false)} />
     } else if (comment.promotedBy) {
-        return <CommentDataText key='promote' text='Promoted by {boosterName}' formatParams={{boosterName}} />
+        return <CommentDataLabel key='promote' text='Promoted by {boosterName}' formatParams={{boosterName}} />
     } else {
         return null;
     }      

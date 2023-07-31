@@ -10,7 +10,7 @@ import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society, civic_society_description } from "../data/openhouse_civic";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useObject, usePersonaKey } from "../util/datastore";
-import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
+import { TranslatableLabel, languageFrench, languageGerman } from "../component/translation";
 import { civic_society_description_french, civic_society_french } from "../translations/french/openhouse_civic_french";
 import { civic_society_description_german, civic_society_german } from "../translations/german/openhouse_civic_german";
 import { memberPersonaList } from "../data/personas";
@@ -106,9 +106,9 @@ function AuthorName({comment}) {
     if (isPublic) {
         return <Text>{authorPersona?.name}</Text>;
     } else if (comment?.from == personaKey) {
-        return <TranslatableText text='You Semi-Anonymously' />;
+        return <TranslatableLabel label='You Semi-Anonymously' />;
     } else {
-        return <TranslatableText text='Anonymous Guest' />;
+        return <TranslatableLabel label='Anonymous Guest' />;
     }
 }
 
@@ -130,11 +130,11 @@ function SemiAnonymousExplain() {
     const userIsMember = useObject('persona', personaKey)?.member;
     if (userIsMember) {
         return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage text='As a member, your identity is always public' />
+            <QuietSystemMessage label='As a member, your identity is always public' />
         </PadBox>
     } else {
         return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage text='Group members will see your name, but you will be anonymous to everyone else'/>
+            <QuietSystemMessage label='Group members will see your name, but you will be anonymous to everyone else'/>
         </PadBox>
     }
 }

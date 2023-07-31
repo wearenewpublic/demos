@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { UserFace } from "./userface";
 import { useObject, usePersonaKey } from "../util/datastore";
-import { TranslatableText } from "./translation";
+import { TranslatableLabel } from "./translation";
 
 export function Message({messageKey}) {
     const s = MessageStyles;
@@ -74,9 +74,9 @@ const MessageAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function QuietSystemMessage({text, formatParams}) {
+export function QuietSystemMessage({label, formatParams}) {
     const s = QuietSystemMessageStyle;
-    return <TranslatableText style={s.text} text={text} formatParams={formatParams} />
+    return <TranslatableLabel style={s.text} label={label} formatParams={formatParams} />
 }
 
 const QuietSystemMessageStyle = StyleSheet.create({

@@ -67,7 +67,7 @@ export function RoboMediatorChatScreen() {
                 )}
             </BottomScroller>
             {inProgress ? 
-                <QuietSystemMessage text='RoboMediator is thinking...'/>
+                <QuietSystemMessage label='RoboMediator is thinking...'/>
             : null}
             <ChatInput onSend={onSend} />
         </WideScreen>

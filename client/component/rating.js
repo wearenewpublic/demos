@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { BackgroundBar, Clickable, MaybeClickable } from "./basics";
-import { TranslatableText } from "./translation";
+import { TranslatableLabel } from "./translation";
 
 
 export function RatingWithLabel({value, labelSet, editable=false, placeholder, onChangeValue}) {
@@ -8,7 +8,7 @@ export function RatingWithLabel({value, labelSet, editable=false, placeholder, o
     const label = value ? labelSet[value - 1] : placeholder;
     return <View style={s.row}>
         <SpectrumRating value={value} editable={editable} onChangeValue={onChangeValue} />
-        <TranslatableText style={s.name} text={label} />
+        <TranslatableLabel style={s.name} label={label} />
     </View>
 }
 
@@ -113,7 +113,7 @@ function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected
                 <SpectrumItem enabled color={colors[rating-1]}/>
             </View>
             <View style={s.right}>
-                <TranslatableText style={s.label} text={label}/>
+                <TranslatableLabel style={s.label} label={label}/>
                 <Text style={s.count}>{count}</Text>
                 <BackgroundBar count={count} maxCount={maxCount} />
             </View>

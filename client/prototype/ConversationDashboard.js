@@ -114,7 +114,7 @@ function PostScreen({postKey}) {
             )}
         </BottomScroller>
         {inProgress ? 
-            <QuietSystemMessage text='Analyzing conversation mood...' />
+            <QuietSystemMessage label='Analyzing conversation mood...' />
         : null}
         <ChatInput onSend={onSend} />
     </WideScreen>

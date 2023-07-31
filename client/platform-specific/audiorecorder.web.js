@@ -20,7 +20,7 @@ export function AudioRecorder({action='Record Audio', onSubmitRecording}) {
         return <PrimaryButton 
             onPress={() => setRecorderShown(true)}
             icon={<FontAwesome name='microphone' size={24} color='white' />}
-            text={action}/>
+            label={action}/>
     }
 }
 
@@ -111,11 +111,11 @@ export function LiveAudioRecorder({size, onSubmitRecording}) {
                 (recording ?
                     <PrimaryButton
                         icon={<Entypo name='controller-stop' size={24} color='white' />} 
-                        onPress={stopRecording} text='Stop Recording' />
+                        onPress={stopRecording} label='Stop Recording' />
                 :
                    <PrimaryButton 
                         icon={<Entypo name='controller-record' size={24} color='white' />} 
-                        onPress={startRecording} text='Start Recording' />
+                        onPress={startRecording} label='Start Recording' />
                 )
             : 
                 <div>Initializing Microphone...</div>

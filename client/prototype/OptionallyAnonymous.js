@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
-import { TranslatableText, languageFrench, languageGerman } from "../component/translation";
+import { TranslatableLabel, languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
 
 const description = `
@@ -77,9 +77,9 @@ function AuthorName({comment}) {
     if (comment.public) {
         return <Text>{authorPersona?.name}</Text>;
     } else if (comment.from == personaKey) {
-        return <TranslatableText text='You Anonymously' />;
+        return <TranslatableLabel label='You Anonymously' />;
     } else {
-        return <TranslatableText text='Anonymous' />;
+        return <TranslatableLabel label='Anonymous' />;
     }
 }
 

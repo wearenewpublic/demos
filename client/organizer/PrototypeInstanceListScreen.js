@@ -1,6 +1,6 @@
 
 import { ScrollView, Text, View } from "react-native"
-import { Card, Clickable, ScrollableScreen, BigTitle, BodyText, Separator, SmallTitle, SectionTitle, MarkdownBodyText, HorizBox, TimeText, AuthorLine, Pad, Narrow, Center } from "../component/basics"
+import { Card, Clickable, ScrollableScreen, BigTitle, BodyText, Separator, SmallTitleLabel, SectionTitleLabel, MarkdownBodyText, HorizBox, TimeText, AuthorLine, Pad, Narrow, Center } from "../component/basics"
 import { NewPublicBodySection } from "../component/newpublic"
 import { useState } from "react";
 import { YouTube } from "../platform-specific/youtube";
@@ -19,11 +19,11 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                 <Pad />
                 {prototype.instance ?
                     <View>
-                        <Center><SectionTitle text='Role Play Instances' /></Center>
+                        <Center><SectionTitleLabel label='Role Play Instances' /></Center>
                         {prototype.instance.map(instance => (
                             <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
                                 <Card>
-                                    <SmallTitle text={instance.name}/>
+                                    <SmallTitleLabel label={instance.name}/>
                                 </Card>
                             </Clickable>
                         ))}      
@@ -31,11 +31,11 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                 : null}
                 {prototype.liveInstance ?
                     <View>
-                        <Center><SectionTitle text='Live Instances'/></Center>
+                        <Center><SectionTitleLabel label='Live Instances'/></Center>
                         {prototype.liveInstance.map(instance => (
                             <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
                                 <Card>
-                                    <SmallTitle text={instance.name} />
+                                    <SmallTitleLabel label={instance.name} />
                                 </Card>
                             </Clickable>
                         ))}      
@@ -44,7 +44,7 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
 
                 {prototype.video ? 
                     <View>
-                        <Center><SectionTitle text='Concept Videos'/></Center>
+                        <Center><SectionTitleLabel label='Concept Videos'/></Center>
                         {prototype.video.map(video => 
                             <VideoPreview key={video.name} video={video} />
                         )}      

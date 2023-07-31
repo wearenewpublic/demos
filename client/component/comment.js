@@ -5,13 +5,13 @@ import React from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
-import { TranslatableText } from "./translation";
+import { TranslatableLabel } from "./translation";
 
 
 export function CommentActionButton({label, formatParams, onPress}) {
     const s = CommentActionButtonStyle;
     return <Clickable style={s.clicker}>
-        <TranslatableText style={s.text} onPress={onPress} text={label} formatParams={formatParams} />
+        <TranslatableLabel style={s.text} onPress={onPress} label={label} formatParams={formatParams} />
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({
@@ -27,8 +27,8 @@ const CommentActionButtonStyle = StyleSheet.create({
     }
 })
 
-export function CommentDataText({text, formatParams}) {
-    return <TranslatableText style={CommentDataTextStyle.text} text={text} formatParams={formatParams} />
+export function CommentDataLabel({text, formatParams}) {
+    return <TranslatableLabel style={CommentDataTextStyle.text} label={text} formatParams={formatParams} />
 }
 const CommentDataTextStyle = StyleSheet.create({
     text: {
