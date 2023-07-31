@@ -58,7 +58,6 @@ export function ParentApprovesScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
-                <Pad size={8} />
                 <TopCommentInput />
                 <CommentContext.Provider value={commentConfig}> 
                     {topLevelComments.map(comment => 

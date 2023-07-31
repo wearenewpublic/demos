@@ -4,12 +4,12 @@ import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad } from "./basics";
 import { useTranslation } from "./translation";
 
-export function ExpandSection({title, defaultOpen=false, children}) {
+export function ExpandSection({title, defaultOpen=false, shadow=true, children}) {
     const s = ExpandSectionStyle;
     const [expanded, setExpanded] = useState(defaultOpen);
     const tTitle = useTranslation(title);
 
-    return <View style={s.outer}>
+    return <View style={[s.outer, shadow ? s.shadow : null]}>
         <Clickable onPress={() => setExpanded(!expanded)}>
             <View style={s.topBar}>
                 <Text style={s.title}>{tTitle}</Text>
@@ -17,11 +17,18 @@ export function ExpandSection({title, defaultOpen=false, children}) {
             </View>
         </Clickable>
         {expanded ? <Pad size={4}/> : null}
-        {expanded ? children : null}
+        {expanded ? <View style={s.inner}>{children}</View> : null}
     </View>
 }
 
 const ExpandSectionStyle = StyleSheet.create({
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 1,
+    },
     outer: {
         margin: 4,
         maxWidth: 500,
@@ -32,6 +39,9 @@ const ExpandSectionStyle = StyleSheet.create({
         paddingVertical: 4,
         backgroundColor: 'white'
     },  
+    inner: {
+        marginVertical: 4
+    },
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -61,7 +61,6 @@ export function OptionallyAnonymousScreen() {
         <WideScreen pad>
             <ScrollView>
                 <CommentContext.Provider value={commentConfig}> 
-                    <Pad size={8} />
                     <TopCommentInput />
                         {topLevelComments.map(comment => 
                         <Comment key={comment.key} commentKey={comment.key} />

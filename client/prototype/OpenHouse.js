@@ -81,9 +81,9 @@ export function OpenHouseScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
+                <Pad size={8} />
                 <BodyText>{description}</BodyText>
                 <Separator />
-                <Pad size={8} />
                 <TopCommentInput />
                 <CommentContext.Provider value={{...commentContext, actions, getIsDefaultCollapsed, authorBling: [MemberAuthorBling]}}> 
                     {topLevelComments.map(comment => 

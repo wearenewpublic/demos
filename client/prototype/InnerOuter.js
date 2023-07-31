@@ -78,7 +78,9 @@ function InnerOuterScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
+                <Pad size={12}/>
                 <SectionTitle text='Public Conclusion'/>
+                <Pad size={4}/>
                 <EditableText 
                         value={conclusion} 
                         onChange={x => datastore.setGlobalProperty('conclusion', x)} 

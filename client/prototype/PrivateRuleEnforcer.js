@@ -48,14 +48,14 @@ export const PrivateRuleEnforcerPrototype = {
     status: statusTentative,
     screen: PrivateRuleEnforcerScreen,
     instance: [
-        {key: 'cats', name: 'The Cat Club', comment: expandDataList(cat_club), rules: initialRules},
+        {key: 'cats', name: 'The Cat Club', comment: expandDataList(cat_club), rules: initialRules.trim()},
         {
             key: 'cats-french', name: 'The Cat Club (French)', language: languageFrench,
-            comment: expandDataList(cat_club_french), rules: initialRules_french
+            comment: expandDataList(cat_club_french), rules: initialRules_french.trim()
         },
         {
             key: 'cats-german', name: 'The Cat Club (German)', language: languageGerman,
-            comment: expandDataList(cat_club_german), rules: initialRules_german
+            comment: expandDataList(cat_club_german), rules: initialRules_german.trim()
         },
     ]
 }
@@ -78,6 +78,7 @@ export function PrivateRuleEnforcerScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
+                <Pad />
                 <ExpandSection title='Group Rules' defaultOpen>
                     <EditableText 
                         value={rules} 

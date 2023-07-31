@@ -97,6 +97,7 @@ function QuestionSummary({questionKey}) {
 function QuestionScreen({questionKey}) {
     const question = useObject('question', questionKey);
     return <WideScreen pad>
+        <Pad />
         <BigTitle>{question?.text}</BigTitle>
         <BasicComments about={question?.key} />
     </WideScreen>

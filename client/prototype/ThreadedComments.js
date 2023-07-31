@@ -43,7 +43,6 @@ export function ThreadedScreen() {
     return (
         <WideScreen pad>
             <ScrollView>
-                <Pad size={8} />
                 <TopCommentInput />
                 {topLevelComments.map(comment => 
                     <Comment key={comment.key} commentKey={comment.key} />
