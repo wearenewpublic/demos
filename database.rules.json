@@ -7,7 +7,13 @@
                         ".read": true,
                         ".write": true
                     }
-                }
+                },
+                "userInstance": {
+                    "$user": {
+                    ".read": "$user == auth.uid",
+                    ".write": "$user == auth.uid"
+                  }
+              }
             }
         },
         ".read": false,

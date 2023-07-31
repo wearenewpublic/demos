@@ -29,11 +29,16 @@ export function NewLiveInstanceScreen({prototype}) {
 
     function onCreate() {
         console.log('Creating instance', instanceGlobals);
-        const key = generateRandomKey(16);
+        const key = generateRandomKey(20);
+        const createTime = Date.now();
         const expandedGlobals = {
-            ...instanceGlobals, admin: firebaseUser.uid
+            ...instanceGlobals, admin: firebaseUser.uid, createTime
+        }
+        const userData = {
+            name: expandedGlobals.name, createTime
         }
         firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'global'], expandedGlobals);
+        firebaseWriteAsync(['prototype', prototype.key, 'userInstance', firebaseUser.uid, key], userData);
         replaceInstance({prototypeKey: prototype.key, instanceKey: key});
     }
 

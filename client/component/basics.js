@@ -34,19 +34,11 @@ export function Narrow({children}) {
 }
 
 
-export function Card({children, fitted=false}) {
+export function Card({children, fitted=false, vMargin=10}) {
     const s = CardStyle;
-    return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null]}>
+    return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]}>
         {children}
     </View>
-}
-
-export function MaybeCard({children, isCard}) {
-    if (isCard) {
-        return <Card>{children}</Card>
-    } else {
-        return children;
-    }
 }
 
 const CardStyle = StyleSheet.create({
@@ -57,6 +49,15 @@ const CardStyle = StyleSheet.create({
         backgroundColor: '#fff'
     }
 })
+
+export function MaybeCard({children, isCard}) {
+    if (isCard) {
+        return <Card>{children}</Card>
+    } else {
+        return children;
+    }
+}
+
 
 export function Clickable({onPress, children, style}) {
     function onPressInner() {

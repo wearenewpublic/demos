@@ -63,6 +63,21 @@ export function firebaseWatchValue(pathList, callback) {
     });
 }
 
+export function useFirebaseData(pathList, defaultValue=null) {
+    const [data, setData] = useState(defaultValue);
+    const pathString = makeFirebasePath(pathList);
+    const nullPath = pathList.some(p => p == null || p == undefined);
+
+    useEffect(() => {
+        if (nullPath) return;
+        const unsubscribe = onValue(ref(database, pathString), snapshot => {
+            setData(snapshot.val())
+        });
+        return unsubscribe;
+    }, [pathString]);
+    return data;
+}
+
 function makeFirebasePath(pathList) {
     return pathList.join('/');
 }
