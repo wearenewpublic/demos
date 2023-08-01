@@ -27,7 +27,8 @@ export const PostFeedPrototype = {
             post: expandDataList(post_parents),
             comment: expandDataList(post_parents_comments)
         }
-    ]
+    ],
+    newInstanceParams: []
 }
 
 export function PostFeedScreen() {

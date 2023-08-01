@@ -55,7 +55,7 @@ export class Datastore extends React.Component {
             this.fbDataWatchReleaser && this.fbDataWatchReleaser();
             this.fbDataWatchReleaser = firebaseWatchValue(['prototype', prototypeKey, 'instance', instanceKey], data => {
                 this.dataTree = {...this.dataTree, ...data?.collection, ...data?.global};
-                console.log('datatree', this.dataTree);
+                // console.log('datatree', this.dataTree);
                 this.notifyWatchers();
                 this.setState({loaded: true})
             });
@@ -215,7 +215,7 @@ export function useCollection(typeName, props = {}) {
 
 export function useGlobalProperty(key) {
     const {dataTree} = useData();
-    return dataTree[key];
+    return dataTree?.[key];
 }
 
 function meetsFilter(item, filter) {

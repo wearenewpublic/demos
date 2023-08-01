@@ -12,7 +12,7 @@ import { squaremapCanada, squaremapFrance, squaremapGermany, squaremapNamesCanad
 import { SquareMap } from "../component/squaremap";
 import { PopupSelector } from "../platform-specific/popup";
 import { post_starwars_canada, post_starwars_france } from "../translations/french/posts_french";
-import { languageFrench, languageGerman, useTranslation } from "../component/translation";
+import { languageFrench, languageGerman, useLanguage, useTranslation } from "../component/translation";
 import { post_starwars_german } from "../translations/german/posts_german";
 
 export const MissingPerspectivesPrototype = {
@@ -27,66 +27,90 @@ export const MissingPerspectivesPrototype = {
     instance: [
         {
             key: 'wars', name: 'Star Wars USA',
-            regions: squaremapUsa, regionNames: squaremapNamesUsa,
+            mapName: 'usa',
             question: 'Which is better. Star Wars or Star Trek?',
             post: expandDataList(post_starwars)
         },
         {
             key: 'wars-binary', name: 'Star Wars USA Binary', binary: true,
-            regions: squaremapUsa, regionNames: squaremapNamesUsa,
+            mapName: 'usa',
             question: 'Which is better. Star Wars or Star Trek?',
             post: expandDataList(post_starwars)
         },
         {
             key: 'wars-canada', name: 'Star Wars Canada (French)', language: languageFrench,
-            regions: squaremapCanada, regionNames: squaremapNamesCanadaFrench,
+            mapName: 'canada',
             question: 'Lequel est meilleur. Star Wars ou Star Trek?',
             post: expandDataList(post_starwars_canada)
         },
         {
             key: 'wars-canada-binary', name: 'Star Wars Canada Binary (French)', language: languageFrench,
-            regions: squaremapCanada, regionNames: squaremapNamesCanadaFrench, binary: true,
+            mapName: 'canada',
             question: 'Lequel est meilleur. Star Wars ou Star Trek?',
             post: expandDataList(post_starwars_canada)
         },
         {
             key: 'wars-france', name: 'Star Wars France (French)', language: languageFrench,
-            regions: squaremapFrance, regionNames: squaremapNamesFrance,
+            mapName: 'france',
             question: 'Lequel est meilleur. Star Wars ou Star Trek?',
             post: expandDataList(post_starwars_france)
         },
         {
             key: 'wars-france-binary', name: 'Star Wars France Binary (French)', language: languageFrench, binary: true,
-            regions: squaremapFrance, regionNames: squaremapNamesFrance,
+            mapName: 'france',
             question: 'Lequel est meilleur. Star Wars ou Star Trek?',
             post: expandDataList(post_starwars_france)
         },
         {
             key: 'wars-germany', name: 'Star Wars (German)', language: languageGerman,
-            regions: squaremapGermany, regionNames: squaremapNamesGermany,
+            mapName: 'germany',
             question: 'Was ist besser, Star Wars oder Star Trek?',
             post: expandDataList(post_starwars_german)
         },
         {
             key: 'wars-germany-binary', name: 'Star Wars Binary (German)', language: languageGerman, binary: true,
-            regions: squaremapGermany, regionNames: squaremapNamesGermany,
+            mapName: 'germany',
             question: 'Was ist besser, Star Wars oder Star Trek?',
             post: expandDataList(post_starwars_german)
         },
-
-
-
+    ],
+    newInstanceParams: [
+        {key: 'mapName', name: 'Map Name', type: 'select', options: [
+            {key: 'usa', label: 'USA'},
+            {key: 'canada', label: 'Canada'},
+            {key: 'france', label: 'France'},
+            {key: 'germany', label: 'Germany'},
+        ]},
+        {key: 'binary', name: 'Binary', type: 'boolean'},
+        {key: 'question', name: 'Question', type: 'shorttext', placeholder: 'What question are people answering?'}
     ]
+}
+
+function getRegionMapAndNames(mapName, language) {
+    switch (mapName) {
+        case 'usa': return [squaremapUsa, squaremapNamesUsa];
+        case 'canada': {
+            if (language == languageFrench) {
+                return [squaremapCanada, squaremapNamesCanadaFrench];
+            } else {
+                return [squaremapCanada, squaremapNamesCanada];
+            }
+        }
+        case 'france': return [squaremapFrance, squaremapNamesFrance];
+        case 'germany': return [squaremapGermany, squaremapNamesGermany];
+        default: return [squaremapUsa, squaremapNamesUsa];
+    }
 }
 
 function MissingPerspectivesScreen() {
     const posts = useCollection('post', {sortBy: 'time', reverse: true});
     const question = useGlobalProperty('question');
-    const regions = useGlobalProperty('regions');
-    const regionNames = useGlobalProperty('regionNames');
     const binary = useGlobalProperty('binary');
     const personaKey = usePersonaKey();
     const [selection, setSelection] = useState(null);
+    const mapName = useGlobalProperty('mapName');
+    const language = useLanguage();
+    const [regions, regionNames] = getRegionMapAndNames(mapName, language);
     const hasAnswered = posts.some(post => post.from == personaKey);
 
     var shownPosts = posts;
@@ -127,7 +151,9 @@ function RegionBling({region, regionNames}) {
 
 
 function EditRegion({post, onPostChanged}) {
-    const regionNames = useGlobalProperty('regionNames');
+    const mapName = useGlobalProperty('mapName');
+    const language = useLanguage();
+    const [regions, regionNames] = getRegionMapAndNames(mapName, language);
     const regionItems = Object.keys(regionNames).map(key => ({key, label: key + ': ' + regionNames[key]}));
     const tSelect = useTranslation('Select your region');
     const unknown = {key: 'unknown', label: tSelect};

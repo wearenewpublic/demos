@@ -268,6 +268,26 @@ const OneLineTextInputStyle = StyleSheet.create({
     },
 })
 
+
+export function MultiLineTextInput({value, onChange, placeholder, ...props}) {
+    const s = OneLineTextInputStyle;
+    return <AutoSizeTextInput value={value} style={s.textInput} placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
+}
+
+const MultiLineTextInputStyle = StyleSheet.create({
+    textInput: {
+        flex: 1,
+        borderRadius: 8, 
+        borderWidth: StyleSheet.hairlineWidth, 
+        borderColor: '#ddd', padding: 8,
+        marginHorizontal: 0,
+        fontSize: 15, lineHeight: 20,
+        height: 150,
+        maxHeight: 600
+    },
+});
+
+
 export function FormField({label, children}) {
     const s = FormFieldStyle;
     return <View style={s.outer}>

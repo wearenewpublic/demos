@@ -40,7 +40,8 @@ export const ParentApproves = {
     status: statusTentative,
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'}
-    ]
+    ],
+    newInstanceParams: []
 }
 
 export function ParentApprovesScreen() {

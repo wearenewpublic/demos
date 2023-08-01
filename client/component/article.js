@@ -1,7 +1,8 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
-import { Separator } from "./basics";
+import { Narrow, Separator } from "./basics";
 import { TranslatableLabel } from "./translation";
+import { expandUrl } from "../util/util";
 
 export function Article({article, embed=null, children}) {
     const s = ArticleStyle;
@@ -17,14 +18,14 @@ export function Article({article, embed=null, children}) {
         </View>
         {article.photo ? 
             <View style={s.photoBox}>
-                <Image style={s.photo} source={{uri: fileHostDomain + '/photos/' + article.photo}}/> 
+                <Image style={s.photo} source={{uri: expandUrl({url: article.photo, type: 'photos'})}}/> 
                 <Text style={s.photoCaption}>{article.photoCaption}</Text>
             </View>
         : null}
         <View style={s.narrowSection}>
             <View style={s.authorBox}>
                 <Image style={s.authorFace}
-                    source={{uri: fileHostDomain + '/faces/' + article.authorFace}} />
+                    source={{url: expandUrl({url: article.authorFace, type: 'faces'})}} />
                 <View>
                     <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author}</Text>
                     <Text style={s.date}>{article.date}</Text>
@@ -46,9 +47,9 @@ export function Article({article, embed=null, children}) {
             </View>
         </View>
         <Separator />
-        <View style={s.comments}>
+        <Narrow>
             {children}
-        </View>
+        </Narrow>
     </View>
 }
 
@@ -65,7 +66,7 @@ const ArticleStyle = StyleSheet.create({
         marginHorizontal: 16
     },  
     comments: {
-        alignSelf: 'center',
+        alignSelf: 'stretch',
     },
     photo: {
         width: 800,

@@ -38,7 +38,6 @@ export function makePrototypeUrl(prototypeKey) {
 }
 
 export function gotoInstance({prototypeKey, instanceKey}) {
-    console.log('gotoInstance', prototypeKey, instanceKey);
     gotoUrl(makeUrl([prototypeKey, instanceKey]));
 }
 

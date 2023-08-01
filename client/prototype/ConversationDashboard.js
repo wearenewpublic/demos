@@ -35,7 +35,8 @@ export const ConversationDashboardPrototype = {
             message: expandDataList(post_parents_comments),
             comment: expandDataList(post_parents_comments)
        }   
-    ]
+    ],
+    newInstanceParams: []
 }
 
 function ConversationDashboardScreen() {

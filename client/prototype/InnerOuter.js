@@ -58,7 +58,6 @@ export const InnerOuter = {
             conclusion: "Star Wars und Star Trek sind beide gute Filme, aber sie erfassen unterschiedliche Aspekte davon, wie die Welt funktioniert.",
             name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german), '$personaKey': 'b'
         }
-
     ],
     screen: InnerOuterScreen   
 }

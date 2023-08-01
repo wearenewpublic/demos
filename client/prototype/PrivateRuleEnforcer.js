@@ -15,6 +15,7 @@ import { cat_club_french } from "../translations/french/threaded_french";
 import { cat_club_german } from "../translations/german/threaded_german";
 import { initialRules_french } from "../translations/french/rules_french";
 import { initialRules_german } from "../translations/german/rules_german";
+import { personaRobo } from "../data/personas";
 
 const description = `
 A treaded conversations where rule-violating comments are hidden.
@@ -57,7 +58,11 @@ export const PrivateRuleEnforcerPrototype = {
             key: 'cats-german', name: 'The Cat Club (German)', language: languageGerman,
             comment: expandDataList(cat_club_german), rules: initialRules_german.trim()
         },
-    ]
+    ],
+    newInstanceParams: [],
+    newInstanceRoboPersonas: {
+        robo: personaRobo
+    }
 }
 
 

@@ -32,6 +32,16 @@ export const ArticleCommentsPrototype = {
     screen: ArticleCommentsScreen,
     instance: [
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)}
+    ],
+    newInstanceParams: [
+        {key: 'article.title', name: 'Article Title', type: 'shorttext'},
+        {key: 'article.subtitle', name: 'Article Subtitle', type: 'shorttext'},
+        {key: 'article.date', name: 'Article Date', type: 'shorttext'},
+        {key: 'article.author', name: 'Article Author', type: 'shorttext'},
+        {key: 'article.authorFace', name: 'Article Author Face URL', type: 'url'},
+        {key: 'article.photo', name: 'Article Photo URL', type: 'url'},
+        {key: 'article.photoCaption', name: 'Article Photo Caption', type: 'shorttext'},
+        {key: 'article.rawText', name: 'Article Text', type: 'longtext'},
     ]
 }
 

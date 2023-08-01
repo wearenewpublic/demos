@@ -41,7 +41,8 @@ export const OptionallyAnonymous = {
         {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language: languageFrench, comment: expandDataList(trek_vs_wars_french), '$personaKey': 'b'},
         {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language: languageGerman, comment: expandDataList(trek_vs_wars_german), '$personaKey': 'b'},
     ],
-    screen: OptionallyAnonymousScreen    
+    screen: OptionallyAnonymousScreen,
+    newInstanceParams: []
 }
 
 export function OptionallyAnonymousScreen() {

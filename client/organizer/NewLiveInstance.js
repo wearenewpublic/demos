@@ -1,12 +1,12 @@
 import { StyleSheet, TextInput } from "react-native";
-import { Card, FormField, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, PrimaryButton, SecondaryButton, SectionTitleLabel } from "../component/basics";
+import { AutoSizeTextInput, Card, FormField, HorizBox, MultiLineTextInput, Narrow, OneLineTextInput, Pad, PadBox, PrimaryButton, SecondaryButton, SectionTitleLabel } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
 import { firebaseNewKey, firebaseWriteAsync, useFirebaseUser } from "../util/firebase";
 import { useState } from "react";
 import { languageEnglish, languageFrench, languageGerman, useTranslation } from "../component/translation";
 import { PopupSelector } from "../platform-specific/popup";
 import { goBack, gotoLogin, replaceInstance } from "../util/navigate";
-import { generateRandomKey } from "../util/util";
+import { boolToString, generateRandomKey, getPath, setPath, stringToBool } from "../util/util";
 import { replaceUrl } from "./url";
 
 const nameParam = {key: 'name', name: 'Name', type: 'shorttext', placeholder: 'What is this instance called?'};
@@ -23,6 +23,8 @@ export function NewLiveInstanceScreen({prototype}) {
     const firebaseUser = useFirebaseUser();
     const [instanceGlobals, setInstanceGlobals] = useState({});
 
+    console.log('instanceGlobals', instanceGlobals);
+
     function onCancel() {
         goBack();
     }
@@ -35,10 +37,13 @@ export function NewLiveInstanceScreen({prototype}) {
             ...instanceGlobals, admin: firebaseUser.uid, createTime
         }
         const userData = {
-            name: expandedGlobals.name, createTime
+            name: expandedGlobals.name, createTime, language: expandedGlobals.language ?? languageEnglish
         }
         firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'global'], expandedGlobals);
         firebaseWriteAsync(['prototype', prototype.key, 'userInstance', firebaseUser.uid, key], userData);
+        if (prototype.newInstanceRoboPersonas) {
+            firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'collection', 'persona'], prototype.newInstanceRoboPersonas);            
+        }
         replaceInstance({prototypeKey: prototype.key, instanceKey: key});
     }
 
@@ -72,17 +77,37 @@ const NewLiveInstanceScreenStyle = StyleSheet.create({
 function InstanceParamSetter({param, instanceGlobals, setInstanceGlobals}) {
     const tEnter = useTranslation('Enter');
     const tPlaceholder = useTranslation(param.placeholder || null);
-    if (param.type == 'shorttext') {
+    const value = getPath(instanceGlobals, param.key) || '';
+    function setValue(value) {
+        const newGlobals = setPath(instanceGlobals, param.key, value);
+        setInstanceGlobals(newGlobals);
+    }
+    if (param.type == 'shorttext' || param.type == 'text' || param.type == 'url') {
         return <FormField label={param.name}>
             <OneLineTextInput  
                 placeholder={tPlaceholder ?? (tEnter + ' ' + param.name)}
-                value={instanceGlobals[param.key] || ''} 
-                onChange={text => setInstanceGlobals({...instanceGlobals, [param.key]: text})} />
+                value={value} 
+                onChange={setValue} />
+        </FormField>
+    } else if (param.type == 'longtext') {
+        return <FormField label={param.name}>
+            <MultiLineTextInput  
+                placeholder={tPlaceholder ?? (tEnter + ' ' + param.name)}
+                value={value} 
+                onChange={setValue} />
         </FormField>
     } else if (param.type == 'select') {
         return <FormField label={param.name}>
-            <PopupSelector items={param.options} value={instanceGlobals[param.key]} 
-                onSelect={value => setInstanceGlobals({...instanceGlobals, [param.key]: value})}/>
+            <PopupSelector items={param.options} value={value} 
+                onSelect={setValue}/>
+        </FormField>
+    } else if (param.type == 'boolean') {
+        return <FormField label={param.name}>
+            <PopupSelector items={[
+                {key: 'true', label: 'Yes'},
+                {key: 'false', label: 'No'}
+            ]} value={boolToString(value)} 
+                onSelect={value => setValue(stringToBool(value))} />
         </FormField>
     } else {
         return <QuietSystemMessage label='Not yet'/>

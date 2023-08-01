@@ -27,6 +27,11 @@ export const CommentSliderPrototype = {
             sideTwo: 'Pro Star Trek',
             post: expandDataList(post_starwars)
         }
+    ],
+    newInstanceParams: [
+        {key: 'question', name: 'Question', type: 'shorttext'},
+        {key: 'sideOne', name: 'Side One', type: 'shorttext'},
+        {key: 'sideTwo', name: 'Side Two', type: 'shorttext'},
     ]
 }
 

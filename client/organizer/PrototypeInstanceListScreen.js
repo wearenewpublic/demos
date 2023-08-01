@@ -10,7 +10,7 @@ import { QuietSystemMessage } from "../component/message";
 
 export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
     const firebaseUser = useFirebaseUser();
-    const userInstanceMap = useFirebaseData(['prototype', prototype.key, 'userInstance', firebaseUser?.uid]);
+    const userInstanceMap = useFirebaseData(['prototype', prototype.key, 'userInstance', firebaseUser?.uid], {});
     const userInstanceList = Object.entries(userInstanceMap || {}).map(([key, value]) => ({key, ...value}));
     const sortedUserInstances = userInstanceList.sort((a, b) => b.createTime - a.createTime);
     return <ScrollView>

@@ -13,6 +13,7 @@ import { useCollection, useDatastore, useGlobalProperty } from "../util/datastor
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
 import { languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
+import { personaRobo } from "../data/personas";
 
 const description = `
 A chat app that enforces a list of user-defined rules in a conversation.
@@ -68,8 +69,11 @@ export const RuleEnforcerChatPrototype = {
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer), rules: initialRules},
         {key: 'wars-german', name: 'Star Wars vs Star Trek (German)', language:languageGerman, message: expandDataList(trek_vs_wars_german), rules: initialRules_german},
         {key: 'wars-french', name: 'Star Wars vs Star Trek (French)', language:languageFrench, message: expandDataList(trek_vs_wars_french), rules: initialRules_french},
-
-    ]
+    ],
+    newInstanceParams: [],
+    newInstanceRoboPersonas: {
+        robo: personaRobo
+    }
 }
 
 

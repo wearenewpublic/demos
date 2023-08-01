@@ -31,6 +31,9 @@ export const QuestionAnswerPrototype = {
             post: expandDataList(answer_godzilla),
             comment: expandDataList(answer_godzilla_comments)
         }
+    ],
+    newInstanceParams: [
+        {key: 'question', name: 'Question', type: 'shorttext'}
     ]
 }
 

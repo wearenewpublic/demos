@@ -29,7 +29,8 @@ export const ChatPrototype = {
         {key: 'ecorp', name: 'E-Corp Alumni', message: expandDataList(ecorp)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)},
         {key: 'starwars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars)}
-    ]
+    ],
+    newInstanceParams: []
 }
 
 export function ChatScreen() {

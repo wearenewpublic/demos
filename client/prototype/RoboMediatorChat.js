@@ -9,6 +9,7 @@ import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } 
 import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore } from "../util/datastore";
+import { personaRobo } from "../data/personas";
 
 const description = `
 An AI agent acts as a mediator between people who are having difficulty getting along.
@@ -35,7 +36,11 @@ export const RoboMediatorChatPrototype = {
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)}
-    ]
+    ],
+    newInstanceParams: [],
+    newInstanceRoboPersonas: {
+        robo: personaRobo
+    }
 }
 
 export function RoboMediatorChatScreen() {

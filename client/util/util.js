@@ -1,3 +1,4 @@
+import { fileHostDomain } from "./config";
 import { ensureNextLocalKeyGreater, newLocalKey } from "./datastore";
 
 export function expandDataList(list) {
@@ -107,3 +108,46 @@ export function toTitleCase(text) {
     return result;
   }
   
+
+  export function boolToString(bool) {
+    return bool ? 'true' : 'false';
+  }
+
+  export function stringToBool(string) {
+    return string == 'true';
+  }
+
+  export function getPath(object, path) {
+    const parts = path.split('.');
+    var result = object;
+    parts.forEach(part => {
+        result = result?.[part];
+    });
+    return result;
+  }
+
+  export function setPath(object, path, value) {
+    const parts = path.split('.');
+    const newObject = deepClone(object);
+    var subpart = newObject;
+    parts.forEach((part, index) => {
+      if (index == parts.length - 1) {
+        subpart[part] = value;
+      } else {
+        if (subpart[part] == undefined) {
+            subpart[part] = {};
+        }
+        subpart = subpart[part];
+      }
+    });
+    return newObject;
+  }
+
+
+export function expandUrl({url, type}) {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    } else {
+        return fileHostDomain + '/' + type + '/' + url;
+    }
+}

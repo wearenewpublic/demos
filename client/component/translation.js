@@ -4,6 +4,8 @@ import { ui_translations_german } from "../translations/german/ui_german";
 import { PrototypeContext } from "../organizer/PrototypeContext";
 import { Text } from "react-native";
 import { formatString } from "../util/util";
+import { useGlobalProperty } from "../util/datastore";
+import { useFirebaseData } from "../util/firebase";
 
 export const languageEnglish = 'english';
 export const languageGerman = 'german';
@@ -28,13 +30,20 @@ export function translateLabel({label, language, formatParams}) {
 }
 
 export function useLanguage() {
-    const {instance} = useContext(PrototypeContext);
-    return instance?.language;
+    const {prototypeKey, instanceKey, instance} = useContext(PrototypeContext);    
+    const globalLanguage = useFirebaseData(['prototype', prototypeKey, 'instance', instanceKey, 'global', 'language']);
+
+    if (!instance) {
+        return null;
+    } else if (!instance?.isLive || instance?.language) {
+        return instance.language;
+    } else {
+        return globalLanguage;
+    }
 }
 
 export function useTranslation(label, formatParams) {
-    const {instance} = useContext(PrototypeContext);
-    const language = instance?.language;
+    const language = useLanguage();
     if (label == null) return null;
     return translateLabel({label, language, formatParams});
 }
