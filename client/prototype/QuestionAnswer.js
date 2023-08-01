@@ -7,7 +7,6 @@ import { PostInput } from "../component/replyinput";
 import { useTranslation } from "../component/translation";
 import { answer_godzilla, answer_godzilla_comments } from "../data/answer";
 import { authorRobEnnals } from "../data/authors";
-import { statusStartingPoint } from "../data/tags";
 import { useCollection, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
@@ -18,8 +17,6 @@ export const QuestionAnswerPrototype = {
     name: 'Question & Answer', 
     author: authorRobEnnals,
     description: 'Quora-like feed of answers to a question. Starting point for other prototypes',
-    tags: [],
-    status: statusStartingPoint,
     screen: QuestionAnswerScreen,
     subscreens: {
         post: {screen: PostScreen, title: PostScreenTitle},

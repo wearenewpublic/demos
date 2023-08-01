@@ -2,7 +2,6 @@ import { Text } from "react-native";
 import { Card, Clickable, HorizBox, Narrow, Pad, Pill, ScreenTitleText, ScrollableScreen, WideScreen } from "../component/basics";
 import { PostInput } from "../component/replyinput";
 import { authorRobEnnals } from "../data/authors";
-import { statusTentative } from "../data/tags";
 import { useCollection, useData, useDatastore, useObject } from "../util/datastore";
 import { expandDataList, toTitleCase } from "../util/util";
 import { post_parents, post_parents_comments } from "../data/posts";
@@ -22,8 +21,6 @@ export const ConversationDashboardPrototype = {
     date: 'Wed Jul 26 2023 10:32:43 GMT-0700 (Pacific Daylight Time)',
     author: authorRobEnnals,
     description: 'Show how well different conversations are progressing',
-    tags: [],
-    status: statusTentative,
     screen: ConversationDashboardScreen,
     subscreens: {
         post: {screen: PostScreen, title: PostScreenTitle},

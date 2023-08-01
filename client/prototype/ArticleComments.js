@@ -3,7 +3,6 @@ import { BodyText, Pad, ScrollableScreen, SmallTitleLabel } from "../component/b
 import { BasicComments } from "../component/comment";
 import { godzilla_article } from "../data/articles";
 import { authorRobEnnals } from "../data/authors";
-import { statusStartingPoint, tagArticle, tagConversation } from "../data/tags";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
@@ -27,8 +26,6 @@ export const ArticleCommentsPrototype = {
     author: authorRobEnnals,
     date: '2023-05-22',
     description,
-    tags: [tagArticle, tagConversation],
-    status: statusStartingPoint,
     screen: ArticleCommentsScreen,
     instance: [
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)}

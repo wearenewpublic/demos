@@ -4,7 +4,6 @@ import { Comment } from "../component/comment";
 import { expandDataList } from "../util/util"
 import { TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
-import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection } from "../util/datastore";
 
@@ -23,8 +22,6 @@ export const ThreadedCommentsPrototype = {
     author: authorRobEnnals,
     date: '2023-05-08',
     description,
-    tags: [tagConversation],
-    status: statusStartingPoint,
     screen: ThreadedScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},

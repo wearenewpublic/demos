@@ -2,7 +2,6 @@ import { ScrollView } from "react-native";
 import { BodyText, EditableText, Pad, SectionTitleLabel, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
-import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { Comment, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
@@ -37,8 +36,6 @@ export const InnerOuter = {
     key: 'innerouter',
     name: 'Inner/Outer',
     author: authorRobEnnals,
-    status: statusTentative,
-    tags: [tagPrivacy, tagConversation],
     date: 'Wed Jun 21 2023 21:14:05 GMT-0700 (Pacific Daylight Time)',
     description,
     instance: [

@@ -6,7 +6,6 @@ import { expandDataList } from "../util/util";
 import { soccer, trek_vs_wars } from "../data/conversations";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync, askGptToRespondToConversationAsync } from "../component/chatgpt";
-import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore } from "../util/datastore";
 import { personaRobo } from "../data/personas";
@@ -31,8 +30,6 @@ export const RoboMediatorChatPrototype = {
     date: '2023-05-09',
     description,
     screen: RoboMediatorChatScreen,
-    tags: [tagConversation, tagModeration],
-    status: statusTentative,
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars)},
         {key: 'soccer', name: 'Soccer Team', message: expandDataList(soccer)}

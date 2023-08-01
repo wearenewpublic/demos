@@ -1,7 +1,6 @@
 import { ScrollView, Text } from "react-native";
 import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
-import { statusTentative, tagConversation, tagPrivacy } from "../data/tags";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
@@ -28,25 +27,11 @@ the smaller set of group members to hold you accountable for your actions.
 
 `
 
-const persona = {
-    memberAlice: {name: 'Alice', label: 'Member', face: 'face9.jpeg', member: true},
-    memberBob: {name: 'Bob', label: 'Member', face: 'face10.jpeg', member: true},
-    memberLaura: {name: 'Laura', label: 'Member', face: 'face5.jpeg', member: true},
-    guestNatalie: {name: 'Natalie', face: 'face4.jpeg'},
-    guestTim: {name: 'Tim', face: 'face2.jpeg'},
-    guestLarry: {name: 'Larry', face: 'face6.jpeg'},
-    guestRita: {name: 'Rita', face: 'face7.jpeg'},
-    guestSarah: {name: 'Sarah', face: 'face8.jpeg'},
-}
-
-
 export const SemiAnonymous = {
     key: 'semianonymous',
     name: 'Semi Anonymous',
     author: authorRobEnnals,
-    status: statusTentative,
     date: 'Wed Jun 21 2023 20:30:05 GMT-0700 (Pacific Daylight Time)',
-    tags: [tagConversation, tagPrivacy],
     description,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 

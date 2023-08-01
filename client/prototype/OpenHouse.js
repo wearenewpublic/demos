@@ -5,7 +5,6 @@ import { TopCommentInput } from "../component/replyinput";
 import { civic_society, civic_society_description } from "../data/openhouse_civic";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
-import { statusTentative, tagAudioVideo, tagConversation, tagModeration, tagOnboarding } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 import { languageFrench, languageGerman } from "../component/translation";
@@ -47,8 +46,6 @@ export const OpenHousePrototype = {
     author: authorRobEnnals,
     date: '2023-05-19 15:00:00',
     description,
-    tags: [tagConversation, tagModeration, tagOnboarding],
-    status: statusTentative,
     screen: OpenHouseScreen,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 

@@ -1,7 +1,6 @@
 import { AudioPost, transcribeAudioAsync } from "../component/audio";
 import { BigTitle, Pad, ScrollableScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
-import { statusTentative, tagAudioVideo, tagConversation } from "../data/tags";
 import { AudioRecorder } from "../platform-specific/audiorecorder";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
@@ -31,8 +30,6 @@ export const AudioResponsePrototype = {
     author: authorRobEnnals,
     date: '2023-05-30',
     description,
-    tags: [tagAudioVideo, tagConversation],
-    status: statusTentative,
     screen: AudioResponseScreen,
     instance: [
         {key: 'kid-names', name: 'How did you choose the names for your kids?', response: expandDataList([

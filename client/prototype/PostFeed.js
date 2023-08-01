@@ -4,7 +4,6 @@ import { Post, PostActionComment, PostActionEdit, PostActionLike } from "../comp
 import { useTranslation } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
 import { post_parents, post_parents_comments } from "../data/posts";
-import { statusStartingPoint } from "../data/tags";
 import { useCollection, useObject } from "../util/datastore";
 import { expandDataList } from "../util/util";
 import { pushSubscreen } from "../util/navigate";
@@ -16,8 +15,6 @@ export const PostFeedPrototype = {
     name: 'Post Feed',
     author: authorRobEnnals,
     description: 'Facebook-style feed of posts. Starting point for other prototypes',
-    tags: [],
-    status: statusStartingPoint,
     screen: PostFeedScreen,
     subscreens: {
         post: {screen: PostScreen, title: PostScreenTitle},

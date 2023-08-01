@@ -5,7 +5,6 @@ import { BottomScroller } from "../platform-specific/bottomscroller"
 import { Message, QuietSystemMessage, sendMessage } from "../component/message"
 import { gptProcessAsync } from "../component/chatgpt"
 import { useState } from "react"
-import { statusExperiment, statusTutorial, tagConversation } from "../data/tags"
 import { authorRobEnnals } from "../data/authors"
 import { useCollection, useDatastore, useGlobalProperty, useObject } from "../util/datastore"
 
@@ -51,8 +50,6 @@ export const SimulatedChat = {
     author: authorRobEnnals,
     date: "2023-05-19",
     description,
-    tags: [tagConversation],
-    status: statusExperiment,
     screen: SimulatedChatScreen,
     instance: [
         {key: 'politics', name: 'Politics', topic: 'Gun Control', message: {}, persona}        

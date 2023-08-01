@@ -7,7 +7,6 @@ import { Message, QuietSystemMessage } from "../component/message";
 import { ChatInput } from "../component/chatinput";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";
-import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
@@ -61,8 +60,6 @@ export const RuleEnforcerChatPrototype = {
     author: authorRobEnnals,
     date: '2023-05-16',
     description,
-    tags: [tagModeration, tagConversation],
-    status: statusTentative,
     screen: RuleEnforcerChatScreen,
     instance: [
         {key: 'b', name: 'Star Wars vs Star Trek', message: expandDataList(trek_vs_wars), rules: initialRules},

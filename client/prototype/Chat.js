@@ -4,7 +4,6 @@ import { Message, sendMessage } from "../component/message";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { expandDataList } from "../util/util";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
-import { statusStartingPoint, tagConversation } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore } from "../util/datastore";
 
@@ -22,8 +21,6 @@ export const ChatPrototype = {
     author: authorRobEnnals,
     date: '2023-05-04',
     description,
-    tags: [tagConversation],
-    status: statusStartingPoint,
     screen: ChatScreen,
     instance: [
         {key: 'ecorp', name: 'E-Corp Alumni', message: expandDataList(ecorp)},

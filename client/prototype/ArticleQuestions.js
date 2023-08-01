@@ -3,7 +3,6 @@ import { Article } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitleLabel, WideScreen } from "../component/basics";
 import { godzilla_article, godzilla_comments, godzilla_questions } from "../data/articles";
 import { authorRobEnnals } from "../data/authors";
-import { statusTentative, tagArticle, tagConversation } from "../data/tags";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
 import { BasicComments } from "../component/comment";
@@ -31,8 +30,6 @@ export const ArticleQuestionsPrototype = {
     author: authorRobEnnals,
     date: 'Wed May 31 2023 12:40:00 GMT-0700 (Pacific Daylight Time)',
     description,
-    tags: [tagArticle, tagConversation],
-    status: statusTentative,
     screen: ArticleQuestionsScreen,
     subscreens: {
         question: {

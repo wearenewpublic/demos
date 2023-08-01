@@ -5,7 +5,6 @@ import { TopCommentInput } from "../component/replyinput";
 import { expandDataList } from "../util/util";
 import { useContext } from "react";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
-import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
 import { useCollection } from "../util/datastore";
@@ -36,8 +35,6 @@ export const ParentApproves = {
     date: '2023-05-19 20:00:00',
     description,
     screen: ParentApprovesScreen,
-    tags: [tagConversation, tagModeration],
-    status: statusTentative,
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'}
     ],

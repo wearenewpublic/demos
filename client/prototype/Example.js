@@ -4,7 +4,6 @@ import { AudioPlayer, transcribeAudioAsync } from '../component/audio';
 import { BigTitle, BodyText, EditableText, HorizBox, Pad, PrimaryButton, ScrollableScreen, SectionTitleLabel, Separator, SmallTitleLabel } from '../component/basics';
 import { VideoPlayer } from '../component/video';
 import { authorRobEnnals } from '../data/authors';
-import { statusStartingPoint } from '../data/tags';
 import { AudioRecorder } from '../platform-specific/audiorecorder';
 import { Popup } from '../platform-specific/popup';
 import { VideoCamera } from '../platform-specific/videocamera';
@@ -32,8 +31,6 @@ export const ExamplePrototype = {
         cat: {screen: CatScreen, title: ({name}) => `Cat ${name}`}, 
         dog: {screen: DogScreen, title: ({name}) => `Dog ${name}`},
     },
-    tags: [],
-    status: statusStartingPoint,
     instance: [
         {key: 'g', name: 'Silly', message: 'I love silliness'},
         {key: 'sensible', name: 'Sensible', message: 'I love sensibleness'}

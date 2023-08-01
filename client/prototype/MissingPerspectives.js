@@ -1,7 +1,6 @@
 import { useState, useTransition } from "react";
 import { authorRobEnnals } from "../data/authors";
 import { post_starwars } from "../data/posts";
-import { statusTentative } from "../data/tags";
 import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { expandDataList } from "../util/util";
 import { BigTitle, Card, Pad, Pill, ScrollableScreen, SectionTitleLabel } from "../component/basics";
@@ -21,8 +20,6 @@ export const MissingPerspectivesPrototype = {
     name: 'Missing Perspectives',
     author: authorRobEnnals,
     description: 'Show a map that illustrates where we are hearing opinions from, and where we are not',
-    tags: [],
-    status: statusTentative,
     screen: MissingPerspectivesScreen,
     instance: [
         {

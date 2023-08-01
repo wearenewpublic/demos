@@ -6,7 +6,6 @@ import { RatingSummary, RatingWithLabel, SpectrumRating } from "../component/rat
 import { PostInput } from "../component/replyinput";
 import { authorRobEnnals } from "../data/authors";
 import { post_starwars } from "../data/posts";
-import { statusTentative } from "../data/tags";
 import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { expandDataList } from "../util/util";
 
@@ -16,8 +15,6 @@ export const CommentSliderPrototype = {
     name: 'CommentSlider Q&A',
     author: authorRobEnnals,
     description: 'When writing an opinion about a disputed topic, say where you stand on the spectrum of opinion',
-    tags: [],
-    status: statusTentative,
     screen: CommentSliderScreen,
     instance: [
         {

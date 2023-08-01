@@ -11,7 +11,6 @@ import { ArticleCommentsPrototype } from "./ArticleComments";
 import { PrivateRuleEnforcerPrototype } from "./PrivateRuleEnforcer";
 import { AudioResponsePrototype } from "./AudioResponse";
 import { ArticleQuestionsPrototype } from "./ArticleQuestions";
-import { concept_comments_slider } from "./concepts";
 import { OptionallyAnonymous } from "./OptionallyAnonymous";
 import { SemiAnonymous } from "./SemiAnonymous";
 import { InnerOuter } from "./InnerOuter";
@@ -27,7 +26,5 @@ export const prototypes = [
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
     InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
     MissingPerspectivesPrototype,
-
-    concept_comments_slider
 ]
 

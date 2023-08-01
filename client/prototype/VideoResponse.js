@@ -1,7 +1,6 @@
 import { BigTitle, Pad, ScrollableScreen, WideScreen, WrapBox } from "../component/basics";
 import { VideoPlayer, VideoPost } from "../component/video";
 import { authorRobEnnals } from "../data/authors";
-import { statusStartingPoint, statusTentative, tagAudioVideo } from "../data/tags";
 import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { expandDataList } from "../util/util";
@@ -29,8 +28,6 @@ export const VideoResponse = {
     author: authorRobEnnals,
     date: '2023-05-18',
     description,
-    tags: [tagAudioVideo],
-    status: statusTentative,
     screen: VideoResponseScreen,
     instance: [
         {key: 'kid-names', name: 'How did you choose the names for your kids?', response: expandDataList([

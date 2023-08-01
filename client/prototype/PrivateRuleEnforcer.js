@@ -3,7 +3,6 @@ import { expandDataList } from "../util/util";
 import { EditableText, Pad, WideScreen } from "../component/basics";
 import { ExpandSection } from "../component/expand-section";
 import { gptProcessAsync } from "../component/chatgpt";
-import { statusTentative, tagConversation, tagModeration } from "../data/tags";
 import { authorRobEnnals } from "../data/authors";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActionButton, CommentContext } from "../component/comment";
@@ -45,8 +44,6 @@ export const PrivateRuleEnforcerPrototype = {
     author: authorRobEnnals,
     date: '2023-05-26',
     description,
-    tags: [tagModeration, tagConversation],
-    status: statusTentative,
     screen: PrivateRuleEnforcerScreen,
     instance: [
         {key: 'cats', name: 'The Cat Club', comment: expandDataList(cat_club), rules: initialRules.trim()},
