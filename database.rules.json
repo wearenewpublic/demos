@@ -16,6 +16,16 @@
               }
             }
         },
+        "userInstance": {
+            "$user": {
+              ".read": "$user == auth.uid",
+            ".write": "$user == auth.uid",
+              "$prototype": {
+                                  "$instance": {
+                          ".write": true
+                }                
+            }
+        },
         ".read": false,
         ".write": false  
     }

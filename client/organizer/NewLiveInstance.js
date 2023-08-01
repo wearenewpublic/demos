@@ -41,6 +41,8 @@ export function NewLiveInstanceScreen({prototype}) {
         }
         firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'global'], expandedGlobals);
         firebaseWriteAsync(['prototype', prototype.key, 'userInstance', firebaseUser.uid, key], userData);
+        firebaseWriteAsync(['userInstance', firebaseUser.uid, prototype.key, key], userData);
+
         if (prototype.newInstanceRoboPersonas) {
             firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'collection', 'persona'], prototype.newInstanceRoboPersonas);            
         }
