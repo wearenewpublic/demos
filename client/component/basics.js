@@ -12,7 +12,7 @@ import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
 export function ScrollableScreen({children, grey, maxWidth=500}) {
     return <ScrollView style={{backgroundColor: grey ? '#EFF2F5' : null}}>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
-            <View style={{maxWidth: maxWidth, flexShrink: 1, marginHorizontal: 8}}>
+            <View style={{maxWidth: maxWidth, flexShrink: 1, flexGrow: 1, marginHorizontal: 8}}>
                 {children}
             </View>
         </View>
