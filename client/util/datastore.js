@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
-import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseUser, onFbUserChanged } from './firebase';
+import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseDataAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
 import { Text } from 'react-native';
 import { LoadingScreen } from '../component/basics';
@@ -94,18 +94,16 @@ export class Datastore extends React.Component {
 
         if (isLive) {
             firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], value);
+            addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree: this.dataTree});
         }
     }
     addObject(typeName, value) {
-        const {prototypeKey, instanceKey, isLive} = this.props;
+        const {isLive} = this.props;
         const key = isLive ? firebaseNewKey() : newLocalKey();
         const personaKey = this.getPersonaKey();
         this.addCurrentUser();
         const objectData = {key, from: personaKey, time: Date.now(), ...value};
         this.setObject(typeName, key, objectData);
-        if (isLive) {
-            firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], objectData);
-        }
         return key;
     }
     modifyObject(typename, key, modFunc) {
@@ -140,7 +138,6 @@ export class Datastore extends React.Component {
         if (isLive) {
             firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
         }
-
     }
         
     render() {
@@ -153,6 +150,20 @@ export class Datastore extends React.Component {
             return <LoadingScreen />
         }
     }
+}
+
+
+export async function addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree}) {
+    console.log('addInstanceToMyInstancesAsync', prototypeKey, instanceKey, dataTree);
+    const firebaseUser = getFirebaseUser();
+    console.log('firebaseUser', firebaseUser);
+    await firebaseWriteAsync(['userInstance', firebaseUser.uid, prototypeKey, instanceKey], {
+        name: dataTree.name, 
+        language: dataTree.language || null,
+        createTime: dataTree.createTime || Date.now(),
+        updateTime: Date.now()
+    });
+    console.log('wrote');
 }
 
 

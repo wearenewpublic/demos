@@ -78,6 +78,11 @@ export function useFirebaseData(pathList, defaultValue=null) {
     return data;
 }
 
+export function getFirebaseDataAsync(pathList) {
+    const pathString = makeFirebasePath(pathList);
+    return ref(database, pathString).get().then(snapshot => snapshot.val());
+}
+
 function makeFirebasePath(pathList) {
     return pathList.join('/');
 }
