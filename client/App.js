@@ -94,10 +94,12 @@ function StackedScreen({screenInstance, index}) {
 
   const prototype = choosePrototypeByKey(prototypeKey);
   const instance = chooseInstanceByKey({prototype, instanceKey});
-  const screenSet = {...defaultScreens, ...prototype.screens};
+  const screenSet = {...defaultScreens, ...prototype.subscreens};
 
   var screen = getScreen({screenSet, prototype, screenKey, instanceKey});
   var title = getScreenTitle({screenSet, prototype, screenKey, instance, params}); 
+
+  console.log('StackedScreen', {screenInstance, prototype, pScreens: prototype.subscreens, screenSet, screen, title, params})
 
   if (!screen) {
     return null;
