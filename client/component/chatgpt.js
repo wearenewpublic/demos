@@ -8,8 +8,8 @@ export async function askGptToRespondToConversationAsync({datastore, promptKey, 
     return response?.messageText || null;
 }
 
-export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
-    const response = await gptProcessAsync({promptKey, params: {text}});
+export async function askGptToEvaluateMessageTextAsync({promptKey, text, params={}}) {
+    const response = await gptProcessAsync({promptKey, params: {...params, text}});
     return response?.judgement || false;
 }
 

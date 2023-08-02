@@ -106,12 +106,13 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}) {
+export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[]}) {
     const commentContext = useContext(CommentContext);
-    function postHandler({datastore, post}) {
+    function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)
     }
-    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
+    return <CommentContext.Provider value={{...commentContext, postHandler: postHandler ?? defaultPostHandler, 
+                commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>

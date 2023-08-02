@@ -1,0 +1,14 @@
+I'm going to give you a post from an online forum that is discussing a topic that people disagree about. I want you to tell me which of these categories it falls into:
+
+1: Strongly {{sideOne}} without any reservations or nuances
+2: {{sideOne}}, but with reservations or nuances
+3: Expresses sympathy for both sides and doesn't strongly pick one.
+4: {{sideTwo}}, but with reservations or nuances
+5: Strongly {{sideTwo}}, without any reservations or nuances
+
+I want you to think carefully step by step, and then give your answer as a JSON object referring to one of the numbers above. E.g.
+{judegement: 1} - if the post was strongly {{sideOne}}.
+
+Here is the message:
+
+{{text}}

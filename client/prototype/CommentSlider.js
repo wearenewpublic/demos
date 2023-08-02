@@ -8,6 +8,7 @@ import { authorRobEnnals } from "../data/authors";
 import { post_starwars } from "../data/posts";
 import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { expandDataList } from "../util/util";
+import { askGptToEvaluateMessageTextAsync, gptProcessAsync } from "../component/chatgpt";
 
 export const CommentSliderPrototype = {
     key: 'commentsliderqa',
@@ -23,9 +24,19 @@ export const CommentSliderPrototype = {
             sideOne: 'Pro Star Wars',
             sideTwo: 'Pro Star Trek',
             post: expandDataList(post_starwars)
+        },
+        {
+            key: 'wars-auto', name: 'Star Wars (Auto-Slider)',
+            auto: true,
+            question: 'Which is better. Star Wars or Star Trek?',
+            sideOne: 'Pro Star Wars',
+            sideTwo: 'Pro Star Trek',
+            post: expandDataList(post_starwars)
         }
     ],
+
     newInstanceParams: [
+        {key: 'auto', name: 'Auto-Slider', type: 'boolean', default: false},
         {key: 'question', name: 'Question', type: 'shorttext'},
         {key: 'sideOne', name: 'Side One', type: 'shorttext'},
         {key: 'sideTwo', name: 'Side Two', type: 'shorttext'},
@@ -42,6 +53,7 @@ function CommentSliderScreen() {
     const hasAnswered = posts.some(post => post.from == personaKey);
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
     const ratingCounts = countRatings(posts);
+    const auto = useGlobalProperty('auto');
     var shownPosts = posts;
     if (selection) {
         shownPosts = posts.filter(post => post.slide == selection);
@@ -52,7 +64,8 @@ function CommentSliderScreen() {
         {hasAnswered ? 
             <QuietSystemMessage label='You have already written an opinion' />
         :
-            <PostInput placeholder="What's your opinion?" topWidgets={[EditRating]} />
+            <PostInput placeholder="What's your opinion?" topWidgets={auto ? [] : [EditRating]} 
+                postHandler={auto ? postHandlerAsync : null} />
         }
 
         <Card>
@@ -66,11 +79,33 @@ function CommentSliderScreen() {
 
         {shownPosts.map(post => 
             <Post key={post.key} post={post} actions={[PostActionLike, PostActionEdit]}
-                editWidgets={[EditRating]}
-                topBling={<RatingWithLabel value={post.slide} labelSet={ratingLabels} />}
+                saveHandler={postHandlerAsync}
+                editWidgets={auto ? [] : [EditRating]}
+                topBling={<RatingWithLabel value={post.slide} labelSet={ratingLabels} placeholder='Analysing Opinion...' />}
             />
         )}
     </ScrollableScreen>
+}
+
+async function postHandlerAsync({datastore, postKey, post}) {
+    console.log('postHandlerAsync', post);
+    const sideOne = datastore.getGlobalProperty('sideOne');
+    const sideTwo = datastore.getGlobalProperty('sideTwo');
+    var key;
+    if (postKey) {
+        key = postKey;
+        await datastore.setObject('post', key, {...post, slide: null});
+    } else {
+        key = await datastore.addObject('post', post);
+    }
+    // const key = postKey ?? await datastore.addObject('post', post);
+    const result = await gptProcessAsync({promptKey: 'slider', params: {text: post.text, sideOne, sideTwo}});
+    console.log('result', result);
+    const slide = result.judgement;
+    await datastore.updateObject('post', key, {slide});
+}
+
+async function saveHandlerAsync({datastore, postKey, post}) {
 }
 
 function getRatingLabels({sideOne, sideTwo}) {

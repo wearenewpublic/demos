@@ -12,12 +12,12 @@ import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
-export function Post({post, editWidgets=[], fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
+export function Post({post, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
     if (editedPost == post.key) {
-        return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} fitted={fitted} noCard={noCard} />
+        return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} saveHandler={saveHandler} fitted={fitted} noCard={noCard} />
     }
     return <MaybeCard fitted={fitted} isCard={!noCard}>
         <View style={s.authorBox}>
@@ -86,13 +86,17 @@ const PostStyle = StyleSheet.create({
     }
 })
 
-export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noCard=false}) {
+export function PostEditor({postKey, oldPostData, editWidgets, saveHandler, fitted=false, noCard=false}) {
     const s = PostEditorStyle;
     const [post, setPost] = useState(oldPostData);
     const datastore = useDatastore();
 
     function onSave() {
-        datastore.modifyObject('post', postKey, () => post);
+        if (saveHandler) {
+            saveHandler({datastore, postKey, post});
+        } else {
+            datastore.modifyObject('post', postKey, () => post);
+        }
         datastore.setSessionData('editPost', null);
     }
 
