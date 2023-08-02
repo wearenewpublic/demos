@@ -32,7 +32,8 @@
     "react-dom": "^18.2.0",
     "react-native": "0.71.7",
     "react-native-markdown-display": "^7.0.0-alpha.2",
-    "react-native-web": "~0.18.11"
+    "react-native-web": "~0.18.11",
+    "react-tooltip": "^5.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

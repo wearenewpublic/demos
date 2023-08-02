@@ -83,7 +83,7 @@ const QuietSystemMessageStyle = StyleSheet.create({
     text: {
         color: '#999',
         marginVertical: 8,
-        alignSelf: 'center'
+        alignSelf: 'left'
     }
 });
 

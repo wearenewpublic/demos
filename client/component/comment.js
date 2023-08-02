@@ -111,7 +111,6 @@ export function BlingPending({comment}) {
     }
 }
 
-
 const defaultActions = [ActionLike, ActionReply, ActionCollapse];
 function ActionBar({actions, commentKey, comment}) {
     return <View style={{flexDirection: 'row'}}>
@@ -182,7 +181,6 @@ function AuthorName({comment}) {
 function AuthorFace({comment, faint}) {
     return <UserFace userId={comment.from} faint={faint} />
 }
-
 
 export function Comment({commentKey}) {
     const s = CommentStyle;

@@ -16,6 +16,8 @@ import { SemiAnonymous } from "./SemiAnonymous";
 import { InnerOuter } from "./InnerOuter";
 import { PostFeedPrototype } from "./PostFeed";
 import { QuestionAnswerPrototype } from "./QuestionAnswer";
+import { CheekyChatBotPrototype } from "./CheekyChatBot";
+import { CommentBouncerPrototype } from "./CommentBouncer";
 import { CommentSliderPrototype } from "./CommentSlider";
 import { ConversationDashboardPrototype } from "./ConversationDashboard";
 import { MissingPerspectivesPrototype } from "./MissingPerspectives";
@@ -24,7 +26,7 @@ export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
-    InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
+    InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CheekyChatBotPrototype, CommentBouncerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
     MissingPerspectivesPrototype,
 ]
 
