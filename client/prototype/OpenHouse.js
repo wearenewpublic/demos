@@ -50,19 +50,16 @@ export const OpenHousePrototype = {
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
             description: civic_society_description,
-            personaList: memberPersonaList,
             comment: expandDataList(civic_society)
         },
         {
             key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
             description: civic_society_description_french,
-            personaList: memberPersonaList,
             comment: expandDataList(civic_society_french)
         },
         {
             key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
             description: civic_society_description_german,
-            personaList: memberPersonaList,
             comment: expandDataList(civic_society_german)
         },
     ]

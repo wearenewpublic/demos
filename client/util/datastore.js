@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
+import { defaultPersona, defaultPersonaList, memberPersonaList, personaListToMap } from '../data/personas';
 import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseDataAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
 import { Text } from 'react-native';
@@ -42,11 +42,13 @@ export class Datastore extends React.Component {
     }
 
     resetData() {
-        const {instance, instanceKey, prototypeKey, isLive} = this.props;
+        const {instance, instanceKey, prototype, prototypeKey, isLive} = this.props;
 
         const personaKey = getInitialPersonaKey(instance);
+        const defaultPersonasForPrototype = isLive ? [] : (prototype.hasMembers ? memberPersonaList : defaultPersonaList);
         this.dataTree = {
-            persona: personaListToMap(instance.personaList || defaultPersonaList),
+            persona: personaListToMap(instance.personaList || defaultPersonasForPrototype),
+            admin: instance.admin || 'a',
             ...deepClone(instance)
         }
         this.sessionData = {personaKey}
@@ -88,6 +90,9 @@ export class Datastore extends React.Component {
     }
     setObject(typeName, key, value) {
         const {prototypeKey, instanceKey, isLive} = this.props;
+        if (!key || !typeName) {
+            throw new Error('Missing key or typeName', key, typeName);
+        }
         const typeData = {...this.dataTree[typeName], [key]: value};
         this.dataTree = {...this.dataTree, [typeName]: typeData};
         this.notifyWatchers();
@@ -123,7 +128,12 @@ export class Datastore extends React.Component {
             const fbUser = getFirebaseUser();
             const myPersona = this.getObject('persona', personaKey);
             if (!myPersona || myPersona.photoUrl != fbUser.photoURL || myPersona.name != fbUser.displayName) {
-                this.setObject('persona', personaKey, {photoUrl: fbUser.photoURL, name: fbUser.displayName});
+                this.setObject('persona', personaKey, {
+                    photoUrl: fbUser.photoURL, 
+                    name: fbUser.displayName, 
+                    key: personaKey,
+                    member: myPersona?.member || null
+                });
             }
         }    
     }

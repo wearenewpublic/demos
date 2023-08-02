@@ -22,7 +22,7 @@ async function renderPrototypeInstanceAsync({prototype, instance}) {
     await act(async () => {
         const renderer = await TestRenderer.create(            
             <PrototypeContext.Provider value={{prototype, instance, instanceKey: instance.key}}>
-                <Datastore instance={instance} instanceKey={instance.key} prototypeKey={prototype.key} isLive={instance.isLive}>
+                <Datastore instance={instance} instanceKey={instance.key} prototype={prototype} prototypeKey={prototype.key} isLive={instance.isLive}>
                     <prototype.screen />
                 </Datastore>
             </PrototypeContext.Provider>

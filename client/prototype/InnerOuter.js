@@ -38,25 +38,24 @@ export const InnerOuter = {
     author: authorRobEnnals,
     date: 'Wed Jun 21 2023 21:14:05 GMT-0700 (Pacific Daylight Time)',
     description,
+    hasMembers: true,
+    screen: InnerOuterScreen,   
     instance: [
         {
             key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
-            personaList: memberPersonaList,
-            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars), '$personaKey': 'b'},
+            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)},
         {
             key: 'wars_french', language: languageFrench,
-            personaList: memberPersonaList,
             conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
-            name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french), '$personaKey': 'b'
+            name: 'Star Wars vs Star Trek (French)', comment: expandDataList(trek_vs_wars_french),
         },
         {
             key: 'wars_german', language: languageGerman,
-            personaList: memberPersonaList,
             conclusion: "Star Wars und Star Trek sind beide gute Filme, aber sie erfassen unterschiedliche Aspekte davon, wie die Welt funktioniert.",
-            name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german), '$personaKey': 'b'
+            name: 'Star Wars vs Star Trek (German)', comment: expandDataList(trek_vs_wars_german),
         }
     ],
-    screen: InnerOuterScreen   
+    newInstanceParams: []
 }
 
 function InnerOuterScreen() {

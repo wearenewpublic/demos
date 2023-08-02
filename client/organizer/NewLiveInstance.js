@@ -23,8 +23,6 @@ export function NewLiveInstanceScreen({prototype}) {
     const firebaseUser = useFirebaseUser();
     const [instanceGlobals, setInstanceGlobals] = useState({});
 
-    console.log('instanceGlobals', instanceGlobals);
-
     function onCancel() {
         goBack();
     }
