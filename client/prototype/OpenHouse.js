@@ -62,6 +62,10 @@ export const OpenHousePrototype = {
             description: civic_society_description_german,
             comment: expandDataList(civic_society_german)
         },
+    ],
+    hasMembers: true,
+    newInstanceParams: [
+        {key: 'description', type: 'longtext', name: 'Description'}
     ]
 }
 
