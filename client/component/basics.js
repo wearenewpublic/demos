@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Markdown from "react-native-markdown-display";
 import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
@@ -233,11 +233,20 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function AutoSizeTextInput({value, onChange, placeholder, style, ...props}) {
+export function AutoSizeTextInput({value, onChange, placeholder, style, maxHeight = 400, ...props}) {
     const [height, setHeight] = useState(0);
 
+    useEffect(() => {
+        if (value == '' && height > 0) {
+            setHeight(0);
+        }
+    }, [value])
+
     function onContentSizeChange(e) {
-        setHeight(e.nativeEvent.contentSize.height);
+        const newHeight = e.nativeEvent.contentSize.height;
+        if (newHeight > height) {
+            setHeight(Math.min(newHeight, maxHeight));
+        }
     }
 
     const styleHeight = Math.max(40, height);
