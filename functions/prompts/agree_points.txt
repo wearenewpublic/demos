@@ -1,0 +1,7 @@
+
+Here is a threaded conversation written as a JSON object. Some of the messages in this conversation are replying to other messages, which is expressed by the "replyTo" field of one message referring to the "key" of another message.
+
+{{commentsJSON}}
+
+Write a short bulleted list of key points made in this conversation that most people would be likely to agree with. This should be expressed in a civil way.
+
