@@ -149,6 +149,9 @@ export class Datastore extends React.Component {
             firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
         }
     }
+
+    getPrototypeKey() {return this.props.prototypeKey}
+    getInstanceKey() {return this.props.instanceKey}
         
     render() {
         const {loaded} = this.state;
@@ -307,3 +310,15 @@ function pathToName(path) {
     }
 }
 
+function makeFirebasePath(path) {
+    return path.map(encodeURIComponent).join('%2F');
+}
+
+export function makeStorageUrl({datastore, userId, fileKey, extension}) {
+    const prototypeKey = datastore.getPrototypeKey();
+    const instanceKey = datastore.getInstanceKey();
+    const storagePrefix = 'https://firebasestorage.googleapis.com/v0/b/new-public-demo.appspot.com/o/';
+    const path = ['user', userId, prototypeKey, instanceKey, fileKey + '.' + extension];
+    const pathString = makeFirebasePath(path);
+    return storagePrefix + pathString + '?alt=media';
+}

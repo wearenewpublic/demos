@@ -3,6 +3,7 @@
 export function firebaseSignOut() {}
 export function onFbUserChanged() {};
 export function getFirebaseUser() {return 'user'};
+export async function getFirebaseIdTokenAsync() {return 'token'}
 export function useFirebaseUser() {return 'user'};
 export function useFirebaseData() {return null}
 export function signInWithPopup() {}

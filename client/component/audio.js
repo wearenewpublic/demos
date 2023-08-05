@@ -92,8 +92,9 @@ const AudioPlayerStyle = StyleSheet.create({
 
 
 export async function transcribeAudioAsync({blob}) {
-    const result = await callServerMultipartApiAsync('whisper', 'transcribeAudio', {}, {
-        audioFile: {blob, filename: 'audio.webm'}
+    const result = await callServerMultipartApiAsync({
+        component: 'whisper', funcname: 'transcribeAudio', params: {}, 
+        fileParams: {audioFile: {blob, filename: 'audio.webm'}}
     });
     return result.text;
 

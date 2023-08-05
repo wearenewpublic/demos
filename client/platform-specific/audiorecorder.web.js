@@ -1,17 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad, PrimaryButton } from "../component/basics";
+import { PrototypeContext } from "../organizer/PrototypeContext";
+import { makeStorageUrl, useDatastore, usePersonaKey } from "../util/datastore";
+import { callServerMultipartApiAsync } from "../util/servercall";
+import { getFirebaseUser } from "../util/firebase";
 
 
 export function AudioRecorder({action='Record Audio', onSubmitRecording}) {
     const s = VideoCameraStyle;
     const [recorderShown, setRecorderShown] = useState(false);
+    const {isLive} = useContext(PrototypeContext);
+    const datastore = useDatastore();
 
-    function onSubmit(url) {
+    console.log('isLive', isLive);
+
+    async function onSubmit({blob, url}) {
+        console.log('onSubmit', blob, url);
         setRecorderShown(false);
-        onSubmitRecording(url);
+        // HACK: Undo this. Temporary for testing.
+        if (isLive) {
+            const result = await callServerMultipartApiAsync({datastore, component: 'storage', funcname: 'uploadFile', 
+                params: {contentType: 'audio/webm', extension: 'webm'}, 
+                fileParams: {
+                file: {blob, filename: 'audio.webm'}
+                }
+            });
+            console.log('result', result);
+            const storageUrl = makeStorageUrl({datastore, userId: result.userId, fileKey: result.fileKey, extension: 'webm'});
+            console.log('storage url', storageUrl);
+            onSubmitRecording({blob, url: storageUrl});
+        } else {
+            onSubmitRecording({blob, url});
+        }
     }
 
     if (recorderShown) {

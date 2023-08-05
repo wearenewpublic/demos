@@ -71,8 +71,8 @@ export const AudioResponsePrototype = {
                 text: "Pour mon fils aîné, nous avons choisi le nom d'Isaac, parce que nous voulions un nom avec les bonnes associations, et nous avons pensé, peut-être, à un scientifique. Et si vous choisissez un scientifique, Isaac Newton est la personne la plus évidente. Et nous lui avons donné le deuxième prénom d'Alexander Graham Bell, donc son deuxième prénom est Graham."
             }
         ])}, 
-
-    ]
+    ],
+    newInstanceParams: []
 }
 
 function AudioResponseScreen() {

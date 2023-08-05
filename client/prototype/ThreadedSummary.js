@@ -47,7 +47,7 @@ function SummaryEditor({property, name, prompt}) {
     async function computeSummary() {
         const commentsJSON = JSON.stringify(comments);
         setInprogress(true);
-        const newSummary = await callServerApiAsync('chatgpt', 'chat', {promptKey: prompt, params: {commentsJSON}});
+        const newSummary = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'chat', params: {promptKey: prompt, params: {commentsJSON}}});
         datastore.setGlobalProperty(property, newSummary);
         setInprogress(false);
     }

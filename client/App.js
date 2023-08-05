@@ -63,7 +63,7 @@ function ScreenStack({screenStack, prototypeKey, instanceKey}) {
   const prototype = choosePrototypeByKey(prototypeKey);
   const instance = chooseInstanceByKey({prototype, instanceKey});
   return <View style={s.stackHolder}>
-    <PrototypeContext.Provider value={{prototype, prototypeKey, instance, instanceKey}}>
+    <PrototypeContext.Provider value={{prototype, prototypeKey, instance, instanceKey, isLive: instance.isLive}}>
       <Datastore instance={instance} instanceKey={instanceKey} prototype={prototype} prototypeKey={prototypeKey} isLive={instance.isLive}>
         {screenStack.map((screenInstance, index) => 
           <StackedScreen screenInstance={screenInstance} index={index} key={index} />

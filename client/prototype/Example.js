@@ -101,12 +101,12 @@ function ExampleCallBackend({name}) {
     const [response, setResponse] = useState('');
 
     async function onCallBackend() {
-        const result = await callServerApiAsync('chatgpt', 'hello', {name});
+        const result = await callServerApiAsync({component: 'chatgpt', funcname: 'hello', params: {name}});
         setResponse(result);
     }
 
     async function onCallMultipartBackend() {
-        const result = await callServerMultipartApiAsync('chatgpt', 'hello', {name});
+        const result = await callServerMultipartApiAsync({component: 'chatgpt', funcname: 'hello', params: {name}});
         setResponse('Multipart: ' + result);
     }
 

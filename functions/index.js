@@ -1,4 +1,11 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: 'https://new-public-demo-default-rtdb.firebaseio.com',
+    storageBucket: 'gs://new-public-demo.appspot.com',
+});
+
 const Busboy = require('busboy');
 const os = require('os');
 const path = require('path');
@@ -9,6 +16,7 @@ const cors = require('cors')({origin: true})
 
 exports.api = functions.https.onRequest((req, res) => {
     const contentType = req.headers['content-type'] || '';
+
     console.log('api request', req.method, req.path, contentType);
     if (req.method == 'OPTIONS') {
         cors(req, res, () => {
@@ -77,19 +85,40 @@ async function handleJsonRequest(request, response) {
 }
     
 
+async function getValidatedUser(req) {
+    const tokenId = req.headers.authorization && req.headers.authorization.split('Bearer ')[1];
+    if (!tokenId || tokenId == 'none') {
+        return null;
+    } 
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(tokenId);
+        return decodedToken.uid;
+    } catch (error) {
+        console.error('Error verifying Firebase ID token:', error);
+        return 'error';
+    }
+}
+
+
 async function callApiFunctionAsync(request, fields) {
     console.log('callApiFunctionAsync', request.path, fields);
     const {componentId, apiId} = parsePath(request.path);
 
     const component = components[componentId];
     const apiFunction = component?.apiFunctions?.[apiId];
-    const params = {...request.query, ...fields};
+    const userId = await getValidatedUser(request);
+    const params = {...request.query, ...fields, userId};
 
-    if (!component || !apiFunction) {
+    console.log('user', userId);
+
+    if (userId == 'error') {
+        return ({statusCode: 500, result: JSON.stringify({success: false, error: 'Error validating user'})});
+    } else if (!component || !apiFunction) {
         return ({statusCode: 400, result: JSON.stringify({success: false, error: 'Unknown api', path: request.path, componentId, apiId})});
     }
 
     const apiResult = await apiFunction(params); 
+
     if (apiResult.data) {
         return ({statusCode: 200, result: JSON.stringify({success: true, data: apiResult.data})});
     } else if (apiResult.error) {

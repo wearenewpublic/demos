@@ -39,6 +39,10 @@ onAuthStateChanged(auth, (user) => {
     global_firebaseUser = user;
 });
 
+export async function getFirebaseIdTokenAsync() {
+    return await auth.currentUser?.getIdToken() || null;
+}
+
 export function firebaseSignOut() {
     auth.signOut();
 }
