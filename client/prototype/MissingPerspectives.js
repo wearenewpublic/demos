@@ -120,7 +120,8 @@ function MissingPerspectivesScreen() {
         {hasAnswered ? 
             <QuietSystemMessage label='You have already written an opinion' />
         :
-            <PostInput placeholder="What's your opinion?"  topWidgets={[EditRegion]} />
+            <PostInput placeholder="What's your opinion?"  topWidgets={[EditRegion]} getCanPost={getCanPost}
+            />
         }
 
         <Card>
@@ -144,6 +145,10 @@ function MissingPerspectivesScreen() {
 
 function RegionBling({region, regionNames}) {
     return <Pill notranslate label={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
+}
+
+function getCanPost({datastore, post}) {
+    return post.region && post.text;
 }
 
 

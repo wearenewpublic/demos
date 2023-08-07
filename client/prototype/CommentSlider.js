@@ -53,7 +53,7 @@ function CommentSliderScreen() {
     const hasAnswered = posts.some(post => post.from == personaKey);
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
     const ratingCounts = countRatings(posts);
-    const auto = useGlobalProperty('auto');
+    const auto = useGlobalProperty('auto') || false;
     var shownPosts = posts;
     if (selection) {
         shownPosts = posts.filter(post => post.slide == selection);
@@ -64,7 +64,9 @@ function CommentSliderScreen() {
         {hasAnswered ? 
             <QuietSystemMessage label='You have already written an opinion' />
         :
-            <PostInput placeholder="What's your opinion?" topWidgets={auto ? [] : [EditRating]} 
+            <PostInput placeholder={"What's your opinion?" + (auto ? '' : ' (optional)')}
+                getCanPost={getCanPost}
+                topWidgets={auto ? [] : [EditRating]} 
                 postHandler={auto ? postHandlerAsync : null} />
         }
 
@@ -79,12 +81,21 @@ function CommentSliderScreen() {
 
         {shownPosts.map(post => 
             <Post key={post.key} post={post} actions={[PostActionLike, PostActionEdit]}
-                saveHandler={postHandlerAsync}
+                saveHandler={auto ? postHandlerAsync : null}
                 editWidgets={auto ? [] : [EditRating]}
                 topBling={<RatingWithLabel value={post.slide} labelSet={ratingLabels} placeholder='Analysing Opinion...' />}
             />
         )}
     </ScrollableScreen>
+}
+
+function getCanPost({datastore, post}) {
+    const auto = datastore.getGlobalProperty('auto');
+    if (auto) {
+        return post.text.length > 0;
+    } else {
+        return post.slide != null;
+    }
 }
 
 async function postHandlerAsync({datastore, postKey, post}) {

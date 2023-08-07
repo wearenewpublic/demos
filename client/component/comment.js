@@ -167,6 +167,7 @@ export const CommentContext = React.createContext({
     getIsVisible: () => true,
     authorName: AuthorName,
     authorFace: AuthorFace,
+    getCanPost: ({post}) => post.text.length > 0,
     authorBling: [],
     commentPlaceholder: 'Write a comment...',
     replyWidgets: [],

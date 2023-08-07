@@ -10,7 +10,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [post, setPost] = useState({text: '', replyTo: commentKey});
-    const {postHandler, authorFace, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
+    const {postHandler, authorFace, getCanPost, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
@@ -40,7 +40,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
-            {((!topLevel || post.text) && replyTopWidgets.length > 0) ?
+            {(replyTopWidgets.length > 0) ?
                 <View style={s.widgetBar}>
                     {replyTopWidgets.map((widget, idx) => 
                         React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
@@ -61,7 +61,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     )}
                 </View>
             : null}
-            {(!topLevel || post.text) ? 
+            {(!topLevel || getCanPost({datastore,post})) ? 
                 <View style={s.actions}>
                     <PrimaryButton onPress={onPost} label='Post'/>
                     <SecondaryButton onPress={hideReplyInput} label='Cancel' />
@@ -106,13 +106,14 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[]}) {
+export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[], getCanPost=null}) {
     const commentContext = useContext(CommentContext);
     function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)
     }
     return <CommentContext.Provider value={{...commentContext, postHandler: postHandler ?? defaultPostHandler, 
-                commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
+                commentPlaceholder:placeholder, replyTopWidgets: topWidgets, 
+                getCanPost: getCanPost ?? commentContext.getCanPost}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>
