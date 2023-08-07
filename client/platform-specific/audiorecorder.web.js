@@ -125,11 +125,6 @@ export function LiveAudioRecorder({size, onSubmitRecording}) {
     
     return (
         <View>
-            {/* <video 
-                ref={videoRef} 
-                style={{width: size, height: size, objectFit: "cover"}} autoPlay muted 
-            />
-            <Pad /> */}
             {initialized ? 
                 (recording ?
                     <PrimaryButton
