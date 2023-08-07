@@ -119,6 +119,10 @@ export const defaultPersonaList = [personaA, personaB, personaC, personaD, perso
 export const memberPersonaList = [adminA, memberB, memberC, personaD, personaE, personaF,
     personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
 
+export const adminPersonaList = [adminA, personaB, personaC, personaD, personaE, personaF,
+      personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+  
+
 
 export function personaListToMap(personas) {
     const result = {};

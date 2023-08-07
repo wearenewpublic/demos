@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput } from "react-native";
 import { AutoSizeTextInput, Card, FormField, HorizBox, MultiLineTextInput, Narrow, OneLineTextInput, Pad, PadBox, PrimaryButton, SecondaryButton, SectionTitleLabel } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
-import { firebaseNewKey, firebaseWriteAsync, useFirebaseUser } from "../util/firebase";
+import { firebaseNewKey, firebaseWriteAsync, getFirebaseUser, useFirebaseUser } from "../util/firebase";
 import { useState } from "react";
 import { languageEnglish, languageFrench, languageGerman, useTranslation } from "../component/translation";
 import { PopupSelector } from "../platform-specific/popup";
@@ -27,7 +27,7 @@ export function NewLiveInstanceScreen({prototype}) {
         goBack();
     }
 
-    function onCreate() {
+    async function onCreate() {
         console.log('Creating instance', instanceGlobals);
         const key = generateRandomKey(20);
         const createTime = Date.now();
@@ -40,7 +40,14 @@ export function NewLiveInstanceScreen({prototype}) {
         firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'global'], expandedGlobals);
         firebaseWriteAsync(['prototype', prototype.key, 'userInstance', firebaseUser.uid, key], userData);
         firebaseWriteAsync(['userInstance', firebaseUser.uid, prototype.key, key], userData);
-
+        const fbUser = getFirebaseUser();
+        firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'collection', 'persona', fbUser.uid], {
+            photoUrl: fbUser.photoURL, 
+            name: fbUser.displayName, 
+            key: fbUser.uid,
+            member: true
+        });
+    
         if (prototype.newInstanceRoboPersonas) {
             firebaseWriteAsync(['prototype', prototype.key, 'instance', key, 'collection', 'persona'], prototype.newInstanceRoboPersonas);            
         }

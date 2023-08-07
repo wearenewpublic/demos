@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeCard, Pad, PluralLabel, Separator, TimeText } from "./basics";
+import { Clickable, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { UserFace } from "./userface";
 import { TranslatableLabel } from "./translation";
@@ -12,7 +12,7 @@ import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
-export function Post({post, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
+export function Post({post, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
@@ -20,13 +20,15 @@ export function Post({post, editWidgets=[], saveHandler=null, fitted=false, chil
         return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} saveHandler={saveHandler} fitted={fitted} noCard={noCard} />
     }
     return <MaybeCard fitted={fitted} isCard={!noCard}>
-        <View style={s.authorBox}>
-            <UserFace userId={post.from} size={32} />
-            <View style={s.authorRight}>
-                <Text style={s.authorName}>{user?.name}</Text>
-                <TimeText time={post.time} />
+        <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor}>
+            <View style={s.authorBox}>
+                <UserFace userId={post.from} size={32} />
+                <View style={s.authorRight}>
+                    <Text style={s.authorName}>{user?.name}</Text>
+                    <TimeText time={post.time} />
+                </View>
             </View>
-        </View>
+        </MaybeClickable>
         {topBling ?
            <View style={{marginBottom: 8}}>{topBling}</View>
         : null} 

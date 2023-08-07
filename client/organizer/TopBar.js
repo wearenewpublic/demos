@@ -95,7 +95,7 @@ function AdminPopup() {
         </View>
     }
 
-    if (admin && admin == personaKey && prototype.hasMembers) {
+    if (admin && admin == personaKey && (prototype.hasMembers || prototype.hasAdmin)) {
         return <Popup popupContent={popup}>
             <Entypo name='menu' size={32} color='#666' />
         </Popup>

@@ -144,7 +144,7 @@ function MissingPerspectivesScreen() {
 }
 
 function RegionBling({region, regionNames}) {
-    return <Pill notranslate label={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
+    return <Pill text={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
 }
 
 function getCanPost({datastore, post}) {

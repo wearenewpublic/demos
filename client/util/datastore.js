@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { defaultPersona, defaultPersonaList, memberPersonaList, personaListToMap } from '../data/personas';
+import { adminPersonaList, defaultPersona, defaultPersonaList, memberPersonaList, personaListToMap } from '../data/personas';
 import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseDataAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
 import { Text } from 'react-native';
@@ -41,13 +41,28 @@ export class Datastore extends React.Component {
         }
     }
 
+    getDefaultPersonaList() {
+        const {instance, prototype, isLive} = this.props;
+        if (isLive) {
+            return [];
+        } else if (instance.personaList) {
+            return instance.personaList;
+        } else if (prototype.hasMembers) {
+            return memberPersonaList;
+        } else if (prototype.hasAdmin) {
+            return adminPersonaList;
+        } else {
+            return defaultPersonaList;
+        }
+    }
+
     resetData() {
         const {instance, instanceKey, prototype, prototypeKey, isLive} = this.props;
 
         const personaKey = getInitialPersonaKey(instance);
-        const defaultPersonasForPrototype = isLive ? [] : (prototype.hasMembers ? memberPersonaList : defaultPersonaList);
+        // const defaultPersonasForPrototype = isLive ? [] : (prototype.hasMembers ? memberPersonaList : defaultPersonaList);
         this.dataTree = {
-            persona: personaListToMap(instance.personaList || defaultPersonasForPrototype),
+            persona: personaListToMap(this.getDefaultPersonaList()),
             admin: instance.admin || 'a',
             ...deepClone(instance)
         }

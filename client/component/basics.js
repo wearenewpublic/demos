@@ -83,6 +83,11 @@ export function BigTitle({children, pad=true}) {
     return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
+export function SmallTitle({children}) {
+    return <Text style={{fontSize: 16, fontWeight: 'bold'}}>{children}</Text>
+}
+
+
 export function SmallTitleLabel({label, formatParams}) {
     return <TranslatableLabel style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
         label={label} formatParams={formatParams} />
@@ -95,6 +100,10 @@ export function SectionTitleLabel({label, formatParams}) {
 
 export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
+}
+
+export function OneLineText({children}) {
+    return <Text numberOfLines={1} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
 }
 
 const markdownStyles = {
@@ -379,11 +388,11 @@ const EditableTextStyle = StyleSheet.create({
 })
 
 
-export function Pill({label, color = '#666', big=false, showCross=false, notranslate=false}) {
+export function Pill({label, text=null, color = '#666', big=false, showCross=false}) {
     const s = PillStyle
     return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color}, showCross ? {paddingRight: 4} : null]}>
-        {notranslate ? 
-            <Text style={[big ? s.bigText : s.text, {color}]}>{label}</Text>
+        {text ? 
+            <Text style={[big ? s.bigText : s.text, {color}]}>{text}</Text>
         :
             <TranslatableLabel style={[big ? s.bigText : s.text, {color}]} label={label} />
         }
