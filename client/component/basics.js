@@ -209,7 +209,8 @@ export function PadBox({children, horiz=8, vert=8}) {
 
 export function PrimaryButton({label, icon, onPress}) {
     return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, 
+            backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
             {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
             <TranslatableLabel style={{color: 'white'}} label={label} />
         </View>
@@ -222,6 +223,13 @@ export function SecondaryButton({label, onPress}) {
             <TranslatableLabel style={{color: '#666'}} label={label} />
         </View>
     </Clickable>
+}
+
+export function StatusButtonlikeMessage({label}) {
+    return <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666', alignSelf: 'flex-start',
+            borderColor: '#666', borderRadius: 4, borderWidth: 1}}>
+        <TranslatableLabel style={{color: '#666'}} label={label} />
+    </View>
 }
 
 

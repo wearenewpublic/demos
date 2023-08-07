@@ -25,6 +25,7 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
         setPlaying(true);
         const {sound} = await Audio.Sound.createAsync(uri);
         setSound(sound);
+        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
         console.log('playing', sound, uri);
         sound.playAsync();
     }
@@ -32,6 +33,10 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
     async function onPause() {
         setPlaying(false);
         sound.pauseAsync();
+    }
+
+    function onPlaybackStatusUpdate(status) {
+        setPlaying(status.isPlaying);
     }
 
     React.useEffect(() => {
