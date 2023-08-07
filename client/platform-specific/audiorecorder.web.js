@@ -18,19 +18,13 @@ export function AudioRecorder({action='Record Audio', onSubmitRecording}) {
     console.log('isLive', isLive);
 
     async function onSubmit({blob, url}) {
-        console.log('onSubmit', blob, url);
         setRecorderShown(false);
-        // HACK: Undo this. Temporary for testing.
         if (isLive) {
             const result = await callServerMultipartApiAsync({datastore, component: 'storage', funcname: 'uploadFile', 
                 params: {contentType: 'audio/webm', extension: 'webm'}, 
-                fileParams: {
-                file: {blob, filename: 'audio.webm'}
-                }
+                fileParams: {file: {blob, filename: 'audio.webm'}}
             });
-            console.log('result', result);
             const storageUrl = makeStorageUrl({datastore, userId: result.userId, fileKey: result.fileKey, extension: 'webm'});
-            console.log('storage url', storageUrl);
             onSubmitRecording({blob, url: storageUrl});
         } else {
             onSubmitRecording({blob, url});
