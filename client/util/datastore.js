@@ -180,6 +180,15 @@ export class Datastore extends React.Component {
     }
 }
 
+export async function addCurrentUserToInstanceAsync({prototypeKey, instanceKey, isMember}) {
+    const fbUser = getFirebaseUser();
+    await firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', 'persona', fbUser.uid], {
+        photoUrl: fbUser.photoURL, 
+        name: fbUser.displayName, 
+        key: personaKey,
+        member: isMember
+    });
+}
 
 export async function addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree}) {
     console.log('addInstanceToMyInstancesAsync', prototypeKey, instanceKey, dataTree);

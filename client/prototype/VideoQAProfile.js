@@ -49,8 +49,6 @@ export function VideoQAProfileScreen() {
     const admin = useGlobalProperty('admin');
     const datastore = useDatastore();
 
-    console.log('questions', questions);
-
     return <ScrollableScreen grey>
         <SectionTitleLabel label='Questions' />
 
@@ -115,12 +113,12 @@ function PersonPost({post}) {
     const questionKey = post.question;
     const question = useObject('question', questionKey);
 
-    return <Card>
+    return <Card fitted>
         <Clickable onPress={() => pushSubscreen('question', {questionKey: question.key})}>
-            <SmallTitle>{question.text}</SmallTitle>
+            <SmallTitle width={200}>{question.text}</SmallTitle>
         </Clickable>
         <Pad size={8} />
-        <VideoPlayer uri={post.uri} />
+        <VideoPlayer uri={post.uri} size={200} />
     </Card>
 }
 
@@ -142,9 +140,9 @@ function PersonScreen({personaKey}) {
         <Pad size={16} />
 
         <WrapBox>
-        {posts.map(post =>
-            <PersonPost key={post.key} post={post} />  
-        )}
+            {posts.map(post =>
+                <PersonPost key={post.key} post={post} />  
+            )}
         </WrapBox>
     </ScrollableScreen>
 }

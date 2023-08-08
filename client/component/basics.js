@@ -79,12 +79,12 @@ export function MaybeClickable({onPress, children, style, isClickable}) {
     }
 }
 
-export function BigTitle({children, pad=true}) {
-    return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
+export function BigTitle({children, pad=true, width=null}) {
+    return <Text style={{fontSize: 24, width, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
-export function SmallTitle({children}) {
-    return <Text style={{fontSize: 16, fontWeight: 'bold'}}>{children}</Text>
+export function SmallTitle({children, width=null}) {
+    return <Text style={{fontSize: 16, width, fontWeight: 'bold'}}>{children}</Text>
 }
 
 
