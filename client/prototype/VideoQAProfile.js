@@ -43,6 +43,7 @@ export const VideoQAProfilePrototype = {
 }
 
 export function VideoQAProfileScreen() {
+    const name = useGlobalProperty('name');
     const questions = useCollection('question', {sortBy: 'time', reverse: true});
     const people = useCollection('persona', {sortBy: 'name'});
     const personaKey = usePersonaKey();
@@ -50,6 +51,8 @@ export function VideoQAProfileScreen() {
     const datastore = useDatastore();
 
     return <ScrollableScreen grey>
+        <BigTitle>{name}</BigTitle>
+
         <SectionTitleLabel label='Questions' />
 
         {admin == personaKey ? 

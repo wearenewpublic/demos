@@ -24,7 +24,7 @@ export class Datastore extends React.Component {
         this.resetData();
         if (this.props.isLive) {
             this.fbWatchReleaser = onFbUserChanged(user => {
-                this.setSessionData('personaKey', user.uid);
+                this.setSessionData('personaKey', user?.uid);
             })
         }
         if (!this.props.isLive) {

@@ -3,8 +3,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pad, PrimaryButton, StatusButtonlikeMessage } from "../component/basics";
 import { callServerMultipartApiAsync } from "../util/servercall";
-import { makeStorageUrl, useDatastore } from "../util/datastore";
+import { makeStorageUrl, useDatastore, usePersonaKey } from "../util/datastore";
 import { PrototypeContext } from "../organizer/PrototypeContext";
+import { gotoLogin } from "../util/navigate";
 
 const video_mimetype = 'video/webm; codecs=vp9';  // this works for Chrome, and Firefox, but not Safari
 
@@ -14,6 +15,11 @@ export function VideoCamera({size=200, action='Record Video', onSubmitRecording}
     const {isLive} = useContext(PrototypeContext);
     const [uploading, setUploding] = useState(false);
     const datastore = useDatastore();
+    const personaKey = usePersonaKey();
+
+    if (!personaKey) {
+        return <LoginToRecord />
+    }
 
     async function onSubmit({blob, url}) {
         setCameraShown(false);
@@ -60,6 +66,10 @@ const VideoCameraStyle = StyleSheet.create({
         fontWeight: 'bold'
     }
 })
+
+function LoginToRecord() {
+    return <PrimaryButton onPress={gotoLogin} label='Log in to record a video' />
+}
 
 export function LiveVideoCamera({size, onSubmitRecording}) {
     const videoRef = useRef(null);
