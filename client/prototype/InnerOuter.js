@@ -1,17 +1,18 @@
 import { ScrollView } from "react-native";
-import { BodyText, EditableText, Pad, SectionTitleLabel, WideScreen } from "../component/basics";
+import { BodyText, EditableText, Pad, PadBox, PrimaryButton, SectionTitleLabel, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { trek_vs_wars } from "../data/conversations";
-import { expandDataList } from "../util/util";
+import { expandDataList, generateRandomKey } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { Comment, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
 import { languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
 import { memberPersonaList } from "../data/personas";
+import { callServerApiAsync } from "../util/servercall";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -63,11 +64,20 @@ function InnerOuterScreen() {
     const conclusion = useGlobalProperty('conclusion');
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const datastore = useDatastore();
+    const [inProgress, setInprogress] = useState(false);
 
     const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({datastore, comment}));
 
     const commentConfig = {...commentContext,
         getIsVisible, authorBling: [GuestAuthorBling]
+    }
+
+    async function generateConclusion() {
+        const commentsJSON = JSON.stringify(comments);
+        setInprogress(true);
+        const newSummary = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'chat', params: {promptKey: 'agree_points', params: {commentsJSON}}});
+        datastore.setGlobalProperty('conclusion', newSummary);
+        setInprogress(false);
     }
 
     return (
@@ -80,7 +90,14 @@ function InnerOuterScreen() {
                         value={conclusion} 
                         onChange={x => datastore.setGlobalProperty('conclusion', x)} 
                         placeholder='What is your group conclusion?' 
-                />                
+                />  
+                <PadBox>              
+                    {inProgress ? 
+                        <QuietSystemMessage center={false} label='Computing...' />
+                        : 
+                        <PrimaryButton label='Generate Conclusion from Conversation' onPress={generateConclusion}/>
+                    }
+                </PadBox>
                 <Pad size={24}/>
 
                 <SectionTitleLabel label='Private Conversation'/>

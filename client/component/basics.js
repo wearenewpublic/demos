@@ -353,7 +353,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
         {text ? 
             <View style={s.actions}>
                 <PrimaryButton onPress={() => {onChange(text); setText(null)}} label={action} />
-                <SecondaryButton onPress={() => setText(null)} text='Cancel' />
+                <SecondaryButton onPress={() => setText(null)} label='Cancel' />
             </View>
         : null}
     </View>
@@ -361,6 +361,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
 
 const EditableTextStyle = StyleSheet.create({
     outer: {
+        maxWidth: 500
         // height: 150,
     },
     label: {

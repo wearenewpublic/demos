@@ -74,9 +74,9 @@ const MessageAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function QuietSystemMessage({label, formatParams}) {
+export function QuietSystemMessage({label, center=true, formatParams}) {
     const s = QuietSystemMessageStyle;
-    return <TranslatableLabel style={s.text} label={label} formatParams={formatParams} />
+    return <TranslatableLabel style={[s.text, {alignSelf: center ? 'center' : 'flex-start'}]} label={label} formatParams={formatParams} />
 }
 
 const QuietSystemMessageStyle = StyleSheet.create({
