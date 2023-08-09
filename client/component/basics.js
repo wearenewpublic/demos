@@ -7,6 +7,7 @@ import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 import { setTitle } from "../platform-specific/url";
 import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
+import { useObject } from "../util/datastore";
 
 
 export function ScrollableScreen({children, grey, maxWidth=500}) {
@@ -285,11 +286,9 @@ const OneLineTextInputStyle = StyleSheet.create({
     textInput: {
         flexShrink: 0,
         maxWidth: 500,
-        marginLeft: 4, marginRight: 4,
         borderRadius: 8, 
         borderWidth: StyleSheet.hairlineWidth, 
         borderColor: '#ddd', padding: 8,
-        marginHorizontal: 8,
         fontSize: 15, lineHeight: 20,
     },
 })
@@ -326,7 +325,7 @@ const FormFieldStyle = StyleSheet.create({
         marginBottom: 8
     },
     label: {
-        marginLeft: 12,
+        marginLeft: 8,
         fontWeight: 'bold',
         fontSize: 12,
         marginBottom: 2
@@ -387,6 +386,14 @@ const EditableTextStyle = StyleSheet.create({
         margin: 8,
     }
 })
+
+
+export function PillBox({children, big=false, color='#666'}) {
+    const s = PillStyle;
+    return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color, paddingHorizontal: 8, paddingVertical: 4}]}>
+        {children}
+    </View>
+}
 
 
 export function Pill({label, text=null, color = '#666', big=false, showCross=false}) {
@@ -512,4 +519,37 @@ const BarStyle = StyleSheet.create({
     }
 });
 
+export function UserFaceAndName({personaKey, extraLabel}) {
+    const s = UserNameChipStyle;
+    const persona = useObject('persona', personaKey);
+    return <View style={s.authorBox}>
+        <UserFace userId={personaKey} size={16} />
+        <View style={s.authorRight}>
+            <Text style={s.authorName}>{persona.name}</Text>            
+            <TranslatableLabel style={s.extraLabel} label={extraLabel} />
+        </View>
+    </View>
+}
+
+const UserNameChipStyle = StyleSheet.create({  
+    authorBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+    authorRight: {
+        marginLeft: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    authorName: {
+        fontSize: 13,
+        fontWeight: 'bold',
+    },      
+    extraLabel: {
+        fontSize: 13,
+        marginLeft: 4,
+        color: '#666',
+    }
+})
 

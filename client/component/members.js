@@ -1,6 +1,6 @@
 import { StyleSheet, Text } from "react-native";
 import { useCollection, useDatastore } from "../util/datastore";
-import { HorizBox, Pad, ScrollableScreen, SmallTitleLabel } from "./basics";
+import { HorizBox, Pad, PadBox, ScrollableScreen, SmallTitleLabel } from "./basics";
 import { UserFace } from "./userface";
 import { PopupSelector } from "../platform-specific/popup";
 
@@ -32,13 +32,15 @@ function PersonaSummary({persona}) {
         datastore.updateObject('persona', persona.key, {member: value == 'member'});
     }
 
-    return <HorizBox center>
-        <Pad/>
-        <UserFace userId={persona.key} />
-        <Text style={s.name}>{persona.name}</Text>
-        <Pad/>
-        <PopupSelector items={memberOptions} value={persona.member ? 'member' : 'guest'} onSelect={onSelect} />
-    </HorizBox>
+    return <PadBox size={2}>
+        <HorizBox center>
+            <Pad/>
+            <UserFace userId={persona.key} />
+            <Text style={s.name}>{persona.name}</Text>
+            <Pad/>
+            <PopupSelector items={memberOptions} value={persona.member ? 'member' : 'guest'} onSelect={onSelect} />
+        </HorizBox>
+    </PadBox>
 }
 
 const PersonaSummaryStyle = StyleSheet.create({

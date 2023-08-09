@@ -40,13 +40,11 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
-            {(replyTopWidgets.length > 0) ?
-                <View style={s.widgetBar}>
-                    {replyTopWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
+            {replyTopWidgets.map((widget, idx) => 
+                <View key={idx} style={s.widgetBar}>
+                    {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
-            : null}
+            )}
             <AutoSizeTextInput style={s.textInput}
                 placeholder={placeholderText}
                 placeholderTextColor='#999'

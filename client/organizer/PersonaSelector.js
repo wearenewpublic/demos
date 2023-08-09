@@ -13,9 +13,11 @@ export function PersonaSelector() {
     const itemKeys = Object.keys(allPersonas || {});    
     const items = itemKeys.map(key => ({key, label: getPersonaName({language, personas: allPersonas, personaKey: key})}));
     return <View style={s.row}>
-        <PopupSelector value={selectedPersona} items={items} 
-            onSelect={personalKey => datastore.setSessionData('personaKey', personalKey)} 
-        />
+        <View style={{marginHorizontal: 4, marginVertical: 2}}>
+            <PopupSelector value={selectedPersona} items={items} 
+                onSelect={personalKey => datastore.setSessionData('personaKey', personalKey)} 
+            />
+        </View>
         <UserFace userId={selectedPersona} size={32} />
     </View>
 }

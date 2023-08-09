@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Clickable, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
-import { UserFace } from "./userface";
+import { AnonymousFace, UserFace } from "./userface";
 import { TranslatableLabel } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -12,7 +12,7 @@ import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
-export function Post({post, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
+export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
@@ -22,9 +22,13 @@ export function Post({post, onPressAuthor=null, editWidgets=[], saveHandler=null
     return <MaybeCard fitted={fitted} isCard={!noCard}>
         <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor}>
             <View style={s.authorBox}>
-                <UserFace userId={post.from} size={32} />
+                {anonymousFace ? 
+                    <AnonymousFace size={32} />
+                :
+                    <UserFace userId={post.from} size={32} />
+                }
                 <View style={s.authorRight}>
-                    <Text style={s.authorName}>{user?.name}</Text>
+                    <Text style={s.authorName}>{authorName ?? user?.name}</Text>
                     <TimeText time={post.time} />
                 </View>
             </View>

@@ -34,6 +34,10 @@ export function addKey(collection, key, value=true) {
     return {...collection, [key]: value};
 }
 
+export function isNonEmpty(collection) {
+    return Object.keys(collection || {}).length > 0;
+}
+
 export function getHuesForNamedList(list) {
     const hues = {};
     list.forEach((item, index) => {
