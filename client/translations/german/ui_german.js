@@ -55,5 +55,5 @@ export const ui_translations_german = {
     'Showing only posts from {regionName}' : 'Zeige nur Beiträge aus {regionName}',
     'person': 'Person',
     'liked this': 'gefällt das',
-
+    'Generate Conclusion': 'Fazit generieren',
 };

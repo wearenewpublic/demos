@@ -95,7 +95,7 @@ function InnerOuterScreen() {
                     {inProgress ? 
                         <QuietSystemMessage center={false} label='Computing...' />
                         : 
-                        <PrimaryButton label='Generate Conclusion from Conversation' onPress={generateConclusion}/>
+                        <PrimaryButton label='Generate Conclusion' onPress={generateConclusion}/>
                     }
                 </PadBox>
                 <Pad size={24}/>

@@ -60,4 +60,5 @@ export const ui_translations_french = {
     'liked this': 'aimé ça',
     'You have already written an opinion': 'Vous avez déjà écrit un avis',
     'Showing only posts from {regionName}': 'Affichage uniquement des messages de {regionName}',
+    'Generate Conclusion': 'Générer une conclusion',
 }
