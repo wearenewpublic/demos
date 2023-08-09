@@ -167,6 +167,7 @@ export class Datastore extends React.Component {
 
     getPrototypeKey() {return this.props.prototypeKey}
     getInstanceKey() {return this.props.instanceKey}
+    getLanguage() {return this.dataTree.language || 'English'}
         
     render() {
         const {loaded} = this.state;

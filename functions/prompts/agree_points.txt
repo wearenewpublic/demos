@@ -5,3 +5,4 @@ Here is a threaded conversation written as a JSON object. Some of the messages i
 
 Write a short bulleted list of key points made in this conversation that most people would be likely to agree with. This should be expressed in a civil way.
 
+Your response should be in {{language}}.

@@ -9,3 +9,4 @@ This should be a free-standing opinion about the topic and should not mention th
 
 Do not mention that there disagreement or debate or diverse opinionsn about the topic. Don't talk about the need for civility of diverse opinions. Just give an opinion that most people would be likely to agree with.
 
+Your response should be in {{language}}.

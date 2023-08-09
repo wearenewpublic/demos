@@ -22,23 +22,23 @@ async function helloAsync({name}) {
     return {data: "Hello " + name};
 }
 
-function createGptPrompt({promptKey, params}) {
-    console.log('createGptPrompt', {promptKey, params});
+function createGptPrompt({promptKey, params, language}) {
+    console.log('createGptPrompt', {promptKey, params, language});
     const filename = 'prompts/' + promptKey + '.txt';
     if (!existsSync(filename)) {
         console.log('file does not exist', filename);
         return null;
     }
     const promptTemplate = readFileSync(filename).toString();  
-    const prompt = Mustache.render(promptTemplate, params);
+    const prompt = Mustache.render(promptTemplate, {...params, language});
     console.log('prompt', prompt);
     return prompt;
 }
 
-async function callGptAsync({promptKey, params}) {
-    console.log('callGptAsync', {promptKey, params})
+async function callGptAsync({promptKey, params, language}) {
+    console.log('callGptAsync', {promptKey, params, language})
 
-    const prompt = createGptPrompt({promptKey, params});
+    const prompt = createGptPrompt({promptKey, params, language});
     if (!prompt) {
         return {success: false, error: 'Unknown prompt: ' + promptKey}
     }
