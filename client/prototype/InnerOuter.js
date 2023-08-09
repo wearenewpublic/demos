@@ -7,7 +7,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { Comment, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext, useState } from "react";
 import { QuietSystemMessage } from "../component/message";
-import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
+import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
 import { languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
@@ -65,6 +65,9 @@ function InnerOuterScreen() {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const datastore = useDatastore();
     const [inProgress, setInprogress] = useState(false);
+    const personaKey = usePersonaKey();
+    const [editing, setEditing] = useState(false);
+    const persona = useObject('persona', personaKey);
 
     const topLevelComments = comments.filter(comment => !comment.replyTo && getIsVisible({datastore, comment}));
 
@@ -84,20 +87,27 @@ function InnerOuterScreen() {
         <WideScreen pad>
             <ScrollView>
                 <Pad size={12}/>
-                <SectionTitleLabel label='Public Conclusion'/>
+                <SectionTitleLabel label='Public Summary'/>
                 <Pad size={4}/>
-                <EditableText 
-                        value={conclusion} 
-                        onChange={x => datastore.setGlobalProperty('conclusion', x)} 
-                        placeholder='What is your group conclusion?' 
-                />  
-                <PadBox>              
-                    {inProgress ? 
-                        <QuietSystemMessage center={false} label='Computing...' />
-                        : 
-                        <PrimaryButton label='Generate Conclusion' onPress={generateConclusion}/>
-                    }
-                </PadBox>
+                {persona.member ? 
+                    <EditableText 
+                            value={conclusion} 
+                            onChange={x => datastore.setGlobalProperty('conclusion', x)} 
+                            onChangeEditState={setEditing}
+                            placeholder='How would you summarise what was said?' 
+                    />  
+                    :
+                    <BodyText>{conclusion}</BodyText>
+                }
+                {persona.member && !editing ? 
+                    <PadBox>              
+                        {inProgress ? 
+                            <QuietSystemMessage center={false} label='Computing...' />
+                            : 
+                            <PrimaryButton label='Generate Public Summary' onPress={generateConclusion}/>
+                        }
+                    </PadBox>
+                : null}
                 <Pad size={24}/>
 
                 <SectionTitleLabel label='Private Conversation'/>

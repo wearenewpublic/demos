@@ -12,8 +12,8 @@ export const languageGerman = 'German';
 export const languageFrench = 'French';
 
 const ui_translations_for_language = {
-    german: ui_translations_german,
-    french: ui_translations_french
+    German: ui_translations_german,
+    French: ui_translations_french
 }
 
 export function translateLabel({label, language, formatParams}) {

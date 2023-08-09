@@ -56,4 +56,7 @@ export const ui_translations_german = {
     'person': 'Person',
     'liked this': 'gefällt das',
     'Generate Conclusion': 'Fazit generieren',
+    'Admin': 'Admin',
+    'Public Summary': 'Öffentliche Zusammenfassung',
+    'Generate Public Summary': 'Öffentliche Zusammenfassung generieren',
 };

@@ -335,7 +335,7 @@ const FormFieldStyle = StyleSheet.create({
 
 
 
-export function EditableText({value, label, action='Update', height=150, placeholder, onChange, multiline=true, flatTop=false, flatBottom=false}) {
+export function EditableText({value, label, action='Update', height=150, placeholder, onChange, onChangeEditState=()=>{}, multiline=true, flatTop=false, flatBottom=false}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
@@ -348,12 +348,12 @@ export function EditableText({value, label, action='Update', height=150, placeho
             placeholder={placeholder}
             placeholderTextColor='#999'
             multiline={multiline} 
-            onChangeText={setText} 
+            onChangeText={text => {setText(text); onChangeEditState(true)}} 
         />
         {text ? 
             <View style={s.actions}>
-                <PrimaryButton onPress={() => {onChange(text); setText(null)}} label={action} />
-                <SecondaryButton onPress={() => setText(null)} label='Cancel' />
+                <PrimaryButton onPress={() => {onChange(text); setText(null); onChangeEditState(false)}} label={action} />
+                <SecondaryButton onPress={() => {setText(null); onChangeEditState(false)}} label='Cancel' />
             </View>
         : null}
     </View>

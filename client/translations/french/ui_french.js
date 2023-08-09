@@ -61,4 +61,7 @@ export const ui_translations_french = {
     'You have already written an opinion': 'Vous avez déjà écrit un avis',
     'Showing only posts from {regionName}': 'Affichage uniquement des messages de {regionName}',
     'Generate Conclusion': 'Générer une conclusion',
+    'Admin': 'Admin',
+    'Public Summary': 'Résumé public',
+    'Generate Public Summary': 'Générer un résumé public',
 }
