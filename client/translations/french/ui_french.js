@@ -64,4 +64,5 @@ export const ui_translations_french = {
     'Admin': 'Admin',
     'Public Summary': 'Résumé public',
     'Generate Public Summary': 'Générer un résumé public',
+    'Computing...': 'Calcul...',
 }

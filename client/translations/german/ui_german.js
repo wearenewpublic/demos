@@ -59,4 +59,5 @@ export const ui_translations_german = {
     'Admin': 'Admin',
     'Public Summary': 'Öffentliche Zusammenfassung',
     'Generate Public Summary': 'Öffentliche Zusammenfassung generieren',
+    'Computing...': 'Berechnung...',
 };
