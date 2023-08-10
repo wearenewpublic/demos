@@ -41,7 +41,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
             {replyTopWidgets.map((widget, idx) => 
-                <View key={idx} style={s.widgetBar}>
+                <View key={idx} style={s.widgetBarTop}>
                     {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
             )}
@@ -53,11 +53,11 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                 multiline={true}
             />
             {(!topLevel || post.text) ?
-                <View style={s.widgetBar}>
-                    {replyWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
-                </View>
+                (replyWidgets.map((widget, idx) => 
+                    <View key={idx} style={s.widgetBottom}>
+                        {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
+                    </View>
+                ))
             : null}
             {(!topLevel || getCanPost({datastore,post})) ? 
                 <View style={s.actions}>
@@ -94,9 +94,13 @@ const ReplyInputStyle = StyleSheet.create({
         justifyContent: 'space-between',
         margin: 8,
     },
-    widgetBar: {
+    widgetBarTop: {
         marginLeft: 8,
         marginBottom: 8,
+    },
+    widgetBottom: {
+        marginLeft: 8,
+        marginTop: 8,
     }
 })
 
@@ -104,13 +108,13 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[], getCanPost=null}) {
+export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[], bottomWidgets=[], getCanPost=null}) {
     const commentContext = useContext(CommentContext);
     function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)
     }
     return <CommentContext.Provider value={{...commentContext, postHandler: postHandler ?? defaultPostHandler, 
-                commentPlaceholder:placeholder, replyTopWidgets: topWidgets, 
+                commentPlaceholder:placeholder, replyTopWidgets: topWidgets, replyWidgets: bottomWidgets,
                 getCanPost: getCanPost ?? commentContext.getCanPost}}>
         <Card>
             <ReplyInput topLevel topPad={false} />

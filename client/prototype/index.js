@@ -22,12 +22,14 @@ import { MissingPerspectivesPrototype } from "./MissingPerspectives";
 import { ThreadedSummaryPrototype } from "./ThreadedSummary";
 import { VideoQAProfilePrototype } from "./VideoQAProfile";
 import { AnswerEndorsement } from "./AnswerEndorsement";
+import { FactAdderPrototye } from "./FactAdder";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
     InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
-    MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement
+    MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
+    FactAdderPrototye
 ]
 
