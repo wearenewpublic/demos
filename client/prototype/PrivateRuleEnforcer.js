@@ -8,7 +8,7 @@ import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { ScrollView } from "react-native";
 import { cat_club } from "../data/threaded";
-import { useCollection, useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
+import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 import { languageFrench, languageGerman } from "../component/translation";
 import { cat_club_french } from "../translations/french/threaded_french";
 import { cat_club_german } from "../translations/german/threaded_german";
@@ -73,8 +73,8 @@ export function PrivateRuleEnforcerScreen() {
     const commentConfig = {...commentContext, 
         postHandler: postHandlerAsync, 
         getIsVisible,
-        actions: [ActionReply, ActionLike, ActionPostAnyway],
-        topBling: [BlingViolatesRules, BlingPending, BlingForced]
+        actions: [ActionReplyIfNotBotOrBad, ActionLikeIfNotBot, ActionPostAnyway],
+        topBling: [BlingViolatesRules, BlingPending, BlingForced, BlingBotPrivate]
     }
 
     return (
@@ -125,6 +125,30 @@ function BlingForced({comment}) {
         return <BlingLabel color='blue' label='Message may violate rules.' />
     }
 }
+
+function BlingBotPrivate({comment}) {
+    const parent = useObject('comment', comment.replyTo);
+    if (parent && parent.maybeBad && comment.from == 'robo') {
+        return <BlingLabel color='#666' label='Only visible by you' />
+    }
+}
+
+function ActionReplyIfNotBotOrBad({commentKey, comment}) {
+    if (comment.from != 'robo' && comment.maybeBad != true) {
+        return <ActionReply commentKey={commentKey} comment={comment} />
+    } else {
+        return null;
+    }
+}
+
+function ActionLikeIfNotBot({commentKey, comment}) {
+    if (comment.from != 'robo') {
+        return <ActionLike commentKey={commentKey} comment={comment} />
+    } else {
+        return null;
+    }
+}
+
 
 
 function getIsVisible({datastore, comment}) {
