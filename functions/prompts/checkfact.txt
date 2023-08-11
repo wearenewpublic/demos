@@ -3,7 +3,7 @@ I want you to tell me how likely the statement is to be true, in the sense that 
 
 Your answer should not be influenced by whether the statement is associated with bad ideas, is commonly believed by bad people, or might be used to justify bad things. I'm only interested in how likely the statement is to be true.
 
-I want you to think carefully step by step, and then give your answer as a JSON object referring to one of the truth ratings above. E.g.
+I want you to give a brief reasoning of why the statement is likely to be true or false, based on facts that you are aware of. Then end your answer with a single line containing a JSON object referring to one of the truth ratings above. E.g.
 {judgement: "probably true"} - if the statement is probably true.
 
 Here is the statement:

@@ -31,7 +31,6 @@ function createGptPrompt({promptKey, params, language}) {
     }
     const promptTemplate = readFileSync(filename).toString();  
     const prompt = Mustache.render(promptTemplate, {...params, language});
-    console.log('prompt', prompt);
     return prompt;
 }
 
