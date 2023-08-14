@@ -60,4 +60,5 @@ export const ui_translations_german = {
     'Public Summary': 'Öffentliche Zusammenfassung',
     'Generate Public Summary': 'Öffentliche Zusammenfassung generieren',
     'Computing...': 'Berechnung...',
+    'Only visible by you': 'Nur für Sie sichtbar',
 };

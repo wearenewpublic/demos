@@ -65,4 +65,5 @@ export const ui_translations_french = {
     'Public Summary': 'Résumé public',
     'Generate Public Summary': 'Générer un résumé public',
     'Computing...': 'Calcul...',
+    'Only visible by you': 'Visible uniquement par vous',
 }

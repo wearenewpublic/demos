@@ -47,15 +47,10 @@ function SummaryEditor({property, name, prompt}) {
 
     useEffect(() => {
         if (comments.length !== commentCount) {
-            console.log('comments changed', comments.length);
             setCanGenerate(true);
             setComentCount(comments.length);
-        } else {
-            console.log('comments unchanged', comments.length);
         }
     }, [comments]);
-
-    console.log('catGenerate', canGenerate, property, comments.length);
 
     async function computeSummary() {
         const commentsJSON = JSON.stringify(comments);
