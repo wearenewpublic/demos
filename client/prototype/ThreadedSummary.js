@@ -8,7 +8,7 @@ import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";
 import { callServerApiAsync } from "../util/servercall";
 import { QuietSystemMessage } from "../component/message";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const description = `
 Generate a summary of a threaded conversation. This summary could be shared externally.
@@ -23,7 +23,6 @@ export const ThreadedSummaryPrototype = {
     screen: ThreadedSummaryScreen,
     instance: [
         {key: 'wars', name: 'Star Wars vs Star Trek', 
-        summary: 'Both are good',
             comment: expandDataList(trek_vs_wars)},
         {key: 'wars-split', name: 'Star Wars vs Star Trek (Split)', 
             split: true,
@@ -43,6 +42,20 @@ function SummaryEditor({property, name, prompt}) {
     const datastore = useDatastore();
     const [inProgress, setInprogress] = useState(false);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
+    const [canGenerate, setCanGenerate] = useState(true);
+    const [commentCount, setComentCount] = useState(0);
+
+    useEffect(() => {
+        if (comments.length !== commentCount) {
+            console.log('comments changed', comments.length);
+            setCanGenerate(true);
+            setComentCount(comments.length);
+        } else {
+            console.log('comments unchanged', comments.length);
+        }
+    }, [comments]);
+
+    console.log('catGenerate', canGenerate, property, comments.length);
 
     async function computeSummary() {
         const commentsJSON = JSON.stringify(comments);
@@ -50,6 +63,7 @@ function SummaryEditor({property, name, prompt}) {
         const newSummary = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'chat', params: {promptKey: prompt, params: {commentsJSON}}});
         datastore.setGlobalProperty(property, newSummary);
         setInprogress(false);
+        setCanGenerate(false);
     }
 
     return <Card>
@@ -58,11 +72,13 @@ function SummaryEditor({property, name, prompt}) {
         <EditableText value={value || ''} onChange={newValue => datastore.setGlobalProperty(property,newValue)} 
             placeholder={'Enter ' + name} />
         <Pad/>
-        {inProgress ?
-            <QuietSystemMessage label='Computing...' />
-        :
-            <PrimaryButton label={'Generate New ' + name} onPress={computeSummary} />
-        }
+        {canGenerate ? 
+            (inProgress ?
+                <QuietSystemMessage label='Computing...' />
+            :
+                <PrimaryButton label={'Generate New ' + name} onPress={computeSummary} />
+            )
+        : null}
     </Card>
 }
 

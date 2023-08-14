@@ -3,7 +3,7 @@ Here is a threaded conversation written as a JSON object. Some of the messages i
 
 {{commentsJSON}}
 
-Write a short list of high level principles that participants in this conversation disagreed about. Write them in a civil and neural way. 
-Do not mention the conversation itself or it's partcipants.
+Write a short bulleted list of high level principles that participants in this conversation disagreed about. Write them in a civil and neural way. 
+Do not mention the conversation itself or it's partcipants. 
 
 Your response should be in {{language}}.
