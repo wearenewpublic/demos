@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { BackgroundBar, Clickable, MaybeClickable } from "./basics";
 import { TranslatableLabel } from "./translation";
+import { useState } from "react";
 
 
 export function RatingWithLabel({value, labelSet, editable=false, placeholder, onChangeValue}) {
@@ -33,7 +34,8 @@ export function SpectrumRating({value, editable, onChangeValue}) {
 
     return <View style={s.outer}>
         {ratings.map(rating =>
-            <MaybeClickable key={rating} isClickable={editable} 
+            <MaybeClickable key={rating} isClickable={editable && rating != value} 
+                hoverStyle={{opacity: 0.5}}
                 onPress={() => onChangeValue(rating)}>
                 <SpectrumItem enabled={rating == value} color={colors[rating-1]}/>
             </MaybeClickable>
@@ -71,34 +73,10 @@ export function RatingSummary({labelSet, ratingCounts, selection, onChangeSelect
     </View>
 }
 
-// function BackgroundBar({count, maxCount}) {
-//     const s = BarStyle;
-//     return <View style={s.frame}>
-//         <View style={[s.filled, {flex: count}]} />
-//         <View style={[s.empty, {flex: Math.max(maxCount, 4) - count}]} />
-//     </View>
-// }
-// const BarStyle = StyleSheet.create({
-//     frame: {
-//         position: 'absolute',
-//         left: 0,
-//         top: 0,
-//         right: 0,
-//         bottom: 0,
-//         zIndex: -1,
-//         flexDirection: 'row',
-//         borderRadius: 10,
-//     },
-//     filled: {
-//         backgroundColor: '#77C7F6',
-//         borderRadius: 4,
-//     },
-//     empty: {
-//     }
-// });
 
 function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected, onChangeSelection}) {
     const s = RatingSummaryItemStyle;
+    const [hover, setHover] = useState(false);
     function onSelect() {
         if (selected) {
             onChangeSelection(null);
@@ -106,9 +84,15 @@ function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected
             onChangeSelection(rating);
         }
     }
+    if (hover) {
+        console.log('hover');
+    }
     const barWidth = (count / Math.max(maxCount, 10)) * 400
-    return <Clickable onPress={onSelect}>
-        <View style={selected ? s.selectedRow : s.row}>
+    return <Clickable onPress={onSelect} 
+            style={selected ? s.selectedRow : s.row}
+            hoverStyle={selected ? s.selectedRow : s.hoverRow}
+            >
+        {/* <View style={selected ? s.selectedRow : s.row}> */}
             <View style={s.dot}>
                 <SpectrumItem enabled color={colors[rating-1]}/>
             </View>
@@ -118,7 +102,7 @@ function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected
                 <BackgroundBar count={count} maxCount={maxCount} />
             </View>
             {/* <View style={[s.ratingBar, {width: barWidth}]} /> */}
-        </View>
+        {/* </View> */}
     </Clickable>
 }
 
@@ -140,6 +124,13 @@ const RatingSummaryItemStyle = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 4,
+    },
+    hoverRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f8f8f8',
+        paddingHorizontal: 4,
+        // borderRadius: 12,
     },
     selectedRow: {
         flexDirection: 'row',

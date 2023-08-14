@@ -62,12 +62,11 @@ function FactAdderScreen() {
 
 function FactsPreview() {
     const posts = useCollection('post', {sortBy: 'time', reverse: true});
-    return <Clickable onPress={() => pushSubscreen('facts')}>
-        {/* <Card> */}
+    return <Card onPress={() => pushSubscreen('facts')}>
             <Center><SmallTitleLabel label='Facts'/></Center>
+            <Pad size={4} />
         {posts.map(post => <ListItem key={post.key} title={post.text} />)}
-        {/* </Card> */}
-    </Clickable>
+    </Card>
 }
 
 function FactListScreen() {

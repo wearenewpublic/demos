@@ -116,9 +116,6 @@ async function postHandlerAsync({datastore, postKey, post}) {
     await datastore.updateObject('post', key, {slide});
 }
 
-async function saveHandlerAsync({datastore, postKey, post}) {
-}
-
 function getRatingLabels({sideOne, sideTwo}) {
     const ratingLabels = [
         'Strongly ' + sideOne,

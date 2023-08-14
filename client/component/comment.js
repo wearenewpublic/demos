@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
-import React from "react";
+import React, { useState } from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
@@ -10,17 +10,21 @@ import { TranslatableLabel } from "./translation";
 
 export function CommentActionButton({label, formatParams, onPress}) {
     const s = CommentActionButtonStyle;
-    return <Clickable style={s.clicker}>
-        <TranslatableLabel style={s.text} onPress={onPress} label={label} formatParams={formatParams} />
+    const [hover, setHover] = useState(false);
+    return <Clickable style={s.clicker} onHoverChange={setHover}>
+        <TranslatableLabel style={!hover ? s.text : [s.text, s.hoverText]} onPress={onPress} label={label} formatParams={formatParams} />
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({
     text: {
         fontSize: 11,
         textTransform: 'uppercase',
-        // marginRight: 32,
         marginTop: 4,
         color: '#666'
+    },
+    hoverText: {
+        color: '#000',
+        textDecorationLine: 'underline'
     },
     clicker: {
         marginRight: 32

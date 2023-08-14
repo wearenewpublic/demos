@@ -8,6 +8,7 @@ export function ChatInput({onSend}) {
     const [text, setText] = useState('');
     const placeholder = useTranslation('Type a message');
     const s = ChatInputStyle;
+    const [hover, setHover] = useState(false);
 
     async function onPressSend() {
         setText('');
@@ -26,8 +27,9 @@ export function ChatInput({onSend}) {
     }
 
     return <View style={s.row}>
-        <TextInput style={s.textInput} 
+        <TextInput style={[s.textInput, hover ? s.hover : null]} 
             value={text}
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
             onChangeText={setText}
             placeholder={placeholder}
             placeholderTextColor='#999'
@@ -48,6 +50,9 @@ const ChatInputStyle = StyleSheet.create({
         marginHorizontal: 8,
         flexShrink: 0,
         fontSize: 16, lineHeight: 20, flexGrow: 1
+    },
+    hover: {
+        borderColor: '#999'
     },
     row: {
         flexDirection: 'row',

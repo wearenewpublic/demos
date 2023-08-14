@@ -45,7 +45,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
             )}
-            <AutoSizeTextInput style={s.textInput}
+            <AutoSizeTextInput style={s.textInput} hoverStyle={{borderColor: '#999'}}
                 placeholder={placeholderText}
                 placeholderTextColor='#999'
                 value={post.text}

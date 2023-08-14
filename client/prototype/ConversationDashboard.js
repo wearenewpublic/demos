@@ -48,14 +48,12 @@ function ConversationDashboardScreen() {
 }
 
 function DashboardPost({post}) {
-    return <Clickable onPress={() => pushSubscreen('post', {postKey: post.key})}>
-        <Card>
-            <HorizBox spread>
-                <Text numberOfLines={1} style={{fontWeight: '600'}}>{post.text}</Text>
-                <GoodnessPill post={post} />
-            </HorizBox>            
-        </Card>   
-    </Clickable>
+    return <Card onPress={() => pushSubscreen('post', {postKey: post.key})}>
+        <HorizBox spread>
+            <Text numberOfLines={1} style={{fontWeight: '600'}}>{post.text}</Text>
+            <GoodnessPill post={post} />
+        </HorizBox>            
+    </Card>   
 }
 
 const postTypeGoodness = {

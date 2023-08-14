@@ -28,11 +28,9 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                     <View>
                         <Center><SectionTitleLabel label='Role Play Instances' /></Center>
                         {prototype.instance.map(instance => (
-                            <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
-                                <Card vMargin={4}>
-                                    <SmallTitleLabel label={instance.name}/>
-                                </Card>
-                            </Clickable>
+                            <Card key={instance.key} onPress={() => onSelectInstance(instance.key)} vMargin={4}>
+                                <SmallTitleLabel label={instance.name}/>
+                            </Card>
                         ))}      
                     </View>
                 : null}
@@ -48,11 +46,9 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                         </Center>
                         <PadBox horiz={16}><PrimaryButton label='New Live Instance' onPress={() => onSelectInstance('new')} /></PadBox>
                         {sortedUserInstances.map(instance => (
-                            <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
-                                <Card vMargin={4}>
-                                    <SmallTitleLabel label={instance.name} />
-                                </Card>
-                            </Clickable>
+                            <Card key={instance.key} onPress={() => onSelectInstance(instance.key)} vMargin={4}>
+                                <SmallTitleLabel label={instance.name} />
+                            </Card>
                         ))}      
                         {userInstanceMap == null ? 
                             <QuietSystemMessage label='Loading...' />

@@ -10,6 +10,7 @@ import { VideoCamera } from "../platform-specific/videocamera";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
+import { useState } from "react";
 
 
 export const VideoQAProfilePrototype = {
@@ -72,39 +73,35 @@ export function VideoQAProfileScreen() {
 
 function QuestionPreview({question}) {
     const answers = useCollection('post', {sortBy: 'time', filter: {question: question.key}});
-    return <Clickable onPress={() => pushSubscreen('question', {questionKey: question.key})}>
-        <Card>
-            <SmallTitle>{question.text}</SmallTitle>
-            <Pad size={8} />
-            <HorizBox>
-                {answers.map(answer =>
-                    <HorizBox key={answer.key}><UserFace key={answer.key} userId={answer.from} />
-                        <Pad size={2} />
-                    </HorizBox>
-                )}
-            </HorizBox>
-        </Card>
-    </Clickable>
+    return <Card onPress={() => pushSubscreen('question', {questionKey: question.key})}>
+        <SmallTitle>{question.text}</SmallTitle>
+        <Pad size={8} />
+        <HorizBox>
+            {answers.map(answer =>
+                <HorizBox key={answer.key}><UserFace key={answer.key} userId={answer.from} />
+                    <Pad size={2} />
+                </HorizBox>
+            )}
+        </HorizBox>
+    </Card>
 }
 
 function PersonPreview({person}) {
     const posts = useCollection('post', {sortBy: 'time', filter: {from: person.key}, reverse: true});
-    return <Clickable onPress={() => pushSubscreen('person', {personaKey: person.key})}>
-        <Card>
-            <HorizBox>
-                <UserFace userId={person.key} size={40} />
-                <Pad size={8} />
-                <View>
-                    <SmallTitle pad={false} >{person.name}</SmallTitle>
-                    <Pad size={2} />
-                    {posts.length > 0 ?
-                        <BodyText><PluralLabel count={posts.length} singular='answer' plural='answers' /></BodyText>
-                    : null}
-                </View>
+    return <Card onPress={() => pushSubscreen('person', {personaKey: person.key})}>
+        <HorizBox>
+            <UserFace userId={person.key} size={40} />
+            <Pad size={8} />
+            <View>
+                <SmallTitle pad={false} >{person.name}</SmallTitle>
+                <Pad size={2} />
+                {posts.length > 0 ?
+                    <BodyText><PluralLabel count={posts.length} singular='answer' plural='answers' /></BodyText>
+                : null}
+            </View>
 
-            </HorizBox>
-        </Card>
-    </Clickable>
+        </HorizBox>
+    </Card>
 }
 
 function PersonScreenTitle({personaKey}) {
@@ -115,10 +112,11 @@ function PersonScreenTitle({personaKey}) {
 function PersonPost({post}) {
     const questionKey = post.question;
     const question = useObject('question', questionKey);
+    const [hover, setHover] = useState(false); 
 
     return <Card fitted>
-        <Clickable onPress={() => pushSubscreen('question', {questionKey: question.key})}>
-            <SmallTitle width={200}>{question.text}</SmallTitle>
+        <Clickable onPress={() => pushSubscreen('question', {questionKey: question.key})} onHoverChange={setHover}>
+            <SmallTitle hover={hover} width={200}>{question.text}</SmallTitle>
         </Clickable>
         <Pad size={8} />
         <VideoPlayer uri={post.uri} size={200} />

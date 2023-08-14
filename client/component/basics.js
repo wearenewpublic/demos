@@ -35,12 +35,17 @@ export function Narrow({children}) {
 }
 
 
-export function Card({children, fitted=false, vMargin=10}) {
+export function Card({children, onPress, fitted=false, vMargin=10}) {
     const s = CardStyle;
-    return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]}>
-        {children}
-    </View>
+    const style=[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]
+
+    return <MaybeClickable onPress={onPress} isClickable={onPress}
+        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]} 
+        hoverStyle={s.hover} >
+            {children}
+    </MaybeClickable>
 }
+
 
 const CardStyle = StyleSheet.create({
     card: {
@@ -48,6 +53,9 @@ const CardStyle = StyleSheet.create({
         shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5, elevation: 1,
         backgroundColor: '#fff'
+    },
+    hover: {
+        shadowRadius: 2, shadowColor: '#555', shadowOffset: {width: 0, height: 2}
     }
 })
 
@@ -60,23 +68,35 @@ export function MaybeCard({children, isCard}) {
 }
 
 
-export function Clickable({onPress, children, style}) {
+export function Clickable({onPress, onHoverChange, children, style, hoverStyle=null}) {
+    const [hover, setHover] = useState(false);
     function onPressInner() {
         if (onPress) {
             closeActivePopup();
             onPress();
         }
     }
-    return <TouchableOpacity onPress={onPressInner} style={style} pointerEvents="box-none">
+    function onHover(hover) {
+        setHover(hover);
+        onHoverChange && onHoverChange(hover);
+    }
+    return <TouchableOpacity onPress={onPressInner} 
+            onMouseEnter={() => onHover(true)}
+            onMouseLeave={() => onHover(false)}
+            style={hover ? [style, hoverStyle] : style} pointerEvents="box-none">
         {children}
     </TouchableOpacity>
 }
 
-export function MaybeClickable({onPress, children, style, isClickable}) {
+export function MaybeClickable({onPress, children, style, hoverStyle, onHoverChange, isClickable}) {
     if (!isClickable) {
         return <View style={style}>{children}</View>
     } else {
-        return <Clickable onPress={onPress} style={style}>{children}</Clickable>
+        return <Clickable onPress={onPress} style={style} 
+            hoverStyle={hoverStyle} 
+            onHoverChange={onHoverChange}>
+               {children}
+        </Clickable>
     }
 }
 
@@ -84,9 +104,19 @@ export function BigTitle({children, pad=true, width=null}) {
     return <Text style={{fontSize: 24, width, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
 
-export function SmallTitle({children, width=null}) {
-    return <Text style={{fontSize: 16, width, fontWeight: 'bold'}}>{children}</Text>
+export function SmallTitle({children, hover, width=null}) {
+    const s = SmallTitleStyle;
+    return <Text style={[s.smallTitle, hover ? s.hover : null, width ? {width} : null]}>{children}</Text>
 }
+const SmallTitleStyle = StyleSheet.create({
+    smallTitle: {
+        fontSize: 16, fontWeight: 'bold'
+    },
+    hover: {
+        color: '#000',
+        textDecorationLine: 'underline'
+    }
+})
 
 
 export function SmallTitleLabel({label, formatParams}) {
@@ -218,22 +248,39 @@ export function PadBox({children, horiz=8, vert=8}) {
 }
 
 export function PrimaryButton({label, icon, onPress}) {
-    return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, 
-            backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
-            {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
-            <TranslatableLabel style={{color: 'white'}} label={label} />
-        </View>
+    const s = PrimaryButtonStyle;
+    return <Clickable onPress={onPress} style={s.button} hoverStyle={s.hover}>
+        {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
+        <TranslatableLabel style={{color: 'white'}} label={label} />
     </Clickable>
 }
+const PrimaryButtonStyle = StyleSheet.create({
+    button: {
+        alignSelf: 'flex-start',
+        flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8,
+        backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4
+    },
+    hover: {
+        backgroundColor: 'hsl(209, 100%, 40%)'
+    }
+})
 
 export function SecondaryButton({label, onPress}) {
-    return <Clickable onPress={onPress}>
-        <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666'}}>
+    const s = SecondaryButtonStyle;
+    return <Clickable onPress={onPress} 
+        style={s.button} hoverStyle={s.hover}>
             <TranslatableLabel style={{color: '#666'}} label={label} />
-        </View>
     </Clickable>
 }
+const SecondaryButtonStyle = StyleSheet.create({
+    button: {
+        paddingHorizontal: 16, paddingVertical: 8, color: '#666'
+    },
+    hover: {
+        backgroundColor: '#eee',
+        borderRadius: 4
+    }
+})
 
 export function StatusButtonlikeMessage({label}) {
     return <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666', alignSelf: 'flex-start',
@@ -251,8 +298,9 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function AutoSizeTextInput({value, onChange, placeholder, style, maxHeight = 400, ...props}) {
+export function AutoSizeTextInput({value, onChange, placeholder, style, hoverStyle=null, maxHeight = 400, ...props}) {
     const [height, setHeight] = useState(0);
+    const [hover, setHover] = useState(false);
 
     useEffect(() => {
         if (value == '' && height > 0) {
@@ -271,7 +319,9 @@ export function AutoSizeTextInput({value, onChange, placeholder, style, maxHeigh
 
     return <View style={{height: styleHeight}}>
         <TextInput value={value} onChangeText={onChange} placeholder={placeholder} 
-            multiline={true} style={[style, {height: styleHeight}]} 
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+            multiline={true} 
+            style={[style, {height: styleHeight}, hover ? hoverStyle : null]} 
             onContentSizeChange={onContentSizeChange} {...props} />
     </View>
 }
@@ -343,6 +393,8 @@ export function EditableText({value, label, action='Update', height=150, placeho
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
          ]} 
+            hoverStyle={{borderColor: '#999'}}
+            height={height}
             value={text ?? value ?? ''}
             placeholder={placeholder}
             placeholderTextColor='#999'

@@ -43,23 +43,26 @@ function RegionCell({regionKey, regionNames, binary, regionCounts, maxCount, sel
     const count = regionCounts[regionKey];
     if (regionKey.trim() == '') return <View style={s.emptyCell} />
     if (binary) {
-        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}> 
-            <View style={[s.cell, count ? s.activeCell : null, selected ? s.selectedCell : null]}>
-                <Text style={s.label}>{regionKey}</Text>
-                <BackgroundBar count={regionCounts[regionKey] ?? 0} maxCount={maxCount} />
-            </View>
+        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}
+                hoverStyle={!selected ? s.hover : null}
+                style={[s.cell, count ? s.activeCell : null, selected ? s.selectedCell : null]}>
+            <Text style={s.label}>{regionKey}</Text>
+            <BackgroundBar count={regionCounts[regionKey] ?? 0} maxCount={maxCount} />
         </Clickable>
     } else {
-        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)}> 
-            <View style={[s.cell, selected ? s.selectedCell : null]}>
-                <Text style={s.label}>{regionKey}</Text>
-                <BackgroundBar count={count ?? 0} maxCount={maxCount} />
-            </View>
+        return <Clickable onPress={() => onChangeSelection(selected ? null : regionKey)} 
+                hoverStyle={s.hover}
+                style={[s.cell, selected ? s.selectedCell : null]}>
+            <Text style={s.label}>{regionKey}</Text>
+            <BackgroundBar count={count ?? 0} maxCount={maxCount} />
         </Clickable>
     }
 }
 
 const RegionCellStyles = StyleSheet.create({
+    hover: {
+        borderColor: '#999'
+    },
     cell: {
         width: 28,
         height: 28,

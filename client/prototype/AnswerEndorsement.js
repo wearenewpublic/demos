@@ -49,11 +49,9 @@ function AnswerEndorsementScreen() {
     const filteredPosts = posts.filter(post => post.from == personaKey || isNonEmpty(post.endorsements) || post.submit == myGroup?.key);
 
     return <ScrollableScreen grey>
-        <Clickable onPress={() => pushSubscreen('groupList')}>
-            <Card fitted>
-                <TranslatableLabel label='{count} Groups' formatParams={{count:groups.length}} />
-            </Card>
-        </Clickable>
+        <Card fitted onPress={() => pushSubscreen('groupList')}>
+            <TranslatableLabel label='{count} Groups' formatParams={{count:groups.length}} />
+        </Card>
         <BigTitle>{question}</BigTitle>
         {hasAnswered ? 
             <QuietSystemMessage label='You have already answered this question' />

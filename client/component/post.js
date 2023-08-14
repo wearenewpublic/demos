@@ -16,21 +16,20 @@ export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
+    const [authorHover, setAuthorHover] = useState(false);
     if (editedPost == post.key) {
         return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} saveHandler={saveHandler} fitted={fitted} noCard={noCard} />
     }
     return <MaybeCard fitted={fitted} isCard={!noCard}>
-        <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor}>
-            <View style={s.authorBox}>
-                {anonymousFace ? 
-                    <AnonymousFace size={32} />
-                :
-                    <UserFace userId={post.from} size={32} />
-                }
-                <View style={s.authorRight}>
-                    <Text style={s.authorName}>{authorName ?? user?.name}</Text>
-                    <TimeText time={post.time} />
-                </View>
+        <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor} style={s.authorBox} onHoverChange={setAuthorHover} >
+            {anonymousFace ? 
+                <AnonymousFace size={32} />
+            :
+                <UserFace userId={post.from} size={32} />
+            }
+            <View style={s.authorRight}>
+                <Text style={!authorHover ? s.authorName : [s.authorName, s.textHover]}>{authorName ?? user?.name}</Text>
+                <TimeText time={post.time} />
             </View>
         </MaybeClickable>
         {topBling ?
@@ -83,6 +82,9 @@ const PostStyle = StyleSheet.create({
     authorName: {
         fontSize: 15,
         fontWeight: 'bold'
+    },
+    textHover: {
+        textDecorationLine: 'underline'
     },
     text: {
         marginHorizontal: 2,
@@ -153,7 +155,7 @@ export function PostCommentsPreview({post, onPress}) {
     const commentCount = allPostComments.length;
     const shownComment = topPostComments[0];
     if (commentCount == 0) return null;
-    return <Clickable onPress={onPress}>
+    return <Clickable onPress={onPress} hoverStyle={s.hover}>
         <Separator pad={12} />
         {shownComment ? 
             <CommentPreview comment={shownComment} />
@@ -171,6 +173,9 @@ const PostCommentsPreviewStyle = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: '#666'
+    },
+    hover: {
+        opacity: 0.6
     }
 })
 
@@ -210,26 +215,32 @@ const CommentPreviewStyle = StyleSheet.create({
 
 export function PostActionButton({iconName, iconSet, label, formatParams, onPress}) {
     const s = PostActionButtonStyle;
-    return <Clickable onPress={onPress}>
-        <View style={s.actionButton}>
-            {iconSet ?
-                React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
-            : null}   
-            <TranslatableLabel style={s.actionLabel} label={label} formatParams={formatParams} />
-        </View>
+    const [hover, setHover] = useState(false);
+    return <Clickable onPress={onPress} style={s.actionButton} onHoverChange={hover => setHover(hover)}>
+        {iconSet ?
+            React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
+        : null}   
+        <TranslatableLabel style={!hover ? s.actionLabel : [s.actionLabel, s.actionLabelHover]} 
+            label={label} formatParams={formatParams} />
     </Clickable>
 }
 
 const PostActionButtonStyle = StyleSheet.create({
     actionButton: {
         flexDirection: 'row',
-        marginRight: 32
+        marginRight: 32,
     },
     actionLabel: {
-        marginLeft: 4,
         color: '#666',
+        marginLeft: 4,
         fontSize: 14
     },
+    actionLabelHover: {
+        color: '#000',
+        textDecorationLine: 'underline'
+
+    }
+
 });
 
 
