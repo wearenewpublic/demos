@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
@@ -172,6 +172,7 @@ export const CommentContext = React.createContext({
     authorName: AuthorName,
     authorFace: AuthorFace,
     getCanPost: ({post}) => post.text.length > 0,
+    sortComments: ({datastore, comments}) => comments,
     authorBling: [],
     commentPlaceholder: 'Write a comment...',
     replyWidgets: [],
@@ -291,11 +292,12 @@ const CollapsedCommentStyle = StyleSheet.create({
 function Replies({commentKey}) {
     const s = RepliesStyle;
     const datastore = useDatastore();
-    const {getIsVisible} = React.useContext(CommentContext);
+    const {getIsVisible, sortComments} = React.useContext(CommentContext);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const replies = comments.filter(c => c.replyTo == commentKey && getIsVisible({datastore, comment: c}));
+    const sortedReplies = sortComments({datastore, comments:replies});
     return <View style={s.repliesHolder}>
-        {replies.map(reply => 
+        {sortedReplies.map(reply => 
             <Comment key={reply.key} commentKey={reply.key} />
         )}
     </View>
@@ -341,16 +343,21 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function BasicComments({about = null}) {
+export function BasicComments({about = null, config={}}) {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
-
-    // console.log('comments', comments);
+    const defaultConfig = useContext(CommentContext);
+    const datastore = useDatastore();
+    const newConfig = {...defaultConfig, ...config};
+ 
+    const sortedComments = newConfig.sortComments({datastore, comments:topLevelComments})
 
     return <View>
-        <TopCommentInput about={about} />
-        {topLevelComments.map(comment => 
-            <Comment key={comment.key} commentKey={comment.key} />
-        )}
+        <CommentContext.Provider value={newConfig}>
+            <TopCommentInput about={about} />
+            {sortedComments.map(comment => 
+                <Comment key={comment.key} commentKey={comment.key} />
+            )}
+        </CommentContext.Provider>
     </View>
 }

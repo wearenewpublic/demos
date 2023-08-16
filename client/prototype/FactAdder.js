@@ -4,7 +4,7 @@ import { Card, Center, Clickable, HorizBox, ListItem, Narrow, Pad, Pill, Primary
 import { BasicComments } from "../component/comment";
 import { Post } from "../component/post";
 import { PostInput } from "../component/replyinput";
-import { godzilla_article } from "../data/articles";
+import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useCollection, useDatastore, useGlobalProperty } from "../util/datastore";

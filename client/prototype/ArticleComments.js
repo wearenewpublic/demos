@@ -1,7 +1,7 @@
 import { Article } from "../component/article"
 import { BodyText, Pad, ScrollableScreen, SmallTitleLabel } from "../component/basics"
 import { BasicComments } from "../component/comment";
-import { godzilla_article } from "../data/articles";
+import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useGlobalProperty } from "../util/datastore";

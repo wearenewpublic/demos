@@ -1,7 +1,7 @@
 import { ScrollView, View } from "react-native";
 import { Article } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitleLabel, WideScreen } from "../component/basics";
-import { godzilla_article, godzilla_comments, godzilla_questions } from "../data/articles";
+import { godzilla_article, godzilla_comments, godzilla_questions } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";

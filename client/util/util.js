@@ -121,6 +121,10 @@ export function toTitleCase(text) {
     return string == 'true';
   }
 
+  export function boolToInt(bool) {
+    return bool ? 1 : 0;
+  }
+
   export function getPath(object, path) {
     const parts = path.split('.');
     var result = object;
@@ -149,8 +153,10 @@ export function toTitleCase(text) {
 
 
 export function expandUrl({url, type}) {
+    console.log('expandUrl', url, type);
     if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
+      console.log('  already expanded', url);
+      return url;
     } else {
         return fileHostDomain + '/' + type + '/' + url;
     }

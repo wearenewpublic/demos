@@ -43,4 +43,53 @@ export const godzilla_comments = [
     {replyTo: 'future', from: 'b', text: 'I think this was a one-off event. I don\'t think we need to worry about future attacks. I base that on the fact that there have been no other giant monster attacks in the last 50 years. \n\nIn fact I think we might just be imagining this one.'},
 ]
 
+// export const godzilla_title_comments = [
+//     {from: 'a', text: 'As Mayor of New York, I have put together a plan for dealing with Godzilla. We are going to assemble a committee to decide on the plan of action to follow. The recommendations of that committee will then be subject to a legal review and a consultation period.\n We expect to have a concrete proposal for what to do by the second half of 2025.'}
+// ]
 
+// 
+
+export const godzilla_title_comments =
+[
+    {
+        "from": "a",
+        "text": "As Mayor of New York, I have put together a plan for dealing with Godzilla. We are going to assemble a committee to decide on the plan of action to follow. The recommendations of that committee will then be subject to a legal review and a consultation period.\n We expect to have a concrete proposal for what to do by the second half of 2025.",
+        "key": 360,
+        "time": 1692220308509
+    },
+    {
+        "key": 362,
+        "from": "b",
+        "time": 1692220368509,
+        "text": "The New York Police Department is fully committed to doing whatever it takes to fully support the proposal the committee and it's sub-committees come up with.",
+        "replyTo": 360
+    },
+    {
+        "key": 363,
+        "from": "c",
+        "time": 1692220428509,
+        "text": "Our research group at Columbia has been studying giant monsters for many years and we have come to the conclusion that they definitely don't exist.\n\nThe falling buildings and people seeing what looks like a giant monster almost certainly have some other explanation.",
+        "replyTo": null
+    },
+    {
+        "key": 364,
+        "from": "f",
+        "time": 1692220488509,
+        "text": "I'm just a random person saying random things.",
+        "replyTo": null
+    },
+    {
+        "key": 366,
+        "from": "f",
+        "time": 1692223869932,
+        "text": "When I reply, my messages appear at the bottom, because I don't have a title.",
+        "replyTo": 360
+    },
+    {
+        "key": 367,
+        "from": "c",
+        "time": 1692223884872,
+        "text": "When I reply, my messages appear at the top, because I'm notable.",
+        "replyTo": 360
+    }
+]
