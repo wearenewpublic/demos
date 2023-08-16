@@ -329,7 +329,10 @@ export function AutoSizeTextInput({value, onChange, placeholder, style, hoverSty
 
 export function OneLineTextInput({value, onChange, placeholder, ...props}) {
     const s = OneLineTextInputStyle;
-    return <TextInput value={value} style={s.textInput} placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
+    const [hover, setHover] = useState(false);
+    return <TextInput value={value} style={!hover ? s.textInput : [s.textInput, s.hover]}
+        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+        placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
 }
 
 const OneLineTextInputStyle = StyleSheet.create({
@@ -341,6 +344,9 @@ const OneLineTextInputStyle = StyleSheet.create({
         borderColor: '#ddd', padding: 8,
         fontSize: 15, lineHeight: 20,
     },
+    hover: {
+        borderColor: '#999'
+    }
 })
 
 
