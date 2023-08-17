@@ -6,8 +6,9 @@ import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datasto
 import { godzilla_article, godzilla_title_comments } from "../data/articles/godzilla";
 import { Article, MaybeArticleScreen } from "../component/article";
 import { cbc_sport_article, cbc_sport_comments } from "../data/articles/cbc_sport";
-import { TranslatableLabel } from "../component/translation";
+import { TranslatableLabel, languageFrench } from "../component/translation";
 import { View } from "react-native";
+import { cbc_sport_article_french } from "../translations/french/cbc_sport_article_french";
 
 const description = `
 Conversation participants can be given titles by a trusted organization.
@@ -64,7 +65,24 @@ export const TitledWritersPrototype = {
                 d: 'Umoja Community Mosaic'
             },
             comment: expandDataList(cbc_sport_comments)
-        }
+        },
+        {key: 'sport-french', name: 'CBC Soccer (French)', 
+            article: cbc_sport_article_french, comment: expandDataList([]), language: languageFrench,
+            personaTitle: {
+                a: 'Maire',
+                b: 'Entraîneur',
+                c: 'Chef de la Police',
+                d: 'Joueur',
+            },
+            personalOrg: {
+                a: 'Ville de Calgary',
+                b: 'Club de Football de Calgary',
+                c: 'Department de Police de Calgary',
+                d: 'Umoja Community Mosaic'
+            },
+        comment: expandDataList(cbc_sport_comments)
+    }
+
 
     ],
     newInstanceParams: []    
@@ -80,7 +98,6 @@ export function TitledWritersScreen() {
 
 function AuthorTitleBling({comment}) {
     const author = comment?.from;
-    console.log('AuthroTitleBling', {comment, author});
     const personaTitle = useGlobalProperty('personaTitle');
     const personaOrg = useGlobalProperty('personalOrg');
     if (personaTitle[author] && personaOrg[author]) {

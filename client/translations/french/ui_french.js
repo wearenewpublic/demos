@@ -66,4 +66,7 @@ export const ui_translations_french = {
     'Generate Public Summary': 'Générer un résumé public',
     'Computing...': 'Calcul...',
     'Only visible by you': 'Visible uniquement par vous',
+    'Comments': 'Commentaires',
+    'at': 'à',
+    'Writing as': 'Écrit en tant que',
 }

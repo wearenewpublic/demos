@@ -32,69 +32,31 @@ Determined to try steering the kids in the right direction, he started teaching 
 
 Umoja Community Mosaic, formerly known as Soccer Without Boundaries, officially launched in 2010 and gave many kids, particularly those from disadvantaged backgrounds, a chance to play competitive soccer and bond with their peers.
 
-Kids were also given access to other initiatives, such as a reading program that gave them a chance to learn how to read and tutoring opportunities that allowed them to seek assistance from volunteer tutors.
-
-The local initiative offers classes to more than 700 children and youth who are mentored by dozens of coaches and volunteers, many of whom were a part of the program as kids.
-
-There are several activities to choose from, such as soccer training sessions across the city, summer soccer camps and girls-only soccer sessions that seek to motivate more female players to pick up the sport.
-
-The free programs are inclusive and open to anyone interested in giving soccer a shot.
-
-"We focus also on the social [aspect] and the belonging," Munyezamu said.
-
-"Those kids who are born here also, they get to see that side of soccer again where basically, you know, you come here to [play]. No pressure from the coach, no pressure from the trainer, you just come here to feel that you are part of the group."
-
-Julia Swallow, who is a coach with Umoja Community Mosaic, immigrated to Canada from Kenya in 2009.
-
-Unfamiliar with soccer, she found herself getting increasingly drawn to the sport after she spotted a few kids playing on a field.
-
-Before she knew it, she was playing soccer and competing against boys. Noticing her newfound love for the sport, her father decided to enrol her in the local soccer league.
-
-Swallow was introduced to Umoja Community Mosaic earlier this year when a professor referred her to the organization.
-
-"I've been working with them since January," she said. "I've been helping the girls' program and meeting new people here … just trying to help [the] organization be a better, bigger, brighter space in Calgary."
-
-Swallow hopes to inspire more girls to start playing soccer and stay committed to the game.
-
-"I've noticed a lot of the younger girls who are really hesitant to come into sports, specifically soccer, they are more involved seeing that there are other women helping out in this community," she said.
-
-"I'm hoping that…next year, there's more people coming in, more women involved in sport, and then the younger girls can see, 'oh, maybe one day I could be that.'"
-
-Spiro Kajusa, a computer science student and head coach with Umoja Community Mosaic, loves teaching kids soccer in his free time.
-
-"I just really want to give these kids an opportunity to play soccer," he said.
-
-"That's one thing where most would not be able to [do] because of maybe finances, maybe situations at home, whatever may be going on. I just want them to have availability and something that they can kind of go to."
-
-Kajusa started playing soccer at the age of six after joining one of Munyezamu's first soccer sessions.
-
-He grew to love the game so much that he practiced with Munyezamu and his team for more than a decade, working as a volunteer and eventually, as a coach.
-
-Kajusa felt so committed to the cause that he decided to turn down international opportunities to continue working with Umoja Community Mosaic, a decision that he's proud of.
-
-"I had the option to go abroad and play post-secondary soccer or to come coach and I think the reward I have from coaching is a lot," he said.
-
-"Looking back now…I think [this] is a better choice cause seeing how the program kind of grew me up, I can now pass [it] on to other kids as well."
-
-
-Tola Wariyo, a volunteer with Umoja Community Mosaic, believes that the soccer program taught him a lot more than soccer — it equipped him with life skills and allowed him to evolve.
-
-"When I first came, I was about 16, around that age and I didn't know a lot," he said.
-
-"Just through the two years or three years I've been in this program, it helped me… grow as a person."
-
-According to Wariyo, one of the biggest strengths of the program is that it gives kids hope.
-
-"Somebody out there want to help you, give you a chance…want you to improve," he said. "That's the best thing about this program."
-
-Wariyo hopes to become a coach someday and inspire others to connect with each other through their passion for the sport.
-
-Wariyo thinks that the program is especially important for newcomers struggling to form connections.
-
-"When they come here, soccer is the main thing that connects them together. They have fun together," he said.
-
 "Sport brings people together, you know … they love soccer. I love soccer … that brings people together and they make friends."
 `    
-
-
 }
+
+export const cbc_sport_comments = [
+    {
+        "key": 378,
+        "from": "a",
+        "time": 1692310033292,
+        "text": "As Mayor of Calgary I really applaud what Jean-Claude has done. This kind of community building work is really great at allowing newcomers to social integrate into the Calgary Community.\n\nCalgary is stronger when we all feel we are part of one Calgary Community and soccer is a great way to bring people together.",
+        "replyTo": null
+    },
+    {
+        "key": 379,
+        "from": "b",
+        "time": 1692310072408,
+        "text": "I'm proud to be one of the volunteer coaches for Community Mosaic. They are an awesome group of kids with so much to contribute to Calgary.",
+        "replyTo": null
+    },
+    {
+        "key": 380,
+        "from": "f",
+        "time": 1692310113543,
+        "text": "I'm a random person who doesn't have interesting things to say but I insist on commenting on every article because I have too much free time.",
+        "replyTo": null
+    }
+]
+
