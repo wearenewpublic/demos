@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BigTitle, Card, ScrollableScreen, SectionTitleLabel } from "../component/basics";
+import { BigTitle, Card, Pad, ScrollableScreen, SectionTitleLabel } from "../component/basics";
 import { QuietSystemMessage } from "../component/message";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
 import { RatingSummary, RatingWithLabel, SpectrumRating } from "../component/rating";
@@ -9,6 +9,7 @@ import { post_starwars } from "../data/posts";
 import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { expandDataList } from "../util/util";
 import { askGptToEvaluateMessageTextAsync, gptProcessAsync } from "../component/chatgpt";
+import { View } from "react-native";
 
 export const CommentSliderPrototype = {
     key: 'commentsliderqa',
@@ -140,8 +141,11 @@ function EditRating({post, onPostChanged}) {
     const sideTwo = useGlobalProperty('sideTwo');
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
 
-    return <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
+    return <View>
+        <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
         placeholder='Rate your opinion'
         onChangeValue={slide => onPostChanged({...post, slide})} />
+        <Pad />
+    </View>
 }
 

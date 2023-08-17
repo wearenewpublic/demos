@@ -96,7 +96,7 @@ const ReplyInputStyle = StyleSheet.create({
     },
     widgetBarTop: {
         marginLeft: 8,
-        marginBottom: 8,
+        // marginBottom: 8,
     },
     widgetBottom: {
         marginLeft: 8,

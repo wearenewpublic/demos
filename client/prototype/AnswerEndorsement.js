@@ -201,8 +201,11 @@ function EditEndorseRequest({post, onPostChanged}) {
     const tSelect = useTranslation('Select group to submit your answer to');
     const unknown = {key: 'unknown', label: tSelect};
 
-    return <PopupSelector value={post.submit} items={[unknown, ... groupItems]} 
-        onSelect={submit => onPostChanged({...post, submit})} />
+    return <View>
+        <PopupSelector value={post.submit} items={[unknown, ... groupItems]} 
+            onSelect={submit => onPostChanged({...post, submit})} />
+        <Pad />
+    </View>
 }
 
 function EditAnonymous({post, onPostChanged}) {
@@ -211,8 +214,11 @@ function EditAnonymous({post, onPostChanged}) {
     const tReal = useTranslation('Use your Real Name');
     const items = [{key: 'true', label: tAnon}, {key: 'false', label: tReal}]
     
-    return <PopupSelector value={boolToString(post.anon)} items={items} 
+    return <View>
+        <PopupSelector value={boolToString(post.anon)} items={items} 
         onSelect={anon => onPostChanged({...post, anon: stringToBool(anon)})} />
+        <Pad />
+    </View>
 }
 
 

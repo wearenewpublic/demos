@@ -2,11 +2,12 @@ import { HorizBox, Pad, Pill, ScrollableScreen, SmallTitleLabel, WideScreen } fr
 import { BasicComments, BlingLabel, Comment, CommentContext } from "../component/comment";
 import { boolToInt, expandDataList } from "../util/util"
 import { authorRobEnnals } from "../data/authors";
-import { useCollection, useGlobalProperty } from "../util/datastore";
+import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datastore";
 import { godzilla_article, godzilla_title_comments } from "../data/articles/godzilla";
 import { Article, MaybeArticleScreen } from "../component/article";
-import { cbc_sport_article } from "../data/articles/cbc_sport";
+import { cbc_sport_article, cbc_sport_comments } from "../data/articles/cbc_sport";
 import { TranslatableLabel } from "../component/translation";
+import { View } from "react-native";
 
 const description = `
 Conversation participants can be given titles by a trusted organization.
@@ -53,14 +54,16 @@ export const TitledWritersPrototype = {
             personaTitle: {
                 a: 'Mayor',
                 b: 'Coach',
-                c: 'Police Officer'
+                c: 'Chief of Police',
+                d: 'Player',
             },
             personalOrg: {
                 a: 'City of Calgary',
                 b: 'Calgary Football Club',
-                c: 'Calgary Police Department'
+                c: 'Calgary Police Department',
+                d: 'Umoja Community Mosaic'
             },
-
+            comment: expandDataList(cbc_sport_comments)
         }
 
     ],
@@ -69,14 +72,15 @@ export const TitledWritersPrototype = {
 
 export function TitledWritersScreen() {
     const comments = useCollection('comment');
-    // console.log('comments', comments);
+    console.log('comments', comments);
     return <MaybeArticleScreen articleChildLabel='Comments'>
-        <BasicComments config={{authorBling: [AuthorTitleBling], sortComments}} />
+        <BasicComments config={{authorBling: [AuthorTitleBling], sortComments, replyTopWidgets:[PostTopBling]}} />
     </MaybeArticleScreen>
 }
 
 function AuthorTitleBling({comment}) {
-    const author = comment.from;
+    const author = comment?.from;
+    console.log('AuthroTitleBling', {comment, author});
     const personaTitle = useGlobalProperty('personaTitle');
     const personaOrg = useGlobalProperty('personalOrg');
     if (personaTitle[author] && personaOrg[author]) {
@@ -87,7 +91,30 @@ function AuthorTitleBling({comment}) {
             <Pad size={4} />
             <Pill text={personaOrg[author]} />
         </HorizBox>
-        // return <BlingLabel label={personaTitle[author] + ' at ' + personaOrg[author]} />
+    } else {
+        return null;
+    }
+}
+
+function PostTopBling() {
+    const author = usePersonaKey();
+    const personaTitle = useGlobalProperty('personaTitle');
+    const personaOrg = useGlobalProperty('personalOrg');
+    if (personaTitle[author] && personaOrg[author]) {
+        return <View>
+            <HorizBox>
+                <TranslatableLabel label='Writing as' style={{color: '#999'}} />
+                <Pad size={4} />
+                <Pill text={personaTitle[author]} />
+                <Pad size={4} />
+                <TranslatableLabel label='at' style={{color: '#999'}} />
+                <Pad size={4} />
+                <Pill text={personaOrg[author]} />
+            </HorizBox>
+            <Pad />
+        </View>
+    } else {
+        return null;
     }
 }
 

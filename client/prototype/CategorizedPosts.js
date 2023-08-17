@@ -20,11 +20,13 @@ export const CategorizedPostsPrototype = {
     screen: CategorizedPostsScreen,
     instance: [
         {key: 'godzilla', name: 'Godzilla Article', article: godzilla_article, post: expandDataList(godzilla_category_posts)},
-        {key: 'godzilla-raw', name: 'Godzilla Raw', title: 'What should we do about Godzilla attackin New York?', 
+        {key: 'godzilla-raw', name: 'Godzilla Raw', title: 'What should we do about Godzilla attacking New York?', 
             post: expandDataList(godzilla_category_posts)
         }
-
-    ]   
+    ],
+    newInstanceParams: [
+        {key: 'title', name: 'Title', type: 'shorttext'}
+    ]
 }
 
 function CategorizedPostsScreen() {
