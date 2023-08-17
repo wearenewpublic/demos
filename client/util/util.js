@@ -153,9 +153,7 @@ export function toTitleCase(text) {
 
 
 export function expandUrl({url, type}) {
-    console.log('expandUrl', url, type);
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      console.log('  already expanded', url);
       return url;
     } else {
         return fileHostDomain + '/' + type + '/' + url;

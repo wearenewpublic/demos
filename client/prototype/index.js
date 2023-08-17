@@ -24,6 +24,7 @@ import { VideoQAProfilePrototype } from "./VideoQAProfile";
 import { AnswerEndorsement } from "./AnswerEndorsement";
 import { FactAdderPrototye } from "./FactAdder";
 import { TitledWritersPrototype } from "./TitledWriters";
+import { CategorizedPostsPrototype } from "./CategorizedPosts";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -31,6 +32,6 @@ export const prototypes = [
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
     InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
     MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
-    FactAdderPrototye, TitledWritersPrototype
+    FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype
 ]
 

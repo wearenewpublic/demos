@@ -93,3 +93,56 @@ export const godzilla_title_comments =
         "replyTo": 360
     }
 ]
+
+
+export const godzilla_category_posts = [
+    {
+        "key": 376,
+        "from": "a",
+        "time": 1692299326856,
+        "text": "New York has ten billion people living in it.",
+        "replyTo": null,
+        "category": "unverified fact"
+    },
+    {
+        "key": 375,
+        "from": "a",
+        "time": 1692299309838,
+        "text": "To protect New York against monsters, we should change the building codes to require buildings to be strong enough to withstand monster attacks.",
+        "replyTo": null,
+        "category": "proposal"
+    },
+    {
+        "key": 374,
+        "from": "a",
+        "time": 1692299280193,
+        "text": "I lived in New York for 20 years and we were never attacked by monsters.",
+        "replyTo": null,
+        "category": "experience"
+    },
+    {
+        "key": 373,
+        "from": "a",
+        "time": 1692299264101,
+        "text": "New York is a great place to live.",
+        "replyTo": null,
+        "category": "opinion"
+    },
+    {
+        "key": 372,
+        "from": "a",
+        "time": 1692299250628,
+        "text": "I love New York",
+        "replyTo": null,
+        "category": "opinion"
+    },
+    {
+        "key": 369,
+        "from": "a",
+        "time": 1692299099250,
+        "text": "New York is a City",
+        "replyTo": null,
+        "category": "fact"
+    }
+]
+

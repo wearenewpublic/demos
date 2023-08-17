@@ -1,0 +1,18 @@
+I'm going to give you a post from an online forum. I want you to tell me which of the following categories it falls into:
+
+"fact": Expresses a fact that is probably true. It should not include personal opinion, but can include statements about the opinions of others.
+"unverified fact": Presents something as fact that is most likely not true.
+"experience": Describes the writers own personal experience.
+"proposal": Makes a concrete proposal about something that should be done.
+"opinion": Expresses the author's own personal opinion.
+"other": Does not fall into one of these categories.
+
+If multiple categories seem to apply, choose the category that seems the best fit.
+
+I want you to give a brief reasoning for your decision, and then end with a single line in JSON format referring to one of the categories above, such as {judgement: "opinion"} if you categorized the post as an opinion.
+
+Here is the post:
+"{{text}}"
+
+Remember to end your response with a single line in JSON format, such as {judgement: 'fact'}.
+

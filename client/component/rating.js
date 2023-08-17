@@ -68,20 +68,21 @@ export function RatingSummary({labelSet, ratingCounts, selection, onChangeSelect
     const totalCount = ratingCounts.reduce((a,b) => a+b, 0);
     return <View>
         {ratings.map(rating =>
-            <RatingSummaryItem key={rating} label={labelSet[rating-1]} totalCount={totalCount} maxCount={maxCount} count={ratingCounts[rating-1]} rating={rating} selected={selection==rating} onChangeSelection={onChangeSelection} />
+            <FilterCategoryItem key={rating} label={labelSet[rating-1]} color={colors[rating-1]} totalCount={totalCount} maxCount={maxCount} count={ratingCounts[rating-1]} category={rating} selection={selection} onChangeSelection={onChangeSelection} />
         )}
     </View>
 }
 
 
-function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected, onChangeSelection}) {
+export function FilterCategoryItem({label, maxCount, count, color, category, selection, onChangeSelection}) {
     const s = RatingSummaryItemStyle;
     const [hover, setHover] = useState(false);
+    const selected = selection == category;
     function onSelect() {
         if (selected) {
             onChangeSelection(null);
         } else {
-            onChangeSelection(rating);
+            onChangeSelection(category);
         }
     }
     if (hover) {
@@ -92,17 +93,14 @@ function RatingSummaryItem({label, totalCount, maxCount, count, rating, selected
             style={selected ? s.selectedRow : s.row}
             hoverStyle={selected ? s.selectedRow : s.hoverRow}
             >
-        {/* <View style={selected ? s.selectedRow : s.row}> */}
             <View style={s.dot}>
-                <SpectrumItem enabled color={colors[rating-1]}/>
+                <SpectrumItem enabled color={color}/>
             </View>
             <View style={s.right}>
                 <TranslatableLabel style={s.label} label={label}/>
                 <Text style={s.count}>{count}</Text>
                 <BackgroundBar count={count} maxCount={maxCount} />
             </View>
-            {/* <View style={[s.ratingBar, {width: barWidth}]} /> */}
-        {/* </View> */}
     </Clickable>
 }
 

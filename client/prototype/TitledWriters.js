@@ -1,15 +1,10 @@
-import { ScrollView } from "react-native"
 import { HorizBox, Pad, Pill, ScrollableScreen, SmallTitleLabel, WideScreen } from "../component/basics";
 import { BasicComments, BlingLabel, Comment, CommentContext } from "../component/comment";
 import { boolToInt, expandDataList } from "../util/util"
-import { TopCommentInput } from "../component/replyinput";
-import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useGlobalProperty } from "../util/datastore";
-import { godzilla_comments_threaded } from "../data/threaded";
 import { godzilla_article, godzilla_title_comments } from "../data/articles/godzilla";
 import { Article, MaybeArticleScreen } from "../component/article";
-import { useContext } from "react";
 import { cbc_sport_article } from "../data/articles/cbc_sport";
 import { TranslatableLabel } from "../component/translation";
 
