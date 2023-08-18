@@ -9,10 +9,8 @@ I'm going to give you a post from an online forum. I want you to tell me which o
 
 If multiple categories seem to apply, choose the category that seems the best fit.
 
-I want you to give a brief reasoning for your decision, and then end with a single line in JSON format referring to one of the categories above, such as {judgement: "opinion"} if you categorized the post as an opinion.
+I want you to give your answer in JSON format. For example say {judgement: "fact"} if you think the statement is a fact.
 
 Here is the post:
 "{{text}}"
-
-Remember to end your response with a single line in JSON format, such as {judgement: 'fact'}.
 

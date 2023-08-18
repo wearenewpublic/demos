@@ -69,4 +69,13 @@ export const ui_translations_french = {
     'Comments': 'Commentaires',
     'at': 'à',
     'Writing as': 'Écrit en tant que',
+    'Responses': 'Réponses',
+    'Filter by Post Type': 'Filtrer par type de message',
+    'Fact': 'Fait',
+    'Opinion': 'Avis',
+    'Unverified Fact': 'Fait non vérifié',
+    'Experience': 'Expérience',
+    'Proposal': 'Proposition',
+    'Other': 'Autre',
+    'What do you want to contribute?': 'Que voulez-vous contribuer?',
 }

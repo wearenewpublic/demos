@@ -10,6 +10,9 @@ import { authorRobEnnals } from "../data/authors";
 import { useCollection } from "../util/datastore";
 import { expandDataList, toTitleCase } from "../util/util";
 import { useState } from "react";
+import { cbc_sport_article, cbc_sport_categorized_posts } from "../data/articles/cbc_sport";
+import { cbc_sport_article_french, cbc_sport_categorized_posts_french } from "../translations/french/cbc_sport_article_french";
+import { languageFrench } from "../component/translation";
 
 export const CategorizedPostsPrototype = {
     description: 'Categorize posts as Fact/Experience/Proposal/Opinion/Other',
@@ -22,7 +25,12 @@ export const CategorizedPostsPrototype = {
         {key: 'godzilla', name: 'Godzilla Article', article: godzilla_article, post: expandDataList(godzilla_category_posts)},
         {key: 'godzilla-raw', name: 'Godzilla Raw', title: 'What should we do about Godzilla attacking New York?', 
             post: expandDataList(godzilla_category_posts)
+        },
+        {key: 'sport', name: 'CBC Soccer', article: cbc_sport_article, post: expandDataList(cbc_sport_categorized_posts)},
+        {key: 'sport-french', name: 'CBC Soccer (French)', post: expandDataList(cbc_sport_categorized_posts_french), 
+            article: cbc_sport_article_french, language: languageFrench,
         }
+
     ],
     newInstanceParams: [
         {key: 'title', name: 'Title', type: 'shorttext'}
@@ -38,13 +46,13 @@ function CategorizedPostsScreen() {
 
     return <MaybeArticleScreen articleChildLabel='Responses'>
         <Narrow>
-            <PostInput placeholder={"What do you want to contribute?"}
-                postHandler={postHandlerAsync} />
-
             <Card>
                 <SectionTitleLabel label='Filter by Post Type' />
                 <CategoryFilter posts={posts} selection={selection} onChangeSelection={setSelection} />
             </Card>
+
+            <PostInput placeholder={"What do you want to contribute?"}
+                postHandler={postHandlerAsync} />
 
             {filteredPosts.map(post => 
                 <Post key={post.key} post={post} saveHandler={postHandlerAsync}

@@ -90,7 +90,7 @@ export const TitledWritersPrototype = {
 
 export function TitledWritersScreen() {
     const comments = useCollection('comment');
-    console.log('comments', comments);
+    // console.log('comments', comments);
     return <MaybeArticleScreen articleChildLabel='Comments'>
         <BasicComments config={{authorBling: [AuthorTitleBling], sortComments, replyTopWidgets:[PostTopBling]}} />
     </MaybeArticleScreen>

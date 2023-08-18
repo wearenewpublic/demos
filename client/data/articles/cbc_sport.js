@@ -60,3 +60,46 @@ export const cbc_sport_comments = [
     }
 ]
 
+export const cbc_sport_categorized_posts = [
+    {
+        "key": 386,
+        "from": "d",
+        "time": 1692319270703,
+        "text": "We should create soccer clubs in other regions of Calgary too. We could get parents involved in coaching and connect the club to other community organizations.",
+        "replyTo": null,
+        "category": "proposal"
+    },
+    {
+        "key": 385,
+        "from": "d",
+        "time": 1692319254588,
+        "text": "I've played soccer a lot in my life and it's been a great way to stay fit and make friends.",
+        "replyTo": null,
+        "category": "experience"
+    },
+    {
+        "key": 384,
+        "from": "c",
+        "time": 1692319244285,
+        "text": "I have been playing soccer with Umoja Community Mosaic for 6 months now and I've really enjoyed the energy they bring to the game. I've had a really good time.",
+        "replyTo": null,
+        "category": "experience"
+    },
+    {
+        "key": 383,
+        "from": "b",
+        "time": 1692319234206,
+        "text": "Most new immigrants to Canada know how to play soccer.",
+        "replyTo": null,
+        "category": "fact"
+    },
+    {
+        "key": 382,
+        "from": "a",
+        "time": 1692319223824,
+        "text": "Soccer is played in almost every country in the world. ",
+        "replyTo": null,
+        "category": "fact"
+    }
+]
+
