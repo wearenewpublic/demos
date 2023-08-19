@@ -68,7 +68,7 @@ export function RatingSummary({labelSet, ratingCounts, selection, onChangeSelect
     const totalCount = ratingCounts.reduce((a,b) => a+b, 0);
     return <View>
         {ratings.map(rating =>
-            <FilterCategoryItem key={rating} label={labelSet[rating-1]} color={colors[rating-1]} totalCount={totalCount} maxCount={maxCount} count={ratingCounts[rating-1]} category={rating} selection={selection} onChangeSelection={onChangeSelection} />
+            <FilterCategoryItem key={rating} label={labelSet[rating-1]} color={colors[rating-1]} maxCount={maxCount} count={ratingCounts[rating-1]} category={rating} selection={selection} onChangeSelection={onChangeSelection} />
         )}
     </View>
 }

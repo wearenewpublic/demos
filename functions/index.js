@@ -11,7 +11,24 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const { components } = require("./component");
+const { bots } = require('./bot');
+const { botlabHandlerAsync } = require('./botutil/botlab');
 const cors = require('cors')({origin: true})
+
+
+exports.slackbot = functions.https.onRequest(async (req, res) => {
+    console.log('botlab request', req.method, req.path);
+    const {componentId} = parsePath(req.path);
+    console.log('componentId', componentId);
+
+    if (componentId == 'botlab') {
+        await botlabHandlerAsync(req, res);
+        return;
+    } else {        
+        res.status(404).send({error: 'Unknown component'});
+        return;
+    }    
+});
 
 
 exports.api = functions.https.onRequest((req, res) => {
@@ -131,7 +148,7 @@ async function callApiFunctionAsync(request, fields) {
 
 function parsePath(path) {
     var parts = path.split('/').filter(x => x);
-    if (parts[0] == 'api') {
+    if (parts[0] == 'api' || parts[0] == 'slackbot') {
         parts = parts.slice(1);
     }
 
