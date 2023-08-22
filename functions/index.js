@@ -21,6 +21,13 @@ exports.slackbot = functions.https.onRequest(async (req, res) => {
     const {componentId} = parsePath(req.path);
     console.log('componentId', componentId);
 
+    if (req.method == 'OPTIONS') {
+        cors(req, res, () => {
+            response.status(200);
+        });
+        return;
+    }
+
     if (componentId == 'botlab') {
         await botlabHandlerAsync(req, res);
         return;
