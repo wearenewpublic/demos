@@ -18,17 +18,17 @@ const botlabApp = new App({
 
 async function handleEvent(event) {
     console.log('handleEvent', event);
-    const { type, text, channel } = event;
+    const { type, text, channel, thread_ts } = event;
     switch (type) {
         case 'app_mention':
-            handleMentionAsync({text, channel});
+            handleMentionAsync({text, channel, thread_ts});
             break;
         default:
             console.log('Unhandled event', type);
     }
 }
 
-async function handleMentionAsync({text, channel}) {
+async function handleMentionAsync({text, channel, thread_ts}) {
     console.log('handleMentionAsync', text, channel);
     const [mention, commandKey, ...args] = text.split(' ');
     if (!mention.startsWith('<@U')) {
@@ -39,9 +39,9 @@ async function handleMentionAsync({text, channel}) {
     if (command) {
         const response = await command.action({args, channel});
         if (typeof response === 'string') {
-            callSlackAsync({action: 'chat.postMessage', data: {text: response, channel}});
+            callSlackAsync({action: 'chat.postMessage', data: {text: response, thread_ts, channel}});
         } else {
-            callSlackAsync({action: 'chat.postMessage', data: {blocks: response, channel}});
+            callSlackAsync({action: 'chat.postMessage', data: {blocks: response, thread_ts, channel}});
         }
 
     }
