@@ -1,8 +1,23 @@
 const { BOTLAB_SLACK_APP_TOKEN, BOTLAB_DEV_SLACK_APP_TOKEN } = require('../keys');
 
-async function sendSlackCommandResponseAsync({response_url, response, isPublic}) {
-    
+async function sendSlackCommandResponseAsync({response_url, response}) {
+    const fetch = await import('node-fetch');
+
+    if (typeof response === 'string') {
+        jsonText = JSON.stringify({text: response, replace_original: true, response_type: 'ephemeral'});
+    } else {
+        jsonText = JSON.stringify({blocks: response, replace_original: true, response_type: 'ephemeral'});
+    }
+
+    const response_result = await fetch.default(response_url, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: jsonText
+    })
 }
+exports.sendSlackCommandResponseAsync = sendSlackCommandResponseAsync;
 
 async function callSlackAsync({action, data}) {
     console.log('callSlackAsync', {action, data});

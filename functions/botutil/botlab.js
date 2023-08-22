@@ -1,19 +1,7 @@
-const { App } = require('@slack/bolt');
 const { BOTLAB_SLACK_APP_TOKEN, BOTLAB_SLACK_SECRET, BOTLAB_VERIFICATION_TOKEN, BOTLAB_DEV_VERIFICATION_TOKEN } = require('../keys');
-const { callSlackAsync } = require('../component/slack');
+const { callSlackAsync, sendSlackCommandResponseAsync } = require('../component/slack');
 const { commands } = require('../bot');
 const cors = require('cors')({origin: true})
-
-// const fetch = await import('node-fetch');
-
-console.log('BOTLAB_SLACK_APP_TOKEN', BOTLAB_SLACK_APP_TOKEN);
-console.log('BOTLAB_SLACK_SECRET', BOTLAB_SLACK_SECRET);
-
-const botlabApp = new App({
-    token: BOTLAB_SLACK_APP_TOKEN,
-    signingSecret: BOTLAB_SLACK_SECRET
-});
-
 
 
 async function handleEvent(event) {
@@ -43,20 +31,23 @@ async function handleMentionAsync({text, channel, thread_ts}) {
         } else {
             callSlackAsync({action: 'chat.postMessage', data: {blocks: response, thread_ts, channel}});
         }
-
+    } else {
+        callSlackAsync({action: 'chat.postMessage', data: {text: 'Unknown command: ' + commandKey + '\n\nUse the "help" command to get help, or the "list" command to list available commands.', thread_ts, channel}});
     }
 }
 
-async function handleCommandAsync(text, response_url) {
+async function handleCommandAsync({req, res, text, response_url}) {
     console.log('handleCommand', text);
+
     const [commandKey, ...args] = text.split(' ');
     const command = commands[commandKey];
+    var response;
     if (command) {
-        const response = await command.action({args, response_url});
-        return {response, isPublic: false};
+        response = await command.action({args, response_url});
     } else {
-        return {response: 'Unknown command: ' + commandKey, isPublic: false};
+        response = 'Unknown command: ' + commandKey + '\n\nUse the "help" command to get help, or the "list" command to list available commands.';
     }
+    sendSlackCommandResponseAsync({response_url, response});
 }
 
 async function botlabHandlerAsync(req, res) {
@@ -75,27 +66,16 @@ async function botlabHandlerAsync(req, res) {
     }
 
     if (event) {
+        cors(req, res, () => {
+            res.send();
+        });
         await handleEvent(event);
     } else if (command) {
-        const {response, isPublic} = await handleCommandAsync(text, response_url);
-        console.log('response', response, isPublic);
-        var jsonText;
-        if (typeof response === 'string') {
-            jsonText = JSON.stringify({text: response, response_type: isPublic ? 'in_channel' : 'ephemeral'});
-        } else {
-            jsonText = JSON.stringify({blocks: response, response_type: isPublic ? 'in_channel' : 'ephemeral'});
-        }
-        console.log('jsonText', jsonText);
         cors(req, res, () => {
-            res.set('Content-Type', 'application/json');
-            res.send(jsonText);
+            res.send();
         });
-        return;
+        await handleCommandAsync({req, res, text, response_url});
     }
-
-    cors(req, res, () => {
-        res.send();
-    });
 }
 
 

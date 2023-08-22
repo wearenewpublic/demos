@@ -8,7 +8,8 @@ function listAction() {
     console.log('list');
 
     const { commands } = require('../bot');
-    const commandList = Object.keys(commands).map(key => {
+    const sortedCommands = Object.keys(commands).sort();
+    const commandList = sortedCommands.map(key => {
         const { description } = commands[key];
         return `• *${key}*: ${description}`;
     });
@@ -29,3 +30,5 @@ function listAction() {
 }
 
 exports.ListCommand = ListCommand;
+
+
