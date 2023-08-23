@@ -22,7 +22,7 @@ async function helloAsync({name}) {
     return {data: "Hello " + name};
 }
 
-function createGptPrompt({promptKey, params, language}) {
+function createGptPrompt({promptKey, params, language='English'}) {
     console.log('createGptPrompt', {promptKey, params, language});
     const filename = 'prompts/' + promptKey + '.txt';
     if (!existsSync(filename)) {
@@ -57,6 +57,8 @@ async function callGptAsync({promptKey, params, language}) {
 
     return {data};
 }
+
+exports.callGptAsync = callGptAsync;
 
 
 exports.apiFunctions = {
