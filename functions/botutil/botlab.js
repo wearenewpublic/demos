@@ -36,14 +36,14 @@ async function handleMentionAsync({text, channel, thread_ts}) {
     }
 }
 
-async function handleCommandAsync({req, res, text, response_url}) {
+async function handleCommandAsync({text, channel, response_url}) {
     console.log('handleCommand', text);
 
     const [commandKey, ...args] = text.split(' ');
     const command = commands[commandKey];
     var response;
     if (command) {
-        response = await command.action({args, response_url});
+        response = await command.action({args, channel, response_url});
     } else {
         response = 'Unknown command: ' + commandKey + '\n\nUse the "help" command to get help, or the "list" command to list available commands.';
     }
@@ -53,7 +53,7 @@ async function handleCommandAsync({req, res, text, response_url}) {
 async function botlabHandlerAsync(req, res) {
     console.log('botlabHandlerAsync', req.body);
 
-    const { challenge, command, text, response_url, event, token } = req.body;
+    const { challenge, command, text, response_url, channel_id, event, token } = req.body;
     if (challenge) {
         res.send(challenge);
         return;
@@ -74,7 +74,7 @@ async function botlabHandlerAsync(req, res) {
         cors(req, res, () => {
             res.send();
         });
-        await handleCommandAsync({req, res, text, response_url});
+        await handleCommandAsync({req, res, text, channel: channel_id, response_url});
     }
 }
 
