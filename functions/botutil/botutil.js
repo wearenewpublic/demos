@@ -20,3 +20,15 @@ function getTimeAgo({interval = 'week'}) {
 exports.getTimeAgo = getTimeAgo
 
 
+function omitNullAndUndefined(obj) {
+    const result = {};
+    for (const key in obj) {
+      if (obj[key] !== null && obj[key] !== undefined) {
+        result[key] = obj[key];
+      }
+    }
+    return result;
+}
+
+exports.omitNullAndUndefined = omitNullAndUndefined;
+

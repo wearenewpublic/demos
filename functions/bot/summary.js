@@ -1,5 +1,5 @@
 const { callSlackAsync } = require("../component/slack");
-const { getUserMappingAsync, replaceUserIdsWithNamesInMessages, filterBotlabMessages } = require("../botutil/users");
+const { getUserMappingAsync, replaceUserIdsWithNamesInMessages, filterBotlabMessages, removeNullMessageFields } = require("../botutil/users");
 const { callGptAsync } = require("../component/chatgpt");
 const { getTimeAgo } = require("../botutil/botutil");
 
@@ -14,10 +14,12 @@ async function summaryAction({args, channel}) {
     const pUserMapping = getUserMappingAsync();
     const timeAgo = getTimeAgo({interval});
     const messagesResult = await callSlackAsync({action: 'conversations.history', data: {channel, limit: 50, oldest: timeAgo.toString()}});
+
     const userMapping = await pUserMapping;
-
+    if (!userMapping) {
+        return 'Error getting user list - likely rate limit exceeded';
+    }
     const format = describe.join(' ').trim() || 'bulleted list';
-
 
     if (messagesResult.error) {
         console.log('messagesResult', messagesResult);
@@ -26,8 +28,9 @@ async function summaryAction({args, channel}) {
 
     const prettyMessages = replaceUserIdsWithNamesInMessages({messages: messagesResult.messages ?? [], userMapping});
     const filteredMessages = filterBotlabMessages({messages: prettyMessages});
+    const cleanedMesasges = removeNullMessageFields({messages: filteredMessages});
     const agreePoints = await callGptAsync({promptKey: 'slack_summary', params: 
-        {commentsJSON: JSON.stringify(filteredMessages), format}});
+        {commentsJSON: JSON.stringify(cleanedMesasges), format}});
 
     return agreePoints.data;
 }
