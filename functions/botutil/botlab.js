@@ -25,6 +25,9 @@ async function handleMentionAsync({text, channel, thread_ts}) {
     }
     const command = commands[commandKey];
     if (command) {
+        if (command.slow) {
+            callSlackAsync({action: 'chat.postMessage', data: {text: 'Working on it...', thread_ts, channel}});
+        }
         const response = await command.action({args, channel});
         if (typeof response === 'string') {
             callSlackAsync({action: 'chat.postMessage', data: {text: response, thread_ts, channel}});

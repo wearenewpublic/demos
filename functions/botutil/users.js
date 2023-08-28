@@ -56,7 +56,7 @@ function removeNullMessageFields({messages}) {
 }
 
 function filterBotlabMessages({messages}) {
-    console.log('filter', messages);
+    // console.log('filter', messages);
     const filteredMessages = messages.filter(message => 
         !(message.from ?? '').includes('Botlab') && !(message.text ?? '').includes('Botlab'));
     return filteredMessages;
