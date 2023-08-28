@@ -13,6 +13,8 @@ import { languageFrench, languageGerman } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
 import { memberPersonaList } from "../data/personas";
 import { callServerApiAsync } from "../util/servercall";
+import { MaybeArticleScreen } from "../component/article";
+import { trek_wars_article } from "../data/articles/startrekwars";
 
 const description = `
 A private conversation that generates a public conclusion.
@@ -44,7 +46,14 @@ export const InnerOuter = {
     instance: [
         {
             key: 'wars', conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
-            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)},
+            name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)
+        },
+        {
+            key: 'wars-article', 
+            article: trek_wars_article,
+            conclusion: 'Star Wars and Star Trek are both good movies, but they capture different aspects of how the world works',
+            name: 'Trek Wars Article', comment: expandDataList(trek_vs_wars)
+        },
         {
             key: 'wars_french', language: languageFrench,
             conclusion: 'Star Wars et Star Trek sont tous deux de bons films, mais ils captent différents aspects de comment le monde fonctionne',
@@ -84,9 +93,10 @@ function InnerOuterScreen() {
     }
 
     return (
-        <WideScreen pad>
-            <ScrollView>
-                <Pad size={12}/>
+        <MaybeArticleScreen articleChildLabel='Community Response'>
+        {/* <WideScreen pad>
+            <ScrollView> */}
+                <Pad size={24}/>
                 <SectionTitleLabel label='Public Summary'/>
                 <Pad size={4}/>
                 {persona.member ? 
@@ -121,8 +131,9 @@ function InnerOuterScreen() {
 
                 <Pad size={24}/>
                 <QuietSystemMessage label='Non-members can only see messages they posted, or replies to their messages.'/>
-            </ScrollView>
-        </WideScreen>
+            {/* </ScrollView>
+        </WideScreen> */}
+        </MaybeArticleScreen>
     )
 }
 

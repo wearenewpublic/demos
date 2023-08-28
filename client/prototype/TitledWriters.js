@@ -9,6 +9,7 @@ import { cbc_sport_article, cbc_sport_comments } from "../data/articles/cbc_spor
 import { TranslatableLabel, languageFrench } from "../component/translation";
 import { View } from "react-native";
 import { cbc_sport_article_french } from "../translations/french/cbc_sport_article_french";
+import { trek_wars_article } from "../data/articles/startrekwars";
 
 const description = `
 Conversation participants can be given titles by a trusted organization.
@@ -80,10 +81,19 @@ export const TitledWritersPrototype = {
                 c: 'Department de Police de Calgary',
                 d: 'Umoja Community Mosaic'
             },
-        comment: expandDataList(cbc_sport_comments)
-    }
-
-
+            comment: expandDataList(cbc_sport_comments)
+        },
+        {key: 'trek-wars', name: 'Star Trek vs Star Wars',
+            article: trek_wars_article, comment: expandDataList([]),
+            personaTitle: {
+                a: 'President',
+                b: 'Ewok Actor'
+            },
+            personalOrg: {
+                a: 'Star Trek Fans of America',
+                b: 'Lucasfilm'
+            }
+        }
     ],
     newInstanceParams: []    
 }
