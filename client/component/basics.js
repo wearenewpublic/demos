@@ -240,7 +240,9 @@ export function WrapBox({children}) {
 }
 
 export function Center({children, pad=0}) {
-    return <View style={{flexDirection: 'row', justifyContent: 'center', margin: pad}}>{children}</View>  
+    return <View style={{alignSelf: 'center', alignItems: 'center', margin: pad}}>
+        {children}
+    </View>  
 }
 
 export function PadBox({children, horiz=8, vert=8}) {

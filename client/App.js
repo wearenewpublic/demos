@@ -12,14 +12,17 @@ import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/naviga
 import { LoginScreen } from './organizer/Login';
 import { Datastore, useGlobalProperty } from './util/datastore';
 import { NewLiveInstanceScreen } from './organizer/NewLiveInstance';
-import { ScreenTitleText } from './component/basics';
+import { HorizBox, ScreenTitleText } from './component/basics';
 import { MembersScreen } from './component/members';
+import { SharedData } from './util/shareddata';
 
 
 export default function App() {
   const url = useLiveUrl();
   const {prototypeKey, instanceKey, screenStack} = getScreenStackForUrl(url);
   const prototype = choosePrototypeByKey(prototypeKey);
+  const instance = prototype && instanceKey && chooseInstanceByKey({prototype, instanceKey});
+
   let [fontsLoaded] = useFonts({
     Montserrat_600SemiBold,
   });
@@ -52,10 +55,55 @@ export default function App() {
       <TopBar title='New Live Instance' subtitle={prototype.name} />
       <NewLiveInstanceScreen prototype={prototype} />
     </FullScreen>
+  } else if (instance && !instance?.isLive && prototype.split) {
+    return <SharedData>
+      <SideBySideStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} prototype={prototype} instance={instance}/>
+    </SharedData>
   } else {
-    return <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
+    return <SharedData>
+      <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
+    </SharedData>
   }
 }
+
+
+function SideBySideStack({screenStack, prototypeKey, instanceKey}) {
+  const s = SideBySideStackStyle;
+  return <View style={s.outer}>
+    <View style={s.column}>
+      <View style={s.columnInner}>   
+        <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
+      </View>
+    </View>
+    <View style={s.column}>
+      <View style={s.columnInner}>
+        <ScreenStack screenStack={screenStack} prototypeKey={prototypeKey} instanceKey={instanceKey} />
+      </View>
+    </View>
+  </View>
+}
+
+const SideBySideStackStyle = StyleSheet.create({
+  outer: {
+    flex: 1, 
+    flexDirection: 'row',
+  },
+  column: {
+    flex: 1,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    marginHorizontal: 8,
+    marginVertical: 4,
+    borderRadius: 2,
+    shadowRadius: 4, shadowColor: '#555', shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.5, elevation: 1,
+    backgroundColor: 'white'
+  },
+  columnInner: {
+    flex: 1,
+    borderRadius: 16
+  },
+})
 
 
 function ScreenStack({screenStack, prototypeKey, instanceKey}) {
