@@ -12,14 +12,14 @@ import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { useTranslation } from "../component/translation";
 
-export const MultiInnerOuterPrototype = {
-    key: 'multiinnerouter',
-    name: 'Multi Inner Outer',
+export const TopicMultiChatPrototype = {
+    key: 'topicmulti',
+    name: 'Topic Multi-Chat Prototype',
     description: "Multiple organizations can have a stance on the article's topic. People can then use inner/outer conversations to engage with the organization.",
     author: authorRobEnnals,
     date: '2023-08-30',
     hasMembers: true,
-    screen: MultiInnerOuterScreen,
+    screen: TopicStanceScreen,
     subscreens: {
         stance: {screen: StanceScreen, title: 'Topic Stance'},
         topic: {screen: TopicScreen, title: 'Topic'}
@@ -70,7 +70,7 @@ export const MultiInnerOuterPrototype = {
     ]
 }
 
-function MultiInnerOuterScreen() {
+function TopicStanceScreen() {
     const topics = useCollection('topic', {sortBy: 'title'});
     return <MaybeArticleScreen articleChildLabel='Community Stances' embed={<TopicListEmbed/>}>
         <Narrow>
