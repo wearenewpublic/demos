@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
-import { BigTitle, Narrow, Pad, ScrollableScreen, Separator, SmallTitleLabel, WideScreen } from "./basics";
+import { BigTitle, Center, Narrow, Pad, ScrollableScreen, Separator, SmallTitleLabel, WideScreen } from "./basics";
 import { TranslatableLabel } from "./translation";
 import { expandUrl } from "../util/util";
 import { useGlobalProperty } from "../util/datastore";
@@ -48,9 +48,7 @@ export function Article({article, embed=null, children}) {
             </View>
         </View>
         <Separator />
-        <Narrow>
-            {children}
-        </Narrow>
+        {children}
     </View>
 }
 
@@ -134,7 +132,7 @@ export function MaybeArticleScreen({article, embed, articleChildLabel, children}
     if (article ?? globalArticle) {
        return <ScrollableScreen maxWidth={800}>
             <Article article={article ?? globalArticle} embed={embed}>
-                <SmallTitleLabel label={articleChildLabel} />
+                <Center><SmallTitleLabel label={articleChildLabel} /></Center>
                 {children}
                 <Pad size={32} />
             </Article>

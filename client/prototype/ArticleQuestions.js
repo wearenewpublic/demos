@@ -1,6 +1,6 @@
 import { ScrollView, View } from "react-native";
 import { Article } from "../component/article";
-import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitleLabel, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, Clickable, ListBox, ListItem, Narrow, Pad, PadBox, ScreenTitleText, ScrollableScreen, SmallTitleLabel, WideScreen } from "../component/basics";
 import { godzilla_article, godzilla_comments, godzilla_questions } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { pushSubscreen } from "../util/navigate";
@@ -75,11 +75,13 @@ export function ArticleQuestionsScreen() {
 
     return <ScrollableScreen maxWidth={800}>
         <Article article={article} embed={<QuestionList />}>
-            <Center>
-                <SmallTitleLabel label='Questions'/>
-            </Center>
-            <Pad/>
-            <QuestionList />
+            <Narrow>
+                <Center>
+                    <SmallTitleLabel label='Questions'/>
+                </Center>
+                <Pad/>
+                <QuestionList />
+            </Narrow>
         </Article>
     </ScrollableScreen>
 }

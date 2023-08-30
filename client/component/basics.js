@@ -35,12 +35,29 @@ export function Narrow({children}) {
 }
 
 
-export function Card({children, onPress, fitted=false, vMargin=10}) {
+export function SectionBox({children}) {
+    const s = SectionBoxStyle;
+    return <View style={s.box}>
+        {children}
+    </View>
+}
+
+const SectionBoxStyle = StyleSheet.create({
+    box: {
+        // borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: '#f5f5f5',
+    }
+});
+
+
+export function Card({children, onPress, fitted=false, vMargin=10, pad=10}) {
     const s = CardStyle;
-    const style=[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]
 
     return <MaybeClickable onPress={onPress} isClickable={onPress}
-        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]} 
+        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}, {padding: pad}]} 
         hoverStyle={s.hover} >
             {children}
     </MaybeClickable>
@@ -153,13 +170,13 @@ const markdownStyles = {
 export function MarkdownBodyText({text}) {
     return <View style={{maxWidth: 500}}>
         <Markdown style={markdownStyles}>
-            {collapseDoubleSpaces(stripSingleLineBreaks(text))}
+            {collapseDoubleSpaces(stripSingleLineBreaks(text ?? ''))}
         </Markdown>
     </View>
 }
 
 export function PreviewText({text, numberOfLines=2}) {
-    const lineLessText = text.replace(/\n/g, ' ').trim()
+    const lineLessText = (text || '').replace(/\n/g, ' ').trim()
     return <Text numberOfLines={numberOfLines} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{lineLessText}</Text>
 }
 

@@ -52,10 +52,12 @@ function FactAdderScreen() {
 
     return <ScrollableScreen maxWidth={800}>
         <Article article={article} embed={<FactsPreview />}>
-            <SmallTitleLabel label='Relevant Facts'/>
-            <Pad />
-            <FactList />
-            <Pad size={32} />
+            <Narrow>
+                <SmallTitleLabel label='Relevant Facts'/>
+                <Pad />
+                <FactList />
+                <Pad size={32} />
+            </Narrow>
         </Article>
     </ScrollableScreen>   
 }
