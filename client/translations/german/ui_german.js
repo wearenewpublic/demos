@@ -61,4 +61,13 @@ export const ui_translations_german = {
     'Generate Public Summary': 'Öffentliche Zusammenfassung generieren',
     'Computing...': 'Berechnung...',
     'Only visible by you': 'Nur für Sie sichtbar',
+    'Fact': 'Fakt',
+    'Responses': 'Antworten',
+    'Filter by Post Type': 'Nach Beitragstyp filtern',
+    'Unverified Fact': 'Unbestätigter Fakt',
+    'Experience': 'Erfahrung',
+    'Proposal': 'Vorschlag',
+    'Opinion': 'Meinung',
+    'Other': 'Andere',
+    'What do you want to contribute?': 'Was möchten Sie beitragen?',
 };

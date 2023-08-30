@@ -12,7 +12,8 @@ import { expandDataList, toTitleCase } from "../util/util";
 import { useState } from "react";
 import { cbc_sport_article, cbc_sport_categorized_posts } from "../data/articles/cbc_sport";
 import { cbc_sport_article_french, cbc_sport_categorized_posts_french } from "../translations/french/cbc_sport_article_french";
-import { languageFrench } from "../component/translation";
+import { languageFrench, languageGerman } from "../component/translation";
+import { cbc_sport_article_german, cbc_sport_categorized_posts_german } from "../translations/german/cbc_sport_article_german";
 
 export const CategorizedPostsPrototype = {
     description: 'Categorize posts as Fact/Experience/Proposal/Opinion/Other',
@@ -29,7 +30,10 @@ export const CategorizedPostsPrototype = {
         {key: 'sport', name: 'CBC Soccer', article: cbc_sport_article, post: expandDataList(cbc_sport_categorized_posts)},
         {key: 'sport-french', name: 'CBC Soccer (French)', post: expandDataList(cbc_sport_categorized_posts_french), 
             article: cbc_sport_article_french, language: languageFrench,
-        }
+        },
+        {key: 'sport-german', name: 'CBC Soccer (German)', post: expandDataList(cbc_sport_categorized_posts_german), 
+        article: cbc_sport_article_german, language: languageGerman,
+    }
 
     ],
     newInstanceParams: [
