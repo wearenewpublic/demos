@@ -26,7 +26,7 @@ import { FactAdderPrototye } from "./FactAdder";
 import { TitledWritersPrototype } from "./TitledWriters";
 import { CategorizedPostsPrototype } from "./CategorizedPosts";
 import { SlackTestPrototype } from "./SlackTest";
-import { TopicMultiChatPrototype } from "./TopicStances";
+import { TopicMultiChatPrototype } from "./TopicMultiChat";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
