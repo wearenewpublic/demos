@@ -1,4 +1,3 @@
-
 exports.ecorp = [
     {key: 'welcome', from: 'i', public: true, text: 'Welcome to the E-Corp Alumni chat room!'},
     {key: 'hate', from: 'a', replyTo: 'welcome', text: 'I hate E-Corp!'},
@@ -34,4 +33,9 @@ exports.trek_vs_wars_enforcer = [
     {replyTo: 'nerd', from: 'c', violates: true, text: "A 'nerd' is just someone who likes to think about things rationally, rather than just following the orders of whatever depraved leader happens to be socially influencing their group. If it wasn't for nerds then garbage-for-brains people like you would still be living in caves and eating mud."}
 ]
 
-
+exports.disco = [
+    {key: 'party', from: 'i', tone: "neutral", text: 'There is a party in Cakewalk County next weekend!'},
+    {from: 'f', replyTo: 'party', tone: "neutral", text: 'That sounds like a lot of fun.'},
+    {key: 'long', from: 'b', tone: "neutral", text: "I'm going to share an extremely long and boring rant about the origin of the word 'disco' that nobody asked for. Here I go. I'm still not done. There is so much to say and I won't stop until everyone is sick of me."},
+    {from: 'b', tone: "neutral", text: "I just thought of another nerdy fun fact about the history of dance music and the culture surrounding it. I'm sure you would love to hear it. But even if you don't, I'll share it anyway..."}
+]

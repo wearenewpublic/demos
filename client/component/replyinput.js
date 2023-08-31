@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useContext, useState } from "react";
 import { AutoSizeTextInput, Card, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
@@ -6,11 +6,12 @@ import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
 import { useTranslation } from "./translation";
 
+
 export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [post, setPost] = useState({text: '', replyTo: commentKey});
-    const {postHandler, authorFace, getCanPost, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
+    const {postHandler, cancelHandler, authorFace, getCanPost, getPrimaryButtonLabel, commentPlaceholder, replyWidgets, replyTopWidgets, inputLock, hideInputOnClick, customTextInputWidget} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
@@ -21,16 +22,24 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
         } else {
             datastore.addObject('comment', post);
         }
-        if (topLevel) {
-            setPost({text: '', replyTo: commentKey});
-        } else {
-            hideReplyInput();
+
+        if (hideInputOnClick) {
+            if (topLevel) {
+                setPost({text: '', replyTo: commentKey});
+            } else {
+                hideReplyInput();
+            }
         }
     }
 
     function hideReplyInput() {
         setPost({text: '', replyTo: commentKey})
         datastore.setSessionData('replyToComment', null);
+
+        // Let the respective prototype do whatever it needs to do when the user discards an unposted comment
+        if (cancelHandler) {
+            cancelHandler();
+        }
     }
 
     if (!personaKey) {
@@ -45,13 +54,20 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
             )}
-            <AutoSizeTextInput style={s.textInput} hoverStyle={{borderColor: '#999'}}
-                placeholder={placeholderText}
-                placeholderTextColor='#999'
-                value={post.text}
-                onChangeText={text => setPost({...post, text})}
-                multiline={true}
-            />
+
+            {(post.text && customTextInputWidget !== undefined) ?
+                React.createElement(customTextInputWidget)
+            :   
+                <AutoSizeTextInput style={s.textInput}
+                    hoverStyle={{borderColor: '#999'}}
+                    placeholder={placeholderText}
+                    placeholderTextColor='#999'
+                    value={post.text}
+                    onChangeText={text => setPost({...post, text})}
+                    multiline={true}
+                    disabled={inputLock}
+                />
+            }
             {(!topLevel || post.text) ?
                 (replyWidgets.map((widget, idx) => 
                     <View key={idx} style={s.widgetBottom}>
@@ -59,17 +75,31 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     </View>
                 ))
             : null}
-            {(!topLevel || getCanPost({datastore,post})) ? 
+            {topLevel ?
+                <View>
+                    {getCanPost({datastore,post}) ?
+                        <View style={s.actions}>          
+                            <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
+                            <SecondaryButton onPress={hideReplyInput} label='Cancel' />             
+                        </View>
+                    : null}
+                </View>
+            : 
                 <View style={s.actions}>
-                    <PrimaryButton onPress={onPost} label='Post'/>
+                    {(getCanPost({datastore,post})) ?
+                        <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
+                    : 
+                        // TODO: It would be nice to have a style for disabled buttons so they look different
+                        <PrimaryButton disabled={true} label={getPrimaryButtonLabel()}/>
+                    }
                     <SecondaryButton onPress={hideReplyInput} label='Cancel' />
                 </View>
-            : null}
+            }
         </View>
     </View>
 }
 
-const ReplyInputStyle = StyleSheet.create({
+export const ReplyInputStyle = StyleSheet.create({
     textInput: {
         flex: 1,
         borderRadius: 8, 
@@ -102,7 +132,7 @@ const ReplyInputStyle = StyleSheet.create({
         marginLeft: 8,
         marginTop: 8,
     }
-})
+});
 
 export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});

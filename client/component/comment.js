@@ -115,7 +115,6 @@ export function BlingPending({comment}) {
     }
 }
 
-
 const defaultActions = [ActionLike, ActionReply, ActionCollapse];
 function ActionBar({actions, commentKey, comment}) {
     return <View style={{flexDirection: 'row'}}>
@@ -172,12 +171,15 @@ export const CommentContext = React.createContext({
     authorName: AuthorName,
     authorFace: AuthorFace,
     getCanPost: ({post}) => post.text.length > 0,
+    getPrimaryButtonLabel: () => "Post",
     sortComments: ({datastore, comments}) => comments,
     authorBling: [],
     commentPlaceholder: 'Write a comment...',
     replyWidgets: [],
     replyTopWidgets: [],
     editExtras: [],
+    inputLock: false,
+    hideInputOnClick: true
 });
 
 function AuthorName({comment}) {
@@ -188,7 +190,6 @@ function AuthorName({comment}) {
 function AuthorFace({comment, faint}) {
     return <UserFace userId={comment.from} faint={faint} />
 }
-
 
 export function Comment({commentKey}) {
     const s = CommentStyle;
@@ -344,14 +345,11 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 
 
 export function BasicComments({about = null, config={}}) {
-    const defaultConfig = useContext(CommentContext);
-    const newConfig = {...defaultConfig, ...config};
-    const {getIsVisible} = newConfig;
-    const datastore = useDatastore();
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => 
-        (about ? comment.replyTo == about : !comment.replyTo) 
-        && getIsVisible({datastore, comment}));
+    const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
+    const defaultConfig = useContext(CommentContext);
+    const datastore = useDatastore();
+    const newConfig = {...defaultConfig, ...config};
  
     const sortedComments = newConfig.sortComments({datastore, comments:topLevelComments})
 
