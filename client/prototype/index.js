@@ -21,12 +21,22 @@ import { CommentBouncerPrototype } from "./CommentBouncer";
 import { CommentSliderPrototype } from "./CommentSlider";
 import { ConversationDashboardPrototype } from "./ConversationDashboard";
 import { MissingPerspectivesPrototype } from "./MissingPerspectives";
+import { ThreadedSummaryPrototype } from "./ThreadedSummary";
+import { VideoQAProfilePrototype } from "./VideoQAProfile";
+import { AnswerEndorsement } from "./AnswerEndorsement";
+import { FactAdderPrototye } from "./FactAdder";
+import { TitledWritersPrototype } from "./TitledWriters";
+import { CategorizedPostsPrototype } from "./CategorizedPosts";
+import { SlackTestPrototype } from "./SlackTest";
+import { TopicMultiChatPrototype } from "./TopicMultiChat";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
     SimulatedChat, OpenHousePrototype, ParentApproves, ArticleCommentsPrototype, PrivateRuleEnforcerPrototype,
     AudioResponsePrototype, ArticleQuestionsPrototype, OptionallyAnonymous, SemiAnonymous,
-    InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CheekyChatBotPrototype, CommentBouncerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
-    MissingPerspectivesPrototype,
+    InnerOuter, PostFeedPrototype, QuestionAnswerPrototype, CommentSliderPrototype, ConversationDashboardPrototype,
+    MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
+    FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype,
+    SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype
 ]
 

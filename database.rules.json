@@ -9,22 +9,23 @@
                     }
                 },
                 "userInstance": {
-                    "$user": {
-                    ".read": "$user == auth.uid",
-                    ".write": "$user == auth.uid"
-                  }
-              }
+                  	"$user": {
+                      ".read": "$user == auth.uid",
+                      ".write": "$user == auth.uid"
+                    }
+                }
             }
         },
         "userInstance": {
-            "$user": {
-              ".read": "$user == auth.uid",
-            ".write": "$user == auth.uid",
-              "$prototype": {
-                                  "$instance": {
-                          ".write": true
-                }                
-            }
+      		"$user": {
+            	".read": "$user == auth.uid",
+              ".write": "$user == auth.uid",
+            	"$prototype": {
+									"$instance": {
+                			".write": true
+                  }                
+              }
+          }
         },
         ".read": false,
         ".write": false  

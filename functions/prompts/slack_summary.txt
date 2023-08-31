@@ -1,0 +1,11 @@
+Here is a Slack conversation written as a JSON object. 
+Some of the messages in this conversation are part of a thread. If a message is in a thread then the "inThread" 
+
+are replying to other messages, which is expressed by the "replyTo" field of one message referring to the "key" of another message. 
+The "from" field is the name of the person who wrote the message.
+
+{{{commentsJSON}}}
+
+Write a summary of the key things that were said in these messages.
+Write your summary in the form of a {{format}}.
+

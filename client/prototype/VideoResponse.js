@@ -49,7 +49,8 @@ export const VideoResponse = {
                 {from: 'b', uri: 'https://new-public-demo.web.app/videos/one_two_three_four.webm'}
             ]
         )},
-    ]
+    ],
+    newInstanceParams: []
 }
 
 function VideoResponseScreen() {
@@ -57,9 +58,9 @@ function VideoResponseScreen() {
     const name = useGlobalProperty('name');
     const datastore = useDatastore();
 
-    function onSubmitRecording(uri) {
-        console.log('submitting recording', uri);
-        datastore.addObject('response', {uri});
+    function onSubmitRecording({blob, url}) {
+        console.log('submitting recording', url);
+        datastore.addObject('response', {uri: url});
     }
 
     return <ScrollableScreen>

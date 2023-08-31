@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Clickable, Pad, PrimaryButton } from "../component/basics";
+import { Clickable, Pad, PrimaryButton, StatusButtonlikeMessage } from "../component/basics";
+import { PrototypeContext } from "../organizer/PrototypeContext";
+import { makeStorageUrl, useDatastore, usePersonaKey } from "../util/datastore";
+import { callServerMultipartApiAsync } from "../util/servercall";
+import { getFirebaseUser } from "../util/firebase";
+import { QuietSystemMessage } from "../component/message";
 
 
 export function AudioRecorder({action='Record Audio', onSubmitRecording}) {
     const s = VideoCameraStyle;
     const [recorderShown, setRecorderShown] = useState(false);
+    const {isLive} = useContext(PrototypeContext);
+    const [uploading, setUploding] = useState(false);
+    const datastore = useDatastore();
 
-    function onSubmit(url) {
+    console.log('isLive', isLive);
+
+    async function onSubmit({blob, url}) {
         setRecorderShown(false);
-        onSubmitRecording(url);
+        if (isLive) {
+            setUploding(true);
+            const result = await callServerMultipartApiAsync({datastore, component: 'storage', funcname: 'uploadFile', 
+                params: {contentType: 'audio/webm', extension: 'webm'}, 
+                fileParams: {file: {blob, filename: 'audio.webm'}}
+            });
+            const storageUrl = makeStorageUrl({datastore, userId: result.userId, fileKey: result.fileKey, extension: 'webm'});
+            onSubmitRecording({blob, url: storageUrl});
+            setUploding(false);
+        } else {
+            onSubmitRecording({blob, url});
+        }
     }
 
-    if (recorderShown) {
+    if (uploading) {
+        return <StatusButtonlikeMessage label='Uploading...' />
+    } else if (recorderShown) {
         return <LiveAudioRecorder onSubmitRecording={onSubmit} />
     } else {
         return <PrimaryButton 
@@ -102,11 +125,6 @@ export function LiveAudioRecorder({size, onSubmitRecording}) {
     
     return (
         <View>
-            {/* <video 
-                ref={videoRef} 
-                style={{width: size, height: size, objectFit: "cover"}} autoPlay muted 
-            />
-            <Pad /> */}
             {initialized ? 
                 (recording ?
                     <PrimaryButton

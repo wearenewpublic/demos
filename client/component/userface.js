@@ -15,7 +15,7 @@ export function UserFace({userId, size = 32, faint=false}) {
         if (fbUser) {
             return <FaceImage photoUrl={fbUser.photoURL} size={size} faint={faint} />
         } else {
-            return <AnonymousFace faint={faint} />
+            return <AnonymousFace faint={faint} size={size} />
         }
     } else {
         const face = persona?.face;
@@ -29,6 +29,6 @@ export function FaceImage({face, photoUrl=null, size=32, faint=false}) {
         source={{uri: photoUrl ?? ('https://new-public-demo.web.app/faces/' + face)}} />
 }
 
-export function AnonymousFace({faint}) {
-    return <FaceImage face='anonymous.jpeg' faint={faint} />
+export function AnonymousFace({faint, size}) {
+    return <FaceImage face='anonymous.jpeg' faint={faint} size={size} />
 }

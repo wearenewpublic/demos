@@ -26,6 +26,10 @@
         "source": "/api/**",
         "function": "api"
       },
+      { 
+        "source": "/slackbot/**",
+        "function": "slackbot"
+      },
       {
         "source": "**",
         "destination": "/index.html"

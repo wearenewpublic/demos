@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Markdown from "react-native-markdown-display";
 import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
@@ -7,6 +7,7 @@ import { FaceImage, UserFace } from "./userface";
 import { closeActivePopup } from "../platform-specific/popup.web";
 import { setTitle } from "../platform-specific/url";
 import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
+import { useObject } from "../util/datastore";
 
 
 export function ScrollableScreen({children, grey, maxWidth=500}) {
@@ -34,12 +35,34 @@ export function Narrow({children}) {
 }
 
 
-export function Card({children, fitted=false, vMargin=10}) {
-    const s = CardStyle;
-    return <View style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}]}>
+export function SectionBox({children}) {
+    const s = SectionBoxStyle;
+    return <View style={s.box}>
         {children}
     </View>
 }
+
+const SectionBoxStyle = StyleSheet.create({
+    box: {
+        // borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: '#f5f5f5',
+    }
+});
+
+
+export function Card({children, onPress, fitted=false, vMargin=10, pad=10}) {
+    const s = CardStyle;
+
+    return <MaybeClickable onPress={onPress} isClickable={onPress}
+        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}, {padding: pad}]} 
+        hoverStyle={s.hover} >
+            {children}
+    </MaybeClickable>
+}
+
 
 const CardStyle = StyleSheet.create({
     card: {
@@ -47,6 +70,9 @@ const CardStyle = StyleSheet.create({
         shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5, elevation: 1,
         backgroundColor: '#fff'
+    },
+    hover: {
+        shadowRadius: 2, shadowColor: '#555', shadowOffset: {width: 0, height: 2}
     }
 })
 
@@ -59,29 +85,56 @@ export function MaybeCard({children, isCard}) {
 }
 
 
-export function Clickable({onPress, children, style}) {
+export function Clickable({onPress, onHoverChange, children, style, hoverStyle=null}) {
+    const [hover, setHover] = useState(false);
     function onPressInner() {
         if (onPress) {
             closeActivePopup();
             onPress();
         }
     }
-    return <TouchableOpacity onPress={onPressInner} style={style} pointerEvents="box-none">
+    function onHover(hover) {
+        setHover(hover);
+        onHoverChange && onHoverChange(hover);
+    }
+    return <TouchableOpacity onPress={onPressInner} 
+            onMouseEnter={() => onHover(true)}
+            onMouseLeave={() => onHover(false)}
+            style={hover ? [style, hoverStyle] : style} pointerEvents="box-none">
         {children}
     </TouchableOpacity>
 }
 
-export function MaybeClickable({onPress, children, style, isClickable}) {
+export function MaybeClickable({onPress, children, style, hoverStyle, onHoverChange, isClickable}) {
     if (!isClickable) {
         return <View style={style}>{children}</View>
     } else {
-        return <Clickable onPress={onPress} style={style}>{children}</Clickable>
+        return <Clickable onPress={onPress} style={style} 
+            hoverStyle={hoverStyle} 
+            onHoverChange={onHoverChange}>
+               {children}
+        </Clickable>
     }
 }
 
-export function BigTitle({children, pad=true}) {
-    return <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
+export function BigTitle({children, pad=true, width=null}) {
+    return <Text style={{fontSize: 24, width, fontWeight: 'bold', marginBottom: pad ? 8 : 0}}>{children}</Text>
 }
+
+export function SmallTitle({children, hover, width=null}) {
+    const s = SmallTitleStyle;
+    return <Text style={[s.smallTitle, hover ? s.hover : null, width ? {width} : null]}>{children}</Text>
+}
+const SmallTitleStyle = StyleSheet.create({
+    smallTitle: {
+        fontSize: 16, fontWeight: 'bold'
+    },
+    hover: {
+        color: '#000',
+        textDecorationLine: 'underline'
+    }
+})
+
 
 export function SmallTitleLabel({label, formatParams}) {
     return <TranslatableLabel style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
@@ -95,6 +148,10 @@ export function SectionTitleLabel({label, formatParams}) {
 
 export function BodyText({children}) {
     return <Text style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
+}
+
+export function OneLineText({children}) {
+    return <Text numberOfLines={1} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{children}</Text>
 }
 
 const markdownStyles = {
@@ -113,13 +170,13 @@ const markdownStyles = {
 export function MarkdownBodyText({text}) {
     return <View style={{maxWidth: 500}}>
         <Markdown style={markdownStyles}>
-            {collapseDoubleSpaces(stripSingleLineBreaks(text))}
+            {collapseDoubleSpaces(stripSingleLineBreaks(text ?? ''))}
         </Markdown>
     </View>
 }
 
 export function PreviewText({text, numberOfLines=2}) {
-    const lineLessText = text.replace(/\n/g, ' ').trim()
+    const lineLessText = (text || '').replace(/\n/g, ' ').trim()
     return <Text numberOfLines={numberOfLines} style={{fontSize: 15, color: '#444', maxWidth: 500}}>{lineLessText}</Text>
 }
 
@@ -200,7 +257,9 @@ export function WrapBox({children}) {
 }
 
 export function Center({children, pad=0}) {
-    return <View style={{flexDirection: 'row', justifyContent: 'center', margin: pad}}>{children}</View>  
+    return <View style={{alignSelf: 'center', alignItems: 'center', margin: pad}}>
+        {children}
+    </View>  
 }
 
 export function PadBox({children, horiz=8, vert=8}) {
@@ -208,20 +267,45 @@ export function PadBox({children, horiz=8, vert=8}) {
 }
 
 export function PrimaryButton({label, icon, onPress}) {
-    return <Clickable onPress={onPress} style={{alignSelf: 'flex-start'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4}}>
-            {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
-            <TranslatableLabel style={{color: 'white'}} label={label} />
-        </View>
+    const s = PrimaryButtonStyle;
+    return <Clickable onPress={onPress} style={s.button} hoverStyle={s.hover}>
+        {icon ? <View style={{marginRight: 12}}>{icon}</View> : null}
+        <TranslatableLabel style={{color: 'white'}} label={label} />
     </Clickable>
 }
+const PrimaryButtonStyle = StyleSheet.create({
+    button: {
+        alignSelf: 'flex-start',
+        flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8,
+        backgroundColor: 'rgb(0, 132, 255)', borderRadius: 4
+    },
+    hover: {
+        backgroundColor: 'hsl(209, 100%, 40%)'
+    }
+})
 
 export function SecondaryButton({label, onPress}) {
-    return <Clickable onPress={onPress}>
-        <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666'}}>
+    const s = SecondaryButtonStyle;
+    return <Clickable onPress={onPress} 
+        style={s.button} hoverStyle={s.hover}>
             <TranslatableLabel style={{color: '#666'}} label={label} />
-        </View>
     </Clickable>
+}
+const SecondaryButtonStyle = StyleSheet.create({
+    button: {
+        paddingHorizontal: 16, paddingVertical: 8, color: '#666'
+    },
+    hover: {
+        backgroundColor: '#eee',
+        borderRadius: 4
+    }
+})
+
+export function StatusButtonlikeMessage({label}) {
+    return <View style={{paddingHorizontal: 16, paddingVertical: 8, color: '#666', alignSelf: 'flex-start',
+            borderColor: '#666', borderRadius: 4, borderWidth: 1}}>
+        <TranslatableLabel style={{color: '#666'}} label={label} />
+    </View>
 }
 
 
@@ -233,18 +317,30 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function AutoSizeTextInput({value, onChange, placeholder, style, ...props}) {
+export function AutoSizeTextInput({value, onChange, placeholder, style, hoverStyle=null, maxHeight = 400, ...props}) {
     const [height, setHeight] = useState(0);
+    const [hover, setHover] = useState(false);
+
+    useEffect(() => {
+        if (value == '' && height > 0) {
+            setHeight(0);
+        }
+    }, [value])
 
     function onContentSizeChange(e) {
-        setHeight(e.nativeEvent.contentSize.height);
+        const newHeight = e.nativeEvent.contentSize.height;
+        if (newHeight > height) {
+            setHeight(Math.min(newHeight, maxHeight));
+        }
     }
 
     const styleHeight = Math.max(40, height);
 
     return <View style={{height: styleHeight}}>
         <TextInput value={value} onChangeText={onChange} placeholder={placeholder} 
-            multiline={true} style={[style, {height: styleHeight}]} 
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+            multiline={true} 
+            style={[style, {height: styleHeight}, hover ? hoverStyle : null]} 
             onContentSizeChange={onContentSizeChange} {...props} />
     </View>
 }
@@ -252,20 +348,24 @@ export function AutoSizeTextInput({value, onChange, placeholder, style, ...props
 
 export function OneLineTextInput({value, onChange, placeholder, ...props}) {
     const s = OneLineTextInputStyle;
-    return <TextInput value={value} style={s.textInput} placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
+    const [hover, setHover] = useState(false);
+    return <TextInput value={value} style={!hover ? s.textInput : [s.textInput, s.hover]}
+        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+        placeholderTextColor='#999' onChangeText={onChange} placeholder={placeholder} />
 }
 
 const OneLineTextInputStyle = StyleSheet.create({
     textInput: {
         flexShrink: 0,
         maxWidth: 500,
-        marginLeft: 4, marginRight: 4,
         borderRadius: 8, 
         borderWidth: StyleSheet.hairlineWidth, 
         borderColor: '#ddd', padding: 8,
-        marginHorizontal: 8,
         fontSize: 15, lineHeight: 20,
     },
+    hover: {
+        borderColor: '#999'
+    }
 })
 
 
@@ -300,7 +400,7 @@ const FormFieldStyle = StyleSheet.create({
         marginBottom: 8
     },
     label: {
-        marginLeft: 12,
+        marginLeft: 8,
         fontWeight: 'bold',
         fontSize: 12,
         marginBottom: 2
@@ -309,7 +409,7 @@ const FormFieldStyle = StyleSheet.create({
 
 
 
-export function EditableText({value, label, action='Update', height=150, placeholder, onChange, multiline=true, flatTop=false, flatBottom=false}) {
+export function EditableText({value, label, action='Update', height=150, placeholder, onChange, onChangeEditState=()=>{}, multiline=true, flatTop=false, flatBottom=false}) {
     const s = EditableTextStyle;
     const [text, setText] = useState(null);
     return <View style={s.outer}>
@@ -318,16 +418,18 @@ export function EditableText({value, label, action='Update', height=150, placeho
             flatTop ? {borderTopLeftRadius: 0, borderTopRightRadius: 0} : null,
             flatBottom ? {borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderBottomWidth: 0} : null
          ]} 
+            hoverStyle={{borderColor: '#999'}}
+            height={height}
             value={text ?? value ?? ''}
             placeholder={placeholder}
             placeholderTextColor='#999'
             multiline={multiline} 
-            onChangeText={setText} 
+            onChangeText={text => {setText(text); onChangeEditState(true)}} 
         />
         {text ? 
             <View style={s.actions}>
-                <PrimaryButton onPress={() => {onChange(text); setText(null)}} label={action} />
-                <SecondaryButton onPress={() => setText(null)} text='Cancel' />
+                <PrimaryButton onPress={() => {onChange(text); setText(null); onChangeEditState(false)}} label={action} />
+                <SecondaryButton onPress={() => {setText(null); onChangeEditState(false)}} label='Cancel' />
             </View>
         : null}
     </View>
@@ -335,6 +437,7 @@ export function EditableText({value, label, action='Update', height=150, placeho
 
 const EditableTextStyle = StyleSheet.create({
     outer: {
+        maxWidth: 500
         // height: 150,
     },
     label: {
@@ -362,11 +465,19 @@ const EditableTextStyle = StyleSheet.create({
 })
 
 
-export function Pill({label, color = '#666', big=false, showCross=false, notranslate=false}) {
+export function PillBox({children, big=false, color='#666'}) {
+    const s = PillStyle;
+    return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color, paddingHorizontal: 8, paddingVertical: 4}]}>
+        {children}
+    </View>
+}
+
+
+export function Pill({label, text=null, color = '#666', big=false, showCross=false}) {
     const s = PillStyle
     return <View style={[big ? s.bigBubble : s.bubble, {borderColor: color}, showCross ? {paddingRight: 4} : null]}>
-        {notranslate ? 
-            <Text style={[big ? s.bigText : s.text, {color}]}>{label}</Text>
+        {text ? 
+            <Text style={[big ? s.bigText : s.text, {color}]}>{text}</Text>
         :
             <TranslatableLabel style={[big ? s.bigText : s.text, {color}]} label={label} />
         }
@@ -381,7 +492,7 @@ const PillStyle = StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 6,
         paddingVertical: 1,
-        marginRight: 8,
+        // marginRight: 8,
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'flex-start'
@@ -391,8 +502,8 @@ const PillStyle = StyleSheet.create({
         borderRadius: 16,
         paddingRight: 4,
         paddingVertical: 2,
-        marginRight: 8,
-        marginBottom: 4,
+        // marginRight: 8,
+        // marginBottom: 4,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'white',
@@ -485,4 +596,37 @@ const BarStyle = StyleSheet.create({
     }
 });
 
+export function UserFaceAndName({personaKey, extraLabel}) {
+    const s = UserNameChipStyle;
+    const persona = useObject('persona', personaKey);
+    return <View style={s.authorBox}>
+        <UserFace userId={personaKey} size={16} />
+        <View style={s.authorRight}>
+            <Text style={s.authorName}>{persona.name}</Text>            
+            <TranslatableLabel style={s.extraLabel} label={extraLabel} />
+        </View>
+    </View>
+}
+
+const UserNameChipStyle = StyleSheet.create({  
+    authorBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 4,
+    },
+    authorRight: {
+        marginLeft: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    authorName: {
+        fontSize: 13,
+        fontWeight: 'bold',
+    },      
+    extraLabel: {
+        fontSize: 13,
+        marginLeft: 4,
+        color: '#666',
+    }
+})
 

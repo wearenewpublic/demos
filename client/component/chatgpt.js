@@ -8,8 +8,8 @@ export async function askGptToRespondToConversationAsync({datastore, promptKey, 
     return response?.messageText || null;
 }
 
-export async function askGptToEvaluateMessageTextAsync({promptKey, text}) {
-    const response = await gptProcessAsync({promptKey, params: {text}});
+export async function askGptToEvaluateMessageTextAsync({datastore, promptKey, text, params={}}) {
+    const response = await gptProcessAsync({datastore, promptKey, params: {...params, text}});
     return response?.judgement || false;
 }
 
@@ -19,9 +19,9 @@ export async function askGptToEvaluateConversationAsync({datastore, promptKey, m
     return response?.judgement || null;
 }
 
-export async function gptProcessAsync({promptKey, params}) {
+export async function gptProcessAsync({datastore, promptKey, params}) {
     console.log('gptProcess', {promptKey, params});
-    const rawResponse = await callServerApiAsync('chatgpt', 'chat', {promptKey, params});
+    const rawResponse = await callServerApiAsync({datastore, component:'chatgpt', funcname:'chat', params:{promptKey, params}});
     console.log('get gpt raw response', rawResponse);
     const parsedResponse = extractAndParseJSON(rawResponse);
     console.log('get gpt response', parsedResponse);

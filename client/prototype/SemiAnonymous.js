@@ -35,18 +35,20 @@ export const SemiAnonymous = {
     description,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
-            personaList: memberPersonaList, '$personaKey': 'e',
+            '$personaKey': 'e',
             comment: expandDataList(civic_society)},
         {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
-            personaList: memberPersonaList, '$personaKey': 'e',
-            comment: expandDataList(civic_society_french)
+            '$personaKey': 'e',
+            comment: expandDataList(civic_society_french)            
         },
         {key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
-            personaList: memberPersonaList, '$personaKey': 'e',
+            '$personaKey': 'e',
             comment: expandDataList(civic_society_german)
         },
     ],
-    screen: SemiAnonymousScreen    
+    screen: SemiAnonymousScreen,
+    hasMembers: true,
+    newInstanceParams: []    
 }
 
 export function SemiAnonymousScreen() {

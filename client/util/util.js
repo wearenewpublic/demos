@@ -34,6 +34,10 @@ export function addKey(collection, key, value=true) {
     return {...collection, [key]: value};
 }
 
+export function isNonEmpty(collection) {
+    return Object.keys(collection || {}).length > 0;
+}
+
 export function getHuesForNamedList(list) {
     const hues = {};
     list.forEach((item, index) => {
@@ -117,6 +121,10 @@ export function toTitleCase(text) {
     return string == 'true';
   }
 
+  export function boolToInt(bool) {
+    return bool ? 1 : 0;
+  }
+
   export function getPath(object, path) {
     const parts = path.split('.');
     var result = object;
@@ -146,7 +154,7 @@ export function toTitleCase(text) {
 
 export function expandUrl({url, type}) {
     if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
+      return url;
     } else {
         return fileHostDomain + '/' + type + '/' + url;
     }

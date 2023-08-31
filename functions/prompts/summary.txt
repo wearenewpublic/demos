@@ -1,0 +1,12 @@
+
+Here is a threaded conversation written as a JSON object. Some of the messages in this conversation are replying to other messages, which is expressed by the "replyTo" field of one message referring to the "key" of another message.
+
+{{commentsJSON}}
+
+I want you to write a one paragraph opinion about the topic of this conversation, integrating points made by the participants in this conversation. This should be an opinion that most people would be likely to agree with.
+
+This should be a free-standing opinion about the topic and should not mention the conversation or it's participants.
+
+Do not mention that there disagreement or debate or diverse opinionsn about the topic. Don't talk about the need for civility of diverse opinions. Just give an opinion that most people would be likely to agree with.
+
+Your response should be in {{language}}.

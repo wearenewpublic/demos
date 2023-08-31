@@ -13,6 +13,7 @@ import { PopupSelector } from "../platform-specific/popup";
 import { post_starwars_canada, post_starwars_france } from "../translations/french/posts_french";
 import { languageFrench, languageGerman, useLanguage, useTranslation } from "../component/translation";
 import { post_starwars_german } from "../translations/german/posts_german";
+import { View } from "react-native";
 
 export const MissingPerspectivesPrototype = {
     key: 'missingperspectives',
@@ -120,7 +121,8 @@ function MissingPerspectivesScreen() {
         {hasAnswered ? 
             <QuietSystemMessage label='You have already written an opinion' />
         :
-            <PostInput placeholder="What's your opinion?"  topWidgets={[EditRegion]} />
+            <PostInput placeholder="What's your opinion?"  topWidgets={[EditRegion]} getCanPost={getCanPost}
+            />
         }
 
         <Card>
@@ -143,7 +145,11 @@ function MissingPerspectivesScreen() {
 }
 
 function RegionBling({region, regionNames}) {
-    return <Pill notranslate label={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
+    return <Pill text={region + ': ' + (regionNames[region] ?? 'Unknown Region')} color='black' />
+}
+
+function getCanPost({datastore, post}) {
+    return post.region && post.text;
 }
 
 
@@ -155,6 +161,9 @@ function EditRegion({post, onPostChanged}) {
     const tSelect = useTranslation('Select your region');
     const unknown = {key: 'unknown', label: tSelect};
 
-    return <PopupSelector value={post.region} items={[unknown, ...regionItems]} 
+    return <View>
+        <PopupSelector value={post.region} items={[unknown, ...regionItems]} 
         onSelect={region => onPostChanged({...post, region})} /> 
+        <Pad />
+    </View>
 }

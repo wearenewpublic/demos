@@ -20,12 +20,12 @@ import { deepClone } from "../util/util";
     member: true
   };
 
-  export const memberA = {
+  export const adminA = {
     key: 'a',
     name: 'Alice Adams',
     face: 'face9.jpeg',
     member: true,
-    label: 'Member'
+    label: 'Admin'
   };
 
   export const memberB = {
@@ -116,8 +116,12 @@ export const defaultPersona = 'a';
 export const defaultPersonaList = [personaA, personaB, personaC, personaD, personaE, personaF, 
     personaG, personaH, personaIngrid,personaJ, personaK, personaL, personaRobo]
 
-export const memberPersonaList = [memberA, memberB, memberC, personaD, personaE, personaF,
+export const memberPersonaList = [adminA, memberB, memberC, personaD, personaE, personaF,
     personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+
+export const adminPersonaList = [adminA, personaB, personaC, personaD, personaE, personaF,
+      personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+  
 
 
 export function personaListToMap(personas) {

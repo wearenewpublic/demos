@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { addKey, removeKey } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
@@ -10,17 +10,21 @@ import { TranslatableLabel } from "./translation";
 
 export function CommentActionButton({label, formatParams, onPress}) {
     const s = CommentActionButtonStyle;
-    return <Clickable style={s.clicker}>
-        <TranslatableLabel style={s.text} onPress={onPress} label={label} formatParams={formatParams} />
+    const [hover, setHover] = useState(false);
+    return <Clickable style={s.clicker} onHoverChange={setHover}>
+        <TranslatableLabel style={!hover ? s.text : [s.text, s.hoverText]} onPress={onPress} label={label} formatParams={formatParams} />
     </Clickable>
 }
 const CommentActionButtonStyle = StyleSheet.create({
     text: {
         fontSize: 11,
         textTransform: 'uppercase',
-        // marginRight: 32,
         marginTop: 4,
         color: '#666'
+    },
+    hoverText: {
+        color: '#000',
+        textDecorationLine: 'underline'
     },
     clicker: {
         marginRight: 32
@@ -166,11 +170,16 @@ export const CommentContext = React.createContext({
     getIsVisible: () => true,
     authorName: AuthorName,
     authorFace: AuthorFace,
+    getCanPost: ({post}) => post.text.length > 0,
+    getPrimaryButtonLabel: () => "Post",
+    sortComments: ({datastore, comments}) => comments,
     authorBling: [],
     commentPlaceholder: 'Write a comment...',
     replyWidgets: [],
     replyTopWidgets: [],
     editExtras: [],
+    inputLock: false,
+    hideInputOnClick: true
 });
 
 function AuthorName({comment}) {
@@ -284,11 +293,12 @@ const CollapsedCommentStyle = StyleSheet.create({
 function Replies({commentKey}) {
     const s = RepliesStyle;
     const datastore = useDatastore();
-    const {getIsVisible} = React.useContext(CommentContext);
+    const {getIsVisible, sortComments} = React.useContext(CommentContext);
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const replies = comments.filter(c => c.replyTo == commentKey && getIsVisible({datastore, comment: c}));
+    const sortedReplies = sortComments({datastore, comments:replies});
     return <View style={s.repliesHolder}>
-        {replies.map(reply => 
+        {sortedReplies.map(reply => 
             <Comment key={reply.key} commentKey={reply.key} />
         )}
     </View>
@@ -334,16 +344,21 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 });
 
 
-export function BasicComments({about = null}) {
+export function BasicComments({about = null, config={}}) {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
-
-    // console.log('comments', comments);
+    const defaultConfig = useContext(CommentContext);
+    const datastore = useDatastore();
+    const newConfig = {...defaultConfig, ...config};
+ 
+    const sortedComments = newConfig.sortComments({datastore, comments:topLevelComments})
 
     return <View>
-        <TopCommentInput about={about} />
-        {topLevelComments.map(comment => 
-            <Comment key={comment.key} commentKey={comment.key} />
-        )}
+        <CommentContext.Provider value={newConfig}>
+            <TopCommentInput about={about} />
+            {sortedComments.map(comment => 
+                <Comment key={comment.key} commentKey={comment.key} />
+            )}
+        </CommentContext.Provider>
     </View>
 }

@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
-import { Narrow, Separator } from "./basics";
+import { BigTitle, Center, Narrow, Pad, ScrollableScreen, Separator, SmallTitleLabel, WideScreen } from "./basics";
 import { TranslatableLabel } from "./translation";
 import { expandUrl } from "../util/util";
+import { useGlobalProperty } from "../util/datastore";
 
 export function Article({article, embed=null, children}) {
     const s = ArticleStyle;
@@ -25,7 +26,7 @@ export function Article({article, embed=null, children}) {
         <View style={s.narrowSection}>
             <View style={s.authorBox}>
                 <Image style={s.authorFace}
-                    source={{url: expandUrl({url: article.authorFace, type: 'faces'})}} />
+                    source={{uri: expandUrl({url: article.authorFace, type: 'faces'})}} />
                 <View>
                     <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author}</Text>
                     <Text style={s.date}>{article.date}</Text>
@@ -47,9 +48,7 @@ export function Article({article, embed=null, children}) {
             </View>
         </View>
         <Separator />
-        <Narrow>
-            {children}
-        </Narrow>
+        {children}
     </View>
 }
 
@@ -125,3 +124,27 @@ const ArticleStyle = StyleSheet.create({
         maxWidth: 500,
     }
 })
+
+
+export function MaybeArticleScreen({article, embed, articleChildLabel, children}) {
+    const globalArticle = useGlobalProperty('article');
+    const title = useGlobalProperty('title');
+    if (article ?? globalArticle) {
+       return <ScrollableScreen maxWidth={800}>
+            <Article article={article ?? globalArticle} embed={embed}>
+                <Center><SmallTitleLabel label={articleChildLabel} /></Center>
+                {children}
+                <Pad size={32} />
+            </Article>
+        </ScrollableScreen>
+    } else {
+        
+        return <WideScreen pad>
+            <ScrollView>
+                <Pad size={8} />
+                {title ? <BigTitle>{title}</BigTitle> : null}
+                {children}
+            </ScrollView>
+        </WideScreen>
+    }
+}

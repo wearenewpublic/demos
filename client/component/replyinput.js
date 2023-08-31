@@ -1,98 +1,45 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useContext, useState } from "react";
 import { AutoSizeTextInput, Card, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
 import { useTranslation } from "./translation";
-import { Tone, BlingBouncerPending, BlingAcceptableTone, BlingQuestionableTone, BlingOutstandingTone } from "../prototype/CommentBouncer.js";
-import { Tooltip } from "react-tooltip";
 
 
 export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [post, setPost] = useState({text: '', replyTo: commentKey});
-    const {analyzeHandler, postHandler, authorFace, commentPlaceholder, replyWidgets, replyTopWidgets, bouncer} = useContext(CommentContext);
+    const {postHandler, cancelHandler, authorFace, getCanPost, getPrimaryButtonLabel, commentPlaceholder, replyWidgets, replyTopWidgets, inputLock, hideInputOnClick, customTextInputWidget} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
 
-    // bouncerStates: none, submitted, rejected, accepted, loved
-    const [bouncerState, setBouncerState] = useState("none");
-
-    // inputStates: unlocked, submissionLocked, feedbackLocked
-    const [inputState, setInputState] = useState("unlocked");
-
-    async function onAnalyze() {
-        setBouncerState("submitted");
-        setInputState("submissionLocked");
-
-        let submission = await analyzeHandler({datastore, text: post.text, replyTo: commentKey});
-
-        console.log("submission: ", submission);
-
-        switch (submission.tone) {
-            case "bad":
-                setBouncerState("rejected");
-                break;
-            case "neutral":
-                setBouncerState("accepted");
-                break;
-            case "good":
-                setBouncerState("loved");
-                break;
-        }
-
-        setInputState("feedbackLocked");
-        // Displaying text with evaluation
-        setPost({text: submission, replyTo: commentKey});
-    }
-
     function onPost() {
-        setBouncerState("none");
-        setInputState("unlocked");
-
-        let text2Post;
-        if (bouncer) {
-            // Using the pure comment text without the evaluation
-            // setPost doesn't work?
-            // setPost({text: post.text.text, replyTo: commentKey});
-            text2Post = post.text.text;
-        }
-        else {
-            text2Post = post.text;
-        }
-
-        console.log("post in onPost: ", post);
-
         if (postHandler) {
-            const post = {text: text2Post, replyTo: commentKey};
             postHandler({datastore, post});
         } else {
             datastore.addObject('comment', post);
         }
-        if (topLevel) {
-            setPost({text: '', replyTo: commentKey});
-        } else {
-            hideReplyInput();
+
+        if (hideInputOnClick) {
+            if (topLevel) {
+                setPost({text: '', replyTo: commentKey});
+            } else {
+                hideReplyInput();
+            }
         }
     }
 
-    function onEdit() {
-        setBouncerState("none");
-        setInputState("unlocked");
-        // Using the pure comment text without the evaluation
-        setPost({text: post.text.text, replyTo: commentKey});
-
-        // TODO: It would be nice to delete rejected submissions from the datastore when they are being revised
-    }
-
     function hideReplyInput() {
-        setBouncerState("none");
-        setInputState("unlocked");
         setPost({text: '', replyTo: commentKey})
         datastore.setSessionData('replyToComment', null);
+
+        // Let the respective prototype do whatever it needs to do when the user discards an unposted comment
+        if (cancelHandler) {
+            cancelHandler();
+        }
     }
 
     if (!personaKey) {
@@ -102,76 +49,57 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
         {React.createElement(authorFace, {comment: {from: personaKey}})}
         <View style={s.right}>
-            {((!topLevel || post.text) && replyTopWidgets.length > 0) ?
-                <View style={s.widgetBar}>
-                    {replyTopWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
+            {replyTopWidgets.map((widget, idx) => 
+                <View key={idx} style={s.widgetBarTop}>
+                    {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
-            : null}
-            {
-                {
-                    "unlocked": 
-                        <AutoSizeTextInput style={s.textInput}
-                            placeholder={placeholderText}
-                            placeholderTextColor='#999'
-                            value={post.text}
-                            onChangeText={text => setPost({...post, text})}
-                            multiline={true}
-                        />,
-                    "submissionLocked":
-                        <AutoSizeTextInput style={s.textInput}
-                            placeholder={placeholderText}
-                            placeholderTextColor='#999'
-                            value={post.text}
-                            onChangeText={text => setPost({...post, text})}
-                            multiline={true}
-                            disabled={true}
-                        />,
-                    "feedbackLocked": <AnalyzedInput comment={post.text}></AnalyzedInput> 
-                }[inputState]
+            )}
+
+            {(post.text && customTextInputWidget !== undefined) ?
+                React.createElement(customTextInputWidget)
+            :   
+                <AutoSizeTextInput style={s.textInput}
+                    hoverStyle={{borderColor: '#999'}}
+                    placeholder={placeholderText}
+                    placeholderTextColor='#999'
+                    value={post.text}
+                    onChangeText={text => setPost({...post, text})}
+                    multiline={true}
+                    disabled={inputLock}
+                />
             }
-            {(!topLevel || post.text) ? 
-                <View style={s.actions}>
-                    {bouncer ? 
-                        {
-                            "none": null,
-                            "submitted": <BlingBouncerPending/>,
-                            "rejected": <BlingQuestionableTone/>,
-                            "accepted": <BlingAcceptableTone/>,
-                            "loved": <BlingOutstandingTone/>
-                        }[bouncerState]
-                        : null
-                    }
-                </View>
-            : null}
             {(!topLevel || post.text) ?
-                <View style={s.widgetBar}>
-                    {replyWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
-                </View>
+                (replyWidgets.map((widget, idx) => 
+                    <View key={idx} style={s.widgetBottom}>
+                        {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
+                    </View>
+                ))
             : null}
-            {(!topLevel || post.text) ? 
+            {topLevel ?
+                <View>
+                    {getCanPost({datastore,post}) ?
+                        <View style={s.actions}>          
+                            <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
+                            <SecondaryButton onPress={hideReplyInput} label='Cancel' />             
+                        </View>
+                    : null}
+                </View>
+            : 
                 <View style={s.actions}>
-                    {bouncer ? 
-                        { 
-                            "none": <PrimaryButton onPress={onAnalyze} label='Analyze'/>,
-                            "submitted": <PrimaryButton disabled={true} label='Analyzing...'/>,
-                            "rejected": <PrimaryButton onPress={onEdit} label='Edit'/>,
-                            "accepted": <PrimaryButton onPress={onPost} label='Post'/>,
-                            "loved": <PrimaryButton onPress={onPost} label='Post'/>
-                        }[bouncerState]
-                        : <PrimaryButton onPress={onPost} label='Post'/>
+                    {(getCanPost({datastore,post})) ?
+                        <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
+                    : 
+                        // TODO: It would be nice to have a style for disabled buttons so they look different
+                        <PrimaryButton disabled={true} label={getPrimaryButtonLabel()}/>
                     }
-                    <SecondaryButton onPress={hideReplyInput} label='Cancel'/>
+                    <SecondaryButton onPress={hideReplyInput} label='Cancel' />
                 </View>
-            : null}
+            }
         </View>
     </View>
 }
 
-const ReplyInputStyle = StyleSheet.create({
+export const ReplyInputStyle = StyleSheet.create({
     textInput: {
         flex: 1,
         borderRadius: 8, 
@@ -196,68 +124,13 @@ const ReplyInputStyle = StyleSheet.create({
         justifyContent: 'space-between',
         margin: 8,
     },
-    widgetBar: {
+    widgetBarTop: {
         marginLeft: 8,
-        marginBottom: 8,
-    }
-});
-
-export function AnalyzedInput({comment}) {
-    if (comment === undefined) {
-        console.error("AnalyzedInput: comment is undefined");
-        return;
-    }
-
-    const styleA = AnalyzedInputStyle;
-    const styleR = ReplyInputStyle;
-    let allText = [];
-    let key = 0;
-
-    comment.analyzedText?.forEach(commentFragment => {
-        let advice = "Here's how you can improve this comment.";
-        if (commentFragment.advice) {
-            advice = commentFragment.advice;
-        }
-
-        // Add space between comment fragments
-        if (key !== 0) {
-            allText.push(
-                <Text key={key} style={styleA.text}> </Text>
-            );
-            key++;
-        }
-
-        if (commentFragment.tone === Tone.Questionable) {
-            allText.push(
-                <Text key={key}>
-                    <Tooltip id="advice" multiline={true} style={{ backgroundColor: "black", color: "white", fontFamily: "sans-serif", maxWidth: "500px", zIndex: "10" }}/>
-                    <Text style={[styleA.text, styleA.questionableText]}>
-                        <a style={styleA.tooltip} data-tooltip-id="advice" data-tooltip-content={advice}>{commentFragment.text}</a>
-                    </Text>
-                </Text>
-            );
-            key++;
-        }
-        else {
-            allText.push(
-                <Text key={key} style={styleA.text}>{commentFragment.text}</Text>
-            );
-            key++;
-        }
-    });
-
-    return <Text style={styleR.textInput}>{allText}</Text>;
-}
-
-const AnalyzedInputStyle = StyleSheet.create({
-    text: {
-        fontSize: 15,
-        color: '#545454',
-        maxWidth: 500
+        // marginBottom: 8,
     },
-    questionableText: {
-        color: "white",
-        backgroundColor: '#e76f51'
+    widgetBottom: {
+        marginLeft: 8,
+        marginTop: 8,
     }
 });
 
@@ -265,12 +138,14 @@ export function TopCommentInput({about = null}) {
     return ReplyInput({commentKey: about, topLevel: true});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}) {
+export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[], bottomWidgets=[], getCanPost=null}) {
     const commentContext = useContext(CommentContext);
-    function postHandler({datastore, post}) {
+    function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)
     }
-    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
+    return <CommentContext.Provider value={{...commentContext, postHandler: postHandler ?? defaultPostHandler, 
+                commentPlaceholder:placeholder, replyTopWidgets: topWidgets, replyWidgets: bottomWidgets,
+                getCanPost: getCanPost ?? commentContext.getCanPost}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>

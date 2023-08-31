@@ -8,7 +8,7 @@ import { ActionLike, ActionReply, BlingLabel, BlingPending, Comment, CommentActi
 import { ScrollView } from "react-native";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useCollection, useDatastore, usePersonaKey } from "../util/datastore";
-import { godzilla_article } from "../data/articles";
+import { godzilla_article } from "../data/articles/godzilla";
 
 const description = `
 A treaded conversations where rule-violating comments are hidden.

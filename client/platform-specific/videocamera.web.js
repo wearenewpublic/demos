@@ -1,20 +1,45 @@
 import { Entypo } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Clickable, Pad, PrimaryButton } from "../component/basics";
+import { Clickable, Pad, PrimaryButton, StatusButtonlikeMessage } from "../component/basics";
+import { callServerMultipartApiAsync } from "../util/servercall";
+import { makeStorageUrl, useDatastore, usePersonaKey } from "../util/datastore";
+import { PrototypeContext } from "../organizer/PrototypeContext";
+import { gotoLogin } from "../util/navigate";
 
 const video_mimetype = 'video/webm; codecs=vp9';  // this works for Chrome, and Firefox, but not Safari
 
 export function VideoCamera({size=200, action='Record Video', onSubmitRecording}) {
     const s = VideoCameraStyle;
     const [cameraShown, setCameraShown] = useState(false);
+    const {isLive} = useContext(PrototypeContext);
+    const [uploading, setUploding] = useState(false);
+    const datastore = useDatastore();
+    const personaKey = usePersonaKey();
 
-    function onSubmit(url) {
-        setCameraShown(false);
-        onSubmitRecording(url);
+    if (!personaKey) {
+        return <LoginToRecord />
     }
 
-    if (cameraShown) {
+    async function onSubmit({blob, url}) {
+        setCameraShown(false);
+        if (isLive) {
+            setUploding(true);
+            const result = await callServerMultipartApiAsync({datastore, component: 'storage', funcname: 'uploadFile', 
+                params: {contentType: 'video/webm', extension: 'webm'}, 
+                fileParams: {file: {blob, filename: 'video.webm'}}
+            });
+            const storageUrl = makeStorageUrl({datastore, userId: result.userId, fileKey: result.fileKey, extension: 'webm'});
+            onSubmitRecording({blob, url: storageUrl});
+            setUploding(false);
+        } else {
+            onSubmitRecording({blob, url});
+        }
+    }
+
+    if (uploading) {
+        return <StatusButtonlikeMessage label='Uploading...' />
+    } else if (cameraShown) {
         return <LiveVideoCamera size={size} onSubmitRecording={onSubmit} />
     } else {
         return <PrimaryButton 
@@ -42,6 +67,10 @@ const VideoCameraStyle = StyleSheet.create({
     }
 })
 
+function LoginToRecord() {
+    return <PrimaryButton onPress={gotoLogin} label='Log in to record a video' />
+}
+
 export function LiveVideoCamera({size, onSubmitRecording}) {
     const videoRef = useRef(null);
     const mediaRecorderRef = useRef(null);
@@ -50,7 +79,7 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
-        initializeMedia();
+        initializeMediaAsync();
       }, []);
 
     const startRecording = () => {
@@ -81,22 +110,20 @@ export function LiveVideoCamera({size, onSubmitRecording}) {
         const url = URL.createObjectURL(blob);
         recordedBlobsRef.current = [];
         console.log('recorderd video uri', url);
-        onSubmitRecording(url);
+        onSubmitRecording({blob, url});
     };
     
-    const handleSuccess = (stream) => {
+    async function initializeMediaAsync() {   
+        const stream = await navigator.mediaDevices.getUserMedia(
+            { 
+                video: {
+                    width: {ideal: size}, 
+                    height: {ideal: size}
+                }, 
+                audio: true 
+            });
         videoRef.current.srcObject = stream;
         setInitialized(true);
-    };
-    
-    const handleError = (error) => {
-        console.error('Error accessing media devices:', error);
-    };
-
-    const initializeMedia = () => {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(handleSuccess)
-            .catch(handleError);
     };
     
     return (
