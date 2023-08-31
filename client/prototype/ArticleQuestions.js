@@ -98,9 +98,8 @@ function QuestionSummary({questionKey}) {
     const questionReplies = useCollection('comment', {filter: {replyTo: questionKey}});
     const tResponses = useTranslation('responses');
 
-    return <Clickable onPress={() => pushSubscreen('question', {questionKey})}>
-        <ListItem title={question.text} subtitle={questionReplies.length + ' ' + tResponses} />
-    </Clickable>
+    return <ListItem onPress={() => pushSubscreen('question', {questionKey})}
+        title={question.text} subtitle={questionReplies.length + ' ' + tResponses} />
 }
 
 function QuestionScreen({questionKey}) {

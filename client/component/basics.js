@@ -519,12 +519,12 @@ const PillStyle = StyleSheet.create({
     }
 })
 
-export function ListItem({title, subtitle}) {
+export function ListItem({title, subtitle, onPress}) {
     const s = ListItemStyle;
-    return <View style={s.item}>
+    return <MaybeClickable onPress={onPress} isClickable={onPress} style={s.item} hoverStyle={s.hover}>
         <Text style={s.title}>{title}</Text>
         <Text style={s.subtitle}>{subtitle}</Text>
-    </View>
+    </MaybeClickable>
 }
 
 const ListItemStyle = StyleSheet.create({
@@ -534,6 +534,9 @@ const ListItemStyle = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 8
+    },
+    hover: {
+        shadowRadius: 2, shadowColor: '#555', shadowOffset: {width: 0, height: 2}
     },
     title: {
         fontSize: 15,

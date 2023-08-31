@@ -122,9 +122,8 @@ function TopicListEmbed() {
 function TopicPreview({topic}) {
     const stances = useCollection('stance', {filter: {topic: topic.key}});
     const tStances = useTranslation('stances');
-    return <Clickable onPress={() => pushSubscreen('topic', {topicKey: topic.key})}>
-        <ListItem title={topic.title} subtitle={stances.length + ' ' +  tStances} />
-    </Clickable>
+    return <ListItem onPress={() => pushSubscreen('topic', {topicKey: topic.key})}
+        title={topic.title} subtitle={stances.length + ' ' +  tStances} />
 }
 
 function TopicStances({topic, compact}) {
