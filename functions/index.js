@@ -116,6 +116,7 @@ async function getValidatedUser(req) {
     } 
     try {
         const decodedToken = await admin.auth().verifyIdToken(tokenId);
+        console.log('decodedToken', decodedToken);
         return decodedToken.uid;
     } catch (error) {
         console.error('Error verifying Firebase ID token:', error);
