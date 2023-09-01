@@ -9,6 +9,8 @@ import { ScrollView, View, StyleSheet, Text } from "react-native";
 import { disco } from "../data/conversations";
 import { useCollection, useDatastore } from "../util/datastore";
 import { Tooltip } from "react-tooltip";
+import { languageGerman } from "../component/translation";
+import { disco_german } from "../translations/german/conversations_german";
 
 
 const description = `
@@ -36,6 +38,8 @@ export const CommentBouncerPrototype = {
     screen: CommentBouncerScreen,
     instance: [
         {key: 'disco', name: 'Digital Disco', comment: expandDataList(disco)},
+        {key: 'disco-german', name: 'Digital Disco (German)', comment: expandDataList(disco_german), language: languageGerman},
+
     ]
 }
 

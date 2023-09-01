@@ -10,4 +10,9 @@ export const trek_vs_wars_german = [
 ]
 
 
-
+export const disco_german = [
+    {key: 'party', from: 'i', tone: "neutral", text: 'Es gibt nächstes Wochenende eine Party im Cakewalk County!'},
+    {from: 'f', replyTo: 'party', tone: "neutral", text: 'Das klingt nach viel Spaß.'},
+    {key: 'long', from: 'b', tone: "neutral", text: "Ich werde eine extrem lange und langweilige Abhandlung über den Ursprung des Wortes 'disco' teilen, nach der niemand gefragt hat. Hier gehe ich. Ich bin noch nicht fertig. Es gibt so viel zu sagen und ich werde nicht aufhören, bis jeder von mir genervt ist."},
+    {from: 'b', tone: "neutral", text: "Mir ist gerade eine weitere nerdige Anekdote zur Geschichte der Tanzmusik und der sie umgebenden Kultur eingefallen. Ich bin sicher, du würdest sie gerne hören. Aber auch wenn du nicht möchtest, werde ich sie trotzdem teilen..."}
+]
