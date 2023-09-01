@@ -108,9 +108,10 @@ function EditCheckFact({post, onPostChanged}) {
     const [inProgress, setInprogress] = useState(false);
     async function checkFact() {
         setInprogress(true);
+        onPostChanged({...post, checkedText: post.text, waiting: true});
         const checkedStatus = await askGptToEvaluateMessageTextAsync({datastore, promptKey: 'checkfact', text: post.text});
         console.log('result', checkedStatus);
-        onPostChanged({...post, checkedText: post.text, checkedStatus});
+        onPostChanged({...post, checkedText: post.text, checkedStatus, waiting: false});
         setInprogress(false);
     }
 

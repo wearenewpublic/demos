@@ -345,11 +345,13 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 
 
 export function BasicComments({about = null, config={}}) {
-    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => about ? comment.replyTo == about : !comment.replyTo);
-    const defaultConfig = useContext(CommentContext);
     const datastore = useDatastore();
+    const defaultConfig = useContext(CommentContext);
     const newConfig = {...defaultConfig, ...config};
+    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
+    const topLevelComments = comments.filter(comment => 
+        (about ? comment.replyTo == about : !comment.replyTo)
+        && newConfig.getIsVisible({datastore, comment}));
  
     const sortedComments = newConfig.sortComments({datastore, comments:topLevelComments})
 

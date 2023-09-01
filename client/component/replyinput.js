@@ -11,7 +11,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [post, setPost] = useState({text: '', replyTo: commentKey});
-    const {postHandler, cancelHandler, authorFace, getCanPost, getPrimaryButtonLabel, commentPlaceholder, replyWidgets, replyTopWidgets, inputLock, hideInputOnClick, customTextInputWidget} = useContext(CommentContext);
+    const {postHandler, authorFace, getCanPost, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
     const placeholderText = useTranslation(commentPlaceholder);
@@ -23,23 +23,16 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
             datastore.addObject('comment', post);
         }
 
-        if (hideInputOnClick) {
-            if (topLevel) {
-                setPost({text: '', replyTo: commentKey});
-            } else {
-                hideReplyInput();
-            }
+        if (topLevel) {
+            setPost({text: '', replyTo: commentKey});
+        } else {
+            hideReplyInput();
         }
     }
 
     function hideReplyInput() {
         setPost({text: '', replyTo: commentKey})
         datastore.setSessionData('replyToComment', null);
-
-        // Let the respective prototype do whatever it needs to do when the user discards an unposted comment
-        if (cancelHandler) {
-            cancelHandler();
-        }
     }
 
     if (!personaKey) {
@@ -55,19 +48,16 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                 </View>
             )}
 
-            {(post.text && customTextInputWidget !== undefined) ?
-                React.createElement(customTextInputWidget)
-            :   
-                <AutoSizeTextInput style={s.textInput}
-                    hoverStyle={{borderColor: '#999'}}
-                    placeholder={placeholderText}
-                    placeholderTextColor='#999'
-                    value={post.text}
-                    onChangeText={text => setPost({...post, text})}
-                    multiline={true}
-                    disabled={inputLock}
-                />
-            }
+            <AutoSizeTextInput style={s.textInput}
+                hoverStyle={{borderColor: '#999'}}
+                placeholder={placeholderText}
+                placeholderTextColor='#999'
+                value={post.text}
+                onChangeText={text => setPost({...post, text})}
+                multiline={true}
+                disabled={post.waiting || false}
+            />
+
             {(!topLevel || post.text) ?
                 (replyWidgets.map((widget, idx) => 
                     <View key={idx} style={s.widgetBottom}>
@@ -75,26 +65,12 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     </View>
                 ))
             : null}
-            {topLevel ?
-                <View>
-                    {getCanPost({datastore,post}) ?
-                        <View style={s.actions}>          
-                            <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
-                            <SecondaryButton onPress={hideReplyInput} label='Cancel' />             
-                        </View>
-                    : null}
-                </View>
-            : 
+            {(!topLevel || getCanPost({datastore,post})) ? 
                 <View style={s.actions}>
-                    {(getCanPost({datastore,post})) ?
-                        <PrimaryButton onPress={onPost} label={getPrimaryButtonLabel()}/>
-                    : 
-                        // TODO: It would be nice to have a style for disabled buttons so they look different
-                        <PrimaryButton disabled={true} label={getPrimaryButtonLabel()}/>
-                    }
+                    <PrimaryButton onPress={onPost} label='Post'/>
                     <SecondaryButton onPress={hideReplyInput} label='Cancel' />
                 </View>
-            }
+            : null}
         </View>
     </View>
 }
