@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { AutoSizeTextInput, Card, PrimaryButton, SecondaryButton } from "./basics";
+import { AutoSizeTextInput, Card, Pad, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
@@ -65,7 +65,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
                     </View>
                 ))
             : null}
-            {(!topLevel || getCanPost({datastore,post})) ? 
+            {getCanPost({datastore, post}) ? 
                 <View style={s.actions}>
                     <PrimaryButton onPress={onPost} label='Post'/>
                     <SecondaryButton onPress={hideReplyInput} label='Cancel' />
@@ -75,7 +75,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     </View>
 }
 
-export const ReplyInputStyle = StyleSheet.create({
+const ReplyInputStyle = StyleSheet.create({
     textInput: {
         flex: 1,
         borderRadius: 8, 
