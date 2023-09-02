@@ -159,3 +159,7 @@ export function expandUrl({url, type}) {
         return fileHostDomain + '/' + type + '/' + url;
     }
 }
+
+export function mapKeys(object, callback) {
+    return Object.keys(object || {}).map(key => callback(key, object[key]))    
+}

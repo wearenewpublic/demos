@@ -1,4 +1,6 @@
-const { BOTLAB_SLACK_APP_TOKEN, BOTLAB_DEV_SLACK_APP_TOKEN } = require('../keys');
+const { firebaseReadAsync, fbKeyToString } = require('../botutil/firebaseutil');
+const { BOTLAB_SLACK_APP_TOKEN, BOTLAB_DEV_SLACK_APP_TOKEN, SLACK_ENCRYPION_KEY } = require('../keys');
+const { decrypt } = require('./encryption');
 
 async function sendSlackCommandResponseAsync({response_url, response}) {
     const fetch = await import('node-fetch');
@@ -40,7 +42,32 @@ async function callSlackAsync({action, data}) {
 
 exports.callSlackAsync = callSlackAsync
 
+
+function decryptMap(map) {
+    var decryptedMap = {};
+    Object.keys(map).forEach(id => {
+        const cipherText = map[id];
+        const plainText = decrypt({encryptedText: cipherText, key: SLACK_ENCRYPION_KEY}).data;
+        decryptedMap[fbKeyToString(id)] = JSON.parse(plainText);
+    })
+    return decryptedMap;
+}
+
+async function getContent({team, path, userEmail}) {
+    console.log('userEmail', userEmail);
+    if (userEmail.endsWith('@newpublic.org')) {
+        const dataPath = 'vault/slack/' + team + '/' + path;
+        const encryptedData = await firebaseReadAsync(dataPath);
+        const data = decryptMap(encryptedData);
+        return {data};
+    } else {
+        return {success: false, error: 'Not authorized'};
+    }
+}
+
+
 exports.apiFunctions = {
+    getContent,
     message: ({text, channel}) => callSlackAsync({action: 'chat.postMessage', data: {text, channel}})
 }
 

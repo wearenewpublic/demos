@@ -117,7 +117,7 @@ async function getValidatedUser(req) {
     try {
         const decodedToken = await admin.auth().verifyIdToken(tokenId);
         console.log('decodedToken', decodedToken);
-        return decodedToken.uid;
+        return decodedToken;
     } catch (error) {
         console.error('Error verifying Firebase ID token:', error);
         return 'error';
@@ -131,8 +131,10 @@ async function callApiFunctionAsync(request, fields) {
 
     const component = components[componentId];
     const apiFunction = component?.apiFunctions?.[apiId];
-    const userId = await getValidatedUser(request);
-    const params = {...request.query, ...fields, userId};
+    const user = await getValidatedUser(request);
+    const userId = user?.uid ?? null;
+    const userEmail = user?.email ?? null;
+    const params = {...request.query, ...fields, userId, userEmail};
 
     console.log('user', userId);
 
