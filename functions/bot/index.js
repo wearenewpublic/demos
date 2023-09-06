@@ -2,7 +2,7 @@ const { HelpCommand } = require("./help");
 const { ListCommand } = require("./list");
 const { SummaryCommand } = require("./summary");
 const { PingPongSlackbot, PingCommand, WibbleCommand } = require("./ping");
-const { MirrorCommand, MirrorChannelCommand, MirrorUsersCommand } = require("./mirror");
+const { MirrorChannelCommand, MirrorUsersCommand, MirrorEmbeddingsCommand } = require("./mirror");
 
 exports.bots = {
     pingpong: PingPongSlackbot
@@ -15,7 +15,8 @@ exports.commands = {
     help: HelpCommand,
     summary: SummaryCommand,
     mirrorusers: MirrorUsersCommand,
-    mirrorchannel: MirrorChannelCommand
+    mirrorchannel: MirrorChannelCommand,
+    mirrorembeddings: MirrorEmbeddingsCommand
 }
 
 

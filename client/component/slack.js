@@ -1,24 +1,26 @@
 import React, { useContext } from "react";
 
 import { Image, StyleSheet, Text, View } from "react-native";
-import { BodyText, HorizBox } from "./basics";
+import { BodyText, HorizBox, MaybeClickable } from "./basics";
 import { callServerApiAsync } from "../util/servercall";
 import { AnonymousFace } from "./userface";
 
 export const SlackContext = React.createContext();
 
-export function SlackMessage({messageKey}) {
+export function SlackMessage({messageKey, onPress}) {
     const s = SlackMessageStyle;
     const {users, messages} = useContext(SlackContext);
     const message = messages[messageKey];
     const user = users[message.user];
-    return <View style={s.outer}>
-        <SlackUserFace userKey={message.user} />
-        <View style={s.right}>
-            <Text style={s.userName}>{user?.name}</Text>
-            <BodyText>{replaceUserMentions({text: message?.text, users})}</BodyText>
+    return <MaybeClickable onPress={onPress} isClickable={onPress}> 
+        <View style={s.outer}>
+            <SlackUserFace userKey={message.user} />
+            <View style={s.right}>
+                <Text style={s.userName}>{user?.name}</Text>
+                <BodyText>{replaceUserMentions({text: message?.text, users})}</BodyText>
+            </View>
         </View>
-    </View>
+    </MaybeClickable>
 }
 
 const SlackMessageStyle = StyleSheet.create({
@@ -58,12 +60,24 @@ export async function getSlackContentAsync({datastore, team, path}) {
     return callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});
 }
 
+export async function getSlackEmbeddingsAsync({datastore, team, path}) {
+    return callServerApiAsync({datastore, component: 'slack', funcname: 'getEmbeddings', params: {team, path}});
+}
+
 export async function getSlackUsers({datastore, team}) {
     return getSlackContentAsync({datastore, team, path: 'users'});
 }
 
 export async function getSlackMessages({datastore, team, channel}) {
     return getSlackContentAsync({datastore, team, path: 'channel/' + channel + '/message'});
+}
+
+export async function getSlackMessageEmbeddings({datastore, team, channel}) {
+    return getSlackEmbeddingsAsync({datastore, team, path: 'channel/' + channel + '/messageEmbedding'});
+}
+
+export async function getSlackChannels({datastore, team}) {
+    return getSlackContentAsync({datastore, team, path: 'channelInfo'});
 }
 
 export function replaceUserMentions({text, users}) {

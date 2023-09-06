@@ -1,6 +1,8 @@
 const { readFileSync, existsSync } = require('fs');
 const keys = require('../keys');
 const Mustache = require('mustache');
+const { encodeFixedPointArrayToBytes, decodeBytesToFixedPointArray } = require('../botutil/botutil');
+const { decryptBytes, encryptBytes } = require('./encryption');
 
 async function callOpenAIAsync({action, data}) {
     const fetch = await import('node-fetch');
@@ -60,10 +62,27 @@ async function callGptAsync({promptKey, params, language}) {
 
 exports.callGptAsync = callGptAsync;
 
+async function getEmbeddingsAsync({text}) {
+    const result = await callOpenAIAsync({action: 'embeddings', data: {
+        input: text,
+        'model': 'text-embedding-ada-002'
+    }});
+    console.log('result', result);
+    if (result.data?.[0].embedding) {
+        return {data: result.data?.[0].embedding};
+    } else {
+        return {success: false, error: result.error}
+    }
+}
+exports.getEmbeddingsAsync = getEmbeddingsAsync;
+
+
+
 
 exports.apiFunctions = {
     hello: helloAsync,
     chat: callGptAsync,
+    embedding: getEmbeddingsAsync
 }
 
 

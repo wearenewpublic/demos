@@ -102,7 +102,6 @@ async function handleJsonRequest(request, response) {
     const fields = {...request.query, ...request.body};
     const {statusCode, result} = await callApiFunctionAsync(request, fields);
     cors(request, response, () => {
-        console.log('in cors', statusCode, result);
         response.status(statusCode);
         response.send(result);
     })
@@ -116,7 +115,7 @@ async function getValidatedUser(req) {
     } 
     try {
         const decodedToken = await admin.auth().verifyIdToken(tokenId);
-        console.log('decodedToken', decodedToken);
+        // console.log('decodedToken', decodedToken);
         return decodedToken;
     } catch (error) {
         console.error('Error verifying Firebase ID token:', error);
@@ -136,13 +135,17 @@ async function callApiFunctionAsync(request, fields) {
     const userEmail = user?.email ?? null;
     const params = {...request.query, ...fields, userId, userEmail};
 
-    console.log('user', userId);
+    console.log('setup', {userId, componentId, apiId});
 
     if (userId == 'error') {
         return ({statusCode: 500, result: JSON.stringify({success: false, error: 'Error validating user'})});
-    } else if (!component || !apiFunction) {
+    } else if (!component) {
+        return ({statusCode: 400, result: JSON.stringify({success: false, error: 'Unknown component', path: request.path, componentId, apiId})});
+    } else if (!apiFunction) {
         return ({statusCode: 400, result: JSON.stringify({success: false, error: 'Unknown api', path: request.path, componentId, apiId})});
     }
+
+    console.log('apiFunction', apiFunction);
 
     const apiResult = await apiFunction(params); 
 

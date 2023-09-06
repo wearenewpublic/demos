@@ -21,6 +21,12 @@ async function firebaseReadAsync(path) {
     return snapshot.val();
 }
 
+async function firebaseUpdateAsync(path, data) {
+    const ref = admin.database().ref(expandPath(path));
+    return await ref.update(data);
+}
+
+
 function stringToFbKey(input) {
     const mapping = {
       '.': '%d',
@@ -51,7 +57,7 @@ function fbKeyToString(input) {
 
 
 
-module.exports = {firebaseWriteAsync, firebaseReadAsync, stringToFbKey, fbKeyToString};
+module.exports = {firebaseWriteAsync, firebaseReadAsync, firebaseUpdateAsync, stringToFbKey, fbKeyToString};
 
 
   

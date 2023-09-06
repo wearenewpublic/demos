@@ -22,6 +22,7 @@ function SlackTestScreen() {
     const [text, setText] = useState('');
     const [plainText, setPlainText] = useState('');
     const [cipherText, setCipherText] = useState('');
+    const [embbedText, setEmbedText] = useState('');
     const [key, setKey] = useState('');
     const datastore = useDatastore();
 
@@ -40,6 +41,11 @@ function SlackTestScreen() {
         const result = await callServerApiAsync({datastore, component: 'encryption', funcname: 'decrypt', params: {encryptedText: cipherText, key}});
         setPlainText(result);
     }
+    async function onEmbed() {
+        const result = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'embedding', params: {text: plainText}});        
+        setEmbedText(JSON.stringify(result));
+    }
+
 
     return <ScrollableScreen pad>
         <BigTitle>Slack Test</BigTitle>
@@ -68,6 +74,13 @@ function SlackTestScreen() {
             <Pad />
             <PrimaryButton label="Decrypt" onPress={onDecrypt} />
         </HorizBox>
+
+        <Pad size={16}/>
+        <OneLineTextInput label="Plaintext" placeholder="Embedding appears here" value={embbedText} onChange={setEmbedText} />
+        <Pad/>
+        <PrimaryButton label="Generate Embedding" onPress={onEmbed} />
+
+
 
 
     </ScrollableScreen>   
