@@ -247,7 +247,7 @@ export function useObject(typeName, key) {
 }
 
 export function useCollection(typeName, props = {}) {
-    const {sortBy, filter} = props;
+    const {sortBy, filter, limit} = props;
     const {dataTree} = useData();
     const collection = dataTree[typeName];
 
@@ -257,8 +257,10 @@ export function useCollection(typeName, props = {}) {
     var result = sortMapValuesByProp(collection, sortBy || 'key');
     if (props.reverse) {
         result = result.reverse();
-    }if (filter) {
+    } if (filter) {
         result = result.filter(item => meetsFilter(item, filter))
+    } if (limit) {
+        result = result.slice(0, limit);
     }
     return result;
 }

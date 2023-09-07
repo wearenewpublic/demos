@@ -27,7 +27,7 @@ export function WideScreen({children, pad}) {
 }
 
 export function Narrow({children}) {
-    return <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
+    return <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
         <View style={{maxWidth: 500, flexShrink: 1, flexGrow: 1, marginHorizontal: 8}}>
             {children}
         </View>
@@ -134,6 +134,21 @@ const SmallTitleStyle = StyleSheet.create({
         textDecorationLine: 'underline'
     }
 })
+
+export function MiniTitle({children, hover, width=null}) {
+    const s = MiniTitleStyle;
+    return <Text style={[s.smallTitle, hover ? s.hover : null, width ? {width} : null]}>{children}</Text>
+}
+const MiniTitleStyle = StyleSheet.create({
+    smallTitle: {
+        fontSize: 14, fontWeight: 'bold'
+    },
+    hover: {
+        color: '#000',
+        textDecorationLine: 'underline'
+    }
+})
+
 
 
 export function SmallTitleLabel({label, formatParams}) {

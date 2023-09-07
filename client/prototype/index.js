@@ -30,6 +30,7 @@ import { CategorizedPostsPrototype } from "./CategorizedPosts";
 import { SlackTestPrototype } from "./SlackTest";
 import { TopicMultiChatPrototype } from "./TopicMultiChat";
 import { SlackViewPrototype } from "./SlackView";
+import { TopicChatPrototype } from "./TopicChat";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -39,6 +40,6 @@ export const prototypes = [
     MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
     FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype,
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
-    SlackViewPrototype
+    SlackViewPrototype, TopicChatPrototype
 ]
 
