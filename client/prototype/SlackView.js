@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
-import { BigTitle, BodyText, Card, Pad, PadBox, PrimaryButton, ScrollableScreen, SmallTitle } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, Pad, PadBox, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
 import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers } from "../component/slack";
 import { mapKeys } from "../util/util";
+import { BottomScroller } from "../platform-specific/bottomscroller";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -82,12 +83,12 @@ function ChannelScreen({channelKey}) {
     async function onGetContent() {
         const pUsers = getSlackUsers({datastore, team});
         const pMessages = getSlackMessages({datastore, team, channel: channelKey});
-        const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
+        // const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
         const messages = await pMessages; 
         const users = await pUsers;
         // const messages = await callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});
         console.log('content', {messages});
-        console.log('embeddings', {embeddings});
+        // console.log('embeddings', {embeddings});
         setMessages(messages);
         setUsers(users);
     }
@@ -101,22 +102,35 @@ function ChannelScreen({channelKey}) {
     }
 
 
-    return <ScrollableScreen pad>
-        <BigTitle>Channel View</BigTitle>
+    return <WideScreen>
+        <Center>
+            <Pad />
+            <HorizBox center>
+                <PrimaryButton label="Get Content" onPress={() => onGetContent()} />
+                <Pad />
+                <PrimaryButton label="Get Embeddings" onPress={() => onGetEmbeddings()} />
+            </HorizBox>
+            <Pad />
+        </Center>
+        <Separator pad={0} />
 
-        <Pad size={32} />
-        <PrimaryButton label="Get Content" onPress={() => onGetContent()} />
-        <Pad />
-        <PrimaryButton label="Get Embeddings" onPress={() => onGetEmbeddings()} />
+        <BottomScroller>
 
-        <Pad size={32} />
+        {/* <BigTitle>Channel View</BigTitle> */}
 
+        {/* <Pad size={32} /> */}
+
+        {/* <Pad size={32} /> */}
+        {/* <Narrow> */}
+        <Narrow>
         <SlackContext.Provider value={{users, messages}}>
             {mapKeys(messages, messageKey =>
                 <SlackMessage key={messageKey} messageKey={messageKey} />
             )}
         </SlackContext.Provider>
-
-    </ScrollableScreen>
+        </Narrow>
+        {/* </Narrow> */}
+        </BottomScroller>
+    </WideScreen>
 }
 

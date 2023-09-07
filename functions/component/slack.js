@@ -94,7 +94,7 @@ async function getContent({team, path, userEmail}) {
 function decryptEmbeddingMap(map) {
     var decryptedMap = {};
     Object.keys(map).forEach(id => {
-        console.log('mapItem', id, map[id]);
+        // console.log('mapItem', id, map[id]);
         const buffer = decryptBytes({encryptedData: map[id], key: SLACK_ENCRYPTION_KEY});
         const embedding = decodeBytesToFixedPointArray(buffer);
         decryptedMap[fbKeyToString(id)] = embedding;

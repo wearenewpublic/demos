@@ -67,7 +67,7 @@ async function getEmbeddingsAsync({text}) {
         input: text,
         'model': 'text-embedding-ada-002'
     }});
-    console.log('result', result);
+    // console.log('result', result);
     if (result.data?.[0].embedding) {
         return {data: result.data?.[0].embedding};
     } else {
@@ -75,6 +75,19 @@ async function getEmbeddingsAsync({text}) {
     }
 }
 exports.getEmbeddingsAsync = getEmbeddingsAsync;
+
+async function getEmbeddingsArrayAsync({textArray}) {
+    console.log('textArray', textArray);
+    const result = await callOpenAIAsync({action: 'embeddings', data: {
+        input: textArray,
+        'model': 'text-embedding-ada-002'
+    }});
+    // console.log('result', result);
+    console.log('result', result);
+    const embeddings = result.data.map(d => d.embedding)
+    return embeddings;
+}
+exports.getEmbeddingsArrayAsync = getEmbeddingsArrayAsync;
 
 
 
