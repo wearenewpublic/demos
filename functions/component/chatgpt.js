@@ -78,12 +78,13 @@ exports.getEmbeddingsAsync = getEmbeddingsAsync;
 
 async function getEmbeddingsArrayAsync({textArray}) {
     console.log('textArray', textArray);
+    const expandEmptyTextArray = textArray.map(t => t || ' ');
     const result = await callOpenAIAsync({action: 'embeddings', data: {
-        input: textArray,
+        input: expandEmptyTextArray,
         'model': 'text-embedding-ada-002'
     }});
-    // console.log('result', result);
     console.log('result', result);
+    // console.log('result', result);
     const embeddings = result.data.map(d => d.embedding)
     return embeddings;
 }

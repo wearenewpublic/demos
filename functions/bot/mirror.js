@@ -125,10 +125,8 @@ async function getChannelMessages({channel}) {
 async function mirrorChannelAction({args, channel, team}) {
     const name = await getChannelNameAsync({channel});
     const messages = await getChannelMessages({channel});
-    // console.log('messages', messages);
 
     const encryptedMessages = encryptMap(messages);
-    // console.log('encrypted', encryptedMessages);
 
     await firebaseUpdateAsync(['vault', 'slack', team, 'channel', channel, 'message'], encryptedMessages);
 
@@ -141,8 +139,61 @@ async function mirrorChannelAction({args, channel, team}) {
 exports.MirrorChannelCommand = MirrorChannelCommand
 
 
+function getMessageEmbeddingChunks({messages, existingEmbeddings, chunkSize}) {
+    var chunks = [];
+    var thisChunk = [];
+    var count = 0;
+    var charCount = 0;
+
+    for(var ts in messages) {
+        const message = messages[ts];
+        if (!existingEmbeddings[stringToFbKey(ts)] && count < 1000) {
+            if (count < 1000 && charCount < 8000) {
+                thisChunk.push(ts);
+                charCount += message.text.length + 1;
+                count++;
+            } else {
+                chunks.push(thisChunk);
+                thisChunk = [];
+                count = 0;
+                charCount = 0;    
+            }
+        }
+    }
+    return chunks;
+}
+
 // TODO: Batch in limited size chunks for OpenAI requests
 async function mirrorEmbeddingsAction({args, channel, team}) {
+    const pMessages = firebaseReadAsync(['vault', 'slack', team, 'channel', channel, 'message']);
+    const cEmbeddings = await firebaseReadAsync(['vault', 'slack', team, 'channel', channel, 'messageEmbedding']);
+    const messages = decryptMap(await pMessages);
+    var existingEmbeddings = cEmbeddings || {};
+
+    const chunks = getMessageEmbeddingChunks({messages, existingEmbeddings, chunkSize: 1000});
+    console.log('chunks', chunks);
+
+    for (i in chunks) {
+        console.log('chunk', i);
+        const thisChunk = chunks[i];
+        const textArray = thisChunk.map(ts => messages[ts].text);
+        const embeddings = await getEmbeddingsArrayAsync({textArray});
+        for(var i = 0; i < thisChunk.length; i++) {
+            const ts = thisChunk[i];
+            const embedding = embeddings[i];
+            const bytes = encodeFixedPointArrayToBytes(embedding);
+            const encrypted = encryptBytes({data: bytes, key: SLACK_ENCRYPTION_KEY});
+            existingEmbeddings[stringToFbKey(ts)] = encrypted;
+        }
+        firebaseUpdateAsync(['vault', 'slack', team, 'channel', channel, 'messageEmbedding'], existingEmbeddings);
+    }
+
+    return 'did chunks: ' + chunks.length;
+}
+
+
+// TODO: Batch in limited size chunks for OpenAI requests
+async function mirrorEmbeddingsActionOLD({args, channel, team}) {
     const pMessages = firebaseReadAsync(['vault', 'slack', team, 'channel', channel, 'message']);
     const cEmbeddings = await firebaseReadAsync(['vault', 'slack', team, 'channel', channel, 'messageEmbedding']);
     const messages = decryptMap(await pMessages);
@@ -154,6 +205,10 @@ async function mirrorEmbeddingsAction({args, channel, team}) {
     var charCount = 0;
     var skipped = 0;
     var leftover = 0;
+
+    const chunks = getMessageEmbeddingChunks({messages, existingEmbeddings, chunkSize: 1000});
+    console.log('chunks', chunks);
+    return 'did chunks: ' + chunks.length;
 
     for(var ts in messages) {
         const message = messages[ts];
@@ -172,7 +227,7 @@ async function mirrorEmbeddingsAction({args, channel, team}) {
     }
 
     if (needEmbeddingsIds.length == 0) {
-        return 'no new embeddings needed';
+        return 'computed: ' + count + ' skipped: ' + skipped + ' leftover: ' + leftover;
     } 
 
     const emeddings = await getEmbeddingsArrayAsync({textArray: needEmbeddingsText});
@@ -187,9 +242,7 @@ async function mirrorEmbeddingsAction({args, channel, team}) {
     }
 
     firebaseUpdateAsync(['vault', 'slack', team, 'channel', channel, 'messageEmbedding'], newEncryptedEmbeddings);
-    existingEmbeddings = {...existingEmbeddings, ...newEncryptedEmbeddings};
     
-    return 'computed: ' + count + ' skipped: ' + skipped + ' leftover: ' + leftover;
 }
 
 
