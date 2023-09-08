@@ -80,4 +80,6 @@ export const ui_translations_french = {
     'What do you want to contribute?': 'Que voulez-vous contribuer?',
     'stances': 'positions',
     'Community Stances': 'Positions de la communauté',
+    'Only the group admin will see your name': 'Seul l\'administrateur du groupe verra votre nom',
+    'Write a comment with your real identity': 'Écrire un commentaire avec votre identité réelle',
 }

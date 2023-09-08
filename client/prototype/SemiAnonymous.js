@@ -59,7 +59,7 @@ export function SemiAnonymousScreen() {
 
     const commentConfig = {...commentContext,
         authorName: AuthorName, authorFace: AuthorFace,
-        commentPlaceholder: 'Write a semi-anonymous comment',
+        commentPlaceholder: () => 'Write a semi-anonymous comment',
         replyWidgets: [SemiAnonymousExplain],
         authorBling: [MemberAuthorBling]
     }

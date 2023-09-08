@@ -174,7 +174,7 @@ export const CommentContext = React.createContext({
     getPrimaryButtonLabel: () => "Post",
     sortComments: ({datastore, comments}) => comments,
     authorBling: [],
-    commentPlaceholder: 'Write a comment...',
+    commentPlaceholder: () => 'Write a comment...',
     replyWidgets: [],
     replyTopWidgets: [],
     editExtras: [],

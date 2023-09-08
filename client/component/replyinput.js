@@ -14,7 +14,8 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const {postHandler, authorFace, getCanPost, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
-    const placeholderText = useTranslation(commentPlaceholder);
+    const placeholerEnglish = typeof (commentPlaceholder) == 'string' ? commentPlaceholder : commentPlaceholder(post);
+    const placeholderText = useTranslation(placeholerEnglish);
 
     function onPost() {
         if (postHandler) {
@@ -40,7 +41,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     }
 
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
-        {React.createElement(authorFace, {comment: {from: personaKey}})}
+        {React.createElement(authorFace, {comment: {...post, from: personaKey}})}
         <View style={s.right}>
             {replyTopWidgets.map((widget, idx) => 
                 <View key={idx} style={s.widgetBarTop}>
@@ -110,11 +111,11 @@ const ReplyInputStyle = StyleSheet.create({
     }
 });
 
-export function TopCommentInput({about = null}) {
-    return ReplyInput({commentKey: about, topLevel: true});
+export function TopCommentInput({about = null, topPad=true}) {
+    return ReplyInput({commentKey: about, topLevel: true, topPad});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", postHandler=null, topWidgets=[], bottomWidgets=[], getCanPost=null}) {
+export function PostInput({placeholder = () => "What\'s on your mind?", postHandler=null, topWidgets=[], bottomWidgets=[], getCanPost=null}) {
     const commentContext = useContext(CommentContext);
     function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)

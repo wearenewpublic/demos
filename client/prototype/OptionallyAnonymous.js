@@ -1,16 +1,18 @@
-import { ScrollView, Text } from "react-native";
-import { Pad, WideScreen } from "../component/basics";
+import { ScrollView, Switch, Text, View } from "react-native";
+import { Card, HorizBox, Pad, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { ecorp, trek_vs_wars } from "../data/conversations";
-import { expandDataList } from "../util/util";
+import { boolToString, expandDataList, stringToBool } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
 import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { useCollection, useDatastore, useObject, usePersonaKey } from "../util/datastore";
 import { trek_vs_wars_french } from "../translations/french/conversations_french";
-import { TranslatableLabel, languageFrench, languageGerman } from "../component/translation";
+import { TranslatableLabel, languageFrench, languageGerman, useTranslation } from "../component/translation";
 import { trek_vs_wars_german } from "../translations/german/conversations_german";
+import { PopupSelector } from "../platform-specific/popup";
+import { QuietSystemMessage } from "../component/message";
 
 const description = `
 Choose whether to be anonymous or not, and toggle between the two.
@@ -50,7 +52,9 @@ export function OptionallyAnonymousScreen() {
 
     const commentConfig = {...commentContext,
         authorName: AuthorName, authorFace: AuthorFace,
-        commentPlaceholder: 'Write an anonymous comment',
+        replyTopWidgets: [AnonToggle],
+        replyWidgets: [AnonInfo],
+        commentPlaceholder: post => post.public ? 'Write a comment with your real identity' : 'Write an anonymous comment',
         actions: [ActionReply, ActionLike, ActionToggleAnonymous],
     }
 
@@ -60,10 +64,12 @@ export function OptionallyAnonymousScreen() {
             <ScrollView>
                 <CommentContext.Provider value={commentConfig}> 
                     <TopCommentInput />
+                    <Pad size={16} />
                         {topLevelComments.map(comment => 
                         <Comment key={comment.key} commentKey={comment.key} />
                     )}
                 </CommentContext.Provider>
+                <Pad size={32} />
             </ScrollView>
         </WideScreen>
     )
@@ -102,4 +108,38 @@ function ActionToggleAnonymous({comment}) {
     }
 
     return <CommentActionButton key='anon' label={comment.public ? 'Go Anonymous' : 'Reveal Identity'} onPress={toggleAnonymous} />
+}
+
+function AnonToggle({post, onPostChanged}) {
+    const personaKey = usePersonaKey();
+    const persona = useObject('persona', personaKey);
+    const name = persona.name;
+    const tAnonymous = useTranslation('Anonymous');
+
+    // const anonItems = [{key: 'false', label: tAnonymous}, {key: 'true', label: name}];
+    // return <View>
+    //     <PopupSelector value={boolToString(post.public)} items={anonItems} 
+    //         onSelect={value => onPostChanged({...post, public: stringToBool(value)})}
+    //         textStyle={{fontWeight: 'bold', fontSize: 13}} paddingVertical={4}
+    //          /> 
+    // <Pad />
+// </View>
+    return <View>
+        <HorizBox center>
+            {/* <Text style={{fontSize: 13, fontWeight: post.public ? 'bold' : null}}>{name}</Text>
+            <Pad size={12} /> */}
+            <Switch value={!post.public} onValueChange={value => onPostChanged({...post, public: !value})} />
+            <Pad size={12} />
+            <TranslatableLabel label='Anonymous' style={{fontSize: 13, fontWeight: post.public ? null : 'bold'}}/>
+        </HorizBox>
+        <Pad/>
+    </View>
+}
+
+function AnonInfo({post}) {
+    if (post.public) {
+        return null;
+    } else {
+        return <QuietSystemMessage center={false} label='Only the group admin will see your name.' />
+    }
 }

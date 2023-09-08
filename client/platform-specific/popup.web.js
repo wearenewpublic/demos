@@ -11,14 +11,16 @@ export function closeActivePopup() {
     }
 }
 
-export function PopupSelector({value, items, onSelect}) {
+export function PopupSelector({value, items, onSelect, textStyle={}, paddingVertical=8}) {
     const [hover, setHover] = useState(false)
     return (
         <View style={{marginHorizontal: 0, marginVertical: 0}}>
             <select value={value} onChange={e => onSelect(e.target.value)} 
                 onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
                 style={{
-                    backgroundColor: 'white', padding: 8, borderWidth: 1, 
+                    ...textStyle,
+                    backgroundColor: 'white', paddingLeft: 8, paddingRight: 8, 
+                    paddingTop: paddingVertical, paddingBottom: paddingVertical, borderWidth: 1, 
                     WebkitAppearance: 'none', borderRadius: 8, flex: 1,
                     hover: {borderColor: '#999'},
                     borderColor: hover ? '#999' : '#ddd'
