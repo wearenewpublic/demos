@@ -160,6 +160,7 @@ function getMessageEmbeddingChunks({messages, existingEmbeddings, chunkSize}) {
             }
         }
     }
+    chunks.push(thisChunk);
     return chunks;
 }
 

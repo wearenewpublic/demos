@@ -12,7 +12,7 @@ export function SlackMessage({messageKey, onPress}) {
     const {users, messages} = useContext(SlackContext);
     const message = messages[messageKey];
     const user = users[message.user];
-    return <MaybeClickable onPress={onPress} isClickable={onPress}> 
+    return <MaybeClickable onPress={onPress} isClickable={onPress} hoverStyle={s.hover}> 
         <View style={s.outer}>
             <SlackUserFace userKey={message.user} />
             <View style={s.right}>
@@ -28,11 +28,15 @@ const SlackMessageStyle = StyleSheet.create({
         marginVertical: 8,
         flexDirection: 'row'
     },
+    hover: {
+        backgroundColor: '#eee'
+    },
     userName: {
         fontWeight: 'bold'
     },
     right: {
-        marginLeft: 8
+        marginLeft: 8,
+        flex: 1
     }
 })
 

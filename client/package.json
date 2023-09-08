@@ -20,6 +20,7 @@
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-community/slider": "4.4.2",
+    "@tensorflow/tfjs-node": "^4.10.0",
     "expo": "~48.0.15",
     "expo-av": "~13.2.1",
     "expo-camera": "~13.2.1",

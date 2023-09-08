@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
-import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, Pad, PadBox, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
 import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers } from "../component/slack";
 import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
+import { ScrollView, View } from "react-native";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -78,19 +79,21 @@ function ChannelScreen({channelKey}) {
     const [users, setUsers] = useState({});
     const [messages, setMessages] = useState();
     const [embeddings, setEmbeddings] = useState();
+    const [selectedMessage, setSelectedMessage] = useState();
     const datastore = useDatastore();
 
     async function onGetContent() {
         const pUsers = getSlackUsers({datastore, team});
         const pMessages = getSlackMessages({datastore, team, channel: channelKey});
-        // const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
+        const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
         const messages = await pMessages; 
         const users = await pUsers;
         // const messages = await callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});
         console.log('content', {messages});
-        // console.log('embeddings', {embeddings});
+        console.log('embeddings', {embeddings});
         setMessages(messages);
         setUsers(users);
+        setEmbeddings(embeddings);
     }
 
     async function onGetEmbeddings() {
@@ -101,36 +104,103 @@ function ChannelScreen({channelKey}) {
         setEmbeddings(embeddings);
     }
 
-
     return <WideScreen>
         <Center>
             <Pad />
             <HorizBox center>
                 <PrimaryButton label="Get Content" onPress={() => onGetContent()} />
-                <Pad />
-                <PrimaryButton label="Get Embeddings" onPress={() => onGetEmbeddings()} />
+                {/* <Pad />
+                <PrimaryButton label="Get Embeddings" onPress={() => onGetEmbeddings()} /> */}
             </HorizBox>
             <Pad />
         </Center>
         <Separator pad={0} />
 
-        <BottomScroller>
-
-        {/* <BigTitle>Channel View</BigTitle> */}
-
-        {/* <Pad size={32} /> */}
-
-        {/* <Pad size={32} /> */}
-        {/* <Narrow> */}
-        <Narrow>
         <SlackContext.Provider value={{users, messages}}>
-            {mapKeys(messages, messageKey =>
-                <SlackMessage key={messageKey} messageKey={messageKey} />
-            )}
+            <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 1}}>
+                    <BottomScroller>
+                        <Narrow>
+                            <SlackContext.Provider value={{users, messages}}>
+                                {mapKeys(messages, messageKey =>
+                                    <SlackMessage key={messageKey} messageKey={messageKey} onPress={() => setSelectedMessage(messageKey)} />
+                                )}
+                            </SlackContext.Provider>
+                        </Narrow>
+                        {/* </Narrow> */}
+                    </BottomScroller>
+                </View>
+                <MessageInfoPanel embeddings={embeddings} messages={messages} messageKey={selectedMessage} />
+            </View>
         </SlackContext.Provider>
-        </Narrow>
-        {/* </Narrow> */}
-        </BottomScroller>
+
     </WideScreen>
 }
 
+function MessageInfoPanel({embeddings, messages, messageKey}) {
+    if (!messageKey || !embeddings) return null;
+    const embedding = embeddings[messageKey];
+    console.log('this embedding', {embeddings, messageKey, embedding});
+    const [closest, setClosest] = useState([]);
+
+    function onGetClosestMessages() {
+        const closest = sortEmbeddingsByDistance(messageKey, embedding, embeddings);
+        setClosest(closest);
+    }
+
+    useEffect(() => {
+        setClosest([])
+    }, [messageKey]);
+
+    return <View style={{flex: 1, borderLeftColor: '#ddd', borderLeftWidth: 1, marginLeft: 8, paddingLeft: 16, paddingRight: 16}}>
+        <ScrollView>
+            <Narrow>
+                <SlackMessage messageKey={messageKey} />
+                <OneLineTextInput value={embedding ? embedding.join(', ') : ''} />
+                <Pad />
+                <PrimaryButton label="Get Closest" onPress={() => onGetClosestMessages()} />
+                {
+                    closest.map(({key}) =>
+                        <SlackMessage key={key} messageKey={key} />
+                    )
+                }
+            </Narrow>
+        </ScrollView>
+    </View>
+}
+
+
+function sortEmbeddingsByDistance(messageKey, embedding, embeddings) {
+    const distances = [];
+    for (const key in embeddings) {
+        if (key == messageKey) continue;
+        const otherEmbedding = embeddings[key];
+        const distance = getDistance(embedding, otherEmbedding);
+        distances.push({key, distance});
+    }
+    distances.sort((a, b) => a.distance - b.distance);
+    return distances;
+}
+
+// function getClosestEmbedding(thisKey, embeddings, embedding) {
+//     let bestDistance = 100000000000000;
+//     let bestKey = null;
+//     for (const key in embeddings) {
+//         if (key === thisKey) continue;
+//         const otherEmbedding = embeddings[key];
+//         const distance = getDistance(embedding, otherEmbedding);
+//         if (distance < bestDistance) {
+//             bestDistance = distance;
+//             bestKey = key;
+//         }
+//     }
+//     return bestKey;
+// }
+
+function getDistance(embedding1, embedding2) {
+    let distance = 0;
+    for (let i = 0; i < embedding1.length; i++) {
+        distance += Math.pow(embedding1[i] - embedding2[i], 2);
+    }
+    return distance;
+}
