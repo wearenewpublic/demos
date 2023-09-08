@@ -10,7 +10,8 @@ import { TopCommentInput } from "../component/replyinput";
 import { BasicComments, CommentContext, GuestAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { QuietSystemMessage } from "../component/message";
-import { useTranslation } from "../component/translation";
+import { languageFrench, useTranslation } from "../component/translation";
+import { godzilla_article_french } from "../translations/french/articles_french";
 
 export const TopicMultiChatPrototype = {
     key: 'topicmulti',
@@ -46,6 +47,28 @@ export const TopicMultiChatPrototype = {
                 }
             ]),
         },
+        {key: 'godzilla-article-french', name: 'Godzilla Article (French)', article: godzilla_article_french, language: languageFrench,
+        topic: expandDataList([
+            {key: 'monster', title: 'Attaques de Monstres Géants'},
+            {key: 'attack', title: 'Attaque de Godzilla en août 2023 à New York'},
+            {key: 'safe', title: 'Préparation aux Catastrophes à NYC'},                   
+        ]), 
+        stance: expandDataList([
+            {key: 'monster-pro', topic: 'monster', org: 'Société de Protection des Monstres',
+                text: 'Les attaques de monstres géants sont la faute des humains, pas des monstres. Nous devons arrêter de polluer les océans et arrêter de construire des centrales nucléaires.',
+            },
+            {key: 'monster-sci', topic: 'monster', org: 'Institut des Scientifiques Importants',
+                text: 'Les attaques de monstres ont augmenté de 50% au cours des 10 dernières années. Nous devons étudier les monstres pour comprendre pourquoi ils nous attaquent.',
+            },
+            {key: 'nyc-mayor', topic: 'attack', org: 'Bureau du Maire de New York',
+                text: 'Nous devons évacuer New York et déplacer tout le monde au New Jersey. Une fois New York évacuée, nous pouvons faire appel à la garde nationale et utiliser des armes lourdes contre le monstre',
+            },
+            {key: 'nyc-safe', topic: 'safe', org: 'Association des Citoyens de New York',
+                text: "New York City consacre actuellement 1% de son budget à la préparation aux catastrophes. Nous devons augmenter cela à 2%, pour être en accord avec d'autres grandes villes ayant des risques similaires.",
+            }
+        ]),
+    },
+
         {key: 'godzilla', name: 'Godzilla Raw', title: 'Godzilla Attacks New York',
         topic: expandDataList([
             {key: 'monster', title: 'Giant Monster Attacks'},

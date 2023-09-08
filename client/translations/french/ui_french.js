@@ -78,4 +78,6 @@ export const ui_translations_french = {
     'Proposal': 'Proposition',
     'Other': 'Autre',
     'What do you want to contribute?': 'Que voulez-vous contribuer?',
+    'stances': 'positions',
+    'Community Stances': 'Positions de la communauté',
 }
