@@ -160,6 +160,15 @@ export function expandUrl({url, type}) {
     }
 }
 
+// export function mapKeys(object, callback) {
+//     return Object.keys(object || {}).map(key => callback(key, object[key]))    
+// }
+
 export function mapKeys(object, callback) {
-    return Object.keys(object || {}).map(key => callback(key, object[key]))    
+  let previousKey = null;
+  return Object.keys(object || {}).map(key => {
+      const result = callback(key, object[key], previousKey);
+      previousKey = key;
+      return result;
+  });
 }

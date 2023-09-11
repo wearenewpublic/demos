@@ -212,11 +212,17 @@ function formatDate(date, language = 'english') {
     } else if (diffInSeconds < 2592000) {
         const days = Math.floor(diffInSeconds / 86400);
         return translateLabel({label: '{days}d ago', language, formatParams:{days}});
+    } else if (currentDate.getFullYear() == inputDate.getFullYear()) {
+        const formattedDate = inputDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+        });
+        return formattedDate;
     } else {
         const formattedDate = inputDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
         });
         return formattedDate;
     }

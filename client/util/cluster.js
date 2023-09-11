@@ -1,5 +1,7 @@
 
-function kMeans(embeddings, k, maxIterations = 100, tolerance = 1e-4) {
+
+function clusterWithKMeans(embeddingMap, k, maxIterations = 100, tolerance = 1e-4) {
+    const embeddings = Object.values(embeddingMap);    
     console.log('embeddings', embeddings);
     const centroids = initializeCentroids(embeddings, k);
     let previousCentroids;
@@ -10,7 +12,35 @@ function kMeans(embeddings, k, maxIterations = 100, tolerance = 1e-4) {
         clusters = createClusters(embeddings, centroids);
         
         previousCentroids = centroids.slice();
-        updateCentroids(clusters, centroids);
+        updateCentroids(embeddings, clusters, centroids);
+        
+        if (hasConverged(previousCentroids, centroids, tolerance)) {
+            break;
+        }
+    }
+
+    // const clusterKeys = clusters.map(cluster =>
+    //     cluster.map(embeddingIndex => Object.keys(embeddingMap)[embeddingIndex])
+    // );
+    const messageToCluster = invertClusterMap(clusters, Object.keys(embeddingMap));
+
+    return {centroids, clusters, messageToCluster};
+}
+
+exports.clusterWithKMeans = clusterWithKMeans;
+
+function kMeansOLD(embeddings, k, maxIterations = 100, tolerance = 1e-4) {
+    console.log('embeddings', embeddings);
+    const centroids = initializeCentroids(embeddings, k);
+    let previousCentroids;
+
+    var clusters;
+
+    for (let i = 0; i < maxIterations; i++) {
+        clusters = createClusters(embeddings, centroids);
+        
+        previousCentroids = centroids.slice();
+        updateCentroids(embeddings, clusters, centroids);
         
         if (hasConverged(previousCentroids, centroids, tolerance)) {
             break;
@@ -20,7 +50,41 @@ function kMeans(embeddings, k, maxIterations = 100, tolerance = 1e-4) {
     return {centroids, clusters};
 }
 
-exports.kMeans = kMeans;
+// exports.kMeans = kMeans;
+
+
+function getRandomClusterIndices(clusters, count) {
+    var result = [];
+    const usedIndices = new Set();
+    for (cluster in clusters) {
+        var picked = [];
+        const clusterIndices = clusters[cluster];
+        for (let i = 0; i < count && i < clusterIndices.length ; i++) {
+            var index = Math.floor(Math.random() * clusterIndices.length);
+            while (usedIndices.has(index)) {
+                index = Math.floor(Math.random() * clusterIndices.length);
+            }
+            usedIndices.add(index);
+            picked.push(clusterIndices[index]);
+        }
+        result.push(picked);
+    }
+    return result;
+}
+exports.getRandomClusterIndices = getRandomClusterIndices;
+
+
+function invertClusterMap(clusters, keys) {
+    var result = {};
+    for (cluster in clusters) {
+        const clusterIndices = clusters[cluster];
+        for (var i = 0; i < clusterIndices.length; i++) {
+            result[keys[clusterIndices[i]]] = cluster;
+        }
+    }
+    return result;
+}
+exports.invertClusterMap = invertClusterMap;
 
 
 function initializeCentroids(embeddings, k) {
@@ -42,7 +106,7 @@ function initializeCentroids(embeddings, k) {
 function createClusters(embeddings, centroids) {
     const clusters = Array.from({ length: centroids.length }, () => []);
     
-    embeddings.forEach(embedding => {
+    embeddings.forEach((embedding, embeddingIndex) => {
         let bestIndex = 0;
         let minDistance = Infinity;
         
@@ -54,26 +118,27 @@ function createClusters(embeddings, centroids) {
             }
         });
         
-        clusters[bestIndex].push(embedding);
+        clusters[bestIndex].push(embeddingIndex);
     });
     
     return clusters;
 }
 
-function updateCentroids(clusters, centroids) {
-    clusters.forEach((cluster, index) => {
-        if (cluster.length === 0) return;
+function updateCentroids(embeddings, clusters, centroids) {
+    clusters.forEach((clusterIndices, index) => {
+        if (clusterIndices.length === 0) return;
         
-        const newCentroid = Array(cluster[0].length).fill(0);
+        const newCentroid = Array(embeddings[0].length).fill(0);
         
-        cluster.forEach(embedding => {
+        clusterIndices.forEach(embeddingIndex => {
+            const embedding = embeddings[embeddingIndex];
             for (let i = 0; i < embedding.length; i++) {
                 newCentroid[i] += embedding[i];
             }
         });
         
         for (let i = 0; i < newCentroid.length; i++) {
-            newCentroid[i] /= cluster.length;
+            newCentroid[i] /= clusterIndices.length;
         }
         
         centroids[index] = newCentroid;
@@ -100,3 +165,25 @@ function hasConverged(prevCentroids, centroids, tolerance) {
     return totalDistance < tolerance;
 }
 
+
+function sortEmbeddingsByDistance(messageKey, embedding, embeddings) {
+    const distances = [];
+    for (const key in embeddings) {
+        if (key == messageKey) continue;
+        const otherEmbedding = embeddings[key];
+        const distance = getDistance(embedding, otherEmbedding);
+        distances.push({key, distance});
+    }
+    distances.sort((a, b) => a.distance - b.distance);
+    return distances;
+}
+
+exports.sortEmbeddingsByDistance = sortEmbeddingsByDistance;
+
+function getDistance(embedding1, embedding2) {
+    let distance = 0;
+    for (let i = 0; i < embedding1.length; i++) {
+        distance += Math.pow(embedding1[i] - embedding2[i], 2);
+    }
+    return distance;
+}

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
-import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
@@ -8,7 +8,7 @@ import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings
 import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
-import { kMeans } from "../util/cluster";
+import { clusterWithKMeans, getRandomClusterIndices, invertClusterMap, kMeans, sortEmbeddingsByDistance } from "../util/cluster";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -81,8 +81,15 @@ function ChannelScreen({channelKey}) {
     const [messages, setMessages] = useState();
     const [embeddings, setEmbeddings] = useState();
     const [selectedMessage, setSelectedMessage] = useState();
+    const [clusterMap, setClusterMap] = useState({});
     const [clusters, setClusters] = useState();
     const datastore = useDatastore();
+
+    const sortedMessageKeys = Object.keys(messages || {}).sort((a, b) => messages[a].ts - messages[b].ts);
+
+    console.log('clusterMap', clusterMap);
+
+    console.log('messages', messages);
 
     async function onGetContent() {
         const pUsers = getSlackUsers({datastore, team});
@@ -99,8 +106,22 @@ function ChannelScreen({channelKey}) {
     }
 
     async function onGetClusters() {
-        const {centroids, clusters} = kMeans(Object.values(embeddings), 5);
-        console.log('clusters', {centroids, clusters});
+        // console.log('embeddings', embeddings);
+        // console.log('sortedMessageKeys', sortedMessageKeys);
+        // console.log('values', Object.values(embeddings));
+        // console.log('sortValues', sortedMessageKeys.map(key => embeddings[key]));
+        // const {centroids, clusters} = kMeans(Object.values(embeddings), 5);
+        // const {centroids, clusters} = kMeans(sortedMessageKeys.map(key => embeddings[key]), 5);
+
+        const {centroids, clusters, messageToCluster} = clusterWithKMeans(embeddings, 5);
+
+        console.log('clusters', {centroids, clusters, messageToCluster});
+        // const invertedMap = invertClusterMap(clusters, sortedMessageKeys);
+        // console.log('invertedMap', invertedMap);
+        setClusterMap(messageToCluster);
+        setClusters(clusters);
+        const randomClusterMembers = getRandomClusterIndices(clusters, 4);
+        console.log('randomMembers', randomClusterMembers);
         // setCentroids(centroids);
         // setClusters(clusters);
     }
@@ -119,14 +140,18 @@ function ChannelScreen({channelKey}) {
         </Center>
         <Separator pad={0} />
 
-        <SlackContext.Provider value={{users, messages}}>
+        <SlackContext.Provider value={{users, messages, clusterMap}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1}}>
                     <BottomScroller>
                         <Narrow>
-                            <SlackContext.Provider value={{users, messages}}>
-                                {mapKeys(messages, messageKey =>
-                                    <SlackMessage key={messageKey} messageKey={messageKey} onPress={() => setSelectedMessage(messageKey)} />
+                            <SlackContext.Provider value={{users, messages, clusterMap}}>
+                                {sortedMessageKeys.map((messageKey, idx) =>
+                                    <SlackMessage key={messageKey}
+                                        authorLineWidget={ClusterWidget}
+                                        messageKey={messageKey}
+                                        prevMessageKey={sortedMessageKeys[idx - 1]} 
+                                        onPress={() => setSelectedMessage(messageKey)} />
                                 )}
                             </SlackContext.Provider>
                         </Narrow>
@@ -138,6 +163,13 @@ function ChannelScreen({channelKey}) {
         </SlackContext.Provider>
 
     </WideScreen>
+}
+
+function ClusterWidget({message, messageKey}) {
+    const {clusterMap} = useContext(SlackContext);
+    const cluster = clusterMap?.[messageKey];
+    if (!cluster) return null;
+    return <PadBox vert={0}><Pill text={cluster} /></PadBox>
 }
 
 function MessageInfoPanel({embeddings, messages, messageKey}) {
@@ -172,23 +204,3 @@ function MessageInfoPanel({embeddings, messages, messageKey}) {
     </View>
 }
 
-
-function sortEmbeddingsByDistance(messageKey, embedding, embeddings) {
-    const distances = [];
-    for (const key in embeddings) {
-        if (key == messageKey) continue;
-        const otherEmbedding = embeddings[key];
-        const distance = getDistance(embedding, otherEmbedding);
-        distances.push({key, distance});
-    }
-    distances.sort((a, b) => a.distance - b.distance);
-    return distances;
-}
-
-function getDistance(embedding1, embedding2) {
-    let distance = 0;
-    for (let i = 0; i < embedding1.length; i++) {
-        distance += Math.pow(embedding1[i] - embedding2[i], 2);
-    }
-    return distance;
-}
