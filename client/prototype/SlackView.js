@@ -8,6 +8,7 @@ import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings
 import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
+import { kMeans } from "../util/cluster";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -80,6 +81,7 @@ function ChannelScreen({channelKey}) {
     const [messages, setMessages] = useState();
     const [embeddings, setEmbeddings] = useState();
     const [selectedMessage, setSelectedMessage] = useState();
+    const [clusters, setClusters] = useState();
     const datastore = useDatastore();
 
     async function onGetContent() {
@@ -96,12 +98,11 @@ function ChannelScreen({channelKey}) {
         setEmbeddings(embeddings);
     }
 
-    async function onGetEmbeddings() {
-        console.log('get Embeddings');
-        const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
-        // const messages = await callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});
-        console.log('embeddings', {embeddings});
-        setEmbeddings(embeddings);
+    async function onGetClusters() {
+        const {centroids, clusters} = kMeans(Object.values(embeddings), 5);
+        console.log('clusters', {centroids, clusters});
+        // setCentroids(centroids);
+        // setClusters(clusters);
     }
 
     return <WideScreen>
@@ -109,8 +110,10 @@ function ChannelScreen({channelKey}) {
             <Pad />
             <HorizBox center>
                 <PrimaryButton label="Get Content" onPress={() => onGetContent()} />
-                {/* <Pad />
-                <PrimaryButton label="Get Embeddings" onPress={() => onGetEmbeddings()} /> */}
+                <Pad />
+                {
+                    embeddings && <PrimaryButton label="Get Clusters" onPress={() => onGetClusters()} />
+                }
             </HorizBox>
             <Pad />
         </Center>
@@ -181,21 +184,6 @@ function sortEmbeddingsByDistance(messageKey, embedding, embeddings) {
     distances.sort((a, b) => a.distance - b.distance);
     return distances;
 }
-
-// function getClosestEmbedding(thisKey, embeddings, embedding) {
-//     let bestDistance = 100000000000000;
-//     let bestKey = null;
-//     for (const key in embeddings) {
-//         if (key === thisKey) continue;
-//         const otherEmbedding = embeddings[key];
-//         const distance = getDistance(embedding, otherEmbedding);
-//         if (distance < bestDistance) {
-//             bestDistance = distance;
-//             bestKey = key;
-//         }
-//     }
-//     return bestKey;
-// }
 
 function getDistance(embedding1, embedding2) {
     let distance = 0;
