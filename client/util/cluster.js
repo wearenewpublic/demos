@@ -1,6 +1,6 @@
 
 
-function clusterWithKMeans(embeddingMap, k, maxIterations = 10, tolerance = 1e-4) {
+function clusterWithKMeans(embeddingMap, k, maxIterations = 100, tolerance = 1e-4) {
     const embeddings = Object.values(embeddingMap);    
     console.log('embeddings', embeddings);
     const centroids = initializeCentroids(embeddings, k);
@@ -33,10 +33,10 @@ exports.clusterWithKMeans = clusterWithKMeans;
 
 function getRandomClusterIndices(clusters, count) {
     var result = [];
-    const usedIndices = new Set();
     for (cluster in clusters) {
         var picked = [];
         const clusterIndices = clusters[cluster];
+        const usedIndices = new Set();
         for (let i = 0; i < count && i < clusterIndices.length - 1 ; i++) {
             var index = Math.floor(Math.random() * clusterIndices.length);
             while (usedIndices.has(index)) {

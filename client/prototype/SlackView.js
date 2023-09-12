@@ -9,6 +9,7 @@ import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
 import { clusterWithKMeans, getRandomClusterIndices, invertClusterMap, kMeans, sortEmbeddingsByDistance } from "../util/cluster";
+import { gptProcessAsync } from "../component/chatgpt";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -82,6 +83,7 @@ function ChannelScreen({channelKey}) {
     const [embeddings, setEmbeddings] = useState();
     const [selectedMessage, setSelectedMessage] = useState();
     const [clusterMap, setClusterMap] = useState({});
+    const [clusterNames, setClusterNames] = useState({});
     const [clusters, setClusters] = useState();
     const datastore = useDatastore();
 
@@ -106,18 +108,21 @@ function ChannelScreen({channelKey}) {
     }
 
     async function onGetClusters() {
-        const {centroids, clusters, clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 8);
+        const {centroids, clusters, clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 10);
 
         console.log('clusters', {centroids, clusters, messageToCluster, clusterToMessages});
         setClusterMap(messageToCluster);
         setClusters(clusters);
         console.log('getRandom');
-        const randomClusterMembers = getRandomClusterIndices(clusterToMessages, 6);
+        const randomClusterMembers = getRandomClusterIndices(clusterToMessages, 5);
         console.log('randomMembers', randomClusterMembers);
         const randomClusterTexts = randomClusterMembers.map(keys => keys.map(key => 
-            replaceLinks({text: replaceUserMentions({text:messages[key]?.text, users})})
+            replaceLinks({text: replaceUserMentions({text:messages[key]?.text, users})}).slice(0,100)
         ))
         console.log('randomClusterTexts', randomClusterTexts);
+        const clusterNames = await gptProcessAsync({datastore, promptKey: 'cluster_label', params: {clusters: JSON.stringify(randomClusterTexts)}});
+        console.log('clusterNames', clusterNames);
+        setClusterNames(clusterNames);
     }
 
     return <WideScreen>
@@ -134,12 +139,12 @@ function ChannelScreen({channelKey}) {
         </Center>
         <Separator pad={0} />
 
-        <SlackContext.Provider value={{users, messages, clusterMap}}>
+        <SlackContext.Provider value={{users, messages, clusterMap, clusterNames}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1}}>
                     <BottomScroller>
                         <Narrow>
-                            <SlackContext.Provider value={{users, messages, clusterMap}}>
+                            <SlackContext.Provider value={{users, messages, clusterMap, clusterNames}}>
                                 {sortedMessageKeys.map((messageKey, idx) =>
                                     <SlackMessage key={messageKey}
                                         authorLineWidget={ClusterWidget}
@@ -160,10 +165,14 @@ function ChannelScreen({channelKey}) {
 }
 
 function ClusterWidget({message, messageKey}) {
-    const {clusterMap} = useContext(SlackContext);
+    const {clusterMap, clusterNames} = useContext(SlackContext);
     const cluster = clusterMap?.[messageKey];
     if (!cluster) return null;
-    return <PadBox vert={0}><Pill text={cluster} /></PadBox>
+    if (clusterNames?.[cluster]) {
+        return <PadBox vert={0}><Pill text={clusterNames[cluster]} /></PadBox>
+    } else {
+        return <PadBox vert={0}><Pill text={cluster} /></PadBox>
+    }
 }
 
 function MessageInfoPanel({embeddings, messages, messageKey}) {
