@@ -4,7 +4,7 @@ import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, P
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
-import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers } from "../component/slack";
+import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers, replaceLinks, replaceUserMentions } from "../component/slack";
 import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
@@ -106,24 +106,18 @@ function ChannelScreen({channelKey}) {
     }
 
     async function onGetClusters() {
-        // console.log('embeddings', embeddings);
-        // console.log('sortedMessageKeys', sortedMessageKeys);
-        // console.log('values', Object.values(embeddings));
-        // console.log('sortValues', sortedMessageKeys.map(key => embeddings[key]));
-        // const {centroids, clusters} = kMeans(Object.values(embeddings), 5);
-        // const {centroids, clusters} = kMeans(sortedMessageKeys.map(key => embeddings[key]), 5);
+        const {centroids, clusters, clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 8);
 
-        const {centroids, clusters, messageToCluster} = clusterWithKMeans(embeddings, 5);
-
-        console.log('clusters', {centroids, clusters, messageToCluster});
-        // const invertedMap = invertClusterMap(clusters, sortedMessageKeys);
-        // console.log('invertedMap', invertedMap);
+        console.log('clusters', {centroids, clusters, messageToCluster, clusterToMessages});
         setClusterMap(messageToCluster);
         setClusters(clusters);
-        const randomClusterMembers = getRandomClusterIndices(clusters, 4);
+        console.log('getRandom');
+        const randomClusterMembers = getRandomClusterIndices(clusterToMessages, 6);
         console.log('randomMembers', randomClusterMembers);
-        // setCentroids(centroids);
-        // setClusters(clusters);
+        const randomClusterTexts = randomClusterMembers.map(keys => keys.map(key => 
+            replaceLinks({text: replaceUserMentions({text:messages[key]?.text, users})})
+        ))
+        console.log('randomClusterTexts', randomClusterTexts);
     }
 
     return <WideScreen>

@@ -1,6 +1,6 @@
 
 
-function clusterWithKMeans(embeddingMap, k, maxIterations = 100, tolerance = 1e-4) {
+function clusterWithKMeans(embeddingMap, k, maxIterations = 10, tolerance = 1e-4) {
     const embeddings = Object.values(embeddingMap);    
     console.log('embeddings', embeddings);
     const centroids = initializeCentroids(embeddings, k);
@@ -9,6 +9,7 @@ function clusterWithKMeans(embeddingMap, k, maxIterations = 100, tolerance = 1e-
     var clusters;
 
     for (let i = 0; i < maxIterations; i++) {
+        console.log('iteration', i);
         clusters = createClusters(embeddings, centroids);
         
         previousCentroids = centroids.slice();
@@ -19,38 +20,15 @@ function clusterWithKMeans(embeddingMap, k, maxIterations = 100, tolerance = 1e-
         }
     }
 
-    // const clusterKeys = clusters.map(cluster =>
-    //     cluster.map(embeddingIndex => Object.keys(embeddingMap)[embeddingIndex])
-    // );
+    const clusterToMessages = clusters.map(cluster =>
+        cluster.map(embeddingIndex => Object.keys(embeddingMap)[embeddingIndex])
+    );
     const messageToCluster = invertClusterMap(clusters, Object.keys(embeddingMap));
 
-    return {centroids, clusters, messageToCluster};
+    return {centroids, clusters, clusterToMessages, messageToCluster};
 }
 
 exports.clusterWithKMeans = clusterWithKMeans;
-
-function kMeansOLD(embeddings, k, maxIterations = 100, tolerance = 1e-4) {
-    console.log('embeddings', embeddings);
-    const centroids = initializeCentroids(embeddings, k);
-    let previousCentroids;
-
-    var clusters;
-
-    for (let i = 0; i < maxIterations; i++) {
-        clusters = createClusters(embeddings, centroids);
-        
-        previousCentroids = centroids.slice();
-        updateCentroids(embeddings, clusters, centroids);
-        
-        if (hasConverged(previousCentroids, centroids, tolerance)) {
-            break;
-        }
-    }
-
-    return {centroids, clusters};
-}
-
-// exports.kMeans = kMeans;
 
 
 function getRandomClusterIndices(clusters, count) {
@@ -59,7 +37,7 @@ function getRandomClusterIndices(clusters, count) {
     for (cluster in clusters) {
         var picked = [];
         const clusterIndices = clusters[cluster];
-        for (let i = 0; i < count && i < clusterIndices.length ; i++) {
+        for (let i = 0; i < count && i < clusterIndices.length - 1 ; i++) {
             var index = Math.floor(Math.random() * clusterIndices.length);
             while (usedIndices.has(index)) {
                 index = Math.floor(Math.random() * clusterIndices.length);

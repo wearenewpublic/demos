@@ -177,3 +177,13 @@ export function replaceUserMentions({text, users}) {
       return ('@' + users[userId]?.name) || match; // Use the original match if the user ID is not found in the mapping
     });
 }
+
+// const slackLinkRegex = /<https?:\/\/[^|]+?\|[^>]+?>/g
+const slackLinkRegex = /<https?:\/\/[^|>]+?(?:\|[^>]+?)?>/g
+
+
+export function replaceLinks({text}) {
+    return text.replace(slackLinkRegex, (match, link) => {
+        return '<link>';
+    });
+}
