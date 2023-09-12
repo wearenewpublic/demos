@@ -93,18 +93,21 @@ function ClusterWidget({messageKey}) {
 
 function MessageInfoPanel({messageKey}) {
     const {embeddings, messages} = useContext(SlackContext);
+    const [closest, setClosest] = useState([]);
+
+    useEffect(() => {
+        setClosest([])
+    }, [messageKey]);
+
     if (!messageKey || !embeddings) return null;
     const embedding = embeddings[messageKey];
-    const [closest, setClosest] = useState([]);
+
 
     function onGetClosestMessages() {
         const closest = sortEmbeddingsByDistance(messageKey, embedding, embeddings);
         setClosest(closest);
     }
 
-    useEffect(() => {
-        setClosest([])
-    }, [messageKey]);
 
     return <View style={{flex: 1, borderLeftColor: '#ddd', borderLeftWidth: 1, marginLeft: 8, paddingLeft: 16, paddingRight: 16}}>
         <ScrollView>
