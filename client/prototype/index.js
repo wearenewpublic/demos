@@ -31,6 +31,8 @@ import { SlackTestPrototype } from "./SlackTest";
 import { TopicMultiChatPrototype } from "./TopicMultiChat";
 import { SlackViewPrototype } from "./SlackView";
 import { TopicChatPrototype } from "./TopicChat";
+import { SlackGuidedClustersPrototype } from "./SlackGuidedClusters";
+import { SlackSearchPrototype } from "./SlackSearch";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -40,6 +42,7 @@ export const prototypes = [
     MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
     FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype,
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
-    SlackViewPrototype, TopicChatPrototype
+    SlackViewPrototype, TopicChatPrototype, SlackGuidedClustersPrototype, SlackSearchPrototype
 ]
+
 

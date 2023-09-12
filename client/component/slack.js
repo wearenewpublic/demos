@@ -194,7 +194,20 @@ export function SlackMessagesWithInfoPanel({messages, infoPanel, authorLineWidge
             React.createElement(infoPanel, {messageKey: selectedMessage})
         }
     </View>
-    
+}
+
+export function SlackMessageList({sortedMessageKeys, authorLineWidget}) {
+    return <BottomScroller>
+        <Narrow>
+            {sortedMessageKeys.map((messageKey, idx) =>
+                <SlackMessage key={messageKey}
+                    authorLineWidget={authorLineWidget}
+                    messageKey={messageKey}
+                    prevMessageKey={sortedMessageKeys[idx - 1]} 
+                />
+            )}
+        </Narrow>
+    </BottomScroller>
 }
 
 
