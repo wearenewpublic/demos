@@ -83,6 +83,7 @@ async function getContent({team, path, userEmail}) {
     console.log('userEmail', userEmail);
     if (userEmail.endsWith('@newpublic.org')) {
         const dataPath = 'vault/slack/' + team + '/' + path;
+        console.log('dataPath', dataPath);
         const encryptedData = await firebaseReadAsync(dataPath);
         const data = decryptMap(encryptedData);
         return {data};

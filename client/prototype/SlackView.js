@@ -4,12 +4,13 @@ import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, P
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
-import { SlackContext, SlackMessage, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers, replaceLinks, replaceUserMentions } from "../component/slack";
+import { SlackChannelList, SlackContext, SlackMessage, SlackMessagesWithInfoPanel, getSlackChannels, getSlackMessageEmbeddings, getSlackMessages, getSlackUsers, replaceLinks, replaceUserMentions, useSlackChannels, useSlackEmbeddings, useSlackMessageEmbeddings, useSlackMessages, useSlackUsers } from "../component/slack";
 import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
-import { clusterWithKMeans, getRandomClusterIndices, invertClusterMap, kMeans, sortEmbeddingsByDistance } from "../util/cluster";
+import { addContextToShortMessageEmbeddings, clusterWithKMeans, getRandomClusterIndices, invertClusterMap, kMeans, sortEmbeddingsByDistance } from "../util/cluster";
 import { gptProcessAsync } from "../component/chatgpt";
+import { QuietSystemMessage } from "../component/message";
 
 export const SlackViewPrototype = {
     name: 'Slack View',
@@ -29,142 +30,57 @@ export const SlackViewPrototype = {
 
 function SlackViewScreen() {
     const team = useGlobalProperty('team');
-    const personaKey = usePersonaKey();
-    const [users, setUsers] = useState({});
-    const [channels, setChannels] = useState();
-    const datastore = useDatastore();
-
-    if (!personaKey) {
-        if (!personaKey) {
-            return <PadBox><PrimaryButton onPress={gotoLogin} label='Log in to Access' /></PadBox>
-        }   
-    }
-
-    async function onGetChannels() {
-        // const pUsers = getSlackUsers({datastore, team});
-        const channels = await getSlackChannels({datastore, team});
-        // const users = await pUsers;
-        console.log('channels', {channels});
-        setChannels(channels);
-        // setUsers(users);
-        // datastore.setSessionData('slackUsers', users);
-    }
 
     return <ScrollableScreen>
-        <BigTitle>Slack View</BigTitle>
+        <Center><BodyText>Team: {team}</BodyText></Center>
 
-        <BodyText>Team: {team}</BodyText>
-
-        <Pad size={32} />
-        <PrimaryButton label="Get Channels" onPress={() => onGetChannels()} />
-
-        <Pad size={32} />
-
-        {/* <SlackContext.Provider value={{users, messages}}> */}
-        {mapKeys(channels, (channelKey, channelInfo) =>
-            <SlackChannel key={channelKey} channelKey={channelKey} channelInfo={channelInfo} />
-        )}
-        {/* </SlackContext.Provider> */}
-
+        <SlackChannelList onPressChannel={({channelKey}) => pushSubscreen('channel', {channelKey})} />
     </ScrollableScreen>
 }
 
-function SlackChannel({channelKey, channelInfo}) {
-    return <Card onPress={() => pushSubscreen('channel', {channelKey})}>
-        <SmallTitle>#{channelInfo.name}</SmallTitle>
-    </Card>
-}
-
 function ChannelScreen({channelKey}) {
-    // const users = useSessionData('slackUsers');
-    const team = useGlobalProperty('team');
-    const [users, setUsers] = useState({});
-    const [messages, setMessages] = useState();
-    const [embeddings, setEmbeddings] = useState();
-    const [selectedMessage, setSelectedMessage] = useState();
+    const messages = useSlackMessages({channelKey});
+    const users = useSlackUsers();
+    const embeddings = useSlackMessageEmbeddings({channelKey});
     const [clusterMap, setClusterMap] = useState({});
     const [clusterNames, setClusterNames] = useState({});
-    const [clusters, setClusters] = useState();
     const datastore = useDatastore();
-
-    const sortedMessageKeys = Object.keys(messages || {}).sort((a, b) => messages[a].ts - messages[b].ts);
-
-    console.log('clusterMap', clusterMap);
-
-    console.log('messages', messages);
-
-    async function onGetContent() {
-        const pUsers = getSlackUsers({datastore, team});
-        const pMessages = getSlackMessages({datastore, team, channel: channelKey});
-        const embeddings = await getSlackMessageEmbeddings({datastore, team, channel: channelKey});
-        const messages = await pMessages; 
-        const users = await pUsers;
-        // const messages = await callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});
-        console.log('content', {messages});
-        console.log('embeddings', {embeddings});
-        setMessages(messages);
-        setUsers(users);
-        setEmbeddings(embeddings);
-    }
+    const [inProgress, setInProgress] = useState(false);
 
     async function onGetClusters() {
-        const {centroids, clusters, clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 10);
-
-        console.log('clusters', {centroids, clusters, messageToCluster, clusterToMessages});
+        setInProgress(true);
+        setClusterNames({});
+        const mergedEmbeddings = addContextToShortMessageEmbeddings({embeddings, messages});
+        // const {clusterToMessages, messageToCluster} = clusterWithKMeans(mergedEmbeddings, 10);
+        const {clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 10);
         setClusterMap(messageToCluster);
-        setClusters(clusters);
-        console.log('getRandom');
         const randomClusterMembers = getRandomClusterIndices(clusterToMessages, 5);
-        console.log('randomMembers', randomClusterMembers);
-        const randomClusterTexts = randomClusterMembers.map(keys => keys.map(key => 
-            replaceLinks({text: replaceUserMentions({text:messages[key]?.text, users})}).slice(0,100)
-        ))
+        const randomClusterTexts = randomClusterMembers.map((keys, index) => ({  
+            messages: keys.map(key => 
+                replaceLinks({text: replaceUserMentions({text:messages[key]?.text, users})}).slice(0,100)),
+            clusterName: 'Cluster ' + index      
+        }))
         console.log('randomClusterTexts', randomClusterTexts);
-        const clusterNames = await gptProcessAsync({datastore, promptKey: 'cluster_label', params: {clusters: JSON.stringify(randomClusterTexts)}});
+        const clusterNames = await gptProcessAsync({datastore, promptKey: 'cluster_label', params: {clusters: JSON.stringify(randomClusterTexts, null, 2)}});
         console.log('clusterNames', clusterNames);
         setClusterNames(clusterNames);
+        setInProgress(false);
     }
 
-    return <WideScreen>
+
+    return <SlackContext.Provider value={{users, messages, embeddings, clusterMap, clusterNames}}>
         <Center>
-            <Pad />
-            <HorizBox center>
-                <PrimaryButton label="Get Content" onPress={() => onGetContent()} />
-                <Pad />
-                {
-                    embeddings && <PrimaryButton label="Get Clusters" onPress={() => onGetClusters()} />
-                }
-            </HorizBox>
-            <Pad />
+            <Pad/>
+            {inProgress && <QuietSystemMessage label='Computing clusters...' />}
+            {!inProgress && <PrimaryButton label="Compute Clusters" onPress={() => onGetClusters()} />}
+            <Pad/>
         </Center>
         <Separator pad={0} />
-
-        <SlackContext.Provider value={{users, messages, clusterMap, clusterNames}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1}}>
-                    <BottomScroller>
-                        <Narrow>
-                            <SlackContext.Provider value={{users, messages, clusterMap, clusterNames}}>
-                                {sortedMessageKeys.map((messageKey, idx) =>
-                                    <SlackMessage key={messageKey}
-                                        authorLineWidget={ClusterWidget}
-                                        messageKey={messageKey}
-                                        prevMessageKey={sortedMessageKeys[idx - 1]} 
-                                        onPress={() => setSelectedMessage(messageKey)} />
-                                )}
-                            </SlackContext.Provider>
-                        </Narrow>
-                        {/* </Narrow> */}
-                    </BottomScroller>
-                </View>
-                <MessageInfoPanel embeddings={embeddings} messages={messages} messageKey={selectedMessage} />
-            </View>
-        </SlackContext.Provider>
-
-    </WideScreen>
+        <SlackMessagesWithInfoPanel messages={messages} infoPanel={MessageInfoPanel} authorLineWidget={ClusterWidget}/>
+    </SlackContext.Provider>
 }
 
-function ClusterWidget({message, messageKey}) {
+function ClusterWidget({messageKey}) {
     const {clusterMap, clusterNames} = useContext(SlackContext);
     const cluster = clusterMap?.[messageKey];
     if (!cluster) return null;
@@ -175,10 +91,10 @@ function ClusterWidget({message, messageKey}) {
     }
 }
 
-function MessageInfoPanel({embeddings, messages, messageKey}) {
+function MessageInfoPanel({messageKey}) {
+    const {embeddings, messages} = useContext(SlackContext);
     if (!messageKey || !embeddings) return null;
     const embedding = embeddings[messageKey];
-    console.log('this embedding', {embeddings, messageKey, embedding});
     const [closest, setClosest] = useState([]);
 
     function onGetClosestMessages() {

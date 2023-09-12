@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Image, StyleSheet, Text, View } from "react-native";
-import { BodyText, HorizBox, MaybeClickable, TimeText } from "./basics";
+import { BodyText, Card, HorizBox, LoadingScreen, MaybeClickable, Narrow, SmallTitle, TimeText } from "./basics";
 import { callServerApiAsync } from "../util/servercall";
 import { AnonymousFace } from "./userface";
+import { useDatastore, useGlobalProperty } from "../util/datastore";
+import { mapKeys } from "../util/util";
+import { BottomScroller } from "../platform-specific/bottomscroller";
 
 export const SlackContext = React.createContext();
 
@@ -147,6 +150,105 @@ const SlackUserFaceStyle = StyleSheet.create({
         borderRadius: 4,
     }
 })
+
+
+export function SlackChannelList({onPressChannel}) {
+    const channels = useSlackChannels();
+
+    if (!channels) {
+        return <LoadingScreen />
+    }
+
+    return <View>
+        {mapKeys(channels, (channelKey, channelInfo) =>
+            <SlackChannel key={channelKey} channelKey={channelKey} channelInfo={channelInfo} onPressChannel={onPressChannel} />
+        )}
+    </View>
+}
+
+function SlackChannel({channelKey, channelInfo, onPressChannel}) {
+    return <Card onPress={() => onPressChannel({channelKey})}>
+        <SmallTitle>#{channelInfo.name}</SmallTitle>
+    </Card>
+}
+
+export function SlackMessagesWithInfoPanel({messages, infoPanel, authorLineWidget=null}) {
+    const [selectedMessage, setSelectedMessage] = useState(null);
+    const sortedMessageKeys = Object.keys(messages || {}).sort((a, b) => messages[a].ts - messages[b].ts);
+
+    return <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{flex: 1}}>
+            <BottomScroller>
+                <Narrow>
+                    {sortedMessageKeys.map((messageKey, idx) =>
+                        <SlackMessage key={messageKey}
+                            authorLineWidget={authorLineWidget}
+                            messageKey={messageKey}
+                            prevMessageKey={sortedMessageKeys[idx - 1]} 
+                            onPress={() => setSelectedMessage(messageKey)} />
+                    )}
+                </Narrow>
+            </BottomScroller>
+        </View>
+        {
+            React.createElement(infoPanel, {messageKey: selectedMessage})
+        }
+    </View>
+    
+}
+
+
+var global_embedding_data = {}
+
+export function useSlackEmbeddings(path) {
+    const team = useGlobalProperty('team');
+    const datastore = useDatastore();
+    const [data, setData] = useState(global_embedding_data[path]);
+    useEffect(() => {
+        if (!data && team) {
+            getSlackEmbeddingsAsync({datastore, team, path}).then(data => {
+                global_embedding_data[path] = data;
+                setData(data);
+            });
+        }
+    }, [team, path]);
+    return data;
+}
+
+export function useSlackMessageEmbeddings({channelKey}) {
+    return channelKey && useSlackEmbeddings('channel/' + channelKey + '/messageEmbedding');
+}
+
+
+var global_slack_data = {};
+
+export function useSlackContent(path) {
+    const team = useGlobalProperty('team');
+    const datastore = useDatastore();
+    const [data, setData] = useState(global_slack_data[path]);
+    useEffect(() => {
+        if (!data && team) {
+            getSlackContentAsync({datastore, team, path}).then(data => {
+                global_slack_data[path] = data;
+                setData(data);
+            });
+        }
+    }, [team, path]);
+    return data;
+}
+
+export function useSlackChannels() {
+    return useSlackContent('channelInfo');
+}
+    
+
+export function useSlackMessages({channelKey}) {
+    return useSlackContent('channel/' + channelKey + '/message');
+}
+
+export function useSlackUsers() {
+    return useSlackContent('users');
+}
 
 export async function getSlackContentAsync({datastore, team, path}) {
     return callServerApiAsync({datastore, component: 'slack', funcname: 'getContent', params: {team, path}});

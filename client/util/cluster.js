@@ -102,6 +102,35 @@ function createClusters(embeddings, centroids) {
     return clusters;
 }
 
+function weightedSumEmbeddings(embeddingA, embeddingB, weight) {
+    const result = [];
+    for (let i = 0; i < embeddingA.length; i++) {
+        result[i] = ((1-weight) * embeddingA[i]) + (weight * embeddingB[i]);
+    }
+    return result;
+}
+
+
+function addContextToShortMessageEmbeddings({embeddings, messages}) {
+    const sortedMessageKeys = Object.keys(messages || {}).sort((a, b) => messages[a].ts - messages[b].ts);
+    const mergedEmbeddings = {};
+    var prevEmbedding = null;
+    sortedMessageKeys.forEach(messageKey => {
+        const embedding = embeddings[messageKey];
+        if (!embedding) return;
+        const text = messages[messageKey]?.text;
+        const specialText = text.includes('has joined the channel') || text.includes('has left the channel') || text.includes('was added to the channel') || text.includes('was removed from the channel');
+        const shouldMerge = prevEmbedding && (specialText || text.length < 100);
+        const mergedEmbedding = shouldMerge ? weightedSumEmbeddings(prevEmbedding, embedding, 0.5) : embedding;
+        if (embedding) {
+            mergedEmbeddings[messageKey] = mergedEmbedding;            
+        }
+        prevEmbedding = embedding;
+    })
+    return mergedEmbeddings;
+}
+exports.addContextToShortMessageEmbeddings = addContextToShortMessageEmbeddings;
+
 function updateCentroids(embeddings, clusters, centroids) {
     clusters.forEach((clusterIndices, index) => {
         if (clusterIndices.length === 0) return;
