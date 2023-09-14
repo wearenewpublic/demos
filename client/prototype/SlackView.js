@@ -47,6 +47,8 @@ function ChannelScreen({channelKey}) {
     const datastore = useDatastore();
     const [inProgress, setInProgress] = useState(false);
 
+    if (!users || !messages || !embeddings) return null;
+
     async function onGetClusters() {
         setInProgress(true);
         setClusterNames({});

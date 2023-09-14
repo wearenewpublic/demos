@@ -20,6 +20,9 @@ const slackTimeFormat =
 export function SlackMessage({prevMessageKey, messageKey, authorLineWidget=null, onPress}) {
     const s = SlackMessageStyle;
     const {users, messages} = useContext(SlackContext);
+
+    if (!users) return null;
+
     const message = messages[messageKey];
     const prevMessage = messages?.[prevMessageKey];
     const user = users[message.user];
