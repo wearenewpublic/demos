@@ -241,6 +241,11 @@ export function usePersonaKey() {
     return useSessionData('personaKey');
 }
 
+export function usePersona() {
+    const personaKey = usePersonaKey();
+    return useObject('persona', personaKey);
+}
+
 export function useObject(typeName, key) {
     const {dataTree} = useData();
     return dataTree[typeName]?.[key];

@@ -25,6 +25,7 @@ import { deepClone } from "../util/util";
     name: 'Alice Adams',
     face: 'face9.jpeg',
     member: true,
+    admin: true,
     label: 'Admin'
   };
 
@@ -72,14 +73,12 @@ import { deepClone } from "../util/util";
     key: 'h',
     name: 'Hiroshi Hasegawa',
     face: 'face6.jpeg',
-    member: true
   };
 
-  export const personaIngrid = {
+  export const personaI = {
     key: 'i',
     name: 'Ingrid Ishida',
     face: 'face5.jpeg',
-    admin: true
   };
 
   export const personaJ = {
@@ -114,13 +113,13 @@ import { deepClone } from "../util/util";
 export const defaultPersona = 'a';
 
 export const defaultPersonaList = [personaA, personaB, personaC, personaD, personaE, personaF, 
-    personaG, personaH, personaIngrid,personaJ, personaK, personaL, personaRobo]
+    personaG, personaH, personaI,personaJ, personaK, personaL, personaRobo]
 
 export const memberPersonaList = [adminA, memberB, memberC, personaD, personaE, personaF,
-    personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+    personaG, personaH, personaI, personaJ, personaK, personaL, personaRobo]
 
 export const adminPersonaList = [adminA, personaB, personaC, personaD, personaE, personaF,
-      personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+    personaG, personaH, personaI, personaJ, personaK, personaL, personaRobo]
   
 
 

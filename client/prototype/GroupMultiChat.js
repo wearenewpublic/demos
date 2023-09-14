@@ -1,9 +1,9 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
-import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
-import { useCollection, useDatastore, useGlobalProperty, useObject, usePersonaKey } from "../util/datastore";
+import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
 import { expandDataList, expandUrl } from "../util/util";
 import { pushSubscreen } from "../util/navigate";
 import { PostInput, TopCommentInput } from "../component/replyinput";
@@ -13,7 +13,8 @@ import { QuietSystemMessage } from "../component/message";
 import { TranslatableLabel, languageFrench, useTranslation } from "../component/translation";
 import { godzilla_article_french } from "../translations/french/articles_french";
 import { TabBar } from "../component/tabs";
-import { Post, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
+import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export const GroupMultiChatPrototype = {
     key: 'groupmulti',
@@ -31,10 +32,19 @@ export const GroupMultiChatPrototype = {
     instance: [
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
             conversation: expandDataList([
-                {key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci'},
-                {key: 'mayor-safety', title: 'NYC Disaster Preparedness', group: 'mayor'},
-                {key: 'pro-monster', title: 'Monster Behavior Problems', group: 'pro'},
-                {key: 'friends', title: 'NYC Monster Attack', group: 'art'},
+                {
+                    key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci', 
+                    description: 'Monster attacks have increased significantly in recent years. Why is this happening and what can we do about it?'
+                },
+                {key: 'mayor-safety', title: 'NYC Disaster Preparedness', group: 'mayor',
+                    description: 'It is our responsibility to make sure New York City is robust against all plausable disaster scenarios, while being efficient with taxpayer money.'
+                },
+                {key: 'pro-monster', title: 'Monster Behavior Problems', group: 'pro',
+                    description: 'Sometimes our monster friends make mistakes. How can we help them behave better?'
+                },
+                {key: 'friends', title: 'NYC Monster Attack', group: 'art',
+                    description: 'A monster is attacking New York. We need to save our art.'
+                },
             ]),
             group: expandDataList([
                 {key: 'sci', name: 'Institute of Important Scientists', image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', slogan: 'Science is important'},
@@ -43,10 +53,16 @@ export const GroupMultiChatPrototype = {
                 {key: 'art', name: 'Brookly Funky Artists', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaSNAQ7aDjRIaxbKW-Aj8leH3tDJMxQ_6IRA&usqp=CAU', slogan: 'Art is life'},
             ]),
             post: expandDataList([
-                {isPublic: true, isAnon: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
-                {isPublic: true, isAnon: false, from: 'b', about: 'mayor-safety', text: 'We need to evacuate New York City and move everyone to New Jersey. Once New York is evacuted, we can bring in the national guard and use heavy weapons against the monster'},                
-                {isPublic: true, isAnon: true, from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
-                {isPublic: true, isAnon: false, from: 'd', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."}
+                {isPublic: true, article: true, from: 'a', about: 'sci-attack', photoUrl: 'godzilla_new_york.jpeg', text: 'Giant Radioactive Lizard Unleashes Chaos in Manhattan'},
+
+                {isPublic: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
+                {isPublic: true, from: 'b', about: 'mayor-safety', text: 'We need to evacuate New York City and move everyone to New Jersey. Once New York is evacuted, we can bring in the national guard and use heavy weapons against the monster'},                
+                {isPublic: true, from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
+                {isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
+                {preventPublic: true, from: 'a', about: 'pro-monster', text: 'I wonder if the monsters are attacking us because we are making too much noise?'},    
+                {from: 'b', about: 'pro-monster', text: 'I think the monsters are attacking us because they are hungry. We need to feed them.'},    
+                {from: 'f', about: 'pro-monster', text: 'I am a guest, so I might say dumb things'}
+
             ])
         },
     ]
@@ -73,7 +89,7 @@ function ConversationListEmbed() {
 }
 
 function ConversationPreview({conversation, embed}) {
-    const comments = useCollection('post', {filter: {about: conversation.key, isPublic: true}});
+    const comments = useCollection('post', {filter: {about: conversation.key, isPublic: true, article: undefined}});
     const group = useObject('group', conversation.group);
     const tComments = useTranslation('posts');
     const shownComments = embed ? [] : comments.slice(0,3);
@@ -97,36 +113,62 @@ function ConversationPreview({conversation, embed}) {
 }
 
 function CallToAction({children}) {
-    return <Text style={{fontWeight: 'bold', marginLeft: 4, marginTop: 4}}>
+    return <Text style={{fontWeight: 'bold', fontSize: 13, marginLeft: 4, marginTop: 4, textAlign: 'center'}}>
         {children}
     </Text>
 }
 
-
 function ConversationScreen({conversationKey}) {
+    const article = useGlobalProperty('article');
     const conversation = useObject('conversation', conversationKey);
     const group = useObject('group', conversation.group);
 
     return <ScrollableScreen grey maxWidth={null} pad={false} >
         <View style={{backgroundColor: 'white'}}>
-            <Narrow>
+            <Narrow >
                 <HorizBox center>
-                    <Image source={{uri: group.image}} style={{width: 40, height: 40, borderRadius: 10, marginRight: 8}} />
+                    <Image source={{uri: group.image}} style={{width: 24, height: 24, borderRadius: 10, marginRight: 4}} />
                     <View style={{flex: 1}}>
-                        <SmallTitle>{group.name}</SmallTitle>
-                        <BodyText>{group.slogan}</BodyText>
+                        <Text style={{fontWeight: '600'}}>{group.name}</Text>
+                        {/* <SmallTitle>{group.name}</SmallTitle> */}
+                        {/* <Text style={{color: '#666', fontSize: 13}}>{group.slogan}</Text> */}
                     </View>
                 </HorizBox>
-                <Pad size={16} />
+                {/* <Pad size={16} /> */}
                 <BigTitle>{conversation.title}</BigTitle>
+                <BodyText>{conversation.description}</BodyText>
+                <Pad size={16} />
+                <TranslatableLabel label='Articles' style={{fontSize: 12, fontWeight: 'bold'}} />
+                <ArticlePreview article={article} />
 
             </Narrow>
+
         </View>
 
-        <Narrow>
+
+
+        <Narrow pad={false}>
+            <PostInfoBox conversation={conversation} />
+            <Pad size={16} />
             <ConversationPosts conversation={conversation} />
         </Narrow>
     </ScrollableScreen>
+}
+
+function PostInfoBox({conversation}) {
+    const personaKey = usePersonaKey();
+    const persona = useObject('persona', personaKey);
+
+    if (!persona.member) {
+        return <View>
+                <Pad size={16} />
+                <InfoBox titleLabel='You are a guest' lines={[
+                'You can only see published posts, and posts you wrote yourself.',
+            ]} />
+        </View>  
+    } else {
+        return null;
+    }
 }
 
 
@@ -147,14 +189,34 @@ function ConversationPosts({conversation}) {
         />
 
         {filteredPosts.map(post => 
-            <Post key={post.key} post={post} onPress={() => pushSubscreen('post', {postKey: post.key})}
-                editWidgets={[AllowPublishToggle]}
+            <Post key={post.key} post={post} 
+                authorBling={GuestAuthorBling}
+                onComment={() => pushSubscreen('post', {postKey: post.key})}
+                getIsCommentVisible={getIsVisible} infoLineWidget={InfoLine}
+                editWidgets={[AllowPublishToggle]} numberOfLines={5} hasComments
+                actions={[PostActionLike, PostActionComment, PostActionEdit, PostActionPublish]}
                 topBling={post.isPublic && <Pill label='Published' />}
             />
         )}
     </View>
 
 }
+
+function InfoLine({post}) {
+    const persona = usePersona();
+    if (post.preventPublic || post.isPublic || (!persona.admin && post.from != persona.key)) {
+        return <TimeText time={post.time} />
+    } else {
+        return <HorizBox>
+            <TimeText time={post.time} />
+            <Pad />
+            <Text style={{fontSize: 12, color: '#999'}}>-</Text>
+            <Pad />
+            <TranslatableLabel label='Publishing allowed' style={{fontSize: 12, color: '#999'}} />
+        </HorizBox>
+    }
+}
+
 
 
 function PublicPostInfo({post}) {
@@ -175,7 +237,25 @@ function GroupScreen({groupKey}) {
 }
 
 function PostScreen({postKey}) {
-    return <BodyText>Post</BodyText>
+    const personaKey = usePersonaKey();
+    const persona = useObject('persona', personaKey);
+    const post = useObject('post', postKey);
+
+    const config = {
+        getIsVisible, authorBling: [GuestAuthorBling]
+    }
+
+    return <ScrollableScreen>
+        <Post post={post} actions={[PostActionLike, PostActionEdit]} editWidgets={[AllowPublishToggle]}/>        
+        <Pad size={16}/>        
+        <SmallTitleLabel label='Private Conversation'/>
+
+        {persona.member && <QuietSystemMessage center={false} label='Only members, and people you reply to can see your comments' /> }
+        {!persona.member && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see comments you wrote and their replies.']} /></PadBox>}
+    
+
+        <BasicComments about={postKey} config={config} />
+    </ScrollableScreen>
 }
 
 
@@ -197,11 +277,6 @@ function getIsVisible({datastore, comment}) {
 }
 
 function AllowPublishToggle({post, onPostChanged}) {
-    const personaKey = usePersonaKey();
-    const persona = useObject('persona', personaKey);
-    const name = persona.name;
-    const tAnonymous = useTranslation('Anonymous');
-
     return <View>
         <HorizBox center>
             <Switch value={!post.preventPublic} onValueChange={value => onPostChanged({...post, preventPublic: !value})} />
@@ -210,4 +285,30 @@ function AllowPublishToggle({post, onPostChanged}) {
         </HorizBox>
         <Pad/>
     </View>
+}
+
+export function PostActionPublish({post}) {
+    const persona = usePersona();
+    const datastore = useDatastore();
+
+    if (post.preventPublic || post.isPublic || !persona.admin) {
+        return null;
+    }
+
+    function onPublish() {
+        datastore.updateObject('post', post.key, {isPublic: true});
+    }
+    return <PostActionButton iconName='award' iconSet={FontAwesome5} label='Publish' onPress={onPublish} />
+}
+
+function ArticlePreview({article}) {
+    console.log('article', article);
+    return <Card pad={0} fitted>
+        <HorizBox center>
+        <Image source={{uri: expandUrl({url:article.photo, type:'photos'})}} style={{height: 56, width: 56, borderTopLeftRadius: 8, borderBottomLeftRadius: 8}} />
+        <PadBox vert={6}>
+            <Text numberOfLines={3} style={{width:150, fontSize: 13, fontWeight: '600'}}>{article.title}</Text>        
+        </PadBox>
+        </HorizBox>
+    </Card>
 }

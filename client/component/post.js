@@ -1,18 +1,21 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
+import { Clickable, HorizBox, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { AnonymousFace, UserFace } from "./userface";
 import { TranslatableLabel } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { pushSubscreen } from "../util/navigate";
-import { addKey, removeKey } from "../util/util";
+import { addKey, expandUrl, removeKey } from "../util/util";
 import { AutoSizeTextInput } from "./basics";
 import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
-export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children, onPress}) {
+export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], 
+        infoLineWidget=null, authorBling=null,
+        saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, 
+        onComment, topBling, children, onPress, numberOfLines, getIsCommentVisible=null}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
@@ -28,18 +31,21 @@ export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=
                 <UserFace userId={post.from} size={32} />
             }
             <View style={s.authorRight}>
-                <Text style={!authorHover ? s.authorName : [s.authorName, s.textHover]}>{authorName ?? user?.name}</Text>
-                <TimeText time={post.time} />
+                <HorizBox>
+                    <Text style={!authorHover ? s.authorName : [s.authorName, s.textHover]}>{authorName ?? user?.name}</Text>
+                    {authorBling && React.createElement(authorBling, {comment:post})}
+                </HorizBox>
+                {infoLineWidget ? React.createElement(infoLineWidget, {post: post}) : <TimeText time={post.time} />}
             </View>
         </MaybeClickable>
         {topBling ?
            <View style={{marginBottom: 8}}>{topBling}</View>
         : null} 
         {post.text ? 
-            <Text style={s.text}>{post.text}</Text>
+            <Text style={s.text} numberOfLines={numberOfLines}>{post.text}</Text>
         : null}
         {post.photoUrl ? 
-            <Image source={{uri: post.photoUrl}} style={{width: '100%', height: 200, marginTop: 8}} />
+            <Image source={{uri: expandUrl({url: post.photoUrl, type: 'photos'})}} style={{width: '100%', height: 200, marginTop: 8}} />
         : null}
         <LikesLine post={post} />
         {actions ? 
@@ -52,7 +58,7 @@ export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=
             </View>
         : null}
         {hasComments ? 
-            <PostCommentsPreview post={post} onPress={onComment} />
+            <PostCommentsPreview post={post} onPress={onComment} getIsCommentVisible={getIsCommentVisible} />
         : null}
         {children ? 
             <View style={{marginTop: childpad ? 12 : 0}}>
@@ -81,7 +87,8 @@ const PostStyle = StyleSheet.create({
     },
     authorName: {
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginRight: 6
     },
     textHover: {
         textDecorationLine: 'underline'
@@ -148,12 +155,14 @@ const PostEditorStyle = StyleSheet.create({
 })
 
 
-export function PostCommentsPreview({post, onPress}) {
+export function PostCommentsPreview({post, getIsCommentVisible, onPress}) {
     const s = PostCommentsPreviewStyle;
-    const allPostComments = useCollection('comment', {filter: {replyTo: post.key}});
+    const datastore = useDatastore();
+    // const allPostComments = useCollection('comment', {filter: {replyTo: post.key}});
     const topPostComments = useCollection('comment', {filter: {replyTo: post.key}, sortBy: 'time', reverse: true});
-    const commentCount = allPostComments.length;
-    const shownComment = topPostComments[0];
+    const filteredComments = getIsCommentVisible ? topPostComments.filter(comment => getIsCommentVisible({datastore, comment})) : topPostComments;
+    const commentCount = filteredComments.length;
+    const shownComment = filteredComments[0];
     if (commentCount == 0) return null;
     return <Clickable onPress={onPress} hoverStyle={s.hover}>
         <Separator pad={12} />
@@ -161,7 +170,7 @@ export function PostCommentsPreview({post, onPress}) {
             <CommentPreview comment={shownComment} />
         : null}
         {commentCount > 1 ?
-            <Text style={s.moreText}>View <PluralLabel count={commentCount} singular='more comment' plural='more comments' /></Text>
+            <Text style={s.moreText}>View <PluralLabel count={commentCount} singular='comment' plural='comments' /></Text>
         : null}
     </Clickable>
 }

@@ -26,9 +26,9 @@ export function WideScreen({children, pad}) {
     </View>
 }
 
-export function Narrow({children}) {
-    return <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
-        <View style={{maxWidth: 500, flexShrink: 1, flexGrow: 1, marginHorizontal: 8}}>
+export function Narrow({children, pad=true}) {
+    return <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: pad && 16}}>
+        <View style={{maxWidth: 500, flexShrink: 1, flexGrow: 1, marginHorizontal: pad && 8}}>
             {children}
         </View>
     </View>
@@ -151,8 +151,8 @@ const MiniTitleStyle = StyleSheet.create({
 
 
 
-export function SmallTitleLabel({label, formatParams}) {
-    return <TranslatableLabel style={{fontSize: 16, fontWeight: 'bold', marginBottom: 2}} 
+export function SmallTitleLabel({label, formatParams, fontSize = 16}) {
+    return <TranslatableLabel style={{fontSize, fontWeight: 'bold', marginBottom: 2}} 
         label={label} formatParams={formatParams} />
 }
 
@@ -654,3 +654,43 @@ const UserNameChipStyle = StyleSheet.create({
     }
 })
 
+export function InfoBox({titleLabel, lines}) {
+    const s = InfoBoxStyle;
+    return <View style={s.outer}>
+        <View style={s.box}>
+            <TranslatableLabel style={s.title} label={titleLabel} />
+            {lines.map((line, idx) => 
+                <TranslatableLabel key={idx} style={s.body} label={line} />
+            )}
+        </View>       
+    </View>
+}
+const InfoBoxStyle = StyleSheet.create({
+    outer: {
+        flexDirection: 'row',
+        justifyContent: 'center',  
+    },
+    box: {
+        flexGrow: 0,
+        flexShrink: 1,
+        backgroundColor: 'white',
+        borderRadius: 16,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginBottom: 2,
+        textAlign: 'center'
+    },
+    body: {
+        fontSize: 14,
+        marginTop: 2,
+        color: '#666',
+        textAlign: 'center',
+    }
+})
