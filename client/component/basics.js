@@ -1,6 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Markdown from "react-native-markdown-display";
 import { collapseDoubleSpaces, stripSingleLineBreaks } from "../util/util";
 import { FaceImage, UserFace } from "./userface";
@@ -10,10 +10,10 @@ import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
 import { useObject } from "../util/datastore";
 
 
-export function ScrollableScreen({children, grey, maxWidth=500}) {
+export function ScrollableScreen({children, grey, maxWidth=500, pad=true}) {
     return <ScrollView style={{backgroundColor: grey ? '#EFF2F5' : null}}>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16}}>
-            <View style={{maxWidth: maxWidth, flexShrink: 1, flexGrow: 1, marginHorizontal: 8}}>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: pad ? 16 :  null}}>
+            <View style={{maxWidth: maxWidth, flexShrink: 1, flexGrow: 1, marginHorizontal: pad ? 8 : null}}>
                 {children}
             </View>
         </View>

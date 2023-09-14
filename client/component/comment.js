@@ -159,6 +159,14 @@ export function GuestAuthorBling({comment}) {
     }
 }
 
+export function PublishedBling({comment}) {
+    if (comment.isPublic) {
+        return <Pill label='Published' style={{color: 'blue'}} />
+    } else {
+        return null;
+    }
+}
+
 
 
 
@@ -290,6 +298,29 @@ const CollapsedCommentStyle = StyleSheet.create({
     }
 });
 
+export function PreviewComment({comment, numberOfLines}) {
+    const s = PreviewCommentStyle;
+    const author = useObject('persona', comment.from);
+    return <View style={s.outer}>
+        <Text style={s.author}>{author?.name}</Text>
+        <Text numberOfLines={numberOfLines} style={s.text}>{comment.text}</Text>
+    </View>
+}
+const PreviewCommentStyle = StyleSheet.create({
+    author: {
+        fontWeight: 'bold',
+        fontSize: 12
+    },
+    outer: {
+        backgroundColor: '#eee',
+        borderRadius: 16,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        marginVertical: 4
+    }
+})
+
+
 function Replies({commentKey}) {
     const s = RepliesStyle;
     const datastore = useDatastore();
@@ -364,3 +395,4 @@ export function BasicComments({about = null, config={}}) {
         </CommentContext.Provider>
     </View>
 }
+
