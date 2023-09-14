@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
-import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, SectionTitleLabel, Separator, SmallTitle, WideScreen } from "../component/basics";
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
@@ -50,7 +50,7 @@ function ChannelScreen({channelKey}) {
     async function onGetClusters() {
         setInProgress(true);
         setClusterNames({});
-        const mergedEmbeddings = addContextToShortMessageEmbeddings({embeddings, messages});
+        // const mergedEmbeddings = addContextToShortMessageEmbeddings({embeddings, messages});
         // const {clusterToMessages, messageToCluster} = clusterWithKMeans(mergedEmbeddings, 10);
         const {clusterToMessages, messageToCluster} = clusterWithKMeans(embeddings, 10);
         setClusterMap(messageToCluster);
@@ -93,20 +93,23 @@ function ClusterWidget({messageKey}) {
 
 function MessageInfoPanel({messageKey}) {
     const {embeddings, messages} = useContext(SlackContext);
-    const [closest, setClosest] = useState([]);
+    // const [closest, setClosest] = useState([]);
 
-    useEffect(() => {
-        setClosest([])
-    }, [messageKey]);
+    // useEffect(() => {
+    //     setClosest([])
+    // }, [messageKey]);
 
     if (!messageKey || !embeddings) return null;
     const embedding = embeddings[messageKey];
 
+    const closest = sortEmbeddingsByDistance(messageKey, embedding, embeddings);
 
-    function onGetClosestMessages() {
-        const closest = sortEmbeddingsByDistance(messageKey, embedding, embeddings);
-        setClosest(closest);
-    }
+
+
+    // function onGetClosestMessages() {
+    //     const closest = sortEmbeddingsByDistance(messageKey, embedding, embeddings);
+    //     setClosest(closest);
+    // }
 
 
     return <View style={{flex: 1, borderLeftColor: '#ddd', borderLeftWidth: 1, marginLeft: 8, paddingLeft: 16, paddingRight: 16}}>
@@ -114,8 +117,10 @@ function MessageInfoPanel({messageKey}) {
             <Narrow>
                 <SlackMessage messageKey={messageKey} />
                 <OneLineTextInput value={embedding ? embedding.join(', ') : ''} />
-                <Pad />
-                <PrimaryButton label="Get Closest" onPress={() => onGetClosestMessages()} />
+                <Pad size={32} />
+                {/* <Separator /> */}
+                <Center><SectionTitleLabel label='Related Messages' /></Center>
+                {/* <PrimaryButton label="Get Closest" onPress={() => onGetClosestMessages()} /> */}
                 {
                     closest.map(({key}) =>
                         <SlackMessage key={key} messageKey={key} />
