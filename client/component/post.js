@@ -12,7 +12,7 @@ import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
 
-export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
+export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children, onPress}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
@@ -20,7 +20,7 @@ export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=
     if (editedPost == post.key) {
         return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} saveHandler={saveHandler} fitted={fitted} noCard={noCard} />
     }
-    return <MaybeCard fitted={fitted} isCard={!noCard}>
+    return <MaybeCard fitted={fitted} isCard={!noCard} onPress={onPress}>
         <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor} style={s.authorBox} onHoverChange={setAuthorHover} >
             {anonymousFace ? 
                 <AnonymousFace size={32} />

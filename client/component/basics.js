@@ -76,9 +76,9 @@ const CardStyle = StyleSheet.create({
     }
 })
 
-export function MaybeCard({children, isCard}) {
+export function MaybeCard({children, isCard, onPress}) {
     if (isCard) {
-        return <Card>{children}</Card>
+        return <Card onPress={onPress}>{children}</Card>
     } else {
         return children;
     }

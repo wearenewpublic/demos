@@ -106,21 +106,6 @@ function CallToAction({children}) {
 function ConversationScreen({conversationKey}) {
     const conversation = useObject('conversation', conversationKey);
     const group = useObject('group', conversation.group);
-    const [selectedTab, setSelectedTab] = useState('public');
-
-    // const commentConfig = {
-    //     getIsVisible, 
-    //     authorBling: [GuestAuthorBling, PublishedBling],
-    //     replyTopWidgets: [AllowPublishToggle]
-    // }
-
-    function postHandler({datastore, post}) {
-        console.log('postHandler', post);
-        datastore.addObject('post', {...post, about: conversation.key});
-        console.log('added', {...post, about: conversation.key})
-        setSelectedTab('private');
-    }
-
 
     return <ScrollableScreen grey maxWidth={null} pad={false} >
         <View style={{backgroundColor: 'white'}}>
@@ -136,57 +121,41 @@ function ConversationScreen({conversationKey}) {
                 <BigTitle>{conversation.title}</BigTitle>
 
             </Narrow>
-            <TabBar selectedTab={selectedTab} onSelectTab={setSelectedTab} 
-                    tabs={[
-                        {key: 'public', label: 'Published Posts'}, 
-                        {key: 'private', label: 'Private Conversation'},
-                    ]} />
         </View>
 
         <Narrow>
-            {selectedTab == 'public' && <PublicPosts conversation={conversation} postHandler={postHandler} />}
-            {selectedTab == 'private' && <PrivatePosts conversation={conversation} />}
+            <ConversationPosts conversation={conversation} />
         </Narrow>
-
-        {/* <BasicComments about={conversationKey} config={commentConfig} /> */}
     </ScrollableScreen>
 }
 
 
-function PublicPosts({conversation, postHandler}) {
-    if (!conversation) return null;
-    const posts = useCollection('post', {filter: {about: conversation.key, isPublic: true}, sortBy: 'time', reverse: true});
+function ConversationPosts({conversation}) {
+    const personaKey = usePersonaKey();
+    const persona = useObject('persona', personaKey);
+    const posts = useCollection('post', {filter: {about: conversation.key}, sortBy: 'time', reverse: true});
+
+    const filteredPosts = posts.filter(post => post.isPublic || post.from == personaKey || persona.member);
+
+    function postHandler({datastore, post}) {
+        datastore.addObject('post', {...post, about: conversation.key});
+    }
 
     return <View>
         <PostInput placeholder='What do you have to contribute?' postHandler={postHandler}
              bottomWidgets={[AllowPublishToggle, PublicPostInfo]}
         />
 
-        {posts.map(post => 
-            <Post key={post.key} post={post} 
+        {filteredPosts.map(post => 
+            <Post key={post.key} post={post} onPress={() => pushSubscreen('post', {postKey: post.key})}
                 editWidgets={[AllowPublishToggle]}
-                actions={[PostActionLike, PostActionEdit, PostActionComment]}                
-            />
-        )}
-    </View>
-
-}
-
-function PrivatePosts({conversation, postHandler}) {
-    const posts = useCollection('post', {filter: {about: conversation.key}, sortBy: 'time', reverse: true});
-
-    return <View>
-        <PostInput bottomWidgets={[AllowPublishToggle]} placeholder='What do you have to contribute?' postHandler={postHandler}/>
-
-        {posts.map(post => 
-            <Post key={post.key} post={post} 
                 topBling={post.isPublic && <Pill label='Published' />}
-                editWidgets={[AllowPublishToggle]}
-                actions={[PostActionLike, PostActionEdit, PostActionComment]}                
             />
         )}
     </View>
+
 }
+
 
 function PublicPostInfo({post}) {
     if (post.preventPublic) {
