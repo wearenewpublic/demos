@@ -1,7 +1,7 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
-import { godzilla_article } from "../data/articles/godzilla";
+import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_groups } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
 import { expandDataList, expandUrl } from "../util/util";
@@ -11,7 +11,7 @@ import { BasicComments, Comment, CommentContext, GuestAuthorBling, PreviewCommen
 import { useContext, useEffect, useState } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { TranslatableLabel, languageFrench, useTranslation } from "../component/translation";
-import { godzilla_article_french } from "../translations/french/articles_french";
+import { godzilla_article_french, godzilla_conversation_post_comments_french, godzilla_conversation_posts_french, godzilla_conversations_french, godzilla_groups_french } from "../translations/french/articles_french";
 import { TabBar } from "../component/tabs";
 import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -32,45 +32,17 @@ export const GroupMultiChatPrototype = {
     },
     instance: [
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
-            conversation: expandDataList([
-                {
-                    key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci', 
-                    description: 'Monster attacks have increased significantly in recent years. Why is this happening and what can we do about it?'
-                },
-                {key: 'mayor-safety', title: 'NYC Disaster Preparedness', group: 'mayor',
-                    description: 'It is our responsibility to make sure New York City is robust against all plausable disaster scenarios, while being efficient with taxpayer money.'
-                },
-                {key: 'pro-monster', title: 'Monster Behavior Problems', group: 'pro',
-                    description: 'Sometimes our monster friends make mistakes. How can we help them behave better?'
-                },
-                {key: 'friends', title: 'NYC Monster Attack', group: 'art',
-                    description: 'A monster is attacking New York. We need to save our art.'
-                },
-            ]),
-            group: expandDataList([
-                {key: 'sci', name: 'Institute of Important Scientists', image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', slogan: 'Science is important and so are we'},
-                {key: 'mayor', name: "New York City Mayor's Office", image: 'https://media.licdn.com/dms/image/C4D0BAQHr6j_Fsv98FQ/company-logo_200_200/0/1523986359131?e=2147483647&v=beta&t=JF2YNkOErNs78xgp7KY5JFVE2HdVAfJrU68xwZKLpRA', slogan: 'We are here to help'},
-                {key: 'pro', name: 'Monster Protection Society', image: 'https://img.freepik.com/premium-photo/colorful-furry-monster-with-horns-horns-its-head-generative-ai_900321-42040.jpg', slogan: 'Monsters are our friends'},
-                {key: 'art', name: 'Brookly Funky Artists', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaSNAQ7aDjRIaxbKW-Aj8leH3tDJMxQ_6IRA&usqp=CAU', slogan: 'Art is life'},
-            ]),
-            post: expandDataList([
-                {isPublic: true, article: true, from: 'b', about: 'sci-attack', article: godzilla_article},
-                {isPublic: true, article: true, from: 'c', about: 'mayor-safety', article: godzilla_article},
-                {isPublic: true, article: true, from: 'b', about: 'pro-monster', article: godzilla_article},
-                {isPublic: true, article: true, from: 'a', about: 'friends', article: godzilla_article},
-
-
-                {isPublic: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
-                {isPublic: true, from: 'b', about: 'mayor-safety', text: 'We need to evacuate New York City and move everyone to New Jersey. Once New York is evacuted, we can bring in the national guard and use heavy weapons against the monster'},                
-                {isPublic: true, from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
-                {isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
-                {preventPublic: true, from: 'a', about: 'pro-monster', text: 'I wonder if the monsters are attacking us because we are making too much noise?'},    
-                {from: 'b', about: 'pro-monster', text: 'I think the monsters are attacking us because they are hungry. We need to feed them.'},    
-                {key: 'dumb', from: 'f', about: 'pro-monster', text: 'I am a guest, so I might say dumb things'}
-            ]),
-            comment: expandDataList([
-                {from: 'a', replyTo: 'dumb', text: 'That is okay. This is a friendly private space.'}
-            ])
+            conversation: expandDataList(godzilla_conversations),
+            group: expandDataList(godzilla_groups),
+            post: expandDataList(godzilla_conversation_posts),
+            comment: expandDataList(godzilla_conversation_post_comments)
+        },
+        {key: 'godzilla-french', name: 'Godzilla Article (French)', article: godzilla_article_french,
+            language: languageFrench,
+            conversation: expandDataList(godzilla_conversations_french),
+            group: expandDataList(godzilla_groups_french),
+            post: expandDataList(godzilla_conversation_posts_french),
+            comment: expandDataList(godzilla_conversation_post_comments_french)
         },
     ]
 }
@@ -129,20 +101,12 @@ function ConversationScreen({conversationKey}) {
     const article = useGlobalProperty('article');
     const conversation = useObject('conversation', conversationKey);
     const group = useObject('group', conversation.group);
+    const persona = usePersona();
 
     return <ScrollableScreen grey maxWidth={null} pad={false} >
         <View style={{backgroundColor: 'white'}}>
             <Narrow >
-                <HoverRegion onPress={() => pushSubscreen('group', {groupKey:conversation.group})}>
-                    <HorizBox center>
-                        <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
-                        <View style={{flex: 1}}>
-                            {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
-                            <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
-                            <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
-                        </View>
-                    </HorizBox>
-                </HoverRegion>
+                <GroupPromo group={group} />
                 <Pad size={8} />
                 <BigTitle>{conversation.title}</BigTitle>
                 <BodyText>{conversation.description}</BodyText>
@@ -150,8 +114,10 @@ function ConversationScreen({conversationKey}) {
             </Narrow>
         </View>
 
-        <Narrow pad={false}>
-            <PostInfoBox conversation={conversation} />
+        <Narrow>
+            {persona.member && <InfoBox titleLabel='You are a member' lines={['You can see all posts']} />}
+            {!persona.member && <InfoBox titleLabel='You are a guest' lines={['You can only see published posts, and posts you wrote yourself']} />}
+            {/* <PostInfoBox conversation={conversation} /> */}
             <Pad size={16} />
             <ConversationPosts conversation={conversation} />
             <Pad size={32} />
@@ -159,21 +125,20 @@ function ConversationScreen({conversationKey}) {
     </ScrollableScreen>
 }
 
-function PostInfoBox({conversation}) {
-    const personaKey = usePersonaKey();
-    const persona = useObject('persona', personaKey);
 
-    if (!persona.member) {
-        return <View>
-                <Pad size={16} />
-                <InfoBox titleLabel='You are a guest' lines={[
-                'You can only see published posts, and posts you wrote yourself.',
-            ]} />
-        </View>  
-    } else {
-        return null;
-    }
+function GroupPromo({group}) {
+    return <HoverRegion onPress={() => pushSubscreen('group', {groupKey:group.key})}>
+        <HorizBox center>
+            <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
+            <View style={{flex: 1}}>
+                {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
+                <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
+                <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
+            </View>
+        </HorizBox>
+    </HoverRegion>
 }
+
 
 
 function ConversationPosts({conversation}) {
@@ -225,7 +190,7 @@ function InfoLine({post}) {
 
 function PublicPostInfo({post}) {
     if (post.preventPublic) {
-        return <QuietSystemMessage label='Your post will only be visible to group members.' />
+        return <QuietSystemMessage label='Your post will only be visible to group members' />
     } else {
         return <QuietSystemMessage label='Your post will initially be private to the group, but admins can choose to make your post public' />
     }
@@ -238,8 +203,6 @@ function GroupScreen({groupKey}) {
     const conversations = useCollection('conversation', {filter: {group: groupKey}});
     const leaders = useCollection('persona', {filter: {admin: true}});
     const members = useCollection('persona', {filter: {member: true}});
-
-    console.log('members', members);
 
     useEffect(() => {
         if (persona.member) {
@@ -261,7 +224,7 @@ function GroupScreen({groupKey}) {
         </HorizBox>
 
         <Pad size={32} />
-        <TabBar tabs={[{key: 'about', label: 'About'}, {key: 'members', label: 'Members'}, {key: 'discussion', label: 'Discussion'}, ,]} selectedTab={tab} onSelectTab={setTab} />
+        <TabBar tabs={[{key: 'about', label: 'About'}, {key: 'members', label: 'Members'}, {key: 'discussion', label: 'Discussion'}]} selectedTab={tab} onSelectTab={setTab} />
         <Pad size={32} />
 
         {tab == 'discussion' && 
@@ -289,25 +252,29 @@ function PostScreen({postKey}) {
     const personaKey = usePersonaKey();
     const persona = useObject('persona', personaKey);
     const post = useObject('post', postKey);
+    // const conversation = useObject('conversation', post.about);
+    // const group = useObject('group', conversation.group);
 
     const config = {
         getIsVisible: post.from != personaKey && getIsVisible, authorBling: [GuestAuthorBling]
     }
 
     return <ScrollableScreen>
+        {/* <PadBox vert={0}><GroupPromo group={group} /></PadBox>
+        <Pad /> */}
         <Post post={post} actions={[PostActionLike, PostActionEdit, PostActionPublish]} editWidgets={[AllowPublishToggle]}
-            topBling={post.isPublic && <Pill label='Published' />} authorBling={GuestAuthorBling}
- 
-
+            topBling={post.isPublic && <Pill label='Published' />} authorBling={GuestAuthorBling} infoLineWidget={InfoLine}
        />        
         {/* <Pad size={16}/>         */}
-        {!persona.member && post.from != personaKey && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see your comments and their replies.']} /></PadBox>}    
-        {!persona.member && post.from == personaKey && <PadBox horiz={0}><InfoBox titleLabel='You wrote this post' lines={['As post author, you can see all comments about your post.']} /></PadBox>}    
+        {!persona.member && post.from != personaKey && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see your comments and their replies']} /></PadBox>}    
+        {persona.member && <PadBox horiz={0}><InfoBox titleLabel='You are a member' lines={['You can see all comments']} /></PadBox>}    
+
+        {!persona.member && post.from == personaKey && <PadBox horiz={0}><InfoBox titleLabel='You wrote this post' lines={['As post author, you can see all comments about your post']} /></PadBox>}    
 
         <Pad size={16} />
         <SmallTitleLabel label='Private Conversation'/>
 
-        {persona.member && <QuietSystemMessage center={false} label='Only members and people your reply to can see your comments' /> }
+        {/* {persona.member && <QuietSystemMessage center={false} label='Only members and people your reply to can see your comments' /> } */}
 
 
         <BasicComments about={postKey} config={config} />

@@ -45,3 +45,76 @@ export const godzilla_comments_french = [
     {replyTo: 'prevent', from: 'a', text: "Nous devrions construire un mur géant autour de la ville pour empêcher les monstres d'entrer."},
     {replyTo: 'future', from: 'b', text: "Je pense que cela était un événement isolé. Je ne pense pas que nous devrions nous inquiéter des attaques futures. Je me base sur le fait qu'il n'y a pas eu d'autres attaques de monstres géants au cours des 50 dernières années.\n\nEn fait, je pense que nous pourrions simplement nous imaginer celle-ci."},
 ]
+
+export const godzilla_conversations_french = [
+    {
+        key: 'sci-attack', 
+        title: 'Attaques de Monstres Géants', 
+        group: 'sci', 
+        description: 'Les attaques de monstres ont considérablement augmenté ces dernières années. Pourquoi cela se produit-il et que pouvons-nous faire à ce sujet?'
+    },
+    {
+        key: 'mayor-safety', 
+        title: 'Préparation aux Catastrophes à NYC', 
+        group: 'mayor',
+        description: "Il est de notre responsabilité de s'assurer que New York est solide face à tous les scénarios de catastrophe plausibles, tout en étant efficace avec l'argent des contribuables."
+    },
+    {
+        key: 'pro-monster', 
+        title: 'Problèmes de Comportement des Monstres', 
+        group: 'pro',
+        description: 'Parfois, nos amis monstres font des erreurs. Comment pouvons-nous les aider à mieux se comporter?'
+    },
+    {
+        key: 'friends', 
+        title: 'Attaque de Monstre à NYC', 
+        group: 'art',
+        description: 'Un monstre attaque New York. Nous devons sauver notre art.'
+    },
+]
+
+export const godzilla_groups_french = [
+    {
+        key: 'sci', 
+        name: 'Institut des Scientifiques Importants', 
+        image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', 
+        slogan: 'La science est importante et nous le sommes aussi'
+    },
+    {
+        key: 'mayor', 
+        name: "Bureau du Maire de New York", 
+        image: 'https://media.licdn.com/dms/image/C4D0BAQHr6j_Fsv98FQ/company-logo_200_200/0/1523986359131?e=2147483647&v=beta&t=JF2YNkOErNs78xgp7KY5JFVE2HdVAfJrU68xwZKLpRA', 
+        slogan: 'Nous sommes là pour aider'
+    },
+    {
+        key: 'pro', 
+        name: 'Société de Protection des Monstres', 
+        image: 'https://img.freepik.com/premium-photo/colorful-furry-monster-with-horns-horns-its-head-generative-ai_900321-42040.jpg', 
+        slogan: 'Les monstres sont nos amis'
+    },
+    {
+        key: 'art', 
+        name: 'Artistes Funky de Brooklyn', 
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaSNAQ7aDjRIaxbKW-Aj8leH3tDJMxQ_6IRA&usqp=CAU', 
+        slogan: "L’art, c’est la vie"
+    },
+]
+
+export const godzilla_conversation_posts_french = 
+[
+    {isPublic: true, article: true, from: 'b', about: 'sci-attack', article: godzilla_article_french},
+    {isPublic: true, article: true, from: 'c', about: 'mayor-safety', article: godzilla_article_french},
+    {isPublic: true, article: true, from: 'b', about: 'pro-monster', article: godzilla_article_french},
+    {isPublic: true, article: true, from: 'a', about: 'friends', article: godzilla_article_french},
+
+    {isPublic: true, from: 'a', about: 'sci-attack', text: 'Les attaques de monstres ont augmenté de 50% au cours des 10 dernières années. Nous devons étudier les monstres pour comprendre pourquoi ils nous attaquent.'},
+    {isPublic: true, from: 'b', about: 'mayor-safety', text: 'Nous devons évacuer New York et déplacer tout le monde au New Jersey. Une fois New York évacué, nous pouvons faire appel à la garde nationale et utiliser des armes lourdes contre le monstre.'},                
+    {isPublic: true, from: 'c', about: 'friends', text: "Notre studio a été complètement mangé. Tout notre art est dans l'estomac de ce monstre."},
+    {key: 'fault', isPublic: true, from: 'c', about: 'pro-monster', text: "Les attaques de monstres géants sont la faute des humains, pas des monstres. Nous devons arrêter de polluer les océans et cesser de construire des centrales nucléaires."},
+
+    {preventPublic: true, from: 'a', about: 'pro-monster', text: 'Ce post n’a pas été publié, donc seuls les membres peuvent le voir'}
+]
+
+export const godzilla_conversation_post_comments_french = [
+    {from: 'b', replyTo: 'fault', text: 'Seuls les membres peuvent voir ce commentaire'}
+]
