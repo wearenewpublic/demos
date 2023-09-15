@@ -81,7 +81,7 @@ export function SemiAnonymousScreen() {
 }
 
 function getIsPublic({mePersona, authorPersona, comment}) {
-    return comment?.public || authorPersona?.member || mePersona?.member;
+    return comment?.public || /* authorPersona?.member ||*/ mePersona?.member;
 }
 
 function AuthorName({comment}) {
@@ -95,7 +95,7 @@ function AuthorName({comment}) {
     } else if (comment?.from == personaKey) {
         return <TranslatableLabel label='You Semi-Anonymously' />;
     } else {
-        return <TranslatableLabel label='Anonymous Guest' />;
+        return <TranslatableLabel label='Anonymous' />;
     }
 }
 
