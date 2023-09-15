@@ -115,13 +115,13 @@ function AuthorFace({comment, faint}) {
 function SemiAnonymousExplain() {
     const personaKey = usePersonaKey();
     const userIsMember = useObject('persona', personaKey)?.member;
-    if (userIsMember) {
-        return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage label='As a member, your identity is always public' />
-        </PadBox>
-    } else {
+    // if (userIsMember) {
+    //     return <PadBox vert={0} horiz={16} >
+    //         <QuietSystemMessage label='As a member, your identity is always public' />
+    //     </PadBox>
+    // } else {
         return <PadBox vert={0} horiz={16} >
             <QuietSystemMessage label='Group members will see your name, but you will be anonymous to everyone else'/>
         </PadBox>
-    }
+    // }
 }
