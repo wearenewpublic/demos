@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, HorizBox, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
+import { Card, Clickable, HorizBox, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { AnonymousFace, UserFace } from "./userface";
 import { TranslatableLabel } from "./translation";
@@ -47,6 +47,9 @@ export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=
         {post.photoUrl ? 
             <Image source={{uri: expandUrl({url: post.photoUrl, type: 'photos'})}} style={{width: '100%', height: 200, marginTop: 8}} />
         : null}
+        {post.article &&
+            <PostArticlePreview article={post.article} />
+        }
         <LikesLine post={post} />
         {actions ? 
             <View>
@@ -100,6 +103,29 @@ const PostStyle = StyleSheet.create({
         color: '#444'
     }
 })
+
+function PostArticlePreview({article}) {
+    const s = PostArticlePreviewStyle;
+    return <View style={s.outer}>
+        <Image source={{uri: expandUrl({url: article.photo, type: 'photos'})}} style={{width: '100%', height: 200}} />
+        <Text style={s.title}>{article.title}</Text>
+    </View>
+}
+const PostArticlePreviewStyle = StyleSheet.create({
+    outer: {
+        borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
+        shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 0.5, elevation: 1,
+        backgroundColor: '#fff',
+        marginTop: 4
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 8,
+     }
+})
+
 
 export function PostEditor({postKey, oldPostData, editWidgets, saveHandler, fitted=false, noCard=false}) {
     const s = PostEditorStyle;

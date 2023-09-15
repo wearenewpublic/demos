@@ -47,13 +47,17 @@ export const GroupMultiChatPrototype = {
                 },
             ]),
             group: expandDataList([
-                {key: 'sci', name: 'Institute of Important Scientists', image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', slogan: 'Science is important'},
+                {key: 'sci', name: 'Institute of Important Scientists', image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', slogan: 'Science is important and so are we'},
                 {key: 'mayor', name: "New York City Mayor's Office", image: 'https://media.licdn.com/dms/image/C4D0BAQHr6j_Fsv98FQ/company-logo_200_200/0/1523986359131?e=2147483647&v=beta&t=JF2YNkOErNs78xgp7KY5JFVE2HdVAfJrU68xwZKLpRA', slogan: 'We are here to help'},
                 {key: 'pro', name: 'Monster Protection Society', image: 'https://img.freepik.com/premium-photo/colorful-furry-monster-with-horns-horns-its-head-generative-ai_900321-42040.jpg', slogan: 'Monsters are our friends'},
                 {key: 'art', name: 'Brookly Funky Artists', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaSNAQ7aDjRIaxbKW-Aj8leH3tDJMxQ_6IRA&usqp=CAU', slogan: 'Art is life'},
             ]),
             post: expandDataList([
-                {isPublic: true, article: true, from: 'a', about: 'sci-attack', photoUrl: 'godzilla_new_york.jpeg', text: 'Giant Radioactive Lizard Unleashes Chaos in Manhattan'},
+                {isPublic: true, article: true, from: 'b', about: 'sci-attack', article: godzilla_article},
+                {isPublic: true, article: true, from: 'c', about: 'mayor-safety', article: godzilla_article},
+                {isPublic: true, article: true, from: 'b', about: 'pro-monster', article: godzilla_article},
+                {isPublic: true, article: true, from: 'a', about: 'friends', article: godzilla_article},
+
 
                 {isPublic: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
                 {isPublic: true, from: 'b', about: 'mayor-safety', text: 'We need to evacuate New York City and move everyone to New Jersey. Once New York is evacuted, we can bring in the national guard and use heavy weapons against the monster'},                
@@ -127,22 +131,18 @@ function ConversationScreen({conversationKey}) {
         <View style={{backgroundColor: 'white'}}>
             <Narrow >
                 <HorizBox center>
-                    <Image source={{uri: group.image}} style={{width: 24, height: 24, borderRadius: 10, marginRight: 4}} />
+                    <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
                     <View style={{flex: 1}}>
-                        <Text style={{fontWeight: '600'}}>{group.name}</Text>
-                        {/* <SmallTitle>{group.name}</SmallTitle> */}
-                        {/* <Text style={{color: '#666', fontSize: 13}}>{group.slogan}</Text> */}
+                        {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
+                        <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
+                        <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
                     </View>
                 </HorizBox>
-                {/* <Pad size={16} /> */}
+                <Pad size={8} />
                 <BigTitle>{conversation.title}</BigTitle>
                 <BodyText>{conversation.description}</BodyText>
-                <Pad size={16} />
-                <TranslatableLabel label='Articles' style={{fontSize: 12, fontWeight: 'bold'}} />
-                <ArticlePreview article={article} />
-
+                <Pad size={8} />
             </Narrow>
-
         </View>
 
 
@@ -151,6 +151,7 @@ function ConversationScreen({conversationKey}) {
             <PostInfoBox conversation={conversation} />
             <Pad size={16} />
             <ConversationPosts conversation={conversation} />
+            <Pad size={32} />
         </Narrow>
     </ScrollableScreen>
 }
@@ -299,16 +300,4 @@ export function PostActionPublish({post}) {
         datastore.updateObject('post', post.key, {isPublic: true});
     }
     return <PostActionButton iconName='award' iconSet={FontAwesome5} label='Publish' onPress={onPublish} />
-}
-
-function ArticlePreview({article}) {
-    console.log('article', article);
-    return <Card pad={0} fitted>
-        <HorizBox center>
-        <Image source={{uri: expandUrl({url:article.photo, type:'photos'})}} style={{height: 56, width: 56, borderTopLeftRadius: 8, borderBottomLeftRadius: 8}} />
-        <PadBox vert={6}>
-            <Text numberOfLines={3} style={{width:150, fontSize: 13, fontWeight: '600'}}>{article.title}</Text>        
-        </PadBox>
-        </HorizBox>
-    </Card>
 }
