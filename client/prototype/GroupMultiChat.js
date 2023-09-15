@@ -1,6 +1,6 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
-import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
+import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
@@ -8,13 +8,14 @@ import { expandDataList, expandUrl } from "../util/util";
 import { pushSubscreen } from "../util/navigate";
 import { PostInput, TopCommentInput } from "../component/replyinput";
 import { BasicComments, Comment, CommentContext, GuestAuthorBling, PreviewComment, PublishedBling } from "../component/comment";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { TranslatableLabel, languageFrench, useTranslation } from "../component/translation";
 import { godzilla_article_french } from "../translations/french/articles_french";
 import { TabBar } from "../component/tabs";
 import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { UserFace } from "../component/userface";
 
 export const GroupMultiChatPrototype = {
     key: 'groupmulti',
@@ -132,14 +133,16 @@ function ConversationScreen({conversationKey}) {
     return <ScrollableScreen grey maxWidth={null} pad={false} >
         <View style={{backgroundColor: 'white'}}>
             <Narrow >
-                <HorizBox center>
-                    <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
-                    <View style={{flex: 1}}>
-                        {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
-                        <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
-                        <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
-                    </View>
-                </HorizBox>
+                <HoverRegion onPress={() => pushSubscreen('group', {groupKey:conversation.group})}>
+                    <HorizBox center>
+                        <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
+                        <View style={{flex: 1}}>
+                            {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
+                            <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
+                            <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
+                        </View>
+                    </HorizBox>
+                </HoverRegion>
                 <Pad size={8} />
                 <BigTitle>{conversation.title}</BigTitle>
                 <BodyText>{conversation.description}</BodyText>
@@ -228,13 +231,58 @@ function PublicPostInfo({post}) {
     }
 }
 
-function ArticleList({conversation}) {
-    return <BodyText>Articles</BodyText>
-}
-
-
 function GroupScreen({groupKey}) {
-    return <BodyText>Not Yet</BodyText>
+    const persona = usePersona();
+    const group = useObject('group', groupKey);
+    const [tab, setTab] = useState(null);
+    const conversations = useCollection('conversation', {filter: {group: groupKey}});
+    const leaders = useCollection('persona', {filter: {admin: true}});
+    const members = useCollection('persona', {filter: {member: true}});
+
+    console.log('members', members);
+
+    useEffect(() => {
+        if (persona.member) {
+            setTab('discussion');
+        } else {
+            setTab('about');
+        }
+    }, [persona, groupKey])
+
+
+    return <ScrollableScreen>
+        <HorizBox center>
+            <Image source={{uri: group.image}} style={{width: 64, height: 64, borderRadius: 10, marginRight: 4}} />
+            <View style={{flex: 1}}>
+                {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
+                <Text style={{fontWeight: 'bold', fontSize: 24}}>{group.name}</Text>
+                <Text style={{color: '#666', fontSize: 15}}>{group.slogan}</Text>
+            </View>
+        </HorizBox>
+
+        <Pad size={32} />
+        <TabBar tabs={[{key: 'about', label: 'About'}, {key: 'members', label: 'Members'}, {key: 'discussion', label: 'Discussion'}, ,]} selectedTab={tab} onSelectTab={setTab} />
+        <Pad size={32} />
+
+        {tab == 'discussion' && 
+            conversations.map(conversation =>
+                <ConversationPreview key={conversation.key} conversation={conversation} />
+            )
+        }
+        {tab == 'members' && 
+            members.map(member =>
+                <Card key={member.key}>
+                    <HorizBox center>
+                        <UserFace userId={member.key} size={40} />
+                        <Pad />
+                        <SmallTitle pad={false} >{member.name}</SmallTitle>
+                    </HorizBox>
+                </Card>
+            )
+        }
+
+    </ScrollableScreen>
+
 }
 
 function PostScreen({postKey}) {

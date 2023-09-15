@@ -17,7 +17,6 @@ import { deepClone } from "../util/util";
     key: 'c',
     name: 'Camila Costa',
     face: 'face7.jpeg',
-    member: true
   };
 
   export const adminA = {

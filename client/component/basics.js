@@ -53,11 +53,11 @@ const SectionBoxStyle = StyleSheet.create({
 });
 
 
-export function Card({children, onPress, fitted=false, vMargin=10, pad=10}) {
+export function Card({children, onPress, fitted=false, vMargin=10, hMargin=10, pad=10}) {
     const s = CardStyle;
 
     return <MaybeClickable onPress={onPress} isClickable={onPress}
-        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin}, {padding: pad}]} 
+        style={[s.card, fitted ? {alignSelf: 'flex-start'} : null, {marginVertical: vMargin, marginHorizontal: hMargin}, {padding: pad}]} 
         hoverStyle={s.hover} >
             {children}
     </MaybeClickable>
@@ -83,6 +83,26 @@ export function MaybeCard({children, isCard, onPress}) {
         return children;
     }
 }
+
+export function HoverRegion({onPress, children}) {
+    const s = HoverRegionStyle;
+    return <Clickable onPress={onPress} style={s.plainStyle} hoverStyle={s.hover}>
+        {children}
+    </Clickable>
+}
+const HoverRegionStyle = StyleSheet.create({
+    plainStyle: {
+        backgroundColor: '#fff',
+        padding: 3,
+        alignSelf: 'flex-start',
+    },
+    hover: {
+        padding: 2, paddingRight: 8,
+        shadowOpacity: 0.5, elevation: 1,
+        borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
+        shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1}
+    }
+})
 
 
 export function Clickable({onPress, onHoverChange, children, style, hoverStyle=null}) {
@@ -694,3 +714,4 @@ const InfoBoxStyle = StyleSheet.create({
         textAlign: 'center',
     }
 })
+

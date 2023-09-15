@@ -378,7 +378,7 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 export function BasicComments({about = null, config={}}) {
     const datastore = useDatastore();
     const defaultConfig = useContext(CommentContext);
-    const newConfig = {...defaultConfig, ... removeNullProperties(config)};
+    const newConfig = {...defaultConfig, ...removeNullProperties(config)};
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => 
         (about ? comment.replyTo == about : !comment.replyTo)
