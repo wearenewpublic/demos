@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React, { useContext, useState } from "react";
-import { addKey, removeKey } from "../util/util";
+import { addKey, removeKey, removeNullProperties } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { TranslatableLabel } from "./translation";
@@ -378,7 +378,7 @@ const CommentAuthorInfoStyle = StyleSheet.create({
 export function BasicComments({about = null, config={}}) {
     const datastore = useDatastore();
     const defaultConfig = useContext(CommentContext);
-    const newConfig = {...defaultConfig, ...config};
+    const newConfig = {...defaultConfig, ... removeNullProperties(config)};
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => 
         (about ? comment.replyTo == about : !comment.replyTo)

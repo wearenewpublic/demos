@@ -284,6 +284,7 @@ export function PostActionLike({post}) {
     const personaKey = usePersonaKey();
     const hasLike = post.likes?.[personaKey];
     const actionLabel = hasLike ? 'Unlike' : 'Like';
+    if (post.from == personaKey) return null;
     function likePost() {
         datastore.modifyObject('post', post.key, post => ({
             ...post, likes: hasLike ? removeKey(post.likes, personaKey) : addKey(post.likes, personaKey)

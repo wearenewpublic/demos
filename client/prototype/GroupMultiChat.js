@@ -65,8 +65,10 @@ export const GroupMultiChatPrototype = {
                 {isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
                 {preventPublic: true, from: 'a', about: 'pro-monster', text: 'I wonder if the monsters are attacking us because we are making too much noise?'},    
                 {from: 'b', about: 'pro-monster', text: 'I think the monsters are attacking us because they are hungry. We need to feed them.'},    
-                {from: 'f', about: 'pro-monster', text: 'I am a guest, so I might say dumb things'}
-
+                {key: 'dumb', from: 'f', about: 'pro-monster', text: 'I am a guest, so I might say dumb things'}
+            ]),
+            comment: expandDataList([
+                {from: 'a', replyTo: 'dumb', text: 'That is okay. This is a friendly private space.'}
             ])
         },
     ]
@@ -145,8 +147,6 @@ function ConversationScreen({conversationKey}) {
             </Narrow>
         </View>
 
-
-
         <Narrow pad={false}>
             <PostInfoBox conversation={conversation} />
             <Pad size={16} />
@@ -193,9 +193,9 @@ function ConversationPosts({conversation}) {
             <Post key={post.key} post={post} 
                 authorBling={GuestAuthorBling}
                 onComment={() => pushSubscreen('post', {postKey: post.key})}
-                getIsCommentVisible={getIsVisible} infoLineWidget={InfoLine}
+                getIsCommentVisible={post.from != personaKey && getIsVisible} infoLineWidget={InfoLine}
                 editWidgets={[AllowPublishToggle]} numberOfLines={5} hasComments
-                actions={[PostActionLike, PostActionComment, PostActionEdit, PostActionPublish]}
+                actions={[PostActionLike, PostActionEdit, PostActionComment, PostActionPublish]}
                 topBling={post.isPublic && <Pill label='Published' />}
             />
         )}
@@ -243,17 +243,24 @@ function PostScreen({postKey}) {
     const post = useObject('post', postKey);
 
     const config = {
-        getIsVisible, authorBling: [GuestAuthorBling]
+        getIsVisible: post.from != personaKey && getIsVisible, authorBling: [GuestAuthorBling]
     }
 
     return <ScrollableScreen>
-        <Post post={post} actions={[PostActionLike, PostActionEdit]} editWidgets={[AllowPublishToggle]}/>        
-        <Pad size={16}/>        
+        <Post post={post} actions={[PostActionLike, PostActionEdit, PostActionPublish]} editWidgets={[AllowPublishToggle]}
+            topBling={post.isPublic && <Pill label='Published' />} authorBling={GuestAuthorBling}
+ 
+
+       />        
+        {/* <Pad size={16}/>         */}
+        {!persona.member && post.from != personaKey && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see your comments and their replies.']} /></PadBox>}    
+        {!persona.member && post.from == personaKey && <PadBox horiz={0}><InfoBox titleLabel='You wrote this post' lines={['As post author, you can see all comments about your post.']} /></PadBox>}    
+
+        <Pad size={16} />
         <SmallTitleLabel label='Private Conversation'/>
 
-        {persona.member && <QuietSystemMessage center={false} label='Only members, and people you reply to can see your comments' /> }
-        {!persona.member && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see comments you wrote and their replies.']} /></PadBox>}
-    
+        {persona.member && <QuietSystemMessage center={false} label='Only members and people your reply to can see your comments' /> }
+
 
         <BasicComments about={postKey} config={config} />
     </ScrollableScreen>

@@ -38,6 +38,16 @@ export function isNonEmpty(collection) {
     return Object.keys(collection || {}).length > 0;
 }
 
+export function removeNullProperties(obj) {
+  const clone = { ...obj };
+  for (const key in clone) {
+      if (!clone[key]) {
+          delete clone[key]; // Remove key-value pair if the value is null
+      }
+  }
+  return clone;
+}
+
 export function getHuesForNamedList(list) {
     const hues = {};
     list.forEach((item, index) => {
@@ -159,10 +169,6 @@ export function expandUrl({url, type}) {
         return fileHostDomain + '/' + type + '/' + url;
     }
 }
-
-// export function mapKeys(object, callback) {
-//     return Object.keys(object || {}).map(key => callback(key, object[key]))    
-// }
 
 export function mapKeys(object, callback) {
   let previousKey = null;
