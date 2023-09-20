@@ -54,7 +54,7 @@ function ChannelScreen({channelKey}) {
 
     async function onComputeClusters({clusterDescriptions}) {
         console.log('compute', clusterDescriptions);
-        const names = clusterDescriptions.map(d => d.name);
+        const names = clusterDescriptions.map(d => d.name).filter(x => x);
         const clusterEmbeddings = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'embeddingArray', 
             params: {textArray: names}});
         setClusterNames(names);
@@ -127,6 +127,12 @@ function ClusterEditor({onComputeClusters}) {
         setClusterDescriptions(descriptions);
     }
 
+    async function onCompute() {
+        setInProgress(true);
+        await onComputeClusters({clusterDescriptions});
+        setInProgress(false);
+    }
+
     return <View>
         <ClusterSetSelector selected={clusterSetKey} onSelect={onSelectClusterSet} />
         <ExpandSection title='Edit Cluster Set'>
@@ -149,7 +155,7 @@ function ClusterEditor({onComputeClusters}) {
         </ExpandSection>
         <Pad/>
         {inProgress && <QuietSystemMessage label='Computing clusters...' />}
-        {!inProgress && <PrimaryButton label="Compute Clusters" onPress={() => onComputeClusters({clusterDescriptions})} />}
+        {!inProgress && <PrimaryButton label="Compute Clusters" onPress={onCompute} />}
 
     </View>
     
