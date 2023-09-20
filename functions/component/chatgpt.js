@@ -85,8 +85,12 @@ async function getEmbeddingsArrayAsync({textArray}) {
     }});
     console.log('result', result);
     // console.log('result', result);
-    const embeddings = result.data.map(d => d.embedding)
-    return embeddings;
+    if (result.data?.[0].embedding) {
+        const embeddings = result.data.map(d => d.embedding)
+        return {data: embeddings};
+    } else {
+        return {success: false, error: result.error}
+    }
 }
 exports.getEmbeddingsArrayAsync = getEmbeddingsArrayAsync;
 
@@ -96,7 +100,8 @@ exports.getEmbeddingsArrayAsync = getEmbeddingsArrayAsync;
 exports.apiFunctions = {
     hello: helloAsync,
     chat: callGptAsync,
-    embedding: getEmbeddingsAsync
+    embedding: getEmbeddingsAsync,
+    embeddingArray: getEmbeddingsArrayAsync
 }
 
 

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
-import { BigTitle, BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
+import { useCollection, useDatastore, useGlobalProperty, usePersonaKey, useSessionData } from "../util/datastore";
+import { BigTitle, BodyText, Card, Center, HorizBox, ListItem, LoadingScreen, Narrow, OneLineTextInput, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, Separator, SmallTitle, WideScreen } from "../component/basics";
 import { gotoLogin, pushSubscreen } from "../util/navigate";
 import { authorRobEnnals } from "../data/authors";
 import { callServerApiAsync } from "../util/servercall";
@@ -9,9 +9,10 @@ import { mapKeys } from "../util/util";
 import { BottomScroller } from "../platform-specific/bottomscroller";
 import { ScrollView, View } from "react-native";
 import { addContextToShortMessageEmbeddings, clusterWithKMeans, getRandomClusterIndices, invertClusterMap, kMeans, sortEmbeddingsByDistance } from "../util/cluster";
-import { gptProcessAsync } from "../component/chatgpt";
+import { gptProcessAsync, messagesToGptString } from "../component/chatgpt";
 import { QuietSystemMessage } from "../component/message";
 import { ExpandSection } from "../component/expand-section";
+import { PopupSelector } from "../platform-specific/popup.web";
 
 export const SlackGuidedClustersPrototype = {
     name: 'Slack Guided Clusters',
@@ -41,59 +42,115 @@ function SlackGuidedClustersScreen() {
 function ChannelScreen({channelKey}) {
     const messages = useSlackMessages({channelKey});
     const users = useSlackUsers();
-    const embeddings = useSlackMessageEmbeddings({channelKey});
-    const [clusterMap, setClusterMap] = useState({});
+    const messageEmbeddings = useSlackMessageEmbeddings({channelKey});
+    // const [clusterMap, setClusterMap] = useState({});
     const [clusterNames, setClusterNames] = useState({});
+    const [clusterEmbeddings, setClusterEmbeddings] = useState(null);
+    const datastore = useDatastore();
 
-    function onNewClusters({clusterMap, clusterNames}) {
-        setClusterMap(clusterMap);
-        setClusterNames(clusterNames);
+    if (!users || !messages || !messageEmbeddings) return <LoadingScreen />;
+
+    const sortedMessageKeys = Object.keys(messages || {}).sort((a, b) => messages[a].ts - messages[b].ts);
+
+    async function onComputeClusters({clusterDescriptions}) {
+        console.log('compute', clusterDescriptions);
+        const names = clusterDescriptions.map(d => d.name);
+        const clusterEmbeddings = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'embeddingArray', 
+            params: {textArray: names}});
+        setClusterNames(names);
+        setClusterEmbeddings(clusterEmbeddings);
+
+        // var clusterMap = {};
+        // sortedMessageKeys.forEach(messageKey => {
+        //     const messageEmbedding = embeddings[messageKey];
+        //     const clusterIndex = sortEmbeddingsByDistance(null, messageEmbedding, clusterEmbeddings)[0].key;
+        //     clusterMap[messageKey] = clusterIndex;
+        // })
+
+        console.log('embeddings', clusterEmbeddings);     
     }
 
-    return <SlackContext.Provider value={{users, messages, embeddings, clusterMap, clusterNames}}>
-        <ClusterEditor messages={messages} onNewClusters={onNewClusters} />
+    return <SlackContext.Provider value={{users, messages, messageEmbeddings, clusterEmbeddings, clusterNames}}>
+        <Narrow>
+            {/* <ClusterSetSelector selected={clusterSetKey} onSelect={onSelectClusterSet} /> */}
+            <ClusterEditor onComputeClusters={onComputeClusters} />
+            <Pad/>
+
+        </Narrow>
         <Separator pad={0} />
-        <SlackMessageList messages={messages} authorLineWidget={ClusterWidget}/>
+        <SlackMessageList sortedMessageKeys={sortedMessageKeys} authorLineWidget={ClusterWidget}/>
     </SlackContext.Provider>
 }
 
-function ClusterWidget({messageKey}) {
-    const {clusterMap, clusterNames} = useContext(SlackContext);
-    const cluster = clusterMap?.[messageKey];
-    if (!cluster || !clusterNames?.[cluster]) return null;
-    return <PadBox vert={0}><Pill text={clusterNames[cluster]} /></PadBox>
+
+function ClusterSetSelector({selected, onSelect, onNew}) {
+    const clusters = useCollection('clusterSet');
+    const items = clusters.map(cluster => ({key: cluster.key, label: cluster.name}));
+
+    return <PopupSelector value={selected ?? 'select'} items={[{key: 'select', label: 'Select a Cluster Set'}, ...items]} onSelect={onSelect} style={{flex: 1}} />
 }
 
-function ClusterEditor({messages, onNewClusters}) {
+
+
+function ClusterWidget({messageKey}) {
+    const {clusterEmbeddings, clusterNames, messageEmbeddings} = useContext(SlackContext);
+    const messageEmbedding = messageEmbeddings?.[messageKey];
+
+    if (!clusterEmbeddings || !clusterNames || !messageEmbedding) return null;
+
+    const rankedClusters = sortEmbeddingsByDistance(null, messageEmbedding, clusterEmbeddings);
+    const clusterIndex = rankedClusters?.[0]?.key;
+    const clusterDistance = rankedClusters?.[0]?.distance.toFixed(2);
+
+    const clusterName = clusterNames?.[clusterIndex];
+    return <PadBox vert={0}><Pill text={clusterName + ' ' + clusterDistance} /></PadBox>
+}
+
+function ClusterEditor({onComputeClusters}) {
+    const [clusterSetName, setClusterSetName] = useState('');
     const [clusterDescriptions, setClusterDescriptions] = useState([{},{},{},{}]);
+    const [clusterSetKey, setClusterSetKey] = useState(null);
+    const datastore = useDatastore();
     const [inProgress, setInProgress] = useState(false);
 
-    async function onComputeClusters() {
-        const clusterTexts = clusterDescriptions.map(description => description.name);
-        // const clusterEmbeddings = 
+
+    async function onSave() {
+        const clusterSetKey = await datastore.addObject('clusterSet', {name: clusterSetName, description: JSON.stringify(clusterDescriptions)});
+        setClusterSetKey(clusterSetKey);
     }
 
-    return <Center>
-        <ExpandSection title='Cluster Descriptions'>
+    function onSelectClusterSet(clusterSetKey) {
+        if (clusterSetKey === 'select') return;
+        setClusterSetKey(clusterSetKey);
+        const clusterSet = datastore.getObject('clusterSet', clusterSetKey);
+        const descriptions = JSON.parse(clusterSet.description);
+        setClusterDescriptions(descriptions);
+    }
+
+    return <View>
+        <ClusterSetSelector selected={clusterSetKey} onSelect={onSelectClusterSet} />
+        <ExpandSection title='Edit Cluster Set'>
             {clusterDescriptions.map((description, index) =>   
-                <PadBox>
-                    <HorizBox>
+                <PadBox key={index} horiz={0}>
                         <OneLineTextInput value={description.name || ''} 
                             placeholder={'Cluster ' + (index+1) + ' name'}
                             onChange={text => setClusterDescriptions(clusterDescriptions.map((d, i) => i === index ? {...d, name: text} : d))}
                         />
-                    </HorizBox>
                 </PadBox>
             )}
-            <Pad/>
             <HorizBox>
                 <PrimaryButton label="New Cluster" onPress={() => setClusterDescriptions([...clusterDescriptions, {}])} />
             </HorizBox>
+
+            <Separator />
+            <OneLineTextInput value={clusterSetName} placeholder='Cluster Set Name' onChange={setClusterSetName} />
+            <Pad/>
+            <PrimaryButton label="Save as New Cluster Set" onPress={onSave} />
         </ExpandSection>
         <Pad/>
-            {inProgress && <QuietSystemMessage label='Computing clusters...' />}
-            {!inProgress && <PrimaryButton label="Compute Clusters" onPress={() => onComputeClusters()} />}
-        <Pad/>
+        {inProgress && <QuietSystemMessage label='Computing clusters...' />}
+        {!inProgress && <PrimaryButton label="Compute Clusters" onPress={() => onComputeClusters({clusterDescriptions})} />}
 
-    </Center>
+    </View>
+    
 }
