@@ -6,13 +6,13 @@ Respond with a JSON array. Cut the original comment into good, bad, and neutral 
 {"text": [insert the part of the comment here], "tone": [insert whether this part of the comment is good, bad, or neutral]}
 
 If this part of the comment is bad, also add:
-"advice": [insert a short message with a suggestion for how to phrase this part of comment instead]
+"advice": [insert a short message in {{language}} with a suggestion for how to phrase this part of comment instead]
 
 If the comment is good, add:
-"explanation": [insert a short message explaining what makes this comment good]
+"explanation": [insert a short message in {{language}} explaining what makes this comment good]
 
 If the comment is neutral, add:
-"explanation": [insert a short message explaining why this comment is neither good nor bad]
+"explanation": [insert a short message in {{language}} explaining why this comment is neither good nor bad]
 
 Here is the comment:
 {{text}}

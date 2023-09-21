@@ -9,8 +9,9 @@ import { ScrollView, View, StyleSheet, Text } from "react-native";
 import { disco } from "../data/conversations";
 import { useCollection, useDatastore } from "../util/datastore";
 import { Tooltip } from "react-tooltip";
-import { languageGerman } from "../component/translation";
+import { languageFrench, languageGerman } from "../component/translation";
 import { disco_german } from "../translations/german/conversations_german";
+import { disco_french } from "../translations/french/conversations_french";
 
 
 const description = `
@@ -39,7 +40,7 @@ export const CommentBouncerPrototype = {
     instance: [
         {key: 'disco', name: 'Digital Disco', comment: expandDataList(disco)},
         {key: 'disco-german', name: 'Digital Disco (German)', comment: expandDataList(disco_german), language: languageGerman},
-
+        {key: 'disco-french', name: 'Digital Disco (French)', comment: expandDataList(disco_french), language: languageFrench},
     ]
 }
 
@@ -119,7 +120,7 @@ function getCanPost({post}) {
 
 
 async function analyzeCommentAsync({datastore, text, replyTo}) {
-    const response = await gptProcessAsync({promptKey: 'bouncer', params: {text}});
+    const response = await gptProcessAsync({datastore, promptKey: 'bouncer', params: {text}});
 
     var tone = Tone.Acceptable;
 
