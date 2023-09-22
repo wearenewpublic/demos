@@ -85,6 +85,8 @@ function ArticlePreview({article}) {
                 <Text style={{fontSize: 14, color: '#222'}}>{creator.name}</Text>
                 <Pad /><TimeText time={article.time} />
             </HorizBox>
+            <Pad size={4}/>
+            <BodyText>key: {article.key}</BodyText>
         </Card>
     }
 }
