@@ -61,15 +61,11 @@ export class Datastore extends React.Component {
         const {instance, instanceKey, prototype, prototypeKey, isLive} = this.props;
 
         const personaKey = getInitialPersonaKey(instance);
-        // const defaultPersonasForPrototype = isLive ? [] : (prototype.hasMembers ? memberPersonaList : defaultPersonaList);
         this.sessionData = {personaKey}
-        // this.notifyWatchers();
         if (isLive) {
             this.fbDataWatchReleaser && this.fbDataWatchReleaser();
             this.fbDataWatchReleaser = firebaseWatchValue(['prototype', prototypeKey, 'instance', instanceKey], data => {
                 this.setData({...this.getData(), ...data?.collection, ...data?.global});
-                // console.log('datatree', this.dataTree);
-                // this.notifyWatchers();
                 this.setState({loaded: true})
             });
         } else {
@@ -136,6 +132,13 @@ export class Datastore extends React.Component {
         const object = this.getObject(typename, key);
         const newObject = {...object, ...value};
         this.setObject(typename, key, newObject);
+    }
+    addObjectWithKey(typeName, key, value) {
+        const personaKey = this.getPersonaKey();
+        this.addCurrentUser();
+        const objectData = {key, from: personaKey, time: Date.now(), ...value};
+        this.setObject(typeName, key, objectData);
+        return key;
     }
 
     addCurrentUser() {

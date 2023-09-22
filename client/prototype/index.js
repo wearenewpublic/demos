@@ -34,6 +34,7 @@ import { TopicChatPrototype } from "./TopicChat";
 import { SlackGuidedClustersPrototype } from "./SlackGuidedClusters";
 import { SlackSearchPrototype } from "./SlackSearch";
 import { GroupMultiChatPrototype } from "./GroupMultiChat";
+import { ArticleGenerator } from "./ArticleGenerator";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -45,6 +46,8 @@ export const prototypes = [
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype,
     
+    ArticleGenerator,
+
     SlackViewPrototype, SlackGuidedClustersPrototype, SlackSearchPrototype, 
 
 ]

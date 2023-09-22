@@ -24,9 +24,10 @@ async function helloAsync({name}) {
     return {data: "Hello " + name};
 }
 
-function createGptPrompt({promptKey, params, language='English'}) {
+function createGptPrompt({promptKey, params, language='English', model=null}) {
     console.log('createGptPrompt', {promptKey, params, language});
-    const filename = 'prompts/' + promptKey + '.txt';
+    const modelPrefix = (model == 'gpt4') ? 'gpt4/' : ''
+    const filename = 'prompts/' + modelPrefix + promptKey + '.txt';
     if (!existsSync(filename)) {
         console.log('file does not exist', filename);
         return null;
@@ -36,10 +37,18 @@ function createGptPrompt({promptKey, params, language='English'}) {
     return prompt;
 }
 
+function selectModel(model) {
+    switch (model) {
+        case 'gpt4': return 'gpt-4';
+        default: return 'gpt-3.5-turbo';
+    }
+}
+
 async function callGptAsync({promptKey, params, language}) {
     console.log('callGptAsync', {promptKey, params, language})
+    const model = params.model;
 
-    const prompt = createGptPrompt({promptKey, params, language});
+    const prompt = createGptPrompt({promptKey, params, language, model});
     if (!prompt) {
         return {success: false, error: 'Unknown prompt: ' + promptKey}
     }
@@ -47,7 +56,7 @@ async function callGptAsync({promptKey, params, language}) {
     console.log('prompt', prompt);
     const result = await callOpenAIAsync({action: 'chat/completions', data: {
         temperature: 0,
-        model: 'gpt-3.5-turbo',
+        model: selectModel(model),
         max_tokens: 1000,
         messages: [
             {role: 'user', content: prompt}

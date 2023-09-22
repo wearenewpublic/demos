@@ -1,0 +1,5 @@
+Write a 400 word article in the style of the New York Times about {{pitch}}.
+
+Write the article in the form of a JSON object with the following fields: title, subtitle, photo_caption, rawText, authorName, date.
+
+In the rawText field, write newline as '\n'.

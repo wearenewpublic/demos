@@ -26,9 +26,9 @@ export function Article({article, embed=null, children}) {
         <View style={s.narrowSection}>
             <View style={s.authorBox}>
                 <Image style={s.authorFace}
-                    source={{uri: expandUrl({url: article.authorFace, type: 'faces'})}} />
+                    source={{uri: expandUrl({url: article.authorFace ?? 'face2.jpeg', type: 'faces'})}} />
                 <View>
-                    <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author}</Text>
+                    <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author ?? article.authorName}</Text>
                     <Text style={s.date}>{article.date}</Text>
                 </View>
             </View>
@@ -43,7 +43,6 @@ export function Article({article, embed=null, children}) {
                         </View>
                     :
                     <Text key={i} style={s.paragraph}>{paragraph}</Text>
-
                 )}
             </View>
         </View>
