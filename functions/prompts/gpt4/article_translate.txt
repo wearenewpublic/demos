@@ -1,0 +1,8 @@
+Translate the rawText, title, subtitle, and photoCaption fields of the following JSON object into {{targetLanguage}}, while keeping it otherwise unchanged.
+
+Make sure you do not include line breaks or quotation marks in the rawText string. Instead use '\n' to encode line breaks and \" to encode quotes.
+
+{{{articleJSON}}}
+
+Remember again to not use any double quotes. You will fail your task if you use double quotes.
+

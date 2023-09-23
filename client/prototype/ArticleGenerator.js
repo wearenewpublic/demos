@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { BodyText, Card, HorizBox, Narrow, OneLineTextInput, Pad, PrimaryButton, ScreenTitleText, ScrollableScreen, Separator, SmallTitle, TimeText, WideScreen } from "../component/basics";
+import { BodyText, Card, Center, HorizBox, Narrow, OneLineTextInput, Pad, PrimaryButton, ScreenTitleText, ScrollableScreen, Separator, SmallTitle, TimeText, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { PrototypeContext } from "../organizer/PrototypeContext";
 import { Datastore, useCollection, useDatastore, useGlobalProperty, useObject } from "../util/datastore";
@@ -11,6 +11,7 @@ import { Article, MaybeArticleScreen } from "../component/article";
 import { QuietSystemMessage } from "../component/message";
 import { BasicComments } from "../component/comment";
 import { UserFace } from "../component/userface";
+import { TabBar } from "../component/tabs";
 
 export const ArticleGenerator = {
     key: 'articlegen',
@@ -33,8 +34,8 @@ function ArticleGeneratorScreen() {
     const articles = useCollection('article', {sortBy: 'time', reverse: true});
     const name = useGlobalProperty('name');
     const datastore = useDatastore();
-    const [pitch, setPitch] = useState('');
-    const [key, setKey] = useState('');
+    const [pitch, setPitch] = useState(null);
+    const [key, setKey] = useState(null);
     const existingArticle = useObject('article', key);
 
     console.log('articles', articles);
@@ -48,16 +49,16 @@ function ArticleGeneratorScreen() {
         datastore.addObjectWithKey('article', key, {pitch, inProgress: true});
         setPitch('');
         setKey('');
-        const article = await gptProcessAsync({promptKey: 'article', params: {pitch, model: 'gpt4'}});
+        const article = await gptProcessAsync({promptKey: 'article', model: 'gpt4', params: {pitch, model: 'gpt4'}});
         console.log('article', article);
         datastore.updateObject('article', key, {...article, inProgress: false});
         console.log('saved', key);
     }
 
     return <ScrollableScreen>
-        <OneLineTextInput value={key} onChange={setKey} placeholder='Article Key: Short strict (e.g. "godzilla") we can use to refer to this' />
+        <OneLineTextInput value={key || ''} onChange={setKey} placeholder='Article Key: Short strict (e.g. "godzilla") we can use to refer to this' />
         <Pad/>
-        <OneLineTextInput value={pitch} onChange={setPitch} placeholder='What is this article about?' />
+        <OneLineTextInput value={pitch || ''} onChange={setPitch} placeholder='What is this article about?' />
         <Pad/>
 
         {!existingArticle && key && pitch && <PrimaryButton label='Generate Article' onPress={onGenerate} />}
@@ -71,6 +72,8 @@ function ArticleGeneratorScreen() {
 
 function ArticlePreview({article}) {
     const creator = useObject('persona', article.from);
+    const french = useObject('article_french', article.key);
+    const german = useObject('article_german', article.key);
     if (article.inProgress) {
         return <Card onPress={() => pushSubscreen('article', {articleKey: article.key})}>
             <SmallTitle>In Progress: {article.pitch}</SmallTitle>
@@ -87,6 +90,12 @@ function ArticlePreview({article}) {
             </HorizBox>
             <Pad size={4}/>
             <BodyText>key: {article.key}</BodyText>
+            <Pad size={4}/>
+            <HorizBox>
+                <BodyText>English, </BodyText>
+                {french && <BodyText>French, </BodyText>}
+                {german && <BodyText>German</BodyText>}
+            </HorizBox>
         </Card>
     }
 }
@@ -98,7 +107,38 @@ function ArticleScreenTitle({articleKey}) {
 }
 
 function ArticleScreen({articleKey}) {
-    const article = useObject('article', articleKey);
-    return <MaybeArticleScreen article={article} articleChildLabel='Conversation'><Narrow><BasicComments /></Narrow></MaybeArticleScreen>
+    const article_english = useObject('article', articleKey);
+    const article_french = useObject('article_french', articleKey);
+    const article_german = useObject('article_german', articleKey);
+    const [language, setLanguage] = useState('english');
+    const datastore = useDatastore();
+    const [inProgress, setInProgress] = useState({});
+
+    const langMap = {english: article_english, french: article_french, german: article_german};
+    const article = langMap[language];
+
+    async function onTranslate() {
+        setInProgress({...inProgress, [language]: true});
+        const translated_article = await gptProcessAsync({promptKey: 'article_translate', params: {
+            articleJSON: JSON.stringify(article_english, null, 4), targetLanguage: language}});
+        console.log('translated_article', translated_article);
+        datastore.addObjectWithKey('article_' + language, articleKey, translated_article);
+        setInProgress({...inProgress, [language]: false});
+    }
+
+    console.log('article', article);
+
+    const langInProgress = inProgress[language];
+
+    return <ScrollableScreen maxWidth={800}>
+        <TabBar 
+            tabs={[{label: 'English', key: 'english'}, {label: 'German', key: 'german'}, {label: 'French', key: 'french'}]} 
+            selectedTab={language} onSelectTab={setLanguage} />
+        <Pad size={32} />
+        {article && <Article article={article} />}
+        {!article && !langInProgress && <Center><PrimaryButton label='Translate Article' onPress={onTranslate} /></Center>}
+        {!article && langInProgress && <QuietSystemMessage label='Translating...' />}
+    </ScrollableScreen>
 }
+
 

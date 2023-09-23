@@ -44,9 +44,8 @@ function selectModel(model) {
     }
 }
 
-async function callGptAsync({promptKey, params, language}) {
+async function callGptAsync({promptKey, params, language, model}) {
     console.log('callGptAsync', {promptKey, params, language})
-    const model = params.model;
 
     const prompt = createGptPrompt({promptKey, params, language, model});
     if (!prompt) {
