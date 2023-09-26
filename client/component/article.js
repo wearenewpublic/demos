@@ -1,13 +1,23 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
 import { BigTitle, Center, Narrow, Pad, ScrollableScreen, Separator, SmallTitleLabel, WideScreen } from "./basics";
-import { TranslatableLabel } from "./translation";
+import { TranslatableLabel, languageFrench, languageGerman, useLanguage } from "./translation";
 import { expandUrl } from "../util/util";
 import { useGlobalProperty } from "../util/datastore";
+import { useFirebaseData } from "../util/firebase";
+import { godzilla_article } from "../data/articles/godzilla";
+import { godzilla_article_french } from "../translations/french/articles_french";
+import { godzilla_article_german } from "../translations/german/articles_german";
+import { trek_wars_article } from "../data/articles/startrekwars";
+import { cbc_sport_article } from "../data/articles/cbc_sport";
+import { cbc_sport_article_french } from "../translations/french/cbc_sport_article_french";
+import { cbc_sport_article_german } from "../translations/german/cbc_sport_article_german";
 
-export function Article({article, embed=null, children}) {
+export function Article({articleKey, article, embed=null, children}) {
     const s = ArticleStyle;
-    
+
+    const keyArticle = useArticle(articleKey);   
+    article = article ?? keyArticle;
     if (!article) return null;
 
     const paragraphs = article?.rawText?.trim()?.split('\n')?.filter(x=>x);
@@ -146,4 +156,50 @@ export function MaybeArticleScreen({article, embed, articleChildLabel, children}
             </ScrollView>
         </WideScreen>
     }
+}
+
+function getBuiltInArticle(articleKey, language) {
+    if (articleKey == 'godzilla') {
+        if (language == languageFrench) {
+            return godzilla_article_french
+        } else if (language == languageGerman) {
+            return godzilla_article_german
+        } else {
+            return godzilla_article;
+        }
+    } else if (articleKey == 'soccer') {
+        if (language == languageFrench) {
+            return cbc_sport_article_french
+        } else if (language == languageGerman) {
+            return cbc_sport_article_german;
+        } else {
+            return cbc_sport_article;
+        }
+    } else if (articleKey == 'starwars') {
+        return trek_wars_article;
+    } else if (process.env.NODE_ENV == 'test') {
+        return godzilla_article;
+    } else {
+        return null;
+    }
+}
+
+export function useArticle(articleKey) {
+    console.log('useArticle', articleKey);
+    const language = useLanguage();
+    const langToSuffix = {
+        English: '',
+        French: '_french',
+        German: '_german'
+    }
+    const suffix = langToSuffix[language] || '';
+    const article = useFirebaseData(['prototype', 'articlegen', 'instance', 'articles', 
+    'collection', 'article' + suffix, articleKey]);
+
+    console.log('article', article);
+
+    const builtInArticle = getBuiltInArticle(articleKey, language);
+    console.log('builtInArticle', builtInArticle);
+
+    return builtInArticle ?? article;
 }

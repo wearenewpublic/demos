@@ -28,7 +28,8 @@ export const ArticleCommentsPrototype = {
     description,
     screen: ArticleCommentsScreen,
     instance: [
-        {key: 'godzilla', name: 'Godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)}
+        {key: 'godzilla', name: 'Godzilla', articleKey: 'godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)},
+        {key: 'kingkong', name: 'King Kong', articleKey: 'king_kong_toronto', article: godzilla_article, comment: expandDataList([])}
     ],
     newInstanceParams: [
         {key: 'article.title', name: 'Article Title', type: 'shorttext'},
@@ -43,10 +44,10 @@ export const ArticleCommentsPrototype = {
 }
 
 export function ArticleCommentsScreen() {
-    const article = useGlobalProperty('article');
+    const articleKey = useGlobalProperty('articleKey');
 
     return <ScrollableScreen maxWidth={800}>
-        <Article article={article}>
+        <Article articleKey={articleKey}>
             <Center>
                 <SmallTitleLabel label='Comments'/>
                 <BasicComments />
