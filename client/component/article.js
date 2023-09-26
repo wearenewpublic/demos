@@ -137,10 +137,11 @@ const ArticleStyle = StyleSheet.create({
 
 export function MaybeArticleScreen({article, embed, articleChildLabel, children}) {
     const globalArticle = useGlobalProperty('article');
+    const globalArticleKey = useGlobalProperty('articleKey');
     const title = useGlobalProperty('title');
-    if (article ?? globalArticle) {
+    if (article || globalArticle || globalArticleKey) {
        return <ScrollableScreen maxWidth={800}>
-            <Article article={article ?? globalArticle} embed={embed}>
+            <Article article={article ?? globalArticle} articleKey={globalArticleKey} embed={embed}>
                 <Center><SmallTitleLabel label={articleChildLabel} /></Center>
                 {children}
                 <Pad size={32} />
@@ -185,7 +186,6 @@ function getBuiltInArticle(articleKey, language) {
 }
 
 export function useArticle(articleKey) {
-    console.log('useArticle', articleKey);
     const language = useLanguage();
     const langToSuffix = {
         English: '',
@@ -195,11 +195,7 @@ export function useArticle(articleKey) {
     const suffix = langToSuffix[language] || '';
     const article = useFirebaseData(['prototype', 'articlegen', 'instance', 'articles', 
     'collection', 'article' + suffix, articleKey]);
-
-    console.log('article', article);
-
     const builtInArticle = getBuiltInArticle(articleKey, language);
-    console.log('builtInArticle', builtInArticle);
 
     return builtInArticle ?? article;
 }

@@ -178,7 +178,7 @@ export const godzilla_conversation_posts =
 
 
     {isPublic: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
-    {isPublic: true, from: 'b', about: 'mayor-safety', text: 'We need to evacuate New York City and move everyone to New Jersey. Once New York is evacuted, we can bring in the national guard and use heavy weapons against the monster'},                
+    {isPublic: true, from: 'b', about: 'mayor-safety', text: 'We need to equip New York city with missile batteries, so we can destroy monsters before they get too close to the city.'},                
     {isPublic: true, from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
     {key: 'fault', isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
 
@@ -194,4 +194,9 @@ export const godzilla_conversation_post_comments = [
     // {from: 'a', replyTo: 'dumb', text: 'That is okay. This is a friendly private space.'}
 ]
 
-
+export const godzilla_group_conversations = [
+    {from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
+    {from: 'b', about: 'mayor-safety', text: 'We need to equip New York city with missile batteries, so we can destroy monsters before they get too close to the city.'},                
+    {from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
+    {key: 'fault', isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
+]

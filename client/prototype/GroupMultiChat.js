@@ -16,6 +16,7 @@ import { TabBar } from "../component/tabs";
 import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { UserFace } from "../component/userface";
+import { ConversationPreview, GroupPromo, GroupScreen, GroupScreenInfo, MultiChatScreen } from "../component/multichat";
 
 export const GroupMultiChatPrototype = {
     key: 'groupmulti',
@@ -24,11 +25,14 @@ export const GroupMultiChatPrototype = {
     author: authorRobEnnals,
     date: '2023-09-13',
     hasMembers: true,
-    screen: GroupMultiChatScreen,
+    screen: MultiChatScreen,
     subscreens: {
         conversation: {screen: ConversationScreen, title: 'Conversation'},
-        group: {screen: GroupScreen, title: 'Group'},
+        group: GroupScreenInfo,
         post: {screen: PostScreen, title: 'Post'}
+    },
+    config: {
+        conversationPreview: InnerOuterConversationPreview,
     },
     instance: [
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
@@ -47,58 +51,12 @@ export const GroupMultiChatPrototype = {
     ]
 }
 
-function GroupMultiChatScreen() {
-    const conversations = useCollection('conversation', {sortBy: 'title'});
-    return <MaybeArticleScreen articleChildLabel='Conversations' embed={<ConversationListEmbed/>}>
-        <Narrow>
-            {conversations.map(conversation =>
-                <ConversationPreview key={conversation.key} conversation={conversation} />
-            )}
-        </Narrow>
-    </MaybeArticleScreen>
-}
-
-function ConversationListEmbed() {
-    const conversations = useCollection('conversation', {sortBy: 'title'});
-    return <View>
-        {conversations.map(conversation =>
-            <ConversationPreview key={conversation.key} conversation={conversation} embed />
-        )}
-    </View>
-}
-
-function ConversationPreview({conversation, embed}) {
+function InnerOuterConversationPreview({conversation, embed}) {
     const comments = useCollection('post', {filter: {about: conversation.key, isPublic: true, article: undefined}});
-    const group = useObject('group', conversation.group);
-    const tComments = useTranslation('posts');
-    const shownComments = embed ? [] : comments.slice(0,3);
-    return <Card onPress={() => pushSubscreen('conversation', {conversationKey: conversation.key})}>
-        <HorizBox>
-            <Image source={{uri: group.image}} style={{width: 40, height: 40, borderRadius: 10, marginRight: 8}} />
-            <View style={{flex: 1}}>
-                <SmallTitle>{group.name}</SmallTitle>
-                <BodyText>{conversation.title}</BodyText>
-                {embed && <Text style={{marginTop: 4, fontSize: 12, color: '#666'}}>{comments.length + ' ' + tComments}</Text>}
-
-            </View>
-        </HorizBox>
-        {!embed && <Pad size={4} />}
-        {shownComments.map(comment => 
-            <PreviewComment key={comment.key} comment={comment} numberOfLines={2} />
-        )}
-        {!embed && comments.length > 2 && <CallToAction><PluralLabel count={comments.length -2} singular='comment' plural='comments'/></CallToAction>}
-        {!embed && comments.length <= 2 && <CallToAction><TranslatableLabel label='Join the conversation' /></CallToAction>}
-    </Card>
-}
-
-function CallToAction({children}) {
-    return <Text style={{fontWeight: 'bold', fontSize: 13, marginLeft: 4, marginTop: 4, textAlign: 'center'}}>
-        {children}
-    </Text>
+    return <ConversationPreview conversation={conversation} comments={comments} embed={embed} />   
 }
 
 function ConversationScreen({conversationKey}) {
-    const article = useGlobalProperty('article');
     const conversation = useObject('conversation', conversationKey);
     const group = useObject('group', conversation.group);
     const persona = usePersona();
@@ -117,28 +75,12 @@ function ConversationScreen({conversationKey}) {
         <Narrow>
             {persona.member && <InfoBox titleLabel='You are a member' lines={['You can see all posts']} />}
             {!persona.member && <InfoBox titleLabel='You are a guest' lines={['You can only see published posts, and posts you wrote yourself']} />}
-            {/* <PostInfoBox conversation={conversation} /> */}
             <Pad size={16} />
             <ConversationPosts conversation={conversation} />
             <Pad size={32} />
         </Narrow>
     </ScrollableScreen>
 }
-
-
-function GroupPromo({group}) {
-    return <HoverRegion onPress={() => pushSubscreen('group', {groupKey:group.key})}>
-        <HorizBox center>
-            <Image source={{uri: group.image}} style={{width: 32, height: 32, borderRadius: 10, marginRight: 4}} />
-            <View style={{flex: 1}}>
-                {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
-                <Text style={{fontWeight: 'bold', fontSize: 13}}>{group.name}</Text>
-                <Text style={{color: '#666', fontSize: 12}}>{group.slogan}</Text>
-            </View>
-        </HorizBox>
-    </HoverRegion>
-}
-
 
 
 function ConversationPosts({conversation}) {
@@ -187,7 +129,6 @@ function InfoLine({post}) {
 }
 
 
-
 function PublicPostInfo({post}) {
     if (post.preventPublic) {
         return <QuietSystemMessage label='Your post will only be visible to group members' />
@@ -196,76 +137,20 @@ function PublicPostInfo({post}) {
     }
 }
 
-function GroupScreen({groupKey}) {
-    const persona = usePersona();
-    const group = useObject('group', groupKey);
-    const [tab, setTab] = useState(null);
-    const conversations = useCollection('conversation', {filter: {group: groupKey}});
-    const leaders = useCollection('persona', {filter: {admin: true}});
-    const members = useCollection('persona', {filter: {member: true}});
-
-    useEffect(() => {
-        if (persona.member) {
-            setTab('discussion');
-        } else {
-            setTab('about');
-        }
-    }, [persona, groupKey])
-
-
-    return <ScrollableScreen>
-        <HorizBox center>
-            <Image source={{uri: group.image}} style={{width: 64, height: 64, borderRadius: 10, marginRight: 4}} />
-            <View style={{flex: 1}}>
-                {/* <Text style={{fontWeight: '600'}}>{group.name}</Text> */}
-                <Text style={{fontWeight: 'bold', fontSize: 24}}>{group.name}</Text>
-                <Text style={{color: '#666', fontSize: 15}}>{group.slogan}</Text>
-            </View>
-        </HorizBox>
-
-        <Pad size={32} />
-        <TabBar tabs={[{key: 'about', label: 'About'}, {key: 'members', label: 'Members'}, {key: 'discussion', label: 'Discussion'}]} selectedTab={tab} onSelectTab={setTab} />
-        <Pad size={32} />
-
-        {tab == 'discussion' && 
-            conversations.map(conversation =>
-                <ConversationPreview key={conversation.key} conversation={conversation} />
-            )
-        }
-        {tab == 'members' && 
-            members.map(member =>
-                <Card key={member.key}>
-                    <HorizBox center>
-                        <UserFace userId={member.key} size={40} />
-                        <Pad />
-                        <SmallTitle pad={false} >{member.name}</SmallTitle>
-                    </HorizBox>
-                </Card>
-            )
-        }
-
-    </ScrollableScreen>
-
-}
 
 function PostScreen({postKey}) {
     const personaKey = usePersonaKey();
     const persona = useObject('persona', personaKey);
     const post = useObject('post', postKey);
-    // const conversation = useObject('conversation', post.about);
-    // const group = useObject('group', conversation.group);
 
     const config = {
         getIsVisible: post.from != personaKey && getIsVisible, authorBling: [GuestAuthorBling]
     }
 
     return <ScrollableScreen>
-        {/* <PadBox vert={0}><GroupPromo group={group} /></PadBox>
-        <Pad /> */}
         <Post post={post} actions={[PostActionLike, PostActionEdit, PostActionPublish]} editWidgets={[AllowPublishToggle]}
             topBling={post.isPublic && <Pill label='Published' />} authorBling={GuestAuthorBling} infoLineWidget={InfoLine}
        />        
-        {/* <Pad size={16}/>         */}
         {!persona.member && post.from != personaKey && <PadBox horiz={0}><InfoBox titleLabel='You are a guest' lines={['You can only see your comments and their replies']} /></PadBox>}    
         {persona.member && <PadBox horiz={0}><InfoBox titleLabel='You are a member' lines={['You can see all comments']} /></PadBox>}    
 
@@ -273,9 +158,6 @@ function PostScreen({postKey}) {
 
         <Pad size={16} />
         <SmallTitleLabel label='Private Conversation'/>
-
-        {/* {persona.member && <QuietSystemMessage center={false} label='Only members and people your reply to can see your comments' /> } */}
-
 
         <BasicComments about={postKey} config={config} />
     </ScrollableScreen>
