@@ -92,7 +92,7 @@ export function GroupScreen({groupKey}) {
 
 }
 
-export function ConversationPreview({conversation, embed, comments}) {
+export function ConversationPreview({conversation, embed, comments, hideNames=false}) {
     const group = useObject('group', conversation.group);
     const tComments = useTranslation('posts');
     const shownComments = embed ? [] : comments.slice(0,3);
@@ -107,7 +107,7 @@ export function ConversationPreview({conversation, embed, comments}) {
         </HorizBox>
         {!embed && <Pad size={4} />}
         {shownComments.map(comment => 
-            <PreviewComment key={comment.key} comment={comment} numberOfLines={2} />
+            <PreviewComment key={comment.key} comment={comment} numberOfLines={2} hideName={hideNames} />
         )}
         {!embed && comments.length > 2 && <CallToAction><PluralLabel count={comments.length -2} singular='comment' plural='comments'/></CallToAction>}
         {!embed && comments.length <= 2 && <CallToAction><TranslatableLabel label='Join the conversation' /></CallToAction>}
@@ -145,4 +145,37 @@ function ConversationListEmbed() {
             React.createElement(conversationPreview, {key: conversation.key, conversation: conversation, embed: true})
         )}
     </View>
+}
+
+
+export const ConversationScreenInfo = {
+    screen: ConversationScreen,
+    title: 'Conversation'
+}
+
+function ConversationScreen({conversationKey}) {
+    const conversation = useObject('conversation', conversationKey);
+    const group = useObject('group', conversation.group);
+    const persona = usePersona();
+    const {prototype} = useContext(PrototypeContext);
+
+    return <ScrollableScreen grey={prototype.config.grey} maxWidth={null} pad={false} >
+        <View style={{backgroundColor: 'white'}}>
+            <Narrow >
+                <GroupPromo group={group} />
+                <Pad size={8} />
+                <BigTitle>{conversation.title}</BigTitle>
+                <BodyText>{conversation.description}</BodyText>
+                <Pad size={8} />
+            </Narrow>
+        </View>
+
+        <Narrow>
+            {persona.member && <InfoBox titleLabel='You are a member' lines={[prototype.config.memberExplain]} />}
+            {!persona.member && <InfoBox titleLabel='You are a guest' lines={[prototype.config.nonMemberExplain]} />}
+            <Pad size={16} />
+            {React.createElement(prototype.config.conversationWidget, {conversation: conversation})}
+            <Pad size={32} />
+        </Narrow>
+    </ScrollableScreen>
 }

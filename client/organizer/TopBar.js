@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, SmallTitleLabel } from "../component/basics";
+import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, Separator, SmallTitleLabel } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
 import { goBack, gotoPrototype, pushSubscreen } from "../util/navigate";
 import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
@@ -86,12 +86,23 @@ function AdminPopup() {
     const {prototype} = useContext(PrototypeContext);
     const admin = useGlobalProperty('admin');
     const personaKey = usePersonaKey();
+    const datastore = useDatastore();
+
+    function onLog() {
+        const data = datastore.getData();
+        console.log('data', data);
+    }
 
     function popup() {
         return <View>
             <Clickable onPress={() => pushSubscreen('members')}>
             <Text>Members</Text>
             </Clickable>
+            <Separator pad={8} />
+            <Clickable onPress={onLog}>
+            <Text>Log Debug Data</Text>
+            </Clickable>
+
         </View>
     }
 

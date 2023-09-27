@@ -147,8 +147,7 @@ export const godzilla_category_posts = [
 ]
 
 export const godzilla_conversations = [
-    {
-        key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci', 
+    {key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci', 
         description: 'Monster attacks have increased significantly in recent years. Why is this happening and what can we do about it?'
     },
     {key: 'mayor-safety', title: 'NYC Disaster Preparedness', group: 'mayor',
@@ -195,8 +194,16 @@ export const godzilla_conversation_post_comments = [
 ]
 
 export const godzilla_group_conversations = [
-    {from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
-    {from: 'b', about: 'mayor-safety', text: 'We need to equip New York city with missile batteries, so we can destroy monsters before they get too close to the city.'},                
-    {from: 'c', about: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
-    {key: 'fault', isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
+    {from: 'a', replyTo: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
+    {from: 'b', replyTo: 'mayor-safety', text: 'We need to equip New York city with missile batteries, so we can destroy monsters before they get too close to the city.'},                
+    {from: 'c', replyTo: 'friends', text: "Our studio was completely eaten. All our art is in that monster's stomach."},
+
+    {from: 'e', replyTo: 'sci-attack', text: 'I am annoying'},
+    {from: 'f', replyTo: 'mayor-safety', text: 'Buy viagra!'},
+    {from: 'h', replyTo: 'pro-monster', text: 'Moster lovers are dumb'},
+    {from: 'g', replyTo: 'friends', text: 'All people who disagree with me are fascists!'},
+
+
+
+    {key: 'fault', from: 'c', replyTo: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
 ]

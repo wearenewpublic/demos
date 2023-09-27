@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Clickable, Pill } from "./basics";
+import { Center, CenterBox, Clickable, Pill } from "./basics";
 import { UserFace } from "./userface";
 import React, { useContext, useState } from "react";
 import { addKey, removeKey, removeNullProperties } from "../util/util";
 import { ReplyInput, TopCommentInput } from "./replyinput";
-import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
+import { useCollection, useDatastore, useObject, usePersona, usePersonaKey, useSessionData } from "../util/datastore";
 import { TranslatableLabel } from "./translation";
 
 
@@ -298,11 +298,11 @@ const CollapsedCommentStyle = StyleSheet.create({
     }
 });
 
-export function PreviewComment({comment, numberOfLines}) {
+export function PreviewComment({comment, hideName=false, numberOfLines}) {
     const s = PreviewCommentStyle;
     const author = useObject('persona', comment.from);
     return <View style={s.outer}>
-        <Text style={s.author}>{author?.name}</Text>
+        {!hideName && <Text style={s.author}>{author?.name}</Text>}
         <Text numberOfLines={numberOfLines} style={s.text}>{comment.text}</Text>
     </View>
 }
@@ -386,13 +386,11 @@ export function BasicComments({about = null, config={}}) {
  
     const sortedComments = newConfig.sortComments({datastore, comments:topLevelComments})
 
-    return <View>
-        <CommentContext.Provider value={newConfig}>
-            <TopCommentInput about={about} />
-            {sortedComments.map(comment => 
-                <Comment key={comment.key} commentKey={comment.key} />
-            )}
-        </CommentContext.Provider>
-    </View>
+    return <CommentContext.Provider value={newConfig}>
+        <TopCommentInput about={about} />
+        {sortedComments.map(comment => 
+            <Comment key={comment.key} commentKey={comment.key} />
+        )}
+    </CommentContext.Provider>
 }
 

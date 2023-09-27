@@ -3,7 +3,7 @@ import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
-import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
+import { ActionLike, ActionReply, BasicComments, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society, civic_society_description } from "../data/openhouse_civic";
@@ -51,30 +51,18 @@ export const SemiAnonymous = {
     newInstanceParams: []    
 }
 
+export const SemiAnonymousCommentConfig = {
+    authorName: AuthorName, authorFace: AuthorFace,
+    commentPlaceholder: () => 'Write a semi-anonymous comment',
+    replyWidgets: [SemiAnonymousExplain],
+    authorBling: [MemberAuthorBling]
+}
+
 export function SemiAnonymousScreen() {
-    const commentContext = useContext(CommentContext);
-
-    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => !comment.replyTo);
-
-    const commentConfig = {...commentContext,
-        authorName: AuthorName, authorFace: AuthorFace,
-        commentPlaceholder: () => 'Write a semi-anonymous comment',
-        replyWidgets: [SemiAnonymousExplain],
-        authorBling: [MemberAuthorBling]
-    }
-
-    // console.log('comments', comments);
-
     return (
         <WideScreen pad>
             <ScrollView>
-                <CommentContext.Provider value={commentConfig}> 
-                    <TopCommentInput />
-                    {topLevelComments.map(comment => 
-                        <Comment key={comment.key} commentKey={comment.key} />
-                    )}
-                </CommentContext.Provider>
+                <BasicComments config={SemiAnonymousCommentConfig} />
             </ScrollView>
         </WideScreen>
     )

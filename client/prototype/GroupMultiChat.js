@@ -16,7 +16,7 @@ import { TabBar } from "../component/tabs";
 import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { UserFace } from "../component/userface";
-import { ConversationPreview, GroupPromo, GroupScreen, GroupScreenInfo, MultiChatScreen } from "../component/multichat";
+import { ConversationPreview, ConversationScreenInfo, GroupPromo, GroupScreen, GroupScreenInfo, MultiChatScreen } from "../component/multichat";
 
 export const GroupMultiChatPrototype = {
     key: 'groupmulti',
@@ -27,12 +27,17 @@ export const GroupMultiChatPrototype = {
     hasMembers: true,
     screen: MultiChatScreen,
     subscreens: {
-        conversation: {screen: ConversationScreen, title: 'Conversation'},
+        conversation: ConversationScreenInfo,
+        // conversation: {screen: ConversationScreen, title: 'Conversation'},
         group: GroupScreenInfo,
-        post: {screen: PostScreen, title: 'Post'}
+        post: {screen: PostScreen, title: 'Post'},
     },
     config: {
         conversationPreview: InnerOuterConversationPreview,
+        conversationWidget: ConversationPosts,
+        memberExplain: 'You can see all posts',
+        nonMemberExplain: 'You can only see published posts, and posts you wrote yourself',
+        grey: true
     },
     instance: [
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
@@ -55,33 +60,6 @@ function InnerOuterConversationPreview({conversation, embed}) {
     const comments = useCollection('post', {filter: {about: conversation.key, isPublic: true, article: undefined}});
     return <ConversationPreview conversation={conversation} comments={comments} embed={embed} />   
 }
-
-function ConversationScreen({conversationKey}) {
-    const conversation = useObject('conversation', conversationKey);
-    const group = useObject('group', conversation.group);
-    const persona = usePersona();
-
-    return <ScrollableScreen grey maxWidth={null} pad={false} >
-        <View style={{backgroundColor: 'white'}}>
-            <Narrow >
-                <GroupPromo group={group} />
-                <Pad size={8} />
-                <BigTitle>{conversation.title}</BigTitle>
-                <BodyText>{conversation.description}</BodyText>
-                <Pad size={8} />
-            </Narrow>
-        </View>
-
-        <Narrow>
-            {persona.member && <InfoBox titleLabel='You are a member' lines={['You can see all posts']} />}
-            {!persona.member && <InfoBox titleLabel='You are a guest' lines={['You can only see published posts, and posts you wrote yourself']} />}
-            <Pad size={16} />
-            <ConversationPosts conversation={conversation} />
-            <Pad size={32} />
-        </Narrow>
-    </ScrollableScreen>
-}
-
 
 function ConversationPosts({conversation}) {
     const personaKey = usePersonaKey();
