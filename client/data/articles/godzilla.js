@@ -148,7 +148,7 @@ export const godzilla_category_posts = [
 
 export const godzilla_conversations = [
     {key: 'sci-attack', title: 'Giant Monster Attacks', group: 'sci', 
-        description: 'Monster attacks have increased significantly in recent years. Why is this happening and what can we do about it?'
+        description: 'Monster attacks have increased significantly in recent years. Why is this happening and what can we do about it?',
     },
     {key: 'mayor-safety', title: 'NYC Disaster Preparedness', group: 'mayor',
         description: 'It is our responsibility to make sure New York City is robust against all plausable disaster scenarios, while being efficient with taxpayer money.'
@@ -161,6 +161,23 @@ export const godzilla_conversations = [
     },
 ]
 
+export const godzilla_related = [
+    {article: 'godzilla', conversation: 'sci-attack'},
+    {article: 'godzilla', conversation: 'mayor-safety'},
+    {article: 'godzilla', conversation: 'pro-monster'},
+    {article: 'godzilla', conversation: 'friends'},
+
+    {article: 'mothra_wedding', conversation: 'sci-attack'},
+    {article: 'king_kong_toronto', conversation: 'sci-attack'},
+    
+    {article: 'monster_unwelcome', conversation: 'pro-monster'},
+
+    {article: 'king_kong_toronto', conversation: 'mayor-safety'},
+    {article: 'zombies', conversation: 'mayor-safety'},
+    {article: 'art_impact', conversation: 'friends'}
+    
+]
+
 export const godzilla_groups = [
     {key: 'sci', name: 'Institute of Important Scientists', image: 'https://www.aaas.org/sites/default/files/styles/square/public/2021-03/AM21_New%20Globe%20copy.png?itok=De63Hpou', slogan: 'Science is important and so are we'},
     {key: 'mayor', name: "New York City Mayor's Office", image: 'https://media.licdn.com/dms/image/C4D0BAQHr6j_Fsv98FQ/company-logo_200_200/0/1523986359131?e=2147483647&v=beta&t=JF2YNkOErNs78xgp7KY5JFVE2HdVAfJrU68xwZKLpRA', slogan: 'We are here to help'},
@@ -170,10 +187,10 @@ export const godzilla_groups = [
 
 export const godzilla_conversation_posts = 
 [
-    {isPublic: true, article: true, from: 'b', about: 'sci-attack', article: godzilla_article},
-    {isPublic: true, article: true, from: 'c', about: 'mayor-safety', article: godzilla_article},
-    {isPublic: true, article: true, from: 'b', about: 'pro-monster', article: godzilla_article},
-    {isPublic: true, article: true, from: 'a', about: 'friends', article: godzilla_article},
+    // {isPublic: true, article: true, from: 'b', about: 'sci-attack', article: godzilla_article},
+    // {isPublic: true, article: true, from: 'c', about: 'mayor-safety', article: godzilla_article},
+    // {isPublic: true, article: true, from: 'b', about: 'pro-monster', article: godzilla_article},
+    // {isPublic: true, article: true, from: 'a', about: 'friends', article: godzilla_article},
 
 
     {isPublic: true, from: 'a', about: 'sci-attack', text: 'Monster attacks have increased by 50% in the last 10 years. We need to study the monsters to understand why they are attacking us.'},
@@ -182,6 +199,11 @@ export const godzilla_conversation_posts =
     {key: 'fault', isPublic: true, from: 'c', about: 'pro-monster', text: "Giant monster attacks are the fault of humans, not monsters. We need to stop polluting the oceans and stop building nuclear power plants."},
 
     {preventPublic: true, from: 'a', about: 'pro-monster', text: 'This post has not been published, so only members can see it'},
+    {preventPublic: true, from: 'b', about: 'mayor-safety', text: 'Only members can see this post. We can use it for internal discussion.'},
+    {preventPublic: true, from: 'c', about: 'friends', text: 'This is a members-only post that outsiders cannot see.'},
+    {preventPublic: true, from: 'a', about: 'sci-attack', text: 'Only truly important scientists (members) can see this post.'},
+
+
 
     // {preventPublic: true, from: 'a', about: 'pro-monster', text: 'I wonder if the monsters are attacking us because we are making too much noise?'},    
     // {from: 'b', about: 'pro-monster', text: 'I think the monsters are attacking us because they are hungry. We need to feed them.'},    

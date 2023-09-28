@@ -2,7 +2,7 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
-import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_group_conversations, godzilla_groups } from "../data/articles/godzilla";
+import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_group_conversations, godzilla_groups, godzilla_related } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
 import { expandDataList, expandUrl } from "../util/util";
@@ -36,12 +36,15 @@ export const SemiAnonMulti = {
     config: {
         conversationPreview: SemiAnonConversationPreview,
         conversationWidget: SemiAnonConversation,
+        memberExplain: 'You can see everyone\'s names. Non members can\'t.',
+        nonMemberExplain: 'Only members can see people\'s names'
     },
     instance: [
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
             conversation: expandDataList(godzilla_conversations),
             group: expandDataList(godzilla_groups),
-            comment: expandDataList(godzilla_group_conversations)
+            comment: expandDataList(godzilla_group_conversations),
+            related: expandDataList(godzilla_related)
         },
     ]
 }

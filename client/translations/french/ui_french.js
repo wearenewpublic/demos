@@ -111,4 +111,5 @@ export const ui_translations_french = {
     '😡 The comment bouncer is not happy. Your comment needs improvement.': '😡 Le commentateur n\'est pas content. Votre commentaire doit être amélioré.',
     '😊 The comment bouncer is happy with your comment.': '😊 Le commentateur est content de votre commentaire.',
     '💖 The comment bouncer is overjoyed! Contributions like yours are greatly appreciated!': '💖 Le commentateur est ravi! Les contributions comme la vôtre sont grandement appréciées!',
+    'Group Conversations related to this Article': 'Conversations de groupe liées à cet article',
 }

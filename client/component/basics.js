@@ -715,3 +715,16 @@ const InfoBoxStyle = StyleSheet.create({
     }
 })
 
+export function ClickableText({children, style, onPress}) {
+    const s = ClickableTextStyle;
+    const [hover, setHover] = useState(false);
+    return <Clickable onHoverChange={setHover} onPress={onPress}><Text style={hover ? [style, s.hoverText] : style}>{children}</Text></Clickable>
+}
+
+const ClickableTextStyle = StyleSheet.create({
+    hoverText: {
+        color: '#000',
+        textDecorationLine: 'underline'
+    },
+})
+

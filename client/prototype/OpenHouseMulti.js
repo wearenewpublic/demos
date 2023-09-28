@@ -2,13 +2,13 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
-import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_group_conversations, godzilla_groups } from "../data/articles/godzilla";
+import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_group_conversations, godzilla_groups, godzilla_related } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
 import { expandDataList, expandUrl } from "../util/util";
 import { pushSubscreen } from "../util/navigate";
 import { PostInput, TopCommentInput } from "../component/replyinput";
-import { ActionCollapse, ActionReply, BasicComments, Comment, CommentContext, GuestAuthorBling, PreviewComment, PublishedBling } from "../component/comment";
+import { ActionCollapse, ActionReply, BasicComments, Comment, CommentContext, GuestAuthorBling, MemberAuthorBling, PreviewComment, PublishedBling } from "../component/comment";
 import { useContext, useEffect, useState } from "react";
 import { QuietSystemMessage } from "../component/message";
 import { TranslatableLabel, languageFrench, useTranslation } from "../component/translation";
@@ -42,7 +42,8 @@ export const OpenHouseMulti = {
         {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
             conversation: expandDataList(godzilla_conversations),
             group: expandDataList(godzilla_groups),
-            comment: expandDataList(godzilla_group_conversations)
+            comment: expandDataList(godzilla_group_conversations),
+            related: expandDataList(godzilla_related)
         },
     ]
 }
@@ -51,47 +52,13 @@ function OpenHouseConversationPreview({conversation, embed}) {
     const comments = useCollection('comment', {filter: {replyTo: conversation.key, article: undefined}});
     const datastore = useDatastore();
     const shownComments = comments.filter(comment => !getIsDefaultCollapsed({datastore, comment}));
-    console.log('preview comments', shownComments);
     return <ConversationPreview conversation={conversation} comments={shownComments} embed={embed} />   
-}
-
-function ConversationScreen({conversationKey}) {
-    const conversation = useObject('conversation', conversationKey);
-    const group = useObject('group', conversation.group);
-    const persona = usePersona();
-
-    const config = {    
-        actions: [ActionPromote, ActionReply, ActionReCollapse],
-        getIsDefaultCollapsed
-    }
-
-    return <ScrollableScreen maxWidth={null} pad={false} >
-        <View style={{backgroundColor: 'white'}}>
-            <Narrow >
-                <GroupPromo group={group} />
-                <Pad size={8} />
-                <BigTitle>{conversation.title}</BigTitle>
-                <BodyText>{conversation.description}</BodyText>
-                <Pad size={8} />
-            </Narrow>
-        </View>
-
-        <Narrow>
-            {persona.member && <InfoBox titleLabel='You are a member' lines={["'Your messages will be seen prominently, and you can promote non member posts to be prominent.'"]} />}
-            {!persona.member && <InfoBox titleLabel='You are a guest' lines={["Your messages will appear small until a member promotes them."]} />}
-
-            <Pad size={16} />
-            <BasicComments about={conversationKey} config={config}/>
-        </Narrow>
-
-        {/* <Center> */}
-        {/* </Center> */}
-    </ScrollableScreen>
 }
 
 function OpenHouseConversation({conversationKey}) {
     const config = {    
         actions: [ActionPromote, ActionReply, ActionReCollapse],
+        authorBling: [MemberAuthorBling],
         getIsDefaultCollapsed
     }
 

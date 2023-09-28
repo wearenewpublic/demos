@@ -1,7 +1,7 @@
 import { Image, Switch, Text, View } from "react-native";
 import { MaybeArticleScreen } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
-import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_groups } from "../data/articles/godzilla";
+import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_groups, godzilla_related } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
 import { expandDataList, expandUrl } from "../util/util";
@@ -44,14 +44,16 @@ export const GroupMultiChatPrototype = {
             conversation: expandDataList(godzilla_conversations),
             group: expandDataList(godzilla_groups),
             post: expandDataList(godzilla_conversation_posts),
-            comment: expandDataList(godzilla_conversation_post_comments)
+            comment: expandDataList(godzilla_conversation_post_comments),
+            related: expandDataList(godzilla_related)
         },
         {key: 'godzilla-french', name: 'Godzilla Article (French)', article: godzilla_article_french,
             language: languageFrench,
             conversation: expandDataList(godzilla_conversations_french),
             group: expandDataList(godzilla_groups_french),
             post: expandDataList(godzilla_conversation_posts_french),
-            comment: expandDataList(godzilla_conversation_post_comments_french)
+            comment: expandDataList(godzilla_conversation_post_comments_french),
+            related: expandDataList(godzilla_related)
         },
     ]
 }

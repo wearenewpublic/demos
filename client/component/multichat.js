@@ -1,8 +1,8 @@
 
 import React from "react";
 import { Image, Switch, Text, View } from "react-native";
-import { MaybeArticleScreen } from "../component/article";
-import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
+import { MaybeArticleScreen, useArticle } from "../component/article";
+import { BigTitle, BodyText, Card, Center, Clickable, ClickableText, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
 import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_groups } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection, useDatastore, useGlobalProperty, useObject, usePersona, usePersonaKey } from "../util/datastore";
@@ -126,7 +126,7 @@ export function MultiChatScreen() {
     const {prototype} = useContext(PrototypeContext);
     const conversationPreview = prototype.config.conversationPreview;
 
-    return <MaybeArticleScreen articleChildLabel='Conversations' embed={<ConversationListEmbed/>}>
+    return <MaybeArticleScreen articleChildLabel='Group Conversations related to this Article' /* embed={<ConversationListEmbed/>} */ >
         <Narrow>
             {conversations.map(conversation =>
                 React.createElement(conversationPreview, {key: conversation.key, conversation: conversation})
@@ -166,16 +166,38 @@ function ConversationScreen({conversationKey}) {
                 <Pad size={8} />
                 <BigTitle>{conversation.title}</BigTitle>
                 <BodyText>{conversation.description}</BodyText>
-                <Pad size={8} />
+                <Pad size={16} />
+                <RelatedArticleList conversationKey={conversationKey} />
+
             </Narrow>
         </View>
+
 
         <Narrow>
             {persona.member && <InfoBox titleLabel='You are a member' lines={[prototype.config.memberExplain]} />}
             {!persona.member && <InfoBox titleLabel='You are a guest' lines={[prototype.config.nonMemberExplain]} />}
             <Pad size={16} />
-            {React.createElement(prototype.config.conversationWidget, {conversation: conversation})}
+            {React.createElement(prototype.config.conversationWidget, {conversation: conversation, conversationKey})}
             <Pad size={32} />
         </Narrow>
     </ScrollableScreen>
+}
+
+function RelatedArticleList({conversationKey}) {
+    const related = useCollection('related', {filter: {conversation: conversationKey}});
+    return <View>
+        <Text style={{fontWeight: 'bold'}}>Related Articles</Text>
+        {related.map(related =>
+            <RelatedArticle articleKey={related.article} key={related.key} />
+        )}
+    </View>
+}
+
+function RelatedArticle({articleKey}) {
+    const article = useArticle(articleKey);
+    function onArticle() {
+        console.log('on Article');
+        alert('Not implemented yet. This should either show the article, or go to a comment that shared the article.');
+    }
+    return <Text style={{marginLeft: 0}}>&bull; <ClickableText onPress={onArticle}>{article?.title}</ClickableText></Text>
 }
