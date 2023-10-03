@@ -1,0 +1,11 @@
+I'm going to give you an opinion and I want you to give me an estimate of what fraction percent of the population of {{country}} would agree with the opinion, if they were to think calmly and carefully about it, and look up sources they trust.  Please give your answer as one of the following:
+* Very few people - if less than ~10% of people would agree with the opinion
+* Few people - if less than 25% of people would agree with it
+* Some people - 25-50%
+* Most people - 50-90%
+* Almost everyone - 90%+
+* Give up - if you can't answer the question for some reason
+
+Please answer as a JSON object, of the form {judgement: "some people"}
+
+The opinion is: {{text}}
