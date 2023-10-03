@@ -12,7 +12,7 @@ import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/naviga
 import { LoginScreen } from './organizer/Login';
 import { Datastore, useGlobalProperty } from './util/datastore';
 import { NewLiveInstanceScreen } from './organizer/NewLiveInstance';
-import { HorizBox, ScreenTitleText } from './component/basics';
+import { BodyText, HorizBox, ScreenTitleText } from './component/basics';
 import { MembersScreen } from './component/members';
 import { SharedData } from './util/shareddata';
 
@@ -31,7 +31,9 @@ export default function App() {
     gotoInstance({prototypeKey, instanceKey: newInstanceKey});
   }
 
-  if (!prototypeKey) {
+  if (window.NEWPUBLIC_CONFIG) {
+    return <EmbeddedPrototype />
+  } else if (!prototypeKey) {
     return <FullScreen>
       <Text>You need a prototype URL to see a prototype</Text>
     </FullScreen>
@@ -65,6 +67,38 @@ export default function App() {
     </SharedData>
   }
 }
+
+
+export function EmbeddedPrototype() {
+  const config = window.NEWPUBLIC_CONFIG;
+  const {instanceKey} = config;
+  const prototypeKey = config.prototype;
+  const prototype = choosePrototypeByKey(config.prototype);
+  const instance = chooseInstanceByKey({prototype, instanceKey: config.instanceKey});
+  const screenSet = {...defaultScreens, ...prototype.subscreens};
+  const screenKey = null;
+  const params = {};
+
+  console.log('config', {config, prototype, instance});
+
+  return <SharedData>
+    <PrototypeContext.Provider value={{prototype, prototypeKey, instance, instanceKey, isLive: instance.isLive}}>
+      <Datastore instance={instance} instanceKey={instanceKey} prototype={prototype} prototypeKey={prototypeKey} isLive={instance.isLive}>
+        <EmbeddedPrototypeScreen instance={instance} instanceKey={instanceKey} prototype={prototype} prototypeKey={prototypeKey} screenKey={screenKey} params={params} />
+      </Datastore>
+    </PrototypeContext.Provider>
+  </SharedData>
+  // return <BodyText>Embedded Prototype</BodyText>
+}
+
+function EmbeddedPrototypeScreen({instance, instanceKey, prototype, prototypeKey, screenKey, params}) {
+  const screenSet = {...defaultScreens, ...prototype.subscreens};
+  var screen = getScreen({screenSet, prototype, screenKey, instanceKey});
+  var title = getScreenTitle({screenSet, prototype, screenKey, instance, params}); 
+
+  return React.createElement(screen, params);
+}
+
 
 
 function SideBySideStack({screenStack, prototypeKey, instanceKey}) {
