@@ -29,8 +29,8 @@ export const OpinionPopularityPrototype = {
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
             country: 'The United States',
             post: expandDataList([
-                {from: 'a', text: "Giant monsters don't exist"},
-                {from: 'b', text: 'Giant Monsters shouldn\'t be allowed to rampage cities.'}
+                {from: 'a', text: "Giant monsters don't exist", checkedStatus: 'most people'},
+                {from: 'b', text: 'Giant Monsters shouldn\'t be allowed to rampage cities.', checkedStatus: 'almost everyone'}
             ])
         }
     ],
