@@ -4,6 +4,7 @@ export const post_parents = [
     {key: 'babysitter', goodness: 'helpful', from: 'b', text: 'I am looking for a babysitter for this Saturday night. Any recommendations?'},
     {key: 'shout', goodness: 'toxic', from: 'a', text: 'All these people different to me are terrible and we should shout at them'},
     {key: 'b', goodness: 'dull', from: 'b', text: 'What age do you think kids are ready to watch the Star Wars movies?'}, 
+    {key: 'imm', goodness: 'toxic', from: 'c', text: "It's terrible what's going on right now with immigration. These politicians are awful"}
 ]
 
 export const post_parents_comments = [
