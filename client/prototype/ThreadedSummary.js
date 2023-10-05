@@ -9,6 +9,7 @@ import { useCollection, useDatastore, useGlobalProperty } from "../util/datastor
 import { callServerApiAsync } from "../util/servercall";
 import { QuietSystemMessage } from "../component/message";
 import { useEffect, useState } from "react";
+import { MaybeArticleScreen } from "../component/article";
 
 const description = `
 Generate a summary of a threaded conversation. This summary could be shared externally.
@@ -26,7 +27,12 @@ export const ThreadedSummaryPrototype = {
             comment: expandDataList(trek_vs_wars)},
         {key: 'wars-split', name: 'Star Wars vs Star Trek (Split)', 
             split: true,
-                comment: expandDataList(trek_vs_wars)},
+            comment: expandDataList(trek_vs_wars)},
+        {key: 'wars-article', name: 'Star Wars vs Star Trek (Article)', 
+            articleKey: 'starwars',
+            mood: true,
+            comment: expandDataList(trek_vs_wars)},
+
     
     ],
     liveInstance: [
@@ -81,30 +87,34 @@ export function ThreadedSummaryScreen() {
     const comments = useCollection('comment', {sortBy: 'time', reverse: true});
     const topLevelComments = comments.filter(comment => !comment.replyTo);
     const split = useGlobalProperty('split');
+    const mood = useGlobalProperty('mood');
 
-    return (
-        <WideScreen pad>
-            <ScrollView>
-                <Narrow>
-                    {split ? 
-                        <View>
-                            <SummaryEditor property='agree' name='Points of Agreement' prompt='agree_points' />
-                            <SummaryEditor property='disagree' name='Points of Disagreement' prompt='disagree_points' />
-                        </View>
-                    :
-                        <SummaryEditor property='summary' name='Conversation Summary' prompt='summary' />
-                    }
-                </Narrow>
-                <Center>
-                    <View>
-                    <TopCommentInput />
-                    {topLevelComments.map(comment => 
-                        <Comment key={comment.key} commentKey={comment.key} />
-                    )}
-                    </View>
-                </Center>
-                <Pad size={24}/>
-            </ScrollView>
-        </WideScreen>
-    )
+    return <MaybeArticleScreen articleChildLabel='Conversation'>
+        <Narrow>
+            {split && 
+                <View>
+                    <SummaryEditor property='agree' name='Points of Agreement' prompt='agree_points' />
+                    <SummaryEditor property='disagree' name='Points of Disagreement' prompt='disagree_points' />
+                </View>
+            }
+            {!split && !mood &&   
+                <SummaryEditor property='summary' name='Conversation Summary' prompt='summary' />
+            }
+            {mood &&
+                <View>
+                    <SummaryEditor property='agree' name='Points of Agreement' prompt='agree_points' />
+                    <SummaryEditor property='moodpoints' name='Conversation Mood' prompt='mood_points' />        
+                </View>
+            }
+        </Narrow>
+        <Center>
+            <View>
+            <TopCommentInput />
+            {topLevelComments.map(comment => 
+                <Comment key={comment.key} commentKey={comment.key} />
+            )}
+            </View>
+        </Center>
+        <Pad size={24}/>
+    </MaybeArticleScreen>
 }
