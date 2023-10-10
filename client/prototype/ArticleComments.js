@@ -1,5 +1,5 @@
 import { Article } from "../component/article"
-import { BodyText, Center, Pad, ScrollableScreen, SmallTitleLabel } from "../component/basics"
+import { BodyText, Center, Narrow, Pad, ScrollableScreen, SmallTitleLabel } from "../component/basics"
 import { BasicComments } from "../component/comment";
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
@@ -48,11 +48,11 @@ export function ArticleCommentsScreen() {
 
     return <ScrollableScreen maxWidth={800}>
         <Article articleKey={articleKey}>
-            <Center>
+            <Narrow>
                 <SmallTitleLabel label='Comments'/>
                 <BasicComments />
                 <Pad size={32} />
-            </Center>
+            </Narrow>
         </Article>
     </ScrollableScreen>
 }
