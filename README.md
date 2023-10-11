@@ -2,18 +2,27 @@
 
 This is a prototyping space for trying out new designs for social products.
 
-## Design Principles
+## Instance Types
 
-A prototype should be a simple demonstration of an idea that makes the idea concrete enough that others can play with it and see what they think of it. As such, prototypes intentionally have several limitations:
+A prototype can be instantiated in three different ways:
+* **Role Play Instance** - The user can switch between multiple alphabetically-named fake users and role play interactions between them. There is no persistent state.
+* **Live Instante** - Users log in with their real identities using Google Login. Data is stored persistently using Google Firebase.
+* **Embedded Instance** (work in progress) - Prototype is embedded in a page on another website, bit inserting a special snippet of javascript.
 
-* **No persistent data** - All data is stored locally on the client and reset when you re-load the prototype. This avoids the need to worry about breaking existing data when modifying a prototype, reduces abuse risks, and prevents people from thinking prototyes are real products.
-* **No login** - You can switch between multiple personas to see how the product looks from their points of view.
-* **Single visual style** - Components don't provide the ability to change their visual styling from the default theme. This allows prototypes to focus on the product structure over the visuals, and ensures all components look reasonable when combined.
-* **Slowness is okay** - Sometimes it's easier to do things slowly than fast (particularly when using GPT back ends). That's okay for a prototype.
-* **Web only** - Making a prototype work as a mobile app is extra work. We want to focus on showing the ideas. 
+The same prototype can be instantiated all three ways. This allows us to test the same idea in increasing levels of fidelity.
+
+
+## Current Limitations
+
+Our current focus is on making it easy to quickly implement and test lots of very different ideas. This has led us to a design that is very simple and flexible, but comes with multiple limitations:
+
+* **Chrome Only** - Some features may not work on other browsers. 
+* **Web Only** - We use React Native, in anticipaton of supporting iOS and Android in the future, but currently only support Web.
+* **Limited Security and Privacy Guarantees** - A determined hacker could read and write all messages in conversations they have access to.
+* **Slowness is Okay** - Sometimes it's easier to do things slowly than fast (particularly when using GPT back ends). That's okay for a prototype.
 * **No fancy indexing** - Data is stored as a simple array for each data type, and non-scalable operations like filtering and sorting are used to find the data we want. This wouldn't scale to large data sets but keeps things simple for a demonstration.
 
-In the near future we are likely to introduce a second category of "One time Product" prototypes that relax some of these limitations, but that isn't supported yet.
+We expect to fix all of these limitations as prototypes get closer to production, but these limitations are acceptable for prototyping, and the correct way to address these limitations will be more obvious once we have a better sense of what prototypes people care about.
 
 
 ## Core Architecture
@@ -72,7 +81,7 @@ cd functions
 yarn emulate
 ```
 
-Use Google Chrome to view [http://localhost:19006/all](http://localhost:19006/all) to see a list of all prototypes in the [organizer](client/organizer/README.md). Note that the `all` URL only works when running in local development mode, and is not available in the production deployment.
+Use Google Chrome to view [http://localhost:19006/all](http://localhost:19006/all) to see a list of all prototypes in the [organizer](client/organizer/README.md). 
 
 
 ## Creating a new prototype
@@ -87,16 +96,16 @@ Use Google Chrome to view [http://localhost:19006/all](http://localhost:19006/al
 ## Using Data
 
 The prototype garden uses a very simple data model, with the following functions:
-* **useCollection** - Fetch items from a particular table, given sorting rules. This function is a React hook, and so your component will automatically refresh when data changes.
-* **useObject** - Fetch an individual data item by its key.
-* **addObject** - Add a new object to a table. The `from`, `time`, and `key` fields are automatically filled in with the current user, time, and object key so you don't need to provide them. 
-* **modifyObject** - Modify an object in a table. For prototyes there are no security rules here. When we introduce one time products we will add constraints on what can be modified.
-* **usePersona** - Get the current user.
-* **useGlobalData** - Get a global variable that isn't part of a collection
-* **useSessionData** - Get a variable that is specific to this particular user session.
-* **useDatastore** - Get a `datastore` object that can be used to modify the datastore from inside a callback.
+* **useCollection(typename, {filter, sortBy})** - Fetch items from a particular table, given sorting rules. This function is a React hook, and so your component will automatically refresh when data changes.
+* **useObject(typename, key)** - Fetch an individual data item by its key.
+* **usePersona()** - Get the current user.
+* **useGlobalData(key)** - Get a global variable that isn't part of a collection
+* **useSessionData(key)** - Get state that is specific to this particular user session. Use together with `datastore.setSessionState(key, value)` to manage global UI state.
+* **useDatastore()** - Get a `datastore` object that can be used to modify the datastore from inside a callback.
 * **datastore.getCollection/Object etc** - Non-hook equivalents of the `use` functions that can be used to read data within a callback.
-* **datastore.addObject/setObject/modifyObject** - Methods to modify the state from within a callback, in response to user actions.
+* **datastore.addObject/setObject/setSessionData/modifyObject** - Methods to modify the state from within a callback, in response to user actions.
+
+Search for a method name in current prototypes to see how to use these in practice. As with other React apps, you should avoid using global variables to manage state.
 
 
 ## Using GPT 
@@ -122,24 +131,22 @@ You can also place translated versions of example content from the `data` direct
  * Email me at `rob@newpublic.org`. I want to have the prototype garden be super easy to use, and I promise to reply to every email. Don't worry about asking stupid questions. If this code isn't super-easy to understand then that means I need to make it clearer.
 
 
-## More Info
+## Directory Layout
 
-For more detailed information, look at the `README.md` files for subdirectories:
+Here is a rough overview of what is in each directory:
 
-* [client](client/README.md)
-    * [assets](client/assets/README.md)
-    * [component](client/component/README.md)
-    * [contrib](client/contrib/README.md)
-    * data
-    * organizer
-    * platform-specific
-    * [prototype](client/prototype/README.md)
-    * translations
-    * util
-* [functions](functions/README.md)
-    * bot
-    * botutil
-    * component
-    * prompts
-* public
-
+* **client** - Front end React code that runs in the browser.
+  * **assets** - Icon images. You can mostly ignore this.
+  * **components** - Shared React components maintained by New Public. If you aren't working for New Public then you should put your components in `contrib` instead. If you want to change one of these components then create your own copy in `contrib`.
+  * **contrib** - Shared React components created by people other than New Public. Use a sub-directory with your name or your organization's name. Some contrib components may later graduate to the `components` directory.
+  * **data** - English-language data for role-play prototype instances. 
+  * **organizer** - Simple UI for browsing prototypes and their instances. You can mostly ignore this.
+  * **platform-specific** - Components that need to be implemented differently for Web vs iOS and Android. Right now iOS and Android support is minimal. 
+  * **prototype** - This is where the prototypes go. Each one should be in a single self-contained file. Look at existing prototypes to get a feel for how they work.
+  * **translations** - Files for [internationalization](#internationalization). 
+  * **util** - Shared code that isn't a react component. In particular `datastore` contains hooks for [using data](#using-data). 
+* **functions** - Back end Node.js code that runs as Firebase Cloud Functions
+  * **bot/botutil** - Experimental support for integrating prototypes with Slack. You can mostly ignore this.
+  * **component** - This is where server-side APIs are implemented. Likely the main component you'll want to call is [GPT](#using-gpt). Contact [rob] 
+  * **prompts** - [GPT prompts](#using-gpt).
+* **public** - Static files, including faces for role play users and images for example articles. If you change anything here you'll need to run `client/update_hosted_files.sh` to see changes reflected in the emulated server.
