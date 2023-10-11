@@ -50,11 +50,11 @@ yarn global add firebase-tools
 yarn global add expo-cli
 ```
 
-Sign up for an OpenAI key [here](https://openai.com/blog/openai-api).
+Sign up for an OpenAI key [here](https://openai.com/blog/openai-api), or find your existing OpenAI key [here](https://platform.openai.com/account/api-keys).
 
 Create a file called `functions/keys.js` with the following content:
 ```
-exports.OPENAI_KEY = 'your OPENAI key'`
+exports.OPENAI_KEY = 'your OPENAI key'
 ```
 
 
@@ -71,6 +71,8 @@ In another terminal, start the back end:
 cd functions
 yarn emulate
 ```
+
+Use Google Chrome to view [http://localhost:19006/all](http://localhost:19006/all) to see a list of all prototypes in the [organizer](client/organizer/README.md). Note that the `all` URL only works when running in local development mode, and is not available in the production deployment.
 
 
 ## Creating a new prototype
@@ -118,4 +120,26 @@ You can also place translated versions of example content from the `data` direct
 ## Any other Questions
  
  * Email me at `rob@newpublic.org`. I want to have the prototype garden be super easy to use, and I promise to reply to every email. Don't worry about asking stupid questions. If this code isn't super-easy to understand then that means I need to make it clearer.
+
+
+## More Info
+
+For more detailed information, look at the `README.md` files for subdirectories:
+
+* [client](client/README.md)
+    * [assets](client/assets/README.md)
+    * [component](client/component/README.md)
+    * [contrib](client/contrib/README.md)
+    * data
+    * organizer
+    * platform-specific
+    * [prototype](client/prototype/README.md)
+    * translations
+    * util
+* [functions](functions/README.md)
+    * bot
+    * botutil
+    * component
+    * prompts
+* public
 
