@@ -1,12 +1,13 @@
 # New Public Prototype Garden
 
-This is a prototyping space for trying out new designs for social products.
+This is an environment for rapidly prototyping lots of different social product ideas.
+
 
 ## Instance Types
 
 A prototype can be instantiated in three different ways:
 * **Role Play Instance** - The user can switch between multiple alphabetically-named fake users and role play interactions between them. There is no persistent state.
-* **Live Instante** - Users log in with their real identities using Google Login. Data is stored persistently using Google Firebase.
+* **Live Instance** - Users log in with their real identities using Google Login. Data is stored persistently using Google Firebase.
 * **Embedded Instance** (work in progress) - Prototype is embedded in a page on another website, bit inserting a special snippet of javascript.
 
 The same prototype can be instantiated all three ways. This allows us to test the same idea in increasing levels of fidelity.
