@@ -39,6 +39,7 @@ import { SemiAnonMulti } from "./SemiAnonMulti";
 import { OpenHouseMulti } from "./OpenHouseMulti";
 import { OpinionPopularityPrototype } from "./OpinionPopularity";
 import { CustomRankedPrototype } from "./CustomRanked";
+import { SimilarCommentPrototype } from "./SimilarComment";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -49,7 +50,7 @@ export const prototypes = [
     FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype,
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
-    OpinionPopularityPrototype, CustomRankedPrototype,
+    OpinionPopularityPrototype, CustomRankedPrototype, SimilarCommentPrototype,
     
     ArticleGenerator,
 

@@ -21,7 +21,7 @@ export const OpinionPopularityPrototype = {
     date: 'Tue Oct 03 2023 15:06:20 GMT-0700 (Pacific Daylight Time)',
     author: authorRobEnnals,
     description: 'AI estimates what fraction of the population agrees with an opinion',
-    screen: FactAdderScreen,
+    screen: OpinionPopularityScreen,
     subscreens: {
         facts: {screen: FactListScreen, title: 'Facts'}
     },
@@ -48,7 +48,7 @@ export const OpinionPopularityPrototype = {
 
 
 
-function FactAdderScreen() {
+function OpinionPopularityScreen() {
     const article = useGlobalProperty('article');
 
     return <ScrollableScreen maxWidth={800}>

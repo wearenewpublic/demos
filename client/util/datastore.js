@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { adminPersonaList, defaultPersona, defaultPersonaList, memberPersonaList, personaListToMap } from '../data/personas';
 import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseDataAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
@@ -254,16 +254,20 @@ export function useObject(typeName, key) {
     return dataTree[typeName]?.[key];
 }
 
+// We have to be careful with memoization here, or we end up creating a new
+// result object every time, which messes up dependencies elsehere
 export function useCollection(typeName, props = {}) {
-    const {sortBy, filter, limit} = props;
     const {dataTree} = useData();
     const collection = dataTree[typeName];
+    const result = useMemo(() => processObjectList(collection, props),
+        [collection, JSON.stringify(props)]
+    )
+    return result;
+}
 
-    if (!collection) {
-        return [];
-    }
-    var result = sortMapValuesByProp(collection, sortBy || 'key');
-    if (props.reverse) {
+function processObjectList(collection, {sortBy, reverse, limit, filter}) {
+    var result = sortMapValuesByProp(collection ?? [], sortBy || 'key');
+    if (reverse) {
         result = result.reverse();
     } if (filter) {
         result = result.filter(item => meetsFilter(item, filter))
