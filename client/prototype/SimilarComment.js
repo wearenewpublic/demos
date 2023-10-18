@@ -42,7 +42,7 @@ function SimilarCommentScreen() {
 
     return <MaybeArticleScreen articleChildLabel='Comments'>
         <Narrow>
-            <PostInput placeholder="Add a relevant fact" bottomWidgets={[EditCheckSimilarity]} getCanPost={getCanPost}/>
+            <PostInput placeholder="What do you have to contribute?" bottomWidgets={[EditCheckSimilarity]} getCanPost={getCanPost}/>
             {posts.map(post => <Post key={post.key} post={post} />)}
         </Narrow>
     </MaybeArticleScreen>

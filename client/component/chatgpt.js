@@ -28,6 +28,13 @@ export async function gptProcessAsync({datastore, promptKey, params, model, func
     return parsedResponse;
 }
 
+export async function getGptResponse({datastore, promptKey, params}) {
+    const rawResponse = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'chat',
+        params: {promptKey, params}
+    })
+    return rawResponse;
+}
+
 
 export function messagesToGptString({datastore, messages, newMessageText, startPost}) {
     const personaKey = datastore.getPersonaKey();
