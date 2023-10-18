@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Article, MaybeArticleScreen } from "../component/article";
 import { BodyText, Card, Center, Clickable, HorizBox, ListItem, Narrow, Pad, PadBox, Pill, PrimaryButton, ScrollableScreen, SmallTitle, SmallTitleLabel } from "../component/basics";
 import { BasicComments } from "../component/comment";
-import { Post } from "../component/post";
+import { Post, PostActionComment, PostActionEdit, PostActionLike, PostScreenInfo } from "../component/post";
 import { PostInput } from "../component/replyinput";
 import { godzilla_article, godzilla_category_posts, godzilla_comments, godzilla_title_comments } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
@@ -19,13 +19,16 @@ import { sortEmbeddingsByDistance } from "../util/cluster";
 import { TranslatableLabel } from "../component/translation";
 import { post_starwars } from "../data/posts";
 
-export const AutoCritiquePrototype = {
-    key: 'autocrit',
-    name: "Auto Critique",
+export const LikelyResponsePrototype = {
+    key: 'likelyresponse',
+    name: "Likely Response",
     date: 'Oct 17 2023 14:10:38 GMT-0700 (Pacific Daylight Time)',
     author: authorRobEnnals,
-    description: 'AI suggests ways that you can improve your post before you post it',
-    screen: AutoCritiqueScreen,
+    description: 'AI shows a likely response that your comment would get, helping you refine it to be less easily picked apart.',
+    screen: LikeleyResponseScreen,
+    subscreens: {
+        post: PostScreenInfo
+    },
     instance: [
         {key: 'wars', name: 'Star Wars', articleKey: 'starwars', 
             post: expandDataList(post_starwars)
@@ -38,13 +41,17 @@ export const AutoCritiquePrototype = {
 
 
 
-function AutoCritiqueScreen() {
+function LikeleyResponseScreen() {
     const posts = useCollection('post', {sortBy: 'time', reverse: true});
 
     return <MaybeArticleScreen articleChildLabel='Comments'>
         <Narrow>
             <PostInput placeholder="Contribute something to the conversation" bottomWidgets={[EditAutoCrit]} getCanPost={getCanPost}/>
-            {posts.map(post => <Post key={post.key} post={post} />)}
+            {posts.map(post => 
+                <Post hasComments key={post.key} post={post}
+                    actions={[PostActionLike, PostActionComment, PostActionEdit]}
+                />
+            )}
         </Narrow>
     </MaybeArticleScreen>
 }
@@ -63,14 +70,12 @@ function EditAutoCrit({post, onPostChanged}) {
         setInprogress(false);
     }
 
-    // return <AIResponse text='THis is a dumbd thing to say' />
-
     if (inProgress) {
         return <QuietSystemMessage label='Getting feedback...' />
     } else {
         return <View>
             {feedback && <AIResponse text={feedback} />}
-            {(post.checkedText != post.text) && <PrimaryButton label='Get AI Feedback before Posting' onPress={getFeedback} />}
+            {(post.checkedText != post.text) && <PrimaryButton label='See Likely Response before Posting' onPress={getFeedback} />}
         </View>
     }
 }

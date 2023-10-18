@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Article, MaybeArticleScreen } from "../component/article";
 import { Card, Center, Clickable, HorizBox, ListItem, Narrow, Pad, Pill, PrimaryButton, ScrollableScreen, SmallTitle, SmallTitleLabel } from "../component/basics";
 import { BasicComments } from "../component/comment";
-import { Post } from "../component/post";
+import { Post, PostActionComment, PostActionEdit, PostActionLike, PostScreenInfo } from "../component/post";
 import { PostInput } from "../component/replyinput";
 import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
@@ -24,6 +24,9 @@ export const SimilarCommentPrototype = {
     author: authorRobEnnals,
     description: 'AI shows you the most similar existing comment before you post yours, so you can see if you are saying something new.',
     screen: SimilarCommentScreen,
+    subscreens: {
+        post: PostScreenInfo
+    },
     instance: [
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
             country: 'The United States',
@@ -43,7 +46,11 @@ function SimilarCommentScreen() {
     return <MaybeArticleScreen articleChildLabel='Comments'>
         <Narrow>
             <PostInput placeholder="What do you have to contribute?" bottomWidgets={[EditCheckSimilarity]} getCanPost={getCanPost}/>
-            {posts.map(post => <Post key={post.key} post={post} />)}
+            {posts.map(post => 
+                <Post hasComments key={post.key} post={post} 
+                    actions={[PostActionLike, PostActionComment, PostActionEdit]}
+                />
+            )}
         </Narrow>
     </MaybeArticleScreen>
 }
@@ -73,7 +80,9 @@ function NoveltyCheckResult({text}) {
     } else if (closestPost) {    
         return <View>
             <SmallTitle>Most Similar Comment</SmallTitle>
-            <Post post={closestPost} />
+            <Post hasComments post={closestPost} 
+                actions={[PostActionLike, PostActionComment, PostActionEdit]}
+            />
         </View>
     } else {
         return null;

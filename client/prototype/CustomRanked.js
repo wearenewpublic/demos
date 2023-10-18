@@ -1,6 +1,6 @@
 import { EditableText, Narrow, Pad, PadBox, Pill, PrimaryButton, ScreenTitleText, ScrollableScreen, WideScreen } from "../component/basics";
 import { BasicComments } from "../component/comment";
-import { Post, PostActionComment, PostActionEdit, PostActionLike } from "../component/post";
+import { Post, PostActionComment, PostActionEdit, PostActionLike, PostScreenInfo } from "../component/post";
 import { useTranslation } from "../component/translation";
 import { authorRobEnnals } from "../data/authors";
 import { post_parents, post_parents_comments } from "../data/posts";
@@ -33,7 +33,7 @@ export const CustomRankedPrototype = {
     description: 'Rank a feed of posts, based on criteria provided by the user',
     screen: CustomRankedScreen,
     subscreens: {
-        post: {screen: PostScreen, title: PostScreenTitle},
+        post: PostScreenInfo,
     },
     instance: [
         {key: 'parents', name: 'Sunnyvale Parents', 
@@ -108,24 +108,6 @@ function ScoreWidget({score}) {
         case 1: return <Pill big label='Very Bad' color='red' />
         default: return <Pill big label='Unknown' color='grey' />
     }
-}
-
-function PostScreenTitle({postKey}) {
-    const post = useObject('post', postKey);
-    const author = useObject('persona', post?.from);
-    const tPost = useTranslation('Post');
-    return <ScreenTitleText title={author.name + "'s " + tPost} />
-}
-
-function PostScreen({postKey}) {
-    const post = useObject('post', postKey);
-    return <WideScreen>
-        <Narrow>
-            <Post noCard post={post} />
-            <Pad/>
-            <BasicComments about={postKey} />
-        </Narrow>
-    </WideScreen>
 }
 
 

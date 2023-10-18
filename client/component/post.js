@@ -1,8 +1,8 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Card, Clickable, HorizBox, MaybeCard, MaybeClickable, Pad, PluralLabel, Separator, TimeText } from "./basics";
+import { Card, Clickable, HorizBox, MaybeCard, MaybeClickable, Narrow, Pad, PluralLabel, ScreenTitleText, Separator, TimeText, WideScreen } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
 import { AnonymousFace, UserFace } from "./userface";
-import { TranslatableLabel } from "./translation";
+import { TranslatableLabel, useTranslation } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { pushSubscreen } from "../util/navigate";
@@ -11,6 +11,7 @@ import { AutoSizeTextInput } from "./basics";
 import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
+import { BasicComments } from "./comment";
 
 export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], 
         infoLineWidget=null, authorBling=null,
@@ -341,3 +342,23 @@ const LikeLineStyle = StyleSheet.create({
         marginTop: 8,
     }
 });
+
+function PostScreenTitle({postKey}) {
+    const post = useObject('post', postKey);
+    const author = useObject('persona', post?.from);
+    const tPost = useTranslation('Post');
+    return <ScreenTitleText title={author.name + "'s " + tPost} />
+}
+
+function PostScreen({postKey}) {
+    const post = useObject('post', postKey);
+    return <WideScreen>
+        <Narrow>
+            <Post noCard post={post} />
+            <Pad/>
+            <BasicComments about={postKey} />
+        </Narrow>
+    </WideScreen>
+}
+
+export const PostScreenInfo = {screen: PostScreen, title: PostScreenTitle}

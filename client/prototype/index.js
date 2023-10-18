@@ -40,7 +40,7 @@ import { OpenHouseMulti } from "./OpenHouseMulti";
 import { OpinionPopularityPrototype } from "./OpinionPopularity";
 import { CustomRankedPrototype } from "./CustomRanked";
 import { SimilarCommentPrototype } from "./SimilarComment";
-import { AutoCritiquePrototype } from "./AutoCritique";
+import { LikelyResponsePrototype } from "./LikelyResponse";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -52,7 +52,7 @@ export const prototypes = [
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, SimilarCommentPrototype,
-    AutoCritiquePrototype,
+    LikelyResponsePrototype,
     
     ArticleGenerator,
 
