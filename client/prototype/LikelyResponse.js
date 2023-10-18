@@ -71,7 +71,7 @@ function EditAutoCrit({post, onPostChanged}) {
     }
 
     if (inProgress) {
-        return <QuietSystemMessage label='Getting feedback...' />
+        return <QuietSystemMessage label='Generating likely response...' />
     } else {
         return <View>
             {feedback && <AIResponse text={feedback} />}
