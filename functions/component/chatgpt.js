@@ -70,6 +70,21 @@ async function callGptAsync({promptKey, params, language, model}) {
 
 exports.callGptAsync = callGptAsync;
 
+async function conversationAsync({messages}) {
+    // const messages = params.messages;
+    console.log('conversationAsync', messages);
+    const result = await callOpenAIAsync({action: 'chat/completions', data: {
+        temperature: 0,
+        model: 'gpt-3.5-turbo',
+        max_tokens: 1000,
+        messages: messages
+    }});
+    console.log('result', result);
+    console.log(result.choices?.[0]?.message?.content);
+    const data = result.choices?.[0]?.message?.content;
+    return {data}
+}
+
 async function getEmbeddingsAsync({text}) {
     const result = await callOpenAIAsync({action: 'embeddings', data: {
         input: text,
@@ -108,6 +123,7 @@ exports.getEmbeddingsArrayAsync = getEmbeddingsArrayAsync;
 exports.apiFunctions = {
     hello: helloAsync,
     chat: callGptAsync,
+    conversation: conversationAsync,
     embedding: getEmbeddingsAsync,
     embeddingArray: getEmbeddingsArrayAsync
 }

@@ -1,10 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Platform, StyleSheet, TextInput, View } from "react-native";
-import { Clickable } from "./basics";
+import { Clickable, MaybeClickable } from "./basics";
 import { useTranslation } from "./translation";
 
-export function ChatInput({onSend}) {
+export function ChatInput({onSend, disabled=false}) {
     const [text, setText] = useState('');
     const placeholder = useTranslation('Type a message');
     const s = ChatInputStyle;
@@ -35,9 +35,9 @@ export function ChatInput({onSend}) {
             placeholderTextColor='#999'
             onKeyPress={onKeyPress}
         />
-        <Clickable onPress={onPressSend}>
-            <Ionicons name='md-send' size={24} color='#0084ff' />
-        </Clickable>
+        <MaybeClickable isClickable={!disabled} onPress={onPressSend}>
+            <Ionicons name='md-send' size={24} color={disabled ? '#999' : '#0084ff'} />
+        </MaybeClickable>
     </View>
 }
 

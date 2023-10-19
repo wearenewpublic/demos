@@ -674,7 +674,7 @@ const UserNameChipStyle = StyleSheet.create({
     }
 })
 
-export function InfoBox({titleLabel, lines}) {
+export function InfoBox({titleLabel, label, lines=[]}) {
     const s = InfoBoxStyle;
     return <View style={s.outer}>
         <View style={s.box}>
@@ -682,6 +682,7 @@ export function InfoBox({titleLabel, lines}) {
             {lines.map((line, idx) => 
                 <TranslatableLabel key={idx} style={s.body} label={line} />
             )}
+            {label && <TranslatableLabel style={s.body} label={label} />}
         </View>       
     </View>
 }

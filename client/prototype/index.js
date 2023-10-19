@@ -41,6 +41,7 @@ import { OpinionPopularityPrototype } from "./OpinionPopularity";
 import { CustomRankedPrototype } from "./CustomRanked";
 import { SimilarCommentPrototype } from "./SimilarComment";
 import { LikelyResponsePrototype } from "./LikelyResponse";
+import { PrivateArticleChatPrototype } from "./PrivateArticleChat";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -52,7 +53,7 @@ export const prototypes = [
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, SimilarCommentPrototype,
-    LikelyResponsePrototype,
+    LikelyResponsePrototype, PrivateArticleChatPrototype,
     
     ArticleGenerator,
 

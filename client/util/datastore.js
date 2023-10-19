@@ -140,6 +140,9 @@ export class Datastore extends React.Component {
         this.setObject(typeName, key, objectData);
         return key;
     }
+    getCollection(typeName, props) {
+        return processObjectList(this.getData()[typeName], props);
+    }
 
     addCurrentUser() {
         if (this.props.isLive) {

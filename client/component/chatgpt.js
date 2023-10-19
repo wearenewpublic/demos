@@ -28,6 +28,16 @@ export async function gptProcessAsync({datastore, promptKey, params, model, func
     return parsedResponse;
 }
 
+export async function getGptConversationResponse({datastore, messages}) {
+    const messagesWithRole = messages.map(message => ({
+        content: message.text,
+        role: message.from == 'robo' ? 'assistant' : 'user'
+    }));
+    const response = await callServerApiAsync({
+        datastore, component: 'chatgpt', funcname: 'conversation', params: {messages: messagesWithRole}})
+    return response;
+}
+
 export async function getGptResponse({datastore, promptKey, params}) {
     const rawResponse = await callServerApiAsync({datastore, component: 'chatgpt', funcname: 'chat',
         params: {promptKey, params}
