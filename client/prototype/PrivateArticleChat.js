@@ -41,9 +41,6 @@ function PrivateChat() {
     const articleKey = useGlobalProperty('articleKey');
     const article = useArticle(articleKey);
 
-    console.log('messages', messages);
-    console.log('article', article);
-
     async function onSend(text) {
         setInProgress(true);
         const message = {text: text, from: personaKey, withPerson: personaKey};
