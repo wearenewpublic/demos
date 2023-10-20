@@ -1,11 +1,13 @@
 import { ScrollView } from "react-native"
-import { Pad, WideScreen } from "../component/basics";
+import { Narrow, Pad, WideScreen } from "../component/basics";
 import { Comment } from "../component/comment";
 import { expandDataList } from "../util/util"
 import { TopCommentInput } from "../component/replyinput";
 import { ecorp, soccer, trek_vs_wars } from "../data/conversations";
 import { authorRobEnnals } from "../data/authors";
 import { useCollection } from "../util/datastore";
+import { MaybeArticleScreen, articleGodzilla, articleStarWars } from "../component/article";
+import { videoTrekWars } from "../component/fakevideo";
 
 const description = `
 A starting point for future prototypes that involve threaded comments.
@@ -27,6 +29,14 @@ export const ThreadedCommentsPrototype = {
         {key: 'ecorp', name: 'E-Corp Alumni', comment: expandDataList(ecorp)},
         {key: 'soccer', name: 'Soccer Team', comment: expandDataList(soccer)},
         {key: 'wars', name: 'Star Wars vs Star Trek', comment: expandDataList(trek_vs_wars)},
+        {key: 'wars-article', name: 'Star Wars vs Trek - Article', 
+            comment: expandDataList(trek_vs_wars),
+            articleKey: articleStarWars
+        },
+        {key: 'wars-video', name: 'Star Wars vs Trek - Video', 
+            comment: expandDataList(trek_vs_wars),
+            videoKey: videoTrekWars
+        },
     ],
     liveInstance: [
         {key: 'live', name: 'Live Conversation', comment: {}}
@@ -39,13 +49,13 @@ export function ThreadedScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo);
 
     return (
-        <WideScreen pad>
-            <ScrollView>
+        <MaybeArticleScreen articleChildLabel='Comments'>
+            <Narrow>
                 <TopCommentInput />
                 {topLevelComments.map(comment => 
                     <Comment key={comment.key} commentKey={comment.key} />
                 )}
-            </ScrollView>
-        </WideScreen>
+            </Narrow>
+        </MaybeArticleScreen>
     )
 }

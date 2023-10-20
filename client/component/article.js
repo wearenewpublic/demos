@@ -12,6 +12,7 @@ import { trek_wars_article } from "../data/articles/startrekwars";
 import { cbc_sport_article } from "../data/articles/cbc_sport";
 import { cbc_sport_article_french } from "../translations/french/cbc_sport_article_french";
 import { cbc_sport_article_german } from "../translations/german/cbc_sport_article_german";
+import { FakeVideoScreen } from "./fakevideo";
 
 export function Article({articleKey, article, embed=null, children}) {
     const s = ArticleStyle;
@@ -138,6 +139,7 @@ const ArticleStyle = StyleSheet.create({
 export function MaybeArticleScreen({article, embed, articleChildLabel, children}) {
     const globalArticle = useGlobalProperty('article');
     const globalArticleKey = useGlobalProperty('articleKey');
+    const globalVideoKey = useGlobalProperty('videoKey');
     const title = useGlobalProperty('title');
     if (article || globalArticle || globalArticleKey) {
        return <ScrollableScreen maxWidth={800}>
@@ -147,8 +149,9 @@ export function MaybeArticleScreen({article, embed, articleChildLabel, children}
                 <Pad size={32} />
             </Article>
         </ScrollableScreen>
-    } else {
-        
+    } else if (globalVideoKey) {
+        return <FakeVideoScreen articleChildLabel={articleChildLabel}>{children}</FakeVideoScreen>
+    } else {        
         return <WideScreen pad>
             <ScrollView>
                 <Pad size={8} />
@@ -184,6 +187,10 @@ function getBuiltInArticle(articleKey, language) {
         return null;
     }
 }
+
+export const articleGodzilla = 'godzilla'
+export const articleSoccer = 'soccer'
+export const articleStarWars = 'starwars'
 
 export function useArticle(articleKey) {
     const language = useLanguage();
