@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, View } from "react-native"
 import { useGlobalProperty } from "../util/datastore"
-import { Pad, SmallTitle, WideScreen } from "./basics"
+import { Center, Pad, SmallTitle, SmallTitleLabel, WideScreen } from "./basics"
 import { expandUrl } from "../util/util"
 import { FontAwesome } from "@expo/vector-icons"
 
@@ -25,9 +25,10 @@ export function FakeVideoScreen({articleChildLabel, children}) {
     return <WideScreen pad>
         <ScrollView>
             <FakeVideoPlayer videoKey={videoKey} />
-            <Pad size={8} />
-            {title ? <BigTitle>{title}</BigTitle> : null}
+            <Pad size={24} />
+            <Center><SmallTitleLabel label={articleChildLabel} /></Center>
             {children}
+            <Pad size={32} />
         </ScrollView>
     </WideScreen>
 }
@@ -39,7 +40,6 @@ function FakeVideoPlayer({videoKey}) {
         <Image style={s.videoThumb} source={{uri: expandUrl({url: videoKey, type: 'photos'})}}/> 
         <View style={s.centerFrame}>
             <FontAwesome name='play-circle' size={128} color='white' style={{opacity: 0.7}}/>
-        {/* <FontAwesome name='play-circle' size={128} color='white' style={{opacity: 0.5, position: 'absolute', alignSelf: 'center'}}/> */}
         </View>
     </View>
 }
@@ -53,7 +53,6 @@ const FakeVideoPlayerStyle = StyleSheet.create({
     },
     videoBox: {
         width: 800,
-        // marginBottom: 16,
         marginTop: 16,
         alignSelf: 'center'
     },

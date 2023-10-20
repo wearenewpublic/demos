@@ -1,5 +1,5 @@
 import { Image, Switch, Text, View } from "react-native";
-import { MaybeArticleScreen } from "../component/article";
+import { MaybeArticleScreen, articleGodzilla } from "../component/article";
 import { BigTitle, BodyText, Card, Center, Clickable, EditableText, HorizBox, HoverRegion, InfoBox, ListItem, MaybeEditableText, Narrow, Pad, PadBox, Pill, PluralLabel, PreviewText, ScrollableScreen, SectionBox, SectionTitleLabel, SmallTitle, SmallTitleLabel, TimeText, WideScreen } from "../component/basics";
 import { godzilla_article, godzilla_conversation_post_comments, godzilla_conversation_posts, godzilla_conversations, godzilla_groups, godzilla_related } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
@@ -17,6 +17,7 @@ import { Post, PostActionButton, PostActionComment, PostActionEdit, PostActionLi
 import { FontAwesome5 } from "@expo/vector-icons";
 import { UserFace } from "../component/userface";
 import { ConversationPreview, ConversationScreenInfo, GroupPromo, GroupScreen, GroupScreenInfo, MultiChatScreen } from "../component/multichat";
+import { videoGodzilla } from "../component/fakevideo";
 
 export const GroupMultiChatPrototype = {
     key: 'groupmulti',
@@ -40,14 +41,21 @@ export const GroupMultiChatPrototype = {
         grey: true
     },
     instance: [
-        {key: 'godzilla-article', name: 'Godzilla Article', article: godzilla_article,
+        {key: 'godzilla-article', name: 'Godzilla Article', articleKey: articleGodzilla,
             conversation: expandDataList(godzilla_conversations),
             group: expandDataList(godzilla_groups),
             post: expandDataList(godzilla_conversation_posts),
             comment: expandDataList(godzilla_conversation_post_comments),
             related: expandDataList(godzilla_related)
         },
-        {key: 'godzilla-french', name: 'Godzilla Article (French)', article: godzilla_article_french,
+        {key: 'godzilla-video', name: 'Godzilla Video', videoKey: videoGodzilla,
+            conversation: expandDataList(godzilla_conversations),
+            group: expandDataList(godzilla_groups),
+            post: expandDataList(godzilla_conversation_posts),
+            comment: expandDataList(godzilla_conversation_post_comments),
+            related: expandDataList(godzilla_related)
+        },
+        {key: 'godzilla-french', name: 'Godzilla Article (French)', articleKey: articleGodzilla,
             language: languageFrench,
             conversation: expandDataList(godzilla_conversations_french),
             group: expandDataList(godzilla_groups_french),

@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Article, MaybeArticleScreen } from "../component/article";
+import { Article, MaybeArticleScreen, articleGodzilla } from "../component/article";
 import { Card, Center, Clickable, HorizBox, ListItem, Narrow, Pad, Pill, PrimaryButton, ScrollableScreen, SmallTitle, SmallTitleLabel } from "../component/basics";
 import { BasicComments } from "../component/comment";
 import { Post, PostActionComment, PostActionEdit, PostActionLike, PostScreenInfo } from "../component/post";
@@ -16,6 +16,7 @@ import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
 import { getTextEmbedding, useMessageEmbeddingMap, useTextEmbedding } from "../component/embeddings";
 import { sortEmbeddingsByDistance } from "../util/cluster";
+import { videoGodzilla } from "../component/fakevideo";
 
 export const SimilarCommentPrototype = {
     key: 'similarcomment',
@@ -28,7 +29,14 @@ export const SimilarCommentPrototype = {
         post: PostScreenInfo
     },
     instance: [
-        {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
+        {key: 'godzilla', name: 'Godzilla', articleKey: articleGodzilla, 
+            country: 'The United States',
+            post: expandDataList([
+                {from: 'a', text: "Giant monsters don't exist", checkedStatus: 'most people'},
+                {from: 'b', text: 'Giant Monsters shouldn\'t be allowed to rampage cities.', checkedStatus: 'almost everyone'}
+            ])
+        },
+        {key: 'godzilla-video', name: 'Godzilla - Video', videoKey: videoGodzilla, 
             country: 'The United States',
             post: expandDataList([
                 {from: 'a', text: "Giant monsters don't exist", checkedStatus: 'most people'},

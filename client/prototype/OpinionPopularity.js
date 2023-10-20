@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Article } from "../component/article";
+import { Article, MaybeArticleScreen, articleGodzilla } from "../component/article";
 import { Card, Center, Clickable, HorizBox, ListItem, Narrow, Pad, Pill, PrimaryButton, ScrollableScreen, SmallTitleLabel } from "../component/basics";
 import { BasicComments } from "../component/comment";
 import { Post } from "../component/post";
@@ -14,6 +14,7 @@ import { QuietSystemMessage } from "../component/message";
 import { gptProcessAsync } from "../component/chatgpt";
 import { useState } from "react";
 import { askGptToEvaluateMessageTextAsync } from "../component/chatgpt";
+import { videoGodzilla } from "../component/fakevideo";
 
 export const OpinionPopularityPrototype = {
     key: 'opinionpopularity',
@@ -22,9 +23,6 @@ export const OpinionPopularityPrototype = {
     author: authorRobEnnals,
     description: 'AI estimates what fraction of the population agrees with an opinion',
     screen: OpinionPopularityScreen,
-    subscreens: {
-        facts: {screen: FactListScreen, title: 'Facts'}
-    },
     instance: [
         {key: 'godzilla', name: 'Godzilla', article: godzilla_article, 
             country: 'The United States',
@@ -32,60 +30,27 @@ export const OpinionPopularityPrototype = {
                 {from: 'a', text: "Giant monsters don't exist", checkedStatus: 'most people'},
                 {from: 'b', text: 'Giant Monsters shouldn\'t be allowed to rampage cities.', checkedStatus: 'almost everyone'}
             ])
+        },
+        {key: 'godzilla-video', name: 'Godzilla - Video', videoKey: videoGodzilla, 
+            country: 'The United States',
+            post: expandDataList([
+                {from: 'a', text: "Giant monsters don't exist", checkedStatus: 'most people'},
+                {from: 'b', text: 'Giant Monsters shouldn\'t be allowed to rampage cities.', checkedStatus: 'almost everyone'}
+            ])
         }
-    ],
-    newInstanceParams: [
-        {key: 'article.title', name: 'Article Title', type: 'shorttext'},
-        {key: 'article.subtitle', name: 'Article Subtitle', type: 'shorttext'},
-        {key: 'article.date', name: 'Article Date', type: 'shorttext'},
-        {key: 'article.author', name: 'Article Author', type: 'shorttext'},
-        {key: 'article.authorFace', name: 'Article Author Face URL', type: 'url'},
-        {key: 'article.photo', name: 'Article Photo URL', type: 'url'},
-        {key: 'article.photoCaption', name: 'Article Photo Caption', type: 'shorttext'},
-        {key: 'article.rawText', name: 'Article Text', type: 'longtext'},
-    ]   
+    ]
 }
-
-
 
 function OpinionPopularityScreen() {
-    const article = useGlobalProperty('article');
-
-    return <ScrollableScreen maxWidth={800}>
-        <Article article={article} embed={<FactsPreview />}>
-            <Narrow>
-                <SmallTitleLabel label='Opinions with Estimated Popular Support'/>
-                <Pad />
-                <FactList />
-                <Pad size={32} />
-            </Narrow>
-        </Article>
-    </ScrollableScreen>   
-}
-
-function FactsPreview() {
     const posts = useCollection('post', {sortBy: 'time', reverse: true});
-    return <Card onPress={() => pushSubscreen('facts')}>
-            <Center><SmallTitleLabel label='Facts'/></Center>
-            <Pad size={4} />
-        {posts.map(post => <ListItem key={post.key} title={post.text} />)}
-    </Card>
-}
 
-function FactListScreen() {
-    return <ScrollableScreen maxWidth={800}>
+    return <MaybeArticleScreen articleChildLabel='Opinions with Estimated Popular Support'>
         <Narrow>
-            <FactList />
+            <PostInput placeholder="Add a relevant fact" bottomWidgets={[EditCheckFact]} getCanPost={getCanPost}/>
+            {posts.map(post => <FactPost key={post.key} post={post} />)}
         </Narrow>
-    </ScrollableScreen>
-}
+    </MaybeArticleScreen>
 
-function FactList() {
-    const posts = useCollection('post', {sortBy: 'time', reverse: true});
-    return <View>
-        <PostInput placeholder="Add a relevant fact" bottomWidgets={[EditCheckFact]} getCanPost={getCanPost}/>
-        {posts.map(post => <FactPost key={post.key} post={post} />)}
-    </View>
 }
 
 function PopularityCheckStatus({checkedStatus}) {

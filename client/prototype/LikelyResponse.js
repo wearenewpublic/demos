@@ -18,6 +18,7 @@ import { getTextEmbedding, useMessageEmbeddingMap, useTextEmbedding } from "../c
 import { sortEmbeddingsByDistance } from "../util/cluster";
 import { TranslatableLabel } from "../component/translation";
 import { post_starwars } from "../data/posts";
+import { videoGodzilla, videoTrekWars } from "../component/fakevideo";
 
 export const LikelyResponsePrototype = {
     key: 'likelyresponse',
@@ -34,6 +35,12 @@ export const LikelyResponsePrototype = {
             post: expandDataList(post_starwars)
         },
         {key: 'godzilla', name: 'Godzilla', articleKey: 'godzilla', 
+            post: expandDataList(godzilla_category_posts)
+        },
+        {key: 'wars-video', name: 'Star Wars - Video', videoKey: videoTrekWars, 
+            post: expandDataList(post_starwars)
+        },
+        {key: 'godzilla-video', name: 'Godzilla - Video', videoKey: videoGodzilla, 
             post: expandDataList(godzilla_category_posts)
         }
     ],
