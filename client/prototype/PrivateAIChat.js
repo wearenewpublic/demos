@@ -9,20 +9,20 @@ import { ChatInput } from "../component/chatinput";
 import { getGptConversationResponse } from "../component/chatgpt";
 import { useState } from "react";
 
-export const PrivateArticleChatPrototype = {
-    key: 'privatechat',
-    name: 'Private Article Chat',
+export const PrivateAIChatPrototype = {
+    key: 'privateaichat',
+    name: 'Private AI Chat',
     date: 'Tue Oct 19 2023 15:06:20 GMT-0700 (Pacific Daylight Time)',
     author: authorRobEnnals,
     description: 'Chat with AI about an article. Publish messages you like.',
-    screen: PrivateArticleChatScreen,
+    screen: PrivateAIChatScreen,
     instance: [
         {key: 'godzilla', name: 'Godzilla', articleKey: 'godzilla'},    
         {key: 'raw', name: 'No Article'}
     ]   
 }
 
-function PrivateArticleChatScreen(){
+function PrivateAIChatScreen(){
     return <MaybeArticleScreen articleChildLabel='Discuss with AI'>
         <Narrow>
             <Pad />

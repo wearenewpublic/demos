@@ -35,7 +35,6 @@ export function FakeVideoScreen({articleChildLabel, children}) {
 
 function FakeVideoPlayer({videoKey}) {
     const s = FakeVideoPlayerStyle
-    console.log('videoKey', videoKey);
     return <View style={s.videoBox}>
         <Image style={s.videoThumb} source={{uri: expandUrl({url: videoKey, type: 'photos'})}}/> 
         <View style={s.centerFrame}>
