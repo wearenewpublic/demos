@@ -39,6 +39,7 @@ import { SemiAnonMulti } from "./SemiAnonMulti";
 import { OpenHouseMulti } from "./OpenHouseMulti";
 import { OpinionPopularityPrototype } from "./OpinionPopularity";
 import { CustomRankedPrototype } from "./CustomRanked";
+import { HumanCheckinPrototype } from "./HumanCheckin";
 import { ConversationHelperPrototype } from "./ConversationHelper";
 import { SimilarCommentPrototype } from "./SimilarComment";
 import { LikelyResponsePrototype } from "./LikelyResponse";
@@ -55,7 +56,7 @@ export const prototypes = [
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, ConversationHelperPrototype, SimilarCommentPrototype,
-    LikelyResponsePrototype, PrivateAIChatPrototype,
+    LikelyResponsePrototype, HumanCheckinPrototype, PrivateAIChatPrototype,
     
     ComponentDemoPrototype,
 
