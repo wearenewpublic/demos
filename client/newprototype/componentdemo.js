@@ -7,6 +7,7 @@ import { CircleCheck } from "../newcomponent/icon";
 import { HorizBox, Narrow, Pad, ScrollableScreen } from "../component/basics";
 import { ContentHeading, Heading, Paragraph, UtilityText } from "../newcomponent/text";
 import { NewPublicTitle } from "../component/newpublic";
+import { Byline } from "../newcomponent/byline";
 
 export const ComponentDemoPrototype = {
     key: 'componentdemo',
@@ -50,10 +51,9 @@ function ComponentDemoScreen() {
         <UtilityText sizeType='large' label='Large' />
         <UtilityText sizeType='small' label='Small' />
         <UtilityText sizeType='bold' label='Bold' />
+        <UtilityText sizeType='faint' label='Faint' />
         <UtilityText sizeType='tiny' label='Tiny' />
         <UtilityText sizeType='tinycaps' label='Tiny Caps' />
-
-
 
         <Pad size={16} />
         <ContentHeading label='Profile Photo' level={2} />
@@ -66,6 +66,13 @@ function ComponentDemoScreen() {
             <ProfilePhoto userId={personaKey} sizeType="small" check/>
             <ProfilePhoto userId={personaKey} sizeType="xs" check/>
         </HorizBox>
+
+        <Pad size={16} />
+        <ContentHeading label='Byline' level={2} />
+        <Pad/>
+        <Byline userId={personaKey} time={Date.now()} />
+        <Byline userId={personaKey} sizeType='small' time={Date.now()} />
+
         </Narrow>
      </ScrollableScreen>
 }

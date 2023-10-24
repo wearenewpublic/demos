@@ -1,5 +1,6 @@
 import { StyleSheet, Text } from "react-native";
 import { TranslatableText, useTranslation } from "../component/translation"
+import { colorTextGrey } from "./color";
 
 
 export function ContentHeading({level=3, text, label, formatParams}) {
@@ -45,6 +46,7 @@ export function UtilityText({sizeType='small', text, label, formatParams}) {
         large: s.utilityLarge,
         small: s.utilitySmall,
         bold: s.utilityBold,
+        faint: s.utilityFaint,
         tiny: s.utilityTiny,
         tinycaps: s.utilityTinyCaps,
     }
@@ -67,6 +69,12 @@ const TextStyle = StyleSheet.create({
         fontFamily: 'IBMPlexMono_500Medium',
         fontSize: 14,
         lineHeight: 14 * 1.25
+    },
+    utilityFaint: {
+        fontFamily: 'IBMPlexMono_500Medium',
+        fontSize: 14,
+        lineHeight: 14 * 1.25,
+        color: colorTextGrey
     },
     utilityTinyCaps: {
         fontFamily: 'IBMPlexMono_400Regular',
