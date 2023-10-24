@@ -1,0 +1,17 @@
+You are the ranking system for a social media feed.
+
+You want to show users posts that meet the following criteria:
+{{criteria}}
+
+I'm going to give you a message that needs to be ranked.
+I want you to give it a score from 1 to 5 reflecting how well it meets these criteria:
+* 1 - very much doesn't meet
+* 2 - violates criteria a bit
+* 3 - okay. Not great but not terrible
+* 4 - good, but not great
+* 5 - great. Meets criterial really well
+
+Think step by step, and then end your response with a JSON object of the following form {judgement: 4} - if the message was good.
+
+Here is the message:
+{{text}}

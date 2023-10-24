@@ -34,6 +34,20 @@ export function addKey(collection, key, value=true) {
     return {...collection, [key]: value};
 }
 
+export function isNonEmpty(collection) {
+    return Object.keys(collection || {}).length > 0;
+}
+
+export function removeNullProperties(obj) {
+  const clone = { ...obj };
+  for (const key in clone) {
+      if (!clone[key]) {
+          delete clone[key]; // Remove key-value pair if the value is null
+      }
+  }
+  return clone;
+}
+
 export function getHuesForNamedList(list) {
     const hues = {};
     list.forEach((item, index) => {
@@ -117,6 +131,10 @@ export function toTitleCase(text) {
     return string == 'true';
   }
 
+  export function boolToInt(bool) {
+    return bool ? 1 : 0;
+  }
+
   export function getPath(object, path) {
     const parts = path.split('.');
     var result = object;
@@ -146,8 +164,17 @@ export function toTitleCase(text) {
 
 export function expandUrl({url, type}) {
     if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
+      return url;
     } else {
         return fileHostDomain + '/' + type + '/' + url;
     }
+}
+
+export function mapKeys(object, callback) {
+  let previousKey = null;
+  return Object.keys(object || {}).map(key => {
+      const result = callback(key, object[key], previousKey);
+      previousKey = key;
+      return result;
+  });
 }

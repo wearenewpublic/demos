@@ -1,7 +1,7 @@
 import { Article } from "../component/article"
-import { BodyText, Pad, ScrollableScreen, SmallTitleLabel } from "../component/basics"
+import { BodyText, Center, Narrow, Pad, ScrollableScreen, SmallTitleLabel } from "../component/basics"
 import { BasicComments } from "../component/comment";
-import { godzilla_article } from "../data/articles";
+import { godzilla_article } from "../data/articles/godzilla";
 import { authorRobEnnals } from "../data/authors";
 import { godzilla_comments_threaded } from "../data/threaded";
 import { useGlobalProperty } from "../util/datastore";
@@ -28,7 +28,8 @@ export const ArticleCommentsPrototype = {
     description,
     screen: ArticleCommentsScreen,
     instance: [
-        {key: 'godzilla', name: 'Godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)}
+        {key: 'godzilla', name: 'Godzilla', articleKey: 'godzilla', article: godzilla_article, comment: expandDataList(godzilla_comments_threaded)},
+        {key: 'kingkong', name: 'King Kong', articleKey: 'king_kong_toronto', article: godzilla_article, comment: expandDataList([])}
     ],
     newInstanceParams: [
         {key: 'article.title', name: 'Article Title', type: 'shorttext'},
@@ -43,13 +44,15 @@ export const ArticleCommentsPrototype = {
 }
 
 export function ArticleCommentsScreen() {
-    const article = useGlobalProperty('article');
+    const articleKey = useGlobalProperty('articleKey');
 
     return <ScrollableScreen maxWidth={800}>
-        <Article article={article}>
-            <SmallTitleLabel label='Comments'/>
-            <BasicComments />
-            <Pad size={32} />
+        <Article articleKey={articleKey}>
+            <Narrow>
+                <SmallTitleLabel label='Comments'/>
+                <BasicComments />
+                <Pad size={32} />
+            </Narrow>
         </Article>
     </ScrollableScreen>
 }

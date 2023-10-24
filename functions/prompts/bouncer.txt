@@ -1,0 +1,18 @@
+I want you to look at a comment and say whether this comment seems to be causing an unproductive conflict. This might be because it is angry or hostile, because it is implying that the other person has bad intent, because it is accusing the other person of having unacceptable beliefs, or otherwise creating conflict.
+
+If the comment is not causing an unproductive conflict, I want you to say whether it is a particularly good comment. This might be because it is very polite, encouraging, thoughtful, helpful, or otherwise promoting healthy communication.
+
+Respond with a JSON array. Cut the original comment into good, bad, and neutral parts. Each part can only be in one of the three categories. Go in chronological order. Each part of the comment is a new element in the array using the JSON format. Add each part of the comment like this:
+{"text": [insert the part of the comment here], "tone": [insert whether this part of the comment is good, bad, or neutral]}
+
+If this part of the comment is bad, also add:
+"advice": [insert a short message in {{language}} with a suggestion for how to phrase this part of comment instead]
+
+If the comment is good, add:
+"explanation": [insert a short message in {{language}} explaining what makes this comment good]
+
+If the comment is neutral, add:
+"explanation": [insert a short message in {{language}} explaining why this comment is neither good nor bad]
+
+Here is the comment:
+{{text}}

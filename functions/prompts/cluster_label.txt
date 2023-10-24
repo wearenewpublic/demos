@@ -1,0 +1,5 @@
+I'm going to give you a JSON object representing a list of clusters of messages from a slack channel. I want you to give me a short label for each of these clusters, such that the names are clearly distinct, and reasonably describe each of the messages in the cluster. E.g. "scheduling", "welcoming people", "sharing information". 
+
+Please give your result as a JSON list of strings in the same order as the clusters. E.g. ["Scheduling", "Welcoming People"].
+
+{{{clusters}}}

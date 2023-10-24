@@ -1,5 +1,5 @@
 
-import { ScrollView, Text, View } from "react-native"
+import { ScrollView, Switch, Text, View } from "react-native"
 import { Card, Clickable, ScrollableScreen, BigTitle, BodyText, Separator, SmallTitleLabel, SectionTitleLabel, MarkdownBodyText, HorizBox, TimeText, AuthorLine, Pad, Narrow, Center, PrimaryButton, PadBox } from "../component/basics"
 import { NewPublicBodySection } from "../component/newpublic"
 import { useState } from "react";
@@ -10,10 +10,15 @@ import { QuietSystemMessage } from "../component/message";
 
 export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
     const firebaseUser = useFirebaseUser();
+    const [split, setSplit] = useState(prototype.split);
     // const userInstanceMap = useFirebaseData(['prototype', prototype.key, 'userInstance', firebaseUser?.uid], {});
     const userInstanceMap = useFirebaseData(['userInstance', firebaseUser?.uid, prototype.key], {});
     const userInstanceList = Object.entries(userInstanceMap || {}).map(([key, value]) => ({key, ...value}));
     const sortedUserInstances = userInstanceList.sort((a, b) => b.createTime - a.createTime);
+    function onToggleSplit() {
+        prototype.split = !split;
+        setSplit(!split);
+    }
     return <ScrollView>
         <NewPublicBodySection>
             <Narrow>
@@ -26,13 +31,15 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                 <Pad />
                 {prototype.instance ?
                     <View>
-                        <Center><SectionTitleLabel label='Role Play Instances' /></Center>
+                        <Center>
+                            <SectionTitleLabel label='Role Play Instances' />
+                        </Center>
+                        <SplitToggle split={split} onToggle={onToggleSplit} />
+                        <Pad/>
                         {prototype.instance.map(instance => (
-                            <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
-                                <Card vMargin={4}>
-                                    <SmallTitleLabel label={instance.name}/>
-                                </Card>
-                            </Clickable>
+                            <Card key={instance.key} onPress={() => onSelectInstance(instance.key)} vMargin={4}>
+                                <SmallTitleLabel label={instance.name}/>
+                            </Card>
                         ))}      
                     </View>
                 : null}
@@ -48,11 +55,9 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
                         </Center>
                         <PadBox horiz={16}><PrimaryButton label='New Live Instance' onPress={() => onSelectInstance('new')} /></PadBox>
                         {sortedUserInstances.map(instance => (
-                            <Clickable key={instance.key} onPress={() => onSelectInstance(instance.key)}>
-                                <Card vMargin={4}>
-                                    <SmallTitleLabel label={instance.name} />
-                                </Card>
-                            </Clickable>
+                            <Card key={instance.key} onPress={() => onSelectInstance(instance.key)} vMargin={4}>
+                                <SmallTitleLabel label={instance.name} />
+                            </Card>
                         ))}      
                         {userInstanceMap == null ? 
                             <QuietSystemMessage label='Loading...' />
@@ -65,3 +70,11 @@ export function PrototypeInstanceListScreen({prototype, onSelectInstance}) {
     </ScrollView>
 }
 
+function SplitToggle({split, onToggle}) {
+    return <HorizBox center>
+        <Pad size={12} />
+        <Text>Split Screen</Text>
+        <Pad size={8} />
+        <Switch value={split} onValueChange={onToggle} />
+    </HorizBox>
+}

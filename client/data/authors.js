@@ -10,3 +10,9 @@ export const authorToriSgarro = {
     email: 'tori@newpublic.org',
     face: 'torisgarro.jpeg'
 }
+
+export const authorZDFDigital = {
+    name: 'ZDF Digital',
+    email: 'dev-technology@zdf.digital',
+    face: 'zdfdigital.jpeg'
+}

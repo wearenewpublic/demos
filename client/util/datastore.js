@@ -1,10 +1,11 @@
 
-import React, { useEffect, useState } from 'react';
-import { defaultPersona, defaultPersonaList, personaListToMap } from '../data/personas';
+import React, { useEffect, useMemo, useState } from 'react';
+import { adminPersonaList, defaultPersona, defaultPersonaList, memberPersonaList, personaListToMap } from '../data/personas';
 import { firebaseNewKey, firebaseWatchValue, firebaseWriteAsync, getFirebaseDataAsync, getFirebaseUser, onFbUserChanged } from './firebase';
 import { deepClone } from './util';
 import { Text } from 'react-native';
 import { LoadingScreen } from '../component/basics';
+import { SharedDataContext } from './shareddata';
 
 const DatastoreContext = React.createContext({});
 
@@ -13,10 +14,10 @@ const DatastoreContext = React.createContext({});
 export class Datastore extends React.Component {
     state = {loaded: false}
 
-    dataTree = {};
+    // dataTree = {};
     sessionData = {};
 
-    dataWatchers = [];
+    // dataWatchers = [];
     fbUserWatchReleaser = null;
     fbDataWatchReleaser = null;
 
@@ -24,7 +25,7 @@ export class Datastore extends React.Component {
         this.resetData();
         if (this.props.isLive) {
             this.fbWatchReleaser = onFbUserChanged(user => {
-                this.setSessionData('personaKey', user.uid);
+                this.setSessionData('personaKey', user?.uid);
             })
         }
         if (!this.props.isLive) {
@@ -41,36 +42,49 @@ export class Datastore extends React.Component {
         }
     }
 
+    getDefaultPersonaList() {
+        const {instance, prototype, isLive} = this.props;
+        if (isLive) {
+            return [];
+        } else if (instance.personaList) {
+            return instance.personaList;
+        } else if (prototype.hasMembers) {
+            return memberPersonaList;
+        } else if (prototype.hasAdmin) {
+            return adminPersonaList;
+        } else {
+            return defaultPersonaList;
+        }
+    }
+
     resetData() {
-        const {instance, instanceKey, prototypeKey, isLive} = this.props;
+        const {instance, instanceKey, prototype, prototypeKey, isLive} = this.props;
 
         const personaKey = getInitialPersonaKey(instance);
-        this.dataTree = {
-            persona: personaListToMap(instance.personaList || defaultPersonaList),
-            ...deepClone(instance)
-        }
         this.sessionData = {personaKey}
-        this.notifyWatchers();
         if (isLive) {
             this.fbDataWatchReleaser && this.fbDataWatchReleaser();
             this.fbDataWatchReleaser = firebaseWatchValue(['prototype', prototypeKey, 'instance', instanceKey], data => {
-                this.dataTree = {...this.dataTree, ...data?.collection, ...data?.global};
-                // console.log('datatree', this.dataTree);
-                this.notifyWatchers();
+                this.setData({...this.getData(), ...data?.collection, ...data?.global});
                 this.setState({loaded: true})
             });
+        } else {
+            this.setData({
+                persona: personaListToMap(this.getDefaultPersonaList()),
+                admin: instance.admin || 'a',
+                ...deepClone(instance)
+            })    
         }
     }
 
-    watch(watchFunc) {
-        this.dataWatchers.push(watchFunc);
-    }
-    unwatch(watchFunc) {
-        this.dataWatchers = this.dataWatchers.filter(w => w !== watchFunc);
-    }
-    notifyWatchers() {
-        this.dataWatchers.forEach(w => w());
-    }
+    // Delegate local data storage and notification to SharedDataContext
+    // This allows the side-by-side view to work for role play instances.
+    static contextType = SharedDataContext;
+    watch(watchFunc) {this.context.watch(watchFunc)}
+    unwatch(watchFunc) {this.context.unwatch(watchFunc)}
+    notifyWatchers() {this.context.notifyWatchers()}
+    getData() {return this.context.getData()}
+    setData(data) {return this.context.setData(data)}
 
     setSessionData(path, value) {
         this.sessionData = {...this.sessionData, [pathToName(path)]: value};
@@ -84,17 +98,20 @@ export class Datastore extends React.Component {
     }
 
     getObject(typeName, key) {
-        return this.dataTree[typeName]?.[key];
+        return this.getData()[typeName]?.[key];
     }
     setObject(typeName, key, value) {
         const {prototypeKey, instanceKey, isLive} = this.props;
-        const typeData = {...this.dataTree[typeName], [key]: value};
-        this.dataTree = {...this.dataTree, [typeName]: typeData};
-        this.notifyWatchers();
+        if (!key || !typeName) {
+            throw new Error('Missing key or typeName', key, typeName);
+        }
+        const typeData = {...this.getData()[typeName], [key]: value};
+        this.setData({...this.getData(), [typeName]: typeData});
+        // this.notifyWatchers();
 
         if (isLive) {
             firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', typeName, key], value);
-            addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree: this.dataTree});
+            addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree: this.getData()});
         }
     }
     addObject(typeName, value) {
@@ -116,6 +133,16 @@ export class Datastore extends React.Component {
         const newObject = {...object, ...value};
         this.setObject(typename, key, newObject);
     }
+    addObjectWithKey(typeName, key, value) {
+        const personaKey = this.getPersonaKey();
+        this.addCurrentUser();
+        const objectData = {key, from: personaKey, time: Date.now(), ...value};
+        this.setObject(typeName, key, objectData);
+        return key;
+    }
+    getCollection(typeName, props) {
+        return processObjectList(this.getData()[typeName], props);
+    }
 
     addCurrentUser() {
         if (this.props.isLive) {
@@ -123,22 +150,31 @@ export class Datastore extends React.Component {
             const fbUser = getFirebaseUser();
             const myPersona = this.getObject('persona', personaKey);
             if (!myPersona || myPersona.photoUrl != fbUser.photoURL || myPersona.name != fbUser.displayName) {
-                this.setObject('persona', personaKey, {photoUrl: fbUser.photoURL, name: fbUser.displayName});
+                this.setObject('persona', personaKey, {
+                    photoUrl: fbUser.photoURL, 
+                    name: fbUser.displayName, 
+                    key: personaKey,
+                    member: myPersona?.member || null
+                });
             }
         }    
     }
 
     getGlobalProperty(key) {
-        return this.dataTree[key];
+        return this.getData()[key];
     }
     setGlobalProperty(key, value) {
         const {prototypeKey, instanceKey, isLive} = this.props;
-        this.dataTree = {...this.dataTree, [key]: value};
-        this.notifyWatchers();
+        this.setData({...this.getData(), [key]: value});
+        // this.notifyWatchers();
         if (isLive) {
             firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'global', key], value);
         }
     }
+
+    getPrototypeKey() {return this.props.prototypeKey}
+    getInstanceKey() {return this.props.instanceKey}
+    getLanguage() {return this.getGlobalProperty('language') || 'English'}
         
     render() {
         const {loaded} = this.state;
@@ -152,6 +188,15 @@ export class Datastore extends React.Component {
     }
 }
 
+export async function addCurrentUserToInstanceAsync({prototypeKey, instanceKey, isMember}) {
+    const fbUser = getFirebaseUser();
+    await firebaseWriteAsync(['prototype', prototypeKey, 'instance', instanceKey, 'collection', 'persona', fbUser.uid], {
+        photoUrl: fbUser.photoURL, 
+        name: fbUser.displayName, 
+        key: personaKey,
+        member: isMember
+    });
+}
 
 export async function addInstanceToMyInstancesAsync({prototypeKey, instanceKey, dataTree}) {
     console.log('addInstanceToMyInstancesAsync', prototypeKey, instanceKey, dataTree);
@@ -175,14 +220,14 @@ export function useDatastore() {
 export function useData() {
     const datastore = useDatastore();
 
-    const [dataTree, setDataTree] = useState(datastore.dataTree);
+    const [dataTree, setDataTree] = useState(datastore.getData());
     const [sessionData, setSessionData] = useState(datastore.sessionData);
     useEffect(() => {
-        setDataTree(datastore.dataTree);
+        setDataTree(datastore.getData());
         setSessionData(datastore.sessionData);
 
         const watchFunc = () => {
-            setDataTree(datastore.dataTree);
+            setDataTree(datastore.getData());
             setSessionData(datastore.sessionData);
         }
         datastore.watch(watchFunc);
@@ -202,24 +247,35 @@ export function usePersonaKey() {
     return useSessionData('personaKey');
 }
 
+export function usePersona() {
+    const personaKey = usePersonaKey();
+    return useObject('persona', personaKey);
+}
+
 export function useObject(typeName, key) {
     const {dataTree} = useData();
     return dataTree[typeName]?.[key];
 }
 
+// We have to be careful with memoization here, or we end up creating a new
+// result object every time, which messes up dependencies elsehere
 export function useCollection(typeName, props = {}) {
-    const {sortBy, filter} = props;
     const {dataTree} = useData();
     const collection = dataTree[typeName];
+    const result = useMemo(() => processObjectList(collection, props),
+        [collection, JSON.stringify(props)]
+    )
+    return result;
+}
 
-    if (!collection) {
-        return [];
-    }
-    var result = sortMapValuesByProp(collection, sortBy || 'key');
-    if (props.reverse) {
+function processObjectList(collection, {sortBy, reverse, limit, filter}) {
+    var result = sortMapValuesByProp(collection ?? [], sortBy || 'key');
+    if (reverse) {
         result = result.reverse();
-    }if (filter) {
+    } if (filter) {
         result = result.filter(item => meetsFilter(item, filter))
+    } if (limit) {
+        result = result.slice(0, limit);
     }
     return result;
 }
@@ -297,3 +353,15 @@ function pathToName(path) {
     }
 }
 
+function makeFirebasePath(path) {
+    return path.map(encodeURIComponent).join('%2F');
+}
+
+export function makeStorageUrl({datastore, userId, fileKey, extension}) {
+    const prototypeKey = datastore.getPrototypeKey();
+    const instanceKey = datastore.getInstanceKey();
+    const storagePrefix = 'https://firebasestorage.googleapis.com/v0/b/new-public-demo.appspot.com/o/';
+    const path = ['user', userId, prototypeKey, instanceKey, fileKey + '.' + extension];
+    const pathString = makeFirebasePath(path);
+    return storagePrefix + pathString + '?alt=media';
+}

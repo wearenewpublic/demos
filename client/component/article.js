@@ -1,12 +1,24 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { fileHostDomain } from "../util/config";
-import { Narrow, Separator } from "./basics";
-import { TranslatableLabel } from "./translation";
+import { BigTitle, Center, Narrow, Pad, ScrollableScreen, Separator, SmallTitleLabel, WideScreen } from "./basics";
+import { TranslatableLabel, languageFrench, languageGerman, useLanguage } from "./translation";
 import { expandUrl } from "../util/util";
+import { useGlobalProperty } from "../util/datastore";
+import { useFirebaseData } from "../util/firebase";
+import { godzilla_article } from "../data/articles/godzilla";
+import { godzilla_article_french } from "../translations/french/articles_french";
+import { godzilla_article_german } from "../translations/german/articles_german";
+import { trek_wars_article } from "../data/articles/startrekwars";
+import { cbc_sport_article } from "../data/articles/cbc_sport";
+import { cbc_sport_article_french } from "../translations/french/cbc_sport_article_french";
+import { cbc_sport_article_german } from "../translations/german/cbc_sport_article_german";
+import { FakeVideoScreen } from "./fakevideo";
 
-export function Article({article, embed=null, children}) {
+export function Article({articleKey, article, embed=null, children}) {
     const s = ArticleStyle;
-    
+
+    const keyArticle = useArticle(articleKey);   
+    article = article ?? keyArticle;
     if (!article) return null;
 
     const paragraphs = article?.rawText?.trim()?.split('\n')?.filter(x=>x);
@@ -25,9 +37,9 @@ export function Article({article, embed=null, children}) {
         <View style={s.narrowSection}>
             <View style={s.authorBox}>
                 <Image style={s.authorFace}
-                    source={{url: expandUrl({url: article.authorFace, type: 'faces'})}} />
+                    source={{uri: expandUrl({url: article.authorFace ?? 'face2.jpeg', type: 'faces'})}} />
                 <View>
-                    <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author}</Text>
+                    <Text style={s.authorName}><TranslatableLabel label='By'/> {article.author ?? article.authorName}</Text>
                     <Text style={s.date}>{article.date}</Text>
                 </View>
             </View>
@@ -42,14 +54,11 @@ export function Article({article, embed=null, children}) {
                         </View>
                     :
                     <Text key={i} style={s.paragraph}>{paragraph}</Text>
-
                 )}
             </View>
         </View>
         <Separator />
-        <Narrow>
-            {children}
-        </Narrow>
+        {children}
     </View>
 }
 
@@ -125,3 +134,75 @@ const ArticleStyle = StyleSheet.create({
         maxWidth: 500,
     }
 })
+
+
+export function MaybeArticleScreen({article, embed, articleChildLabel, children}) {
+    const globalArticle = useGlobalProperty('article');
+    const globalArticleKey = useGlobalProperty('articleKey');
+    const globalVideoKey = useGlobalProperty('videoKey');
+    const title = useGlobalProperty('title');
+    if (article || globalArticle || globalArticleKey) {
+       return <ScrollableScreen maxWidth={800}>
+            <Article article={article ?? globalArticle} articleKey={globalArticleKey} embed={embed}>
+                <Center><SmallTitleLabel label={articleChildLabel} /></Center>
+                {children}
+                <Pad size={32} />
+            </Article>
+        </ScrollableScreen>
+    } else if (globalVideoKey) {
+        return <FakeVideoScreen articleChildLabel={articleChildLabel}>{children}</FakeVideoScreen>
+    } else {        
+        return <WideScreen pad>
+            <ScrollView>
+                <Pad size={8} />
+                {title ? <BigTitle>{title}</BigTitle> : null}
+                {children}
+            </ScrollView>
+        </WideScreen>
+    }
+}
+
+function getBuiltInArticle(articleKey, language) {
+    if (articleKey == 'godzilla') {
+        if (language == languageFrench) {
+            return godzilla_article_french
+        } else if (language == languageGerman) {
+            return godzilla_article_german
+        } else {
+            return godzilla_article;
+        }
+    } else if (articleKey == 'soccer') {
+        if (language == languageFrench) {
+            return cbc_sport_article_french
+        } else if (language == languageGerman) {
+            return cbc_sport_article_german;
+        } else {
+            return cbc_sport_article;
+        }
+    } else if (articleKey == 'starwars') {
+        return trek_wars_article;
+    } else if (process.env.NODE_ENV == 'test') {
+        return godzilla_article;
+    } else {
+        return null;
+    }
+}
+
+export const articleGodzilla = 'godzilla'
+export const articleSoccer = 'soccer'
+export const articleStarWars = 'starwars'
+
+export function useArticle(articleKey) {
+    const language = useLanguage();
+    const langToSuffix = {
+        English: '',
+        French: '_french',
+        German: '_german'
+    }
+    const suffix = langToSuffix[language] || '';
+    const article = useFirebaseData(['prototype', 'articlegen', 'instance', 'articles', 
+    'collection', 'article' + suffix, articleKey]);
+    const builtInArticle = getBuiltInArticle(articleKey, language);
+
+    return builtInArticle ?? article;
+}

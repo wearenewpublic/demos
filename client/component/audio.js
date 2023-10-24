@@ -25,6 +25,7 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
         setPlaying(true);
         const {sound} = await Audio.Sound.createAsync(uri);
         setSound(sound);
+        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
         console.log('playing', sound, uri);
         sound.playAsync();
     }
@@ -32,6 +33,10 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
     async function onPause() {
         setPlaying(false);
         sound.pauseAsync();
+    }
+
+    function onPlaybackStatusUpdate(status) {
+        setPlaying(status.isPlaying);
     }
 
     React.useEffect(() => {
@@ -44,21 +49,18 @@ export function AudioPlayer({uri, pill=false, label='Play Audio'}) {
       }, [sound]);
 
     if (pill) {
-        return <Clickable onPress={playing ? onPause : onPlay}>
-            <View style={s.pill}> 
+        return <Clickable onPress={playing ? onPause : onPlay} style={s.pill}> 
                 <View style={s.outer}>
                     <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={24} color='#666' />
                 </View>
                 <TranslatableLabel style={s.label} label={label}/>
-            </View>
         </Clickable>
         
     } else {
-        return <View style={s.outer}>
-            <Clickable onPress={playing ? onPause : onPlay}>
-                <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={32} color='#666' />
-            </Clickable>
-        </View>
+        return <Clickable style={s.outer} hoverStyle={s.hoverButton}
+                onPress={playing ? onPause : onPlay}>
+            <FontAwesome name={playing ? 'pause-circle' : 'play-circle'} size={32} color='#666' />
+        </Clickable>
     }
 }
 
@@ -71,6 +73,9 @@ const AudioPlayerStyle = StyleSheet.create({
         textAlign: 'center',
         borderColor: '#ddd',
         borderWidth: StyleSheet.hairlineWidth
+    },
+    hoverButton: {
+        opacity: 0.5
     },
     pill: {
         flexDirection: 'row',
@@ -92,8 +97,9 @@ const AudioPlayerStyle = StyleSheet.create({
 
 
 export async function transcribeAudioAsync({blob}) {
-    const result = await callServerMultipartApiAsync('whisper', 'transcribeAudio', {}, {
-        audioFile: {blob, filename: 'audio.webm'}
+    const result = await callServerMultipartApiAsync({
+        component: 'whisper', funcname: 'transcribeAudio', params: {}, 
+        fileParams: {audioFile: {blob, filename: 'audio.webm'}}
     });
     return result.text;
 

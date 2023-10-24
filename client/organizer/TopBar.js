@@ -1,16 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import { PersonaSelector } from "./PersonaSelector";
-import { Entypo } from "@expo/vector-icons";
-import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, SmallTitleLabel } from "../component/basics";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Card, Center, Clickable, HorizBox, Pad, PadBox, PrimaryButton, ScreenTitleText, SecondaryButton, Separator, SmallTitleLabel } from "../component/basics";
 import { setTitle } from "../platform-specific/url";
 import { goBack, gotoPrototype, pushSubscreen } from "../util/navigate";
 import { firebaseSignOut, useFirebaseUser } from "../util/firebase";
 import { FaceImage, UserFace } from "../component/userface";
 import { Popup } from "../platform-specific/popup";
-import { useDatastore } from "../util/datastore";
+import { useDatastore, useGlobalProperty, usePersonaKey } from "../util/datastore";
+import { useContext } from "react";
+import { PrototypeContext } from "./PrototypeContext";
 
 export function TopBar({title, subtitle, showPersonas, showBack=true, params}) {
     const s = TopBarStyle;
+    const {instanceKey} = useContext(PrototypeContext);
     return <View style={s.topBox}>        
         <View style={s.leftRow}>    
             {showBack ? 
@@ -29,11 +32,16 @@ export function TopBar({title, subtitle, showPersonas, showBack=true, params}) {
                 : null}
             </View>
         </View>
-        {showPersonas ? 
-            <PersonaSelector />
-        : 
-            <UserInfo />
-        }
+        <HorizBox center>
+            {instanceKey ? 
+                <AdminPopup />
+            : null}
+            {showPersonas ? 
+                <PersonaSelector />
+            : 
+                <UserInfo />
+            }
+        </HorizBox>
     </View>
 }
 
@@ -74,6 +82,38 @@ const TopBarStyle = StyleSheet.create({
 })
 
 
+function AdminPopup() {
+    const {prototype} = useContext(PrototypeContext);
+    const admin = useGlobalProperty('admin');
+    const personaKey = usePersonaKey();
+    const datastore = useDatastore();
+
+    function onLog() {
+        const data = datastore.getData();
+        console.log('data', data);
+    }
+
+    function popup() {
+        return <View>
+            <Clickable onPress={() => pushSubscreen('members')}>
+            <Text>Members</Text>
+            </Clickable>
+            <Separator pad={8} />
+            <Clickable onPress={onLog}>
+            <Text>Log Debug Data</Text>
+            </Clickable>
+
+        </View>
+    }
+
+    if (admin && admin == personaKey && (prototype.hasMembers || prototype.hasAdmin)) {
+        return <Popup popupContent={popup}>
+            <Entypo name='menu' size={32} color='#666' />
+        </Popup>
+    }
+}
+
+
 function UserInfo() {
     const s = UserInfoStyle;
     const fbUser = useFirebaseUser();
@@ -96,7 +136,7 @@ function UserInfo() {
 
     if (fbUser) {
         return <Popup popupContent={popup}>
-            <PadBox vert={0}>
+            <PadBox vert={6}>
                 <FaceImage photoUrl={fbUser.photoURL} size={32} />
             </PadBox>
         </Popup>

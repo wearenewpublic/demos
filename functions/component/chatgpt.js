@@ -1,6 +1,8 @@
 const { readFileSync, existsSync } = require('fs');
 const keys = require('../keys');
 const Mustache = require('mustache');
+const { encodeFixedPointArrayToBytes, decodeBytesToFixedPointArray } = require('../botutil/botutil');
+const { decryptBytes, encryptBytes } = require('./encryption');
 
 async function callOpenAIAsync({action, data}) {
     const fetch = await import('node-fetch');
@@ -22,23 +24,30 @@ async function helloAsync({name}) {
     return {data: "Hello " + name};
 }
 
-function createGptPrompt({promptKey, params}) {
-    console.log('createGptPrompt', {promptKey, params});
-    const filename = 'prompts/' + promptKey + '.txt';
+function createGptPrompt({promptKey, params, language='English', model=null}) {
+    console.log('createGptPrompt', {promptKey, params, language});
+    const modelPrefix = (model == 'gpt4') ? 'gpt4/' : ''
+    const filename = 'prompts/' + modelPrefix + promptKey + '.txt';
     if (!existsSync(filename)) {
         console.log('file does not exist', filename);
         return null;
     }
     const promptTemplate = readFileSync(filename).toString();  
-    const prompt = Mustache.render(promptTemplate, params);
-    console.log('prompt', prompt);
+    const prompt = Mustache.render(promptTemplate, {...params, language});
     return prompt;
 }
 
-async function callGptAsync({promptKey, params}) {
-    console.log('callGptAsync', {promptKey, params})
+function selectModel(model) {
+    switch (model) {
+        case 'gpt4': return 'gpt-4';
+        default: return 'gpt-3.5-turbo';
+    }
+}
 
-    const prompt = createGptPrompt({promptKey, params});
+async function callGptAsync({promptKey, params, language, model}) {
+    console.log('callGptAsync', {promptKey, params, language})
+
+    const prompt = createGptPrompt({promptKey, params, language, model});
     if (!prompt) {
         return {success: false, error: 'Unknown prompt: ' + promptKey}
     }
@@ -46,7 +55,7 @@ async function callGptAsync({promptKey, params}) {
     console.log('prompt', prompt);
     const result = await callOpenAIAsync({action: 'chat/completions', data: {
         temperature: 0,
-        model: 'gpt-3.5-turbo',
+        model: selectModel(model),
         max_tokens: 1000,
         messages: [
             {role: 'user', content: prompt}
@@ -59,10 +68,64 @@ async function callGptAsync({promptKey, params}) {
     return {data};
 }
 
+exports.callGptAsync = callGptAsync;
+
+async function conversationAsync({messages}) {
+    // const messages = params.messages;
+    console.log('conversationAsync', messages);
+    const result = await callOpenAIAsync({action: 'chat/completions', data: {
+        temperature: 0,
+        model: 'gpt-3.5-turbo',
+        max_tokens: 1000,
+        messages: messages
+    }});
+    console.log('result', result);
+    console.log(result.choices?.[0]?.message?.content);
+    const data = result.choices?.[0]?.message?.content;
+    return {data}
+}
+
+async function getEmbeddingsAsync({text}) {
+    const result = await callOpenAIAsync({action: 'embeddings', data: {
+        input: text,
+        'model': 'text-embedding-ada-002'
+    }});
+    // console.log('result', result);
+    if (result.data?.[0].embedding) {
+        return {data: result.data?.[0].embedding};
+    } else {
+        return {success: false, error: result.error}
+    }
+}
+exports.getEmbeddingsAsync = getEmbeddingsAsync;
+
+async function getEmbeddingsArrayAsync({textArray}) {
+    console.log('textArray', textArray);
+    const expandEmptyTextArray = textArray.map(t => t || ' ');
+    const result = await callOpenAIAsync({action: 'embeddings', data: {
+        input: expandEmptyTextArray,
+        'model': 'text-embedding-ada-002'
+    }});
+    console.log('result', result);
+    // console.log('result', result);
+    if (result.data?.[0].embedding) {
+        const embeddings = result.data.map(d => d.embedding)
+        return {data: embeddings};
+    } else {
+        return {success: false, error: result.error}
+    }
+}
+exports.getEmbeddingsArrayAsync = getEmbeddingsArrayAsync;
+
+
+
 
 exports.apiFunctions = {
     hello: helloAsync,
     chat: callGptAsync,
+    conversation: conversationAsync,
+    embedding: getEmbeddingsAsync,
+    embeddingArray: getEmbeddingsArrayAsync
 }
 
 

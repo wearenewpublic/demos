@@ -1,4 +1,3 @@
-
 exports.ecorp = [
     {key: 'welcome', from: 'i', public: true, text: 'Welcome to the E-Corp Alumni chat room!'},
     {key: 'hate', from: 'a', replyTo: 'welcome', text: 'I hate E-Corp!'},
@@ -15,7 +14,7 @@ exports.soccer = [
 
 exports.trek_vs_wars = [
     {key: 'one', from: 'c', text: "Star Wars is a horrible show that has inflicted untold harm of society. Star Trek is much better."},
-    {key: 'despicable', replyTo: 'one', from: 'b', maybeBad: true, text: "What rubbish. Star Trek is the fantasy of scary authoritarians who want you to think that harmony under a single world government is something to aim for. If you like Star Trek then you are despicable."},
+    {key: 'despicable', replyTo: 'one', from: 'b', maybeBad: false, text: "What rubbish. Star Trek is the fantasy of scary authoritarians who want you to think that harmony under a single world government is something to aim for. If you like Star Trek then you are despicable."},
     {replyTo: 'despicable', from: 'c', maybeBad: true, text: "And your supposed better alternative is a world where it's fine to kill millions of people just because some weird little green guy tells you they are bad. How many people do you think died in that Death Star? How many women and children? \n\nYou Star Wars lunatics are willing to justify mass murder on a whim, just so you don't have to deal with any kind of social order."},
     {key: 'two', from: 'c', text: "Did you know that Star Wars was Osama Bin Laden's favorite show? That the attack on the twin tours was insipred by the attack on the death star. If you like Star Wars then you aren't in great company.\n\nWhen you show your kids Star Wars movies you are teaching them to be a genocidal terrorist."},
     {replyTo: 'two', from: 'b', text: "Well if Josef Stalin was still alive then I'm sure Star Trek would be his favorite show. All that unifying orderly harmony - it's so authoritarian. \n\nStar Wars is about the need to rebel against authorty, and that's what makes us free citizens rather than robots."},
@@ -34,4 +33,9 @@ exports.trek_vs_wars_enforcer = [
     {replyTo: 'nerd', from: 'c', violates: true, text: "A 'nerd' is just someone who likes to think about things rationally, rather than just following the orders of whatever depraved leader happens to be socially influencing their group. If it wasn't for nerds then garbage-for-brains people like you would still be living in caves and eating mud."}
 ]
 
-
+exports.disco = [
+    {key: 'party', from: 'i', tone: "neutral", text: 'There is a party in Cakewalk County next weekend!'},
+    {from: 'f', replyTo: 'party', tone: "neutral", text: 'That sounds like a lot of fun.'},
+    {key: 'long', from: 'b', tone: "neutral", text: "I'm going to share an extremely long and boring rant about the origin of the word 'disco' that nobody asked for. Here I go. I'm still not done. There is so much to say and I won't stop until everyone is sick of me."},
+    {from: 'b', tone: "neutral", text: "I just thought of another nerdy fun fact about the history of dance music and the culture surrounding it. I'm sure you would love to hear it. But even if you don't, I'll share it anyway..."}
+]

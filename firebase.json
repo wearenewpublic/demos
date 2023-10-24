@@ -21,10 +21,23 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "/asset-manifest.json",
+        "headers": [{
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }]
+      }
+    ],
     "rewrites": [
       {
         "source": "/api/**",
         "function": "api"
+      },
+      { 
+        "source": "/slackbot/**",
+        "function": "slackbot"
       },
       {
         "source": "**",

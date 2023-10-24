@@ -47,7 +47,7 @@ export function ParentApprovesScreen() {
     const topLevelComments = comments.filter(comment => !comment.replyTo);
 
     const commentConfig = {...commentContext, 
-        actions: [ActionLike, ActionReply, ActionApprove, ActionCollapse],
+        actions: [ActionLike, ActionReplyIfNotBad, ActionApprove, ActionCollapse],
         postHandler: postHandlerAsync, 
         getIsVisible,
         topBling: [BlingMaybeBad, BlingPending]
@@ -66,6 +66,15 @@ export function ParentApprovesScreen() {
         </WideScreen>
     )   
 }
+
+function ActionReplyIfNotBad({commentKey, comment}) {
+    if (comment.maybeBad != true) {
+        return <ActionReply commentKey={commentKey} comment={comment} />
+    } else {
+        return null;
+    }
+}
+
 
 function getIsVisible({datastore, comment}) {
     const personaKey = datastore.getPersonaKey();

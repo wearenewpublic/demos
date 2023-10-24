@@ -1,0 +1,15 @@
+
+Here is a threaded conversation written as a JSON object. Some of the messages in this conversation are replying to other messages, which is expressed by the "replyTo" field of one message referring to the "key" of another message.
+
+{{commentsJSON}}
+
+Write a short summary of how well the people in this conversation are interacting with each other. Pay particular attention to:
+* Are people treating each other respectfully
+* Are people helping each other
+* Are people resolving their differences
+* Are people finding points of Agreement
+* Any other social dynamics that a newcomer to the conversation might want to be aware of
+
+Do not talk about the subject matter of the conversation - just the social dynamics.
+
+Your response should be in {{language}} and be expressed as a sequence of short bullets.

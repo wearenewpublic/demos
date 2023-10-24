@@ -7,13 +7,13 @@ import { formatString } from "../util/util";
 import { useGlobalProperty } from "../util/datastore";
 import { useFirebaseData } from "../util/firebase";
 
-export const languageEnglish = 'english';
-export const languageGerman = 'german';
-export const languageFrench = 'french';
+export const languageEnglish = 'English';
+export const languageGerman = 'German';
+export const languageFrench = 'French';
 
 const ui_translations_for_language = {
-    german: ui_translations_german,
-    french: ui_translations_french
+    German: ui_translations_german,
+    French: ui_translations_french
 }
 
 export function translateLabel({label, language, formatParams}) {
@@ -59,5 +59,14 @@ export function TranslatableLabel({label, formatParams, style, ...props}) {
     }
 }
 
-
+export function TranslatableText({text, label, formatParams, style, ...props}) {
+    try {
+        const translatedLabel = useTranslation(label, formatParams);
+        return <Text style={style} {...props}>{translatedLabel || label || text}</Text>
+    } catch (e) {
+        console.log('Error translating ' + label, e);
+        throw Error('Error translating ' + label + ': ' + e);
+        // return <Text style={style} {...props}>{label}</Text>
+    }
+}
 

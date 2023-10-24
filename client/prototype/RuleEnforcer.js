@@ -41,6 +41,7 @@ const initialRules = `1. Nobody can say anything disrespectful towards any perso
 2. Any links must be accompanied by the date the link was published, and a summary of what the linked document says.
 3. No criticism of cats.
 4. No mentioning of vegetables.
+5. Nobody is allowed to refer to soccer as football.
 `
 
 const initialRules_german = `1. Niemand darf einer Person oder Gruppe gegenüber etwas Respektloses sagen, einschließlich der Unterstellung, dass sie schlechte Absichten hat.

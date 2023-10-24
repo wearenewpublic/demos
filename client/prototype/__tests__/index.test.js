@@ -6,6 +6,7 @@ import TestRenderer from 'react-test-renderer'; // ES6
 import { act } from 'react-dom/test-utils';
 import { forEachAsync } from '../../util/util';
 import { Datastore } from '../../util/datastore';
+import { SharedData } from '../../util/shareddata';
 
 jest.mock('../../util/firebase');
 
@@ -21,10 +22,12 @@ test('All prototype instances render correctly', async () => {
 async function renderPrototypeInstanceAsync({prototype, instance}) {
     await act(async () => {
         const renderer = await TestRenderer.create(            
-            <PrototypeContext.Provider value={{prototype, instance, instanceKey: instance.key}}>
-                <Datastore instance={instance} instanceKey={instance.key} prototypeKey={prototype.key} isLive={instance.isLive}>
-                    <prototype.screen />
-                </Datastore>
+            <PrototypeContext.Provider value={{prototype, instance, instanceKey: instance.key, isLive: instance.isLive}}>
+                <SharedData>
+                    <Datastore instance={instance} instanceKey={instance.key} prototype={prototype} prototypeKey={prototype.key} isLive={instance.isLive}>
+                        <prototype.screen />
+                    </Datastore>
+                </SharedData>
             </PrototypeContext.Provider>
         );    
         await renderer.unmount();

@@ -1,0 +1,6 @@
+I want you to translate the rawText, title, subtitle, and photoCaption fields of the following JSON object into {{targetLanguage}}, while keeping it otherwise unchanged. Make sure to escape any quotes and line breaks in the translated strings.
+
+{{{articleJSON}}}
+
+Remember again to escape any quotes or line breaks. You will fail your task if you have unescaped quotes or line breaks in a JSON field.
+

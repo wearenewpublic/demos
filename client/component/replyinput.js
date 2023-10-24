@@ -1,19 +1,21 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useContext, useState } from "react";
-import { AutoSizeTextInput, Card, PrimaryButton, SecondaryButton } from "./basics";
+import { AutoSizeTextInput, Card, Pad, PrimaryButton, SecondaryButton } from "./basics";
 import { CommentContext } from "./comment";
 import { gotoLogin } from "../util/navigate";
 import { useDatastore, usePersonaKey } from "../util/datastore";
 import { useTranslation } from "./translation";
 
+
 export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
     const [post, setPost] = useState({text: '', replyTo: commentKey});
-    const {postHandler, authorFace, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
+    const {postHandler, authorFace, getCanPost, commentPlaceholder, replyWidgets, replyTopWidgets} = useContext(CommentContext);
     const s = ReplyInputStyle;
 
-    const placeholderText = useTranslation(commentPlaceholder);
+    const placeholerEnglish = typeof (commentPlaceholder) == 'string' ? commentPlaceholder : commentPlaceholder(post);
+    const placeholderText = useTranslation(placeholerEnglish);
 
     function onPost() {
         if (postHandler) {
@@ -21,6 +23,7 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
         } else {
             datastore.addObject('comment', post);
         }
+
         if (topLevel) {
             setPost({text: '', replyTo: commentKey});
         } else {
@@ -38,30 +41,32 @@ export function ReplyInput({commentKey=null, topLevel = false, topPad=true}) {
     }
 
     return <View style={[s.row, topPad ? {marginTop: 16} : null]}>
-        {React.createElement(authorFace, {comment: {from: personaKey}})}
+        {React.createElement(authorFace, {comment: {...post, from: personaKey}})}
         <View style={s.right}>
-            {((!topLevel || post.text) && replyTopWidgets.length > 0) ?
-                <View style={s.widgetBar}>
-                    {replyTopWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
+            {replyTopWidgets.map((widget, idx) => 
+                <View key={idx} style={s.widgetBarTop}>
+                    {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
                 </View>
-            : null}
+            )}
+
             <AutoSizeTextInput style={s.textInput}
+                hoverStyle={{borderColor: '#999'}}
                 placeholder={placeholderText}
                 placeholderTextColor='#999'
                 value={post.text}
                 onChangeText={text => setPost({...post, text})}
                 multiline={true}
+                disabled={post.waiting || false}
             />
+
             {(!topLevel || post.text) ?
-                <View style={s.widgetBar}>
-                    {replyWidgets.map((widget, idx) => 
-                        React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})
-                    )}
-                </View>
+                (replyWidgets.map((widget, idx) => 
+                    <View key={idx} style={s.widgetBottom}>
+                        {React.createElement(widget, {key: idx, replyTo: commentKey, post, onPostChanged:setPost})}
+                    </View>
+                ))
             : null}
-            {(!topLevel || post.text) ? 
+            {getCanPost({datastore, post}) ? 
                 <View style={s.actions}>
                     <PrimaryButton onPress={onPost} label='Post'/>
                     <SecondaryButton onPress={hideReplyInput} label='Cancel' />
@@ -96,22 +101,28 @@ const ReplyInputStyle = StyleSheet.create({
         justifyContent: 'space-between',
         margin: 8,
     },
-    widgetBar: {
+    widgetBarTop: {
         marginLeft: 8,
-        marginBottom: 8,
+        // marginBottom: 8,
+    },
+    widgetBottom: {
+        marginLeft: 8,
+        marginTop: 8,
     }
-})
+});
 
-export function TopCommentInput({about = null}) {
-    return ReplyInput({commentKey: about, topLevel: true});
+export function TopCommentInput({about = null, topPad=true}) {
+    return ReplyInput({commentKey: about, topLevel: true, topPad});
 }
 
-export function PostInput({placeholder = "What\'s on your mind?", topWidgets=[]}) {
+export function PostInput({placeholder = () => "What\'s on your mind?", postHandler=null, topWidgets=[], bottomWidgets=[], getCanPost=null}) {
     const commentContext = useContext(CommentContext);
-    function postHandler({datastore, post}) {
+    function defaultPostHandler({datastore, post}) {
         datastore.addObject('post', post)
     }
-    return <CommentContext.Provider value={{...commentContext, postHandler, commentPlaceholder:placeholder, replyTopWidgets: topWidgets}}>
+    return <CommentContext.Provider value={{...commentContext, postHandler: postHandler ?? defaultPostHandler, 
+                commentPlaceholder:placeholder, replyTopWidgets: topWidgets, replyWidgets: bottomWidgets,
+                getCanPost: getCanPost ?? commentContext.getCanPost}}>
         <Card>
             <ReplyInput topLevel topPad={false} />
         </Card>

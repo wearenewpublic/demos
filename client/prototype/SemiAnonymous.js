@@ -3,7 +3,7 @@ import { Pad, PadBox, WideScreen } from "../component/basics";
 import { authorRobEnnals } from "../data/authors";
 import { expandDataList } from "../util/util";
 import { TopCommentInput } from "../component/replyinput";
-import { ActionLike, ActionReply, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
+import { ActionLike, ActionReply, BasicComments, Comment, CommentActionButton, CommentContext, GuestAuthorBling, MemberAuthorBling } from "../component/comment";
 import { useContext } from "react";
 import { AnonymousFace, FaceImage, UserFace } from "../component/userface";
 import { civic_society, civic_society_description } from "../data/openhouse_civic";
@@ -35,51 +35,41 @@ export const SemiAnonymous = {
     description,
     instance: [
         {key: 'civic', name: 'Civic Society, Sunnyvale Chapter', 
-            personaList: memberPersonaList, '$personaKey': 'e',
+            '$personaKey': 'e',
             comment: expandDataList(civic_society)},
         {key: 'civic-french', name: 'Civic Society, Sunnyvale Chapter (French)', language: languageFrench,
-            personaList: memberPersonaList, '$personaKey': 'e',
-            comment: expandDataList(civic_society_french)
+            '$personaKey': 'e',
+            comment: expandDataList(civic_society_french)            
         },
         {key: 'civic-german', name: 'Civic Society, Sunnyvale Chapter (German)', language: languageGerman,
-            personaList: memberPersonaList, '$personaKey': 'e',
+            '$personaKey': 'e',
             comment: expandDataList(civic_society_german)
         },
     ],
-    screen: SemiAnonymousScreen    
+    screen: SemiAnonymousScreen,
+    hasMembers: true,
+    newInstanceParams: []    
+}
+
+export const SemiAnonymousCommentConfig = {
+    authorName: AuthorName, authorFace: AuthorFace,
+    commentPlaceholder: () => 'Write a semi-anonymous comment',
+    replyWidgets: [SemiAnonymousExplain],
+    authorBling: [MemberAuthorBling]
 }
 
 export function SemiAnonymousScreen() {
-    const commentContext = useContext(CommentContext);
-
-    const comments = useCollection('comment', {sortBy: 'time', reverse: true});
-    const topLevelComments = comments.filter(comment => !comment.replyTo);
-
-    const commentConfig = {...commentContext,
-        authorName: AuthorName, authorFace: AuthorFace,
-        commentPlaceholder: 'Write a semi-anonymous comment',
-        replyWidgets: [SemiAnonymousExplain],
-        authorBling: [MemberAuthorBling]
-    }
-
-    // console.log('comments', comments);
-
     return (
         <WideScreen pad>
             <ScrollView>
-                <CommentContext.Provider value={commentConfig}> 
-                    <TopCommentInput />
-                    {topLevelComments.map(comment => 
-                        <Comment key={comment.key} commentKey={comment.key} />
-                    )}
-                </CommentContext.Provider>
+                <BasicComments config={SemiAnonymousCommentConfig} />
             </ScrollView>
         </WideScreen>
     )
 }
 
 function getIsPublic({mePersona, authorPersona, comment}) {
-    return comment?.public || authorPersona?.member || mePersona?.member;
+    return comment?.public || /* authorPersona?.member ||*/ mePersona?.member;
 }
 
 function AuthorName({comment}) {
@@ -93,7 +83,7 @@ function AuthorName({comment}) {
     } else if (comment?.from == personaKey) {
         return <TranslatableLabel label='You Semi-Anonymously' />;
     } else {
-        return <TranslatableLabel label='Anonymous Guest' />;
+        return <TranslatableLabel label='Anonymous' />;
     }
 }
 
@@ -113,13 +103,13 @@ function AuthorFace({comment, faint}) {
 function SemiAnonymousExplain() {
     const personaKey = usePersonaKey();
     const userIsMember = useObject('persona', personaKey)?.member;
-    if (userIsMember) {
-        return <PadBox vert={0} horiz={16} >
-            <QuietSystemMessage label='As a member, your identity is always public' />
-        </PadBox>
-    } else {
+    // if (userIsMember) {
+    //     return <PadBox vert={0} horiz={16} >
+    //         <QuietSystemMessage label='As a member, your identity is always public' />
+    //     </PadBox>
+    // } else {
         return <PadBox vert={0} horiz={16} >
             <QuietSystemMessage label='Group members will see your name, but you will be anonymous to everyone else'/>
         </PadBox>
-    }
+    // }
 }

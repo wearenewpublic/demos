@@ -17,15 +17,15 @@ import { deepClone } from "../util/util";
     key: 'c',
     name: 'Camila Costa',
     face: 'face7.jpeg',
-    member: true
   };
 
-  export const memberA = {
+  export const adminA = {
     key: 'a',
     name: 'Alice Adams',
     face: 'face9.jpeg',
     member: true,
-    label: 'Member'
+    admin: true,
+    label: 'Admin'
   };
 
   export const memberB = {
@@ -72,14 +72,12 @@ import { deepClone } from "../util/util";
     key: 'h',
     name: 'Hiroshi Hasegawa',
     face: 'face6.jpeg',
-    member: true
   };
 
-  export const personaIngrid = {
+  export const personaI = {
     key: 'i',
     name: 'Ingrid Ishida',
     face: 'face5.jpeg',
-    admin: true
   };
 
   export const personaJ = {
@@ -114,10 +112,14 @@ import { deepClone } from "../util/util";
 export const defaultPersona = 'a';
 
 export const defaultPersonaList = [personaA, personaB, personaC, personaD, personaE, personaF, 
-    personaG, personaH, personaIngrid,personaJ, personaK, personaL, personaRobo]
+    personaG, personaH, personaI,personaJ, personaK, personaL, personaRobo]
 
-export const memberPersonaList = [memberA, memberB, memberC, personaD, personaE, personaF,
-    personaG, personaH, personaIngrid, personaJ, personaK, personaL, personaRobo]
+export const memberPersonaList = [adminA, memberB, memberC, personaD, personaE, personaF,
+    personaG, personaH, personaI, personaJ, personaK, personaL, personaRobo]
+
+export const adminPersonaList = [adminA, personaB, personaC, personaD, personaE, personaF,
+    personaG, personaH, personaI, personaJ, personaK, personaL, personaRobo]
+  
 
 
 export function personaListToMap(personas) {

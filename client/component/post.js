@@ -1,41 +1,56 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Clickable, MaybeCard, Pad, PluralLabel, Separator, TimeText } from "./basics";
+import { Card, Clickable, HorizBox, MaybeCard, MaybeClickable, Narrow, Pad, PluralLabel, ScreenTitleText, Separator, TimeText, WideScreen } from "./basics";
 import { useCollection, useDatastore, useObject, usePersonaKey, useSessionData } from "../util/datastore";
-import { UserFace } from "./userface";
-import { TranslatableLabel } from "./translation";
+import { AnonymousFace, UserFace } from "./userface";
+import { TranslatableLabel, useTranslation } from "./translation";
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { pushSubscreen } from "../util/navigate";
-import { addKey, removeKey } from "../util/util";
+import { addKey, expandUrl, removeKey } from "../util/util";
 import { AutoSizeTextInput } from "./basics";
 import { SectionTitleLabel } from "./basics";
 import { PrimaryButton } from "./basics";
 import { SecondaryButton } from "./basics";
+import { BasicComments } from "./comment";
 
-export function Post({post, editWidgets=[], fitted=false, childpad=false, noCard=false, actions, hasComments=false, onComment, topBling, children}) {
+export function Post({post, authorName=null, anonymousFace=false, onPressAuthor=null, editWidgets=[], 
+        infoLineWidget=null, authorBling=null,
+        saveHandler=null, fitted=false, childpad=false, noCard=false, actions, hasComments=false, 
+        onComment, topBling, children, onPress, numberOfLines, getIsCommentVisible=null}) {
     const s = PostStyle;
     const user = useObject('persona', post.from);
     const editedPost = useSessionData('editPost');
+    const [authorHover, setAuthorHover] = useState(false);
     if (editedPost == post.key) {
-        return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} fitted={fitted} noCard={noCard} />
+        return <PostEditor postKey={post.key} oldPostData={post} editWidgets={editWidgets} saveHandler={saveHandler} fitted={fitted} noCard={noCard} />
     }
-    return <MaybeCard fitted={fitted} isCard={!noCard}>
-        <View style={s.authorBox}>
-            <UserFace userId={post.from} size={32} />
+    return <MaybeCard fitted={fitted} isCard={!noCard} onPress={onPress}>
+        <MaybeClickable onPress={onPressAuthor} isClickable={onPressAuthor} style={s.authorBox} onHoverChange={setAuthorHover} >
+            {anonymousFace ? 
+                <AnonymousFace size={32} />
+            :
+                <UserFace userId={post.from} size={32} />
+            }
             <View style={s.authorRight}>
-                <Text style={s.authorName}>{user?.name}</Text>
-                <TimeText time={post.time} />
+                <HorizBox>
+                    <Text style={!authorHover ? s.authorName : [s.authorName, s.textHover]}>{authorName ?? user?.name}</Text>
+                    {authorBling && React.createElement(authorBling, {comment:post})}
+                </HorizBox>
+                {infoLineWidget ? React.createElement(infoLineWidget, {post: post}) : <TimeText time={post.time} />}
             </View>
-        </View>
+        </MaybeClickable>
         {topBling ?
            <View style={{marginBottom: 8}}>{topBling}</View>
         : null} 
         {post.text ? 
-            <Text style={s.text}>{post.text}</Text>
+            <Text style={s.text} numberOfLines={numberOfLines}>{post.text}</Text>
         : null}
         {post.photoUrl ? 
-            <Image source={{uri: post.photoUrl}} style={{width: '100%', height: 200, marginTop: 8}} />
+            <Image source={{uri: expandUrl({url: post.photoUrl, type: 'photos'})}} style={{width: '100%', height: 200, marginTop: 8}} />
         : null}
+        {post.article &&
+            <PostArticlePreview article={post.article} />
+        }
         <LikesLine post={post} />
         {actions ? 
             <View>
@@ -47,7 +62,7 @@ export function Post({post, editWidgets=[], fitted=false, childpad=false, noCard
             </View>
         : null}
         {hasComments ? 
-            <PostCommentsPreview post={post} onPress={onComment} />
+            <PostCommentsPreview post={post} onPress={onComment} getIsCommentVisible={getIsCommentVisible} />
         : null}
         {children ? 
             <View style={{marginTop: childpad ? 12 : 0}}>
@@ -76,7 +91,11 @@ const PostStyle = StyleSheet.create({
     },
     authorName: {
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginRight: 6
+    },
+    textHover: {
+        textDecorationLine: 'underline'
     },
     text: {
         marginHorizontal: 2,
@@ -86,13 +105,40 @@ const PostStyle = StyleSheet.create({
     }
 })
 
-export function PostEditor({postKey, oldPostData, editWidgets, fitted=false, noCard=false}) {
+function PostArticlePreview({article}) {
+    const s = PostArticlePreviewStyle;
+    return <View style={s.outer}>
+        <Image source={{uri: expandUrl({url: article.photo, type: 'photos'})}} style={{width: '100%', height: 200}} />
+        <Text style={s.title}>{article.title}</Text>
+    </View>
+}
+const PostArticlePreviewStyle = StyleSheet.create({
+    outer: {
+        borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
+        shadowRadius: 1, shadowColor: '#555', shadowOffset: {width: 0, height: 1},
+        shadowOpacity: 0.5, elevation: 1,
+        backgroundColor: '#fff',
+        marginTop: 4
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 8,
+     }
+})
+
+
+export function PostEditor({postKey, oldPostData, editWidgets, saveHandler, fitted=false, noCard=false}) {
     const s = PostEditorStyle;
     const [post, setPost] = useState(oldPostData);
     const datastore = useDatastore();
 
     function onSave() {
-        datastore.modifyObject('post', postKey, () => post);
+        if (saveHandler) {
+            saveHandler({datastore, postKey, post});
+        } else {
+            datastore.modifyObject('post', postKey, () => post);
+        }
         datastore.setSessionData('editPost', null);
     }
 
@@ -136,20 +182,22 @@ const PostEditorStyle = StyleSheet.create({
 })
 
 
-export function PostCommentsPreview({post, onPress}) {
+export function PostCommentsPreview({post, getIsCommentVisible, onPress}) {
     const s = PostCommentsPreviewStyle;
-    const allPostComments = useCollection('comment', {filter: {replyTo: post.key}});
+    const datastore = useDatastore();
+    // const allPostComments = useCollection('comment', {filter: {replyTo: post.key}});
     const topPostComments = useCollection('comment', {filter: {replyTo: post.key}, sortBy: 'time', reverse: true});
-    const commentCount = allPostComments.length;
-    const shownComment = topPostComments[0];
+    const filteredComments = getIsCommentVisible ? topPostComments.filter(comment => getIsCommentVisible({datastore, comment})) : topPostComments;
+    const commentCount = filteredComments.length;
+    const shownComment = filteredComments[0];
     if (commentCount == 0) return null;
-    return <Clickable onPress={onPress}>
+    return <Clickable onPress={onPress} hoverStyle={s.hover}>
         <Separator pad={12} />
         {shownComment ? 
             <CommentPreview comment={shownComment} />
         : null}
         {commentCount > 1 ?
-            <Text style={s.moreText}>View <PluralLabel count={commentCount} singular='more comment' plural='more comments' /></Text>
+            <Text style={s.moreText}>View <PluralLabel count={commentCount} singular='comment' plural='comments' /></Text>
         : null}
     </Clickable>
 }
@@ -161,6 +209,9 @@ const PostCommentsPreviewStyle = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: '#666'
+    },
+    hover: {
+        opacity: 0.6
     }
 })
 
@@ -200,26 +251,32 @@ const CommentPreviewStyle = StyleSheet.create({
 
 export function PostActionButton({iconName, iconSet, label, formatParams, onPress}) {
     const s = PostActionButtonStyle;
-    return <Clickable onPress={onPress}>
-        <View style={s.actionButton}>
-            {iconSet ?
-                React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
-            : null}   
-            <TranslatableLabel style={s.actionLabel} label={label} formatParams={formatParams} />
-        </View>
+    const [hover, setHover] = useState(false);
+    return <Clickable onPress={onPress} style={s.actionButton} onHoverChange={hover => setHover(hover)}>
+        {iconSet ?
+            React.createElement(iconSet, {name: iconName, size: 15, color: '#666'})
+        : null}   
+        <TranslatableLabel style={!hover ? s.actionLabel : [s.actionLabel, s.actionLabelHover]} 
+            label={label} formatParams={formatParams} />
     </Clickable>
 }
 
 const PostActionButtonStyle = StyleSheet.create({
     actionButton: {
         flexDirection: 'row',
-        marginRight: 32
+        marginRight: 32,
     },
     actionLabel: {
-        marginLeft: 4,
         color: '#666',
+        marginLeft: 4,
         fontSize: 14
     },
+    actionLabelHover: {
+        color: '#000',
+        textDecorationLine: 'underline'
+
+    }
+
 });
 
 
@@ -228,6 +285,7 @@ export function PostActionLike({post}) {
     const personaKey = usePersonaKey();
     const hasLike = post.likes?.[personaKey];
     const actionLabel = hasLike ? 'Unlike' : 'Like';
+    if (post.from == personaKey) return null;
     function likePost() {
         datastore.modifyObject('post', post.key, post => ({
             ...post, likes: hasLike ? removeKey(post.likes, personaKey) : addKey(post.likes, personaKey)
@@ -284,3 +342,23 @@ const LikeLineStyle = StyleSheet.create({
         marginTop: 8,
     }
 });
+
+function PostScreenTitle({postKey}) {
+    const post = useObject('post', postKey);
+    const author = useObject('persona', post?.from);
+    const tPost = useTranslation('Post');
+    return <ScreenTitleText title={author.name + "'s " + tPost} />
+}
+
+function PostScreen({postKey}) {
+    const post = useObject('post', postKey);
+    return <WideScreen>
+        <Narrow>
+            <Post noCard post={post} />
+            <Pad/>
+            <BasicComments about={postKey} />
+        </Narrow>
+    </WideScreen>
+}
+
+export const PostScreenInfo = {screen: PostScreen, title: PostScreenTitle}

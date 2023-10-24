@@ -16,10 +16,13 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo-google-fonts/ibm-plex-mono": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
+    "@expo-google-fonts/raleway": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-community/slider": "4.4.2",
+    "@tensorflow/tfjs-node": "^4.10.0",
     "expo": "~48.0.15",
     "expo-av": "~13.2.1",
     "expo-camera": "~13.2.1",
@@ -32,7 +35,8 @@
     "react-dom": "^18.2.0",
     "react-native": "0.71.7",
     "react-native-markdown-display": "^7.0.0-alpha.2",
-    "react-native-web": "~0.18.11"
+    "react-native-web": "~0.18.11",
+    "react-tooltip": "^5.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

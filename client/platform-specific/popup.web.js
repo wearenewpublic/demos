@@ -11,19 +11,28 @@ export function closeActivePopup() {
     }
 }
 
-export function PopupSelector({value, items, onSelect}) {
+export function PopupSelector({value, items, onSelect, textStyle={}, paddingVertical=8}) {
+    const [hover, setHover] = useState(false)
     return (
-        <View style={{marginHorizontal: 4, marginVertical: 4}}>
-        <select value={value} onChange={e => onSelect(e.target.value)} style={{
-            backgroundColor: 'white', padding: 8, borderColor: '#ddd', borderWidth: 1, 
-            WebkitAppearance: 'none', borderRadius: 8, flex: 1}}>
-                {items.map(item => 
-                   <option key={item.key} value={item.key}>{item.label}</option>
-                )}
-        </select>
+        <View style={{marginHorizontal: 0, marginVertical: 0}}>
+            <select value={value} onChange={e => onSelect(e.target.value)} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+                style={{
+                    ...textStyle,
+                    backgroundColor: 'white', paddingLeft: 8, paddingRight: 8, 
+                    paddingTop: paddingVertical, paddingBottom: paddingVertical, borderWidth: 1, 
+                    WebkitAppearance: 'none', borderRadius: 8, flex: 1,
+                    hover: {borderColor: '#999'},
+                    borderColor: hover ? '#999' : '#ddd'
+                    }}>
+                    {items.map(item => 
+                    <option key={item.key} value={item.key}>{item.label}</option>
+                    )}
+            </select>
         </View>
     )
 }
+
 
 
 function DocumentLevelComponent({children}) {
