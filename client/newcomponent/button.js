@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { colorAccent, colorAccentHover, colorBlack, colorBlackHover, colorDisabledBackground, colorDisabledText, colorGreyBorder, colorGreyHover, colorTextBlue, colorWhite } from "./color";
+import { colorAccent, colorAccentHover, colorBlack, colorBlackHover, colorDisabledBackground, colorDisabledText, colorGreyBorder, colorGreyHover, colorGreyPopupBackground, colorRed, colorTextBlue, colorWhite } from "./color";
 import { UtilityText } from "./text";
 import { TranslatableText } from "../component/translation";
-import { Pad } from "../component/basics";
+import { Clickable, Pad } from "../component/basics";
 import { HoverView } from "./basics";
-import { IconChevronDown, IconChevronUp } from "./icon";
+import { IconChevronDown, IconChevronDownBlack, IconChevronUp } from "./icon";
 import { FacePile } from "./people";
+import { Popup } from "../platform-specific/popup";
 
-export function CTAButton({label, type, icon, disabled, onPress}) {
+export function CTAButton({label, type='primary', icon, disabled, onPress}) {
     const s = CTAButtonStyle;
 
     const styleMap = {
@@ -131,5 +132,86 @@ const ExpanderButtonStyle = StyleSheet.create({
     button: {
         flexDirection: 'row',
         alignItems: 'center',
+    }
+})
+
+export function Tag({label, text, type='emphasized', formatParams, color=null, onPress}) {
+    const s = TagStyle;
+    return <View style={[s.button, type == 'emphasized' && s.emphasized, 
+                color && {borderColor: color, backgroundColor: color}]} 
+            hoverStyle={s.hover} onPress={onPress}>
+        <UtilityText label={label} text={text} formatParams={formatParams} type='tiny' />
+    </View>
+}
+const TagStyle = StyleSheet.create({
+    button: {
+        alignSelf: 'flex-start',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: colorGreyBorder
+    },
+    emphasized: {
+        borderRadius: 100,
+    },
+})
+
+export function ReactionButton({label, count}){
+    const s = ReactionButtonStyle;
+    return <HoverView style={s.button} hoverStyle={s.hover}>
+        <UtilityText label={label} type='tiny' bold />
+        <Pad size={8} />
+        <UtilityText text={count} type='tiny' color={colorRed} />
+    </HoverView>
+}
+const ReactionButtonStyle = StyleSheet.create({
+    button: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: colorGreyBorder,
+    },
+    hover: {
+        backgroundColor: colorGreyHover,
+    }
+})
+
+export function DropDownSelector({label, options, value, onChange=()=>{}}) {
+    const s = DropDownSelectorStyle;
+    const selectedOption = options.find(o => o.key == value) || options[0];
+    function popup() {
+        return <View >
+            {options.map((o, i) => <View key={i}>
+                {i != 0 && <Pad size={20} />}
+                <Clickable onPress={() => onChange(o.key)}>
+                    <UtilityText label={o.label} type='tiny' />
+                </Clickable>
+            </View>)}
+        </View>
+    }
+    return <Popup popupContent={popup} popupStyle={s.popup}>
+        <View style={s.button}>
+            <UtilityText label={label} type='tiny' />
+            <UtilityText text=': ' type='tiny' />
+            <UtilityText label={selectedOption.label} type='tiny' />
+            <Pad size={8} />
+            <IconChevronDownBlack />
+        </View>        
+    </Popup>
+}
+
+const DropDownSelectorStyle = StyleSheet.create({
+    button: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+    },
+    popup: {
+        backgroundColor: colorGreyPopupBackground,
+        borderRadius: 8,
+        padding: 12
     }
 })

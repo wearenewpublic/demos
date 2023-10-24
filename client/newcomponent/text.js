@@ -40,17 +40,20 @@ export function Paragraph({type='small', text, label, formatParams}) {
     />
 }
 
-export function UtilityText({type='small', text, label, formatParams, color='black', underline=false}) {
+export function UtilityText({type='small', text, label, formatParams, color='black', bold=false, underline=false}) {
     const s = TextStyle;
     const styleMap = {
         large: s.utilityLarge,
         small: s.utilitySmall,
-        bold: s.utilityBold,
         tiny: s.utilityTiny,
         tinycaps: s.utilityTinyCaps,
     }
     return <TranslatableText text={text} label={label} formatParams={formatParams}
-        style={[styleMap[type], {color}, underline ? {textDecoration: 'underline'} : null]} />
+        style={[
+            styleMap[type], {color}, 
+            underline && {textDecorationLine: 'underline'},
+            bold && {fontFamily: 'IBMPlexMono_500Medium'}
+        ]} />
 }
 
 const TextStyle = StyleSheet.create({
@@ -62,11 +65,6 @@ const TextStyle = StyleSheet.create({
     utilitySmall: {
         fontFamily: 'IBMPlexMono_400Regular',
         fontSize: 14, 
-        lineHeight: 14 * 1.25
-    },
-    utilityBold: {
-        fontFamily: 'IBMPlexMono_500Medium',
-        fontSize: 14,
         lineHeight: 14 * 1.25
     },
     utilityTinyCaps: {

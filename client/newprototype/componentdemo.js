@@ -7,8 +7,8 @@ import { IconAudio, IconCircleCheck, IconComment, IconEdit, IconEmoji, IconImage
 import { HorizBox, Narrow, Pad, ScrollableScreen } from "../component/basics";
 import { ContentHeading, Heading, Paragraph, UtilityText } from "../newcomponent/text";
 import { NewPublicTitle } from "../component/newpublic";
-import { colorTextGrey } from "../newcomponent/color";
-import { CTAButton, ExpanderButton, IconButton, SubtleButton } from "../newcomponent/button";
+import { colorPink, colorTextGrey } from "../newcomponent/color";
+import { CTAButton, DropDownSelector, ExpanderButton, IconButton, ReactionButton, SubtleButton, Tag } from "../newcomponent/button";
 import { translatePlural, useLanguage } from "../component/translation";
 // import { Byline } from "../newcomponent/byline";
 
@@ -41,7 +41,9 @@ function ComponentDemoScreen() {
                 <UtilityText type='large' label='Utility:Large' />
                 <UtilityText type='small' label='Utility:Small' />
                 <UtilityText type='small' color={colorTextGrey} label='Utility:Small color:TextGrey' />
-                <UtilityText type='bold' label='Utility:Bold' />
+                <UtilityText type='small' bold label='Utility:Small Bold' />
+                <UtilityText type='small' underline label='Utility:Small Underline' />
+                
                 <UtilityText type='tiny' label='Utility:Tiny' />
                 <UtilityText type='tinycaps' label='Utility:Tiny Caps' />
             </DemoSection>
@@ -106,6 +108,19 @@ function ComponentDemoScreen() {
                 <ExpanderButton label='Show More' />
                 <ExpanderButton userList={['a','b','c','d']} label='{count} {noun}' 
                     formatParams={{count: 22, singular: 'reply', plural: 'replies'}} />
+            </DemoSection>
+            <DemoSection label='Tag'>
+                <Tag label='Subtle Tag' type='subtle' />
+                <Tag label='🔥 Emphasized Tag' type='emphasized' color={colorPink} />
+            </DemoSection>
+            <DemoSection label='Reaction Button'>
+                <ReactionButton label='🤝🏽 Respect' count={1} />
+            </DemoSection>
+            <DemoSection label='DropDownSelector'>
+                <DropDownSelector label='Sort by' options={[
+                    {key: 'recent', label: 'Most recent'},
+                    {key: 'top', label: 'Top voted'}
+                ]} />
             </DemoSection>
         </Narrow>
      </ScrollableScreen>

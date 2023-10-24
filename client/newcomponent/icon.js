@@ -97,3 +97,9 @@ export function IconChevronUp() {
        <path d="M10 6.25L16.25 12.5L15.375 13.375L10 8L4.625 13.375L3.75 12.5L10 6.25Z" fill="#5A1EF5"/>
     </svg>
 }
+
+export function IconChevronDownBlack() {
+    return <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 5.00001L13 10L12.3 10.7L8 6.40001L3.7 10.7L3 10L8 5.00001Z" fill="black"/>
+    </svg>
+}

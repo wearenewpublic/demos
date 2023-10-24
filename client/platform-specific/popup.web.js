@@ -85,15 +85,17 @@ function global_layoutPopup() {
         node.style.right = null;
     }
     if (rect.left > windowWidth / 2) {
-        node.style.maxWidth = (rect.left - 16) + 'px';
+        console.log('first');
+        node.style.maxWidth = (rect.right - 16) + 'px';
     } else {
-        node.style.maxWidth = (windowWidth - rect.right - 16) + 'px';
+        console.log('second', windowWidth, rect.right, rect, global_clickTargetRef.current);
+        node.style.maxWidth = (windowWidth - rect.left - 16) + 'px';
     }
     requestAnimationFrame(global_layoutPopup);
 }
 
 
-export function Popup({popupContent, children}) {
+export function Popup({popupContent, popupStyle, children}) {
     const s = PopupButtonStyle;
     const [shown, setShown] = useState(false);
     const popupRef = React.useRef(null);
@@ -154,7 +156,7 @@ export function Popup({popupContent, children}) {
         </View> 
         {shown ? 
             <DocumentLevelComponent>
-                <View ref={popupRef} style = {s.popup} >
+                <View ref={popupRef} style={[s.basicPopup, popupStyle ?? s.popupFrame]} >
                     {shown ? popupContent() : null}
                 </View>
             </DocumentLevelComponent>
@@ -166,14 +168,15 @@ const PopupButtonStyle = StyleSheet.create({
     frame: {
         position: 'relative'
     },
-    popup: {
+    basicPopup: {
         position: 'absolute',        
         zIndex: 1000,
+    },
+    popupFrame: {
         borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
         shadowRadius: 4, shadowColor: '#555', shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.5, elevation: 1,
         backgroundColor: '#fff'
-
     },
     up: {
         bottom: 0
