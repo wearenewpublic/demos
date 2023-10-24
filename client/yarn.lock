@@ -1599,10 +1599,20 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@expo-google-fonts/ibm-plex-mono@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/ibm-plex-mono/-/ibm-plex-mono-0.2.3.tgz#447948818c0ee0352a983eb1967c571f6527d45d"
+  integrity sha512-Bc+VBBtOjP993mNycex2Dmomuokvd3lkn43CY7Kya8Jst4F8CKXhe6H/wp52AAR6Wo+dWsCHSUdW0ynHDD3Qhg==
+
 "@expo-google-fonts/montserrat@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/montserrat/-/montserrat-0.2.3.tgz#e22b337ee6bd2007126b466ddd18f9de59eb3fc6"
   integrity sha512-9imhwIs6j5uyTkTxoNplC5T8ERES1W98ZgF7kf7OaypnbcoLoIW0wKH6oudecZyiEqoSktC7epkRpj+UEUvzWg==
+
+"@expo-google-fonts/raleway@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/raleway/-/raleway-0.2.3.tgz#bdcad2a77b7d0f84ef7a9fd5eb993597270ad9a5"
+  integrity sha512-31D87kwraBhf59VPXEUQxRQjMCIUqNrvmWmfcyRremnwjdvSyu7LAjT6KmTZB/kAuRHJRGY4KFPQDhnPhxkZ7A==
 
 "@expo/bunyan@4.0.0", "@expo/bunyan@^4.0.0":
   version "4.0.0"

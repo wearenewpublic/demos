@@ -6,6 +6,8 @@ import { PrototypeInstanceListScreen } from './organizer/PrototypeInstanceListSc
 import { PrototypeListScreen } from './organizer/PrototypeListScreen';
 import { TopBar } from './organizer/TopBar';
 import { useFonts, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import { Raleway_400Regular } from '@expo-google-fonts/raleway';
+import { IBMPlexMono_400Regular, IBMPlexMono_500Medium, IBMPlexMono_600SemiBold } from '@expo-google-fonts/ibm-plex-mono'
 import { getIsLocalhost, setTitle } from './platform-specific/url';
 import { useLiveUrl } from './organizer/url';
 import { getScreenStackForUrl, gotoPrototype, gotoInstance } from './util/navigate';
@@ -25,7 +27,13 @@ export default function App() {
 
   let [fontsLoaded] = useFonts({
     Montserrat_600SemiBold,
+    Raleway_400Regular,
+    IBMPlexMono_400Regular,
+    IBMPlexMono_500Medium,
+    IBMPlexMono_600SemiBold
   });
+
+  console.log('fontsLoaded', fontsLoaded);
 
   function onSelectInstance(newInstanceKey) {
     gotoInstance({prototypeKey, instanceKey: newInstanceKey});

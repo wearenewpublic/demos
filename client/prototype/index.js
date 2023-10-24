@@ -42,6 +42,7 @@ import { CustomRankedPrototype } from "./CustomRanked";
 import { SimilarCommentPrototype } from "./SimilarComment";
 import { LikelyResponsePrototype } from "./LikelyResponse";
 import { PrivateAIChatPrototype } from "./PrivateAIChat";
+import { ComponentDemoPrototype } from "../newprototype/componentdemo";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -55,6 +56,8 @@ export const prototypes = [
     OpinionPopularityPrototype, CustomRankedPrototype, SimilarCommentPrototype,
     LikelyResponsePrototype, PrivateAIChatPrototype,
     
+    ComponentDemoPrototype,
+
     ArticleGenerator,
 
     SlackViewPrototype, SlackGuidedClustersPrototype, SlackSearchPrototype, 

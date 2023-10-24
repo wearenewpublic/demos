@@ -16,7 +16,9 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo-google-fonts/ibm-plex-mono": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
+    "@expo-google-fonts/raleway": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-community/slider": "4.4.2",
