@@ -1,0 +1,9 @@
+I'm going to give you a topic and I want you to rephrase it as a question that incentivizes users on an online forum to respond to it.
+
+Respond with a JSON in this format:
+{
+    "question": <insert your question here>
+}
+
+Here is the topic:
+{{topic}}
