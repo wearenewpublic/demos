@@ -8,8 +8,9 @@ import { trek_vs_wars, trek_vs_wars_constructive } from "../data/conversations";
 import { useCollection, useDatastore } from "../util/datastore";
 import { QuietSystemMessage } from "../component/message";
 import { createContext, useContext, useState } from "react";
-import { askGptToEvaluateCommentsWithTopicAsync, askGptToEvaluateHelpAcceptanceAsync, askGptToRespondToCommentsWithTopicAsync, gptProcessAsync } from "../contrib/zdf/chatgpt";
+import { askGptToEvaluateCommentsWithTopicAsync, askGptToEvaluateHelpAcceptanceAsync, askGptToRespondToCommentsWithTopicAsync } from "../contrib/zdf/chatgpt";
 import { authorZDFDigital } from "../data/authors";
+import { gptProcessAsync } from "../component/chatgpt";
 
 const description = `
 An AI assistant that helps out when a conversation is stuck.

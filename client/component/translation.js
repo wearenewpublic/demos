@@ -17,6 +17,14 @@ const ui_translations_for_language = {
 }
 
 export function translateLabel({label, language, formatParams}) {
+    var extra = {};
+    if (formatParams?.singular && formatParams?.plural && formatParams?.count) {
+        if (formatParams.count == 1) {
+            extra = {noun: translateLabel({label: formatParams.singular, language})}
+        } else {
+            extra = {noun: translateLabel({label: formatParams.plural, language})}
+        }
+    }
     const translations = ui_translations_for_language[language];
     var translatedText = translations ? translations[label] : label;
 
@@ -24,9 +32,17 @@ export function translateLabel({label, language, formatParams}) {
         console.log('No translation for ' + label + ' in ' + language);
     }
     if (formatParams) {
-        translatedText = formatString(translatedText || label, formatParams);
+        translatedText = formatString(translatedText || label, {...formatParams, ...extra});
     }
     return translatedText || label;
+}
+
+export function translatePlural({singular, plural, language, count}) {
+    if (count == 1) {
+        return count + ' ' + translateLabel({label: singular, language});
+    } else {
+        return count + ' ' + translateLabel({label: plural, language});
+    }
 }
 
 export function useLanguage() {

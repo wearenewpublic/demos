@@ -29,29 +29,28 @@ export function Heading({text, label, formatParams}) {
         style={TextStyle.heading} />
 }
 
-export function Paragraph({sizeType='small', text, label, formatParams}) {
+export function Paragraph({type='small', text, label, formatParams}) {
     const s = TextStyle;
     const styleMap = {
         large: s.largeParagraph,
         small: s.smallParagraph
     }
     return <TranslatableText text={text} label={label} formatParams={formatParams} 
-        style={styleMap[sizeType]} 
+        style={styleMap[type]} 
     />
 }
 
-export function UtilityText({sizeType='small', text, label, formatParams}) {
+export function UtilityText({type='small', text, label, formatParams, color='black', underline=false}) {
     const s = TextStyle;
     const styleMap = {
         large: s.utilityLarge,
         small: s.utilitySmall,
         bold: s.utilityBold,
-        faint: s.utilityFaint,
         tiny: s.utilityTiny,
         tinycaps: s.utilityTinyCaps,
     }
     return <TranslatableText text={text} label={label} formatParams={formatParams}
-        style={styleMap[sizeType]} />
+        style={[styleMap[type], {color}, underline ? {textDecoration: 'underline'} : null]} />
 }
 
 const TextStyle = StyleSheet.create({
@@ -69,12 +68,6 @@ const TextStyle = StyleSheet.create({
         fontFamily: 'IBMPlexMono_500Medium',
         fontSize: 14,
         lineHeight: 14 * 1.25
-    },
-    utilityFaint: {
-        fontFamily: 'IBMPlexMono_500Medium',
-        fontSize: 14,
-        lineHeight: 14 * 1.25,
-        color: colorTextGrey
     },
     utilityTinyCaps: {
         fontFamily: 'IBMPlexMono_400Regular',
