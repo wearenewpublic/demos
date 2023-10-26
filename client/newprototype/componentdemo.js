@@ -183,6 +183,8 @@ function CommentScreen() {
 function ComponentDemoScreen() {
     return <ScrollableScreen>
         <Narrow>
+            <ContentHeading label='Compenent Groups' />
+            <Pad size={20} />
             <SpacedArray>
                 <PrimaryButton label='Text' onPress={() => pushSubscreen('text')} />
                 <PrimaryButton label='Profile' onPress={() => pushSubscreen('profile')} />
@@ -194,129 +196,12 @@ function ComponentDemoScreen() {
 }
 
 
-function OLDomponentDemoScreen() {
-    const personaKey = usePersonaKey();
-    const [switchValue, setSwitchValue] = useState(false);
-    const [dropDownValue, setDropDownValue] = useState(null);
-    const [text, setText] = useState(null);
-    const [expanded, setExpanded] = useState(false);
-    return <ScrollableScreen backgroundColor={colorBlueBackgound}>
-        <Narrow>
-            <DemoSection label='Content Text'>
-                <ContentHeading label='Level 1' level={1} />
-                <ContentHeading label='Level 2' level={2} />
-                <ContentHeading label='Level 3' level={3} />
-                <ContentHeading label='Level 4' level={4} />
-            </DemoSection>
-            <DemoSection label='UI Text'>
-                <Heading label='Heading' />
-                <Paragraph type='large' label='Paragraph:Large' />
-                <Paragraph type='small' label='Paragraph:Small' />
-                <UtilityText type='large' label='Utility:Large' />
-                <UtilityText type='small' label='Utility:Small' />
-                <UtilityText type='small' color={colorTextGrey} label='Utility:Small color:TextGrey' />
-                <UtilityText type='small' bold label='Utility:Small Bold' />
-                <UtilityText type='small' underline label='Utility:Small Underline' />
-                
-                <UtilityText type='tiny' label='Utility:Tiny' />
-                <UtilityText type='tinycaps' label='Utility:Tiny Caps' />
-            </DemoSection>
-            <DemoSection label='Text Field'>
-                <TextField value={text} placeholder='Enter some text' onChange={setText} />
-            </DemoSection>
-            <DemoSection label='Profile Photo'>
-                <SpacedArray horiz pad={8}>
-                    <ProfilePhoto userId={personaKey} />
-                    <ProfilePhoto userId={personaKey} type="small"/>
-                    <ProfilePhoto userId={personaKey} type="tiny"/>
-                    <ProfilePhoto userId={personaKey} check={true} />
-                    <ProfilePhoto userId={personaKey} type="small" check/>
-                    <ProfilePhoto userId={personaKey} type="tiny" check/>
-                </SpacedArray>
-            </DemoSection>
-            <DemoSection label='Facepile'>
-                <FacePile userIdList={['a','b','c']} />
-                <FacePile userIdList={['a','b','c']} type='small' />
-                <FacePile userIdList={['a','b','c','d','e','f']} type='tiny' />
-            </DemoSection>
-            <DemoSection label='Byline'>
-                <Byline userId={personaKey} time={Date.now()} />
-                <Byline userId={personaKey} type='small' time={Date.now()} />
-            </DemoSection>
-            <DemoSection label='Persona'>
-                <Persona userId={personaKey} />
-            </DemoSection>
-            <DemoSection label='CTA Button'>
-                <SpacedArray horiz>
-                    <CTAButton label='Primary Button' type='primary' />
-                    <CTAButton label='Secondary Button' type='secondary' />
-                    <CTAButton label='Accent Button' type='accent' />
-                </SpacedArray>
-                <SpacedArray horiz>
-                    <CTAButton label='✨ Accent with Emoji' type='accent' />
-                    <CTAButton label='Disabled Button' type='primary' disabled />
-                </SpacedArray>
-            </DemoSection>
-            <DemoSection label='Icon Button'>
-                <SpacedArray horiz>
-                    <IconButton icon={IconReply} label='Reply' />
-                    <IconButton icon={IconComment} label='Comment' />
-                    <IconButton icon={IconEdit} label='Edit' />
-                    <IconButton icon={IconSave} label='Save' />
-                </SpacedArray>
-                <SpacedArray horiz>
-                    <IconButton icon={IconImage} label='Image' />
-                    <IconButton icon={IconAudio} label='Audio' />
-                    <IconButton icon={IconVideo} label='Video' />
-                    <IconButton icon={IconEmoji} label='Emoji' />
-                </SpacedArray>
-            </DemoSection>
-            <DemoSection label='Subtle Button'>
-                <SpacedArray horiz>
-                    <SubtleButton icon={IconReply} label='Reply' />
-                    <SubtleButton icon={IconUpvote} label='Upvote ({count})' formatParams={{count: 22}} />
-                    <SubtleButton icon={IconReport} label='Report' />
-                    <SubtleButton icon={IconComment} label='{count} {noun}' 
-                        formatParams={{singular: 'comment', plural: 'comments', count: 12}} />
-                </SpacedArray>
-            </DemoSection>
-            <DemoSection label='Expander Button'>
-                <ExpanderButton label='Show More' type='small' expanded={expanded} setExpanded={setExpanded} />
-                <ExpanderButton label='Show More' expanded={expanded} setExpanded={setExpanded} />
-                <ExpanderButton userList={['a','b','c','d']} label='{count} {noun}' 
-                    formatParams={{count: 22, singular: 'reply', plural: 'replies'}} expanded={expanded} setExpanded={setExpanded} />
-            </DemoSection>
-            <DemoSection label='Tag'>
-                <Tag label='Subtle Tag' type='subtle' />
-                <Tag label='🔥 Emphasized Tag' type='emphasized' color={colorPink} />
-            </DemoSection>
-            <DemoSection label='Reaction Button'>
-                <ReactionButton label='🤝🏽 Respect' count={1} />
-            </DemoSection>
-            <DemoSection label='DropDownSelector'>
-                <DropDownSelector label='Sort by' 
-                    value={dropDownValue} onChange={setDropDownValue}
-                    options={[
-                        {key: 'recent', label: 'Most recent'},
-                        {key: 'top', label: 'Top voted'}
-                ]} />
-            </DemoSection>
-            <DemoSection label='Toggle'>
-                <Toggle label='Toggle' value={switchValue} onChange={setSwitchValue} />
-            </DemoSection>
-            <DemoSection label='Comment'>
-                <Comment commentKey='a' />
-            </DemoSection>
-        </Narrow>
-     </ScrollableScreen>
-}
 
 function DemoSection({label, horiz=false, children}) {
     return <View style={{marginBottom: 32}}>
         <ContentHeading label={label} level={2} />
         <Pad size={8} />
         <SpacedArray horiz={horiz}>{children}</SpacedArray>
-        {/* {children} */}
     </View>
 }
 

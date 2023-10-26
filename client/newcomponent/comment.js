@@ -31,7 +31,6 @@ export function Comment({commentKey}) {
 
 export function ReplyComment({commentKey}) {
     const comment = useObject('comment', commentKey);
-    console.log('reply comment', commentKey, comment);
     return <View>
         <Pad size={20} />
         <Divider />
@@ -52,9 +51,16 @@ function CommentBody({commentKey}) {
     const comment = useObject('comment', commentKey);
     const editing = useSessionData(['editComment', commentKey]);
     const [editedComment, setEditedComment] = useState(null);
+    const datastore = useDatastore();
+
+    function onEditingDone() {
+        setEditedComment(null);
+        datastore.setSessionData(['editComment', comment.key], false);
+    }
 
     if (editing) {
-        return <EditComment comment={editedComment ?? comment} setComment={setEditedComment} />
+        return <EditComment comment={editedComment ?? comment} 
+            setComment={setEditedComment} onEditingDone={onEditingDone} />
     } else {
         return <Paragraph text={comment.text.trim()} />
     }
@@ -64,16 +70,25 @@ function MaybeCommentReply({commentKey}) {
     const replyEnabled = useSessionData(['replyToComment', commentKey]);
     const personaKey = usePersonaKey();
     const [comment, setComment] = useState({text: '', replyTo: commentKey});
+    const datastore = useDatastore();
     if (!replyEnabled) return null;
+
+    function onEditingDone() {
+        datastore.setSessionData(['replyToComment', comment.replyTo], false);
+        datastore.setSessionData(['showReplies', comment.replyTo], true);
+        setComment({text: '', replyTo: commentKey})
+    }
+
     return <View>
         <Pad size={20} />
         <Persona userId={personaKey} />
         <Pad size={20} />
-        <EditComment commentKey={commentKey} comment={comment} setComment={setComment} />
+        <EditComment commentKey={commentKey} comment={comment} 
+            setComment={setComment} onEditingDone={onEditingDone} />
     </View>
 }
 
-function EditComment({comment, setComment}) {
+function EditComment({comment, setComment, onEditingDone}) {
     const replyToComment = useObject('comment', comment.replyTo);
     const author = useObject('persona', replyToComment?.from);
     const datastore = useDatastore();
@@ -81,16 +96,10 @@ function EditComment({comment, setComment}) {
     function onReply() {
         if (comment.key) {
             datastore.updateObject('comment', comment.key, comment);
-            datastore.setSessionData(['editComment', comment.key], false);
-            setComment(null);
         } else {
             datastore.addObject('comment', comment);
-            setComment({text: '', replyTo: comment.replyTo || null})
         }
-        if (comment.replyTo) {
-            datastore.setSessionData(['replyToComment', comment.replyTo], false);
-            datastore.setSessionData(['showReplies', comment.replyTo], true);
-        }
+        onEditingDone();
     }
 
     const canPost = comment.text && !comment.blockPost;
@@ -229,3 +238,13 @@ export function ActionReport({commentKey}) {
     return <SubtleButton icon={IconReport} onPress={onReport}/>
 }
 
+function TopCommentEntry({replyTo}) {
+
+}
+
+export function BasicComments({config, about}) {
+    const comments = useCollection('comment', {filter: {about}, sortBy: 'time', reverse: true});
+    return <View>
+        {comments.map(comment => <Comment key={comment.key} commentKey={comment.key} />)}
+    </View>
+}
