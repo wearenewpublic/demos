@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Switch, Text, View } from "react-native";
 import { authorRobEnnals } from "../data/authors";
 import { Byline, FacePile, Persona, ProfilePhoto } from "../newcomponent/people";
 import { usePersonaKey } from "../util/datastore";
@@ -8,8 +8,9 @@ import { HorizBox, Narrow, Pad, ScrollableScreen } from "../component/basics";
 import { ContentHeading, Heading, Paragraph, UtilityText } from "../newcomponent/text";
 import { NewPublicTitle } from "../component/newpublic";
 import { colorPink, colorTextGrey } from "../newcomponent/color";
-import { CTAButton, DropDownSelector, ExpanderButton, IconButton, ReactionButton, SubtleButton, Tag } from "../newcomponent/button";
+import { CTAButton, DropDownSelector, ExpanderButton, IconButton, ReactionButton, SubtleButton, Tag, Toggle } from "../newcomponent/button";
 import { translatePlural, useLanguage } from "../component/translation";
+import { useState } from "react";
 // import { Byline } from "../newcomponent/byline";
 
 export const ComponentDemoPrototype = {
@@ -26,6 +27,8 @@ export const ComponentDemoPrototype = {
 
 function ComponentDemoScreen() {
     const personaKey = usePersonaKey();
+    const [switchValue, setSwitchValue] = useState(false);
+    const [dropDownValue, setDropDownValue] = useState(null);
     return <ScrollableScreen>
         <Narrow>
             <DemoSection label='Content Text'>
@@ -117,10 +120,15 @@ function ComponentDemoScreen() {
                 <ReactionButton label='🤝🏽 Respect' count={1} />
             </DemoSection>
             <DemoSection label='DropDownSelector'>
-                <DropDownSelector label='Sort by' options={[
-                    {key: 'recent', label: 'Most recent'},
-                    {key: 'top', label: 'Top voted'}
+                <DropDownSelector label='Sort by' 
+                    value={dropDownValue} onChange={setDropDownValue}
+                    options={[
+                        {key: 'recent', label: 'Most recent'},
+                        {key: 'top', label: 'Top voted'}
                 ]} />
+            </DemoSection>
+            <DemoSection label='Toggle'>
+                <Toggle label='Toggle' value={switchValue} onChange={setSwitchValue} />
             </DemoSection>
         </Narrow>
      </ScrollableScreen>

@@ -57,6 +57,7 @@ function DocumentLevelComponent({children}) {
 
 var global_clickTargetRef = null;
 var global_popupRef = null;
+var global_popup_align_right = false;
 
 function global_layoutPopup() {
     if (!global_clickTargetRef || !global_popupRef) return;
@@ -77,25 +78,20 @@ function global_layoutPopup() {
         node.style.top = rect.bottom + 'px';
         node.style.bottom = null;
     }
-    if (rect.left > windowWidth / 2) {
+    if ((rect.left > windowWidth / 2) || global_popup_align_right) {
         node.style.right = (windowWidth - rect.right) + 'px';
         node.style.left = null;
+        node.style.maxWidth = (rect.right - 16) + 'px';
     } else {
         node.style.left = rect.left + 'px';
         node.style.right = null;
-    }
-    if (rect.left > windowWidth / 2) {
-        console.log('first');
-        node.style.maxWidth = (rect.right - 16) + 'px';
-    } else {
-        console.log('second', windowWidth, rect.right, rect, global_clickTargetRef.current);
         node.style.maxWidth = (windowWidth - rect.left - 16) + 'px';
     }
     requestAnimationFrame(global_layoutPopup);
 }
 
 
-export function Popup({popupContent, popupStyle, children}) {
+export function Popup({popupContent, popupStyle, alignRight=false, children}) {
     const s = PopupButtonStyle;
     const [shown, setShown] = useState(false);
     const popupRef = React.useRef(null);
@@ -134,6 +130,7 @@ export function Popup({popupContent, popupStyle, children}) {
         if (shown) {
             global_clickTargetRef = clickTargetRef;
             global_popupRef = popupRef;
+            global_popup_align_right = alignRight;
             global_layoutPopup();
         } else {
             global_clickTargetRef = null;

@@ -103,3 +103,45 @@ export function IconChevronDownBlack() {
         <path d="M8 5.00001L13 10L12.3 10.7L8 6.40001L3.7 10.7L3 10L8 5.00001Z" fill="black"/>
     </svg>
 }
+
+export function IconSwitchOff() {
+    return <svg xmlns="http://www.w3.org/2000/svg" width="61" height="46" viewBox="0 0 61 46" fill="none">
+        <rect x="5" y="5" width="56" height="32" rx="16" fill="#F7F7F7"/>
+        <g filter="url(#filter0_d_483_3094)">
+        <circle cx="21" cy="21" r="13" fill="white"/>
+        </g>
+        <defs>
+        <filter id="filter0_d_483_3094" x="0" y="0" width="46" height="46" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dx="2" dy="2"/>
+        <feGaussianBlur stdDeviation="5"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_483_3094"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_483_3094" result="shape"/>
+        </filter>
+        </defs>
+    </svg>
+}
+
+export function IconSwitchOn() {
+    return <svg xmlns="http://www.w3.org/2000/svg" width="65" height="46" viewBox="0 0 65 46" fill="none">
+        <rect y="5" width="56" height="32" rx="16" fill="#B9EBDC"/>
+        <g filter="url(#filter0_d_483_3101)">
+        <circle cx="40" cy="21" r="13" fill="#00AF87"/>
+        </g>
+        <defs>
+        <filter id="filter0_d_483_3101" x="19" y="0" width="46" height="46" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+            <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dx="2" dy="2"/>
+            <feGaussianBlur stdDeviation="5"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_483_3101"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_483_3101" result="shape"/>
+        </filter>
+        </defs>
+    </svg>   
+}

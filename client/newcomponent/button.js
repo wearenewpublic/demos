@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { colorAccent, colorAccentHover, colorBlack, colorBlackHover, colorDisabledBackground, colorDisabledText, colorGreyBorder, colorGreyHover, colorGreyPopupBackground, colorRed, colorTextBlue, colorWhite } from "./color";
+import { colorAccent, colorAccentHover, colorBlack, colorBlackHover, colorDisabledBackground, colorDisabledText, colorGreen, colorGreyBorder, colorGreyHover, colorGreyPopupBackground, colorLightGreen, colorRed, colorTextBlue, colorWhite } from "./color";
 import { UtilityText } from "./text";
 import { TranslatableText } from "../component/translation";
 import { Clickable, Pad } from "../component/basics";
 import { HoverView } from "./basics";
-import { IconChevronDown, IconChevronDownBlack, IconChevronUp } from "./icon";
+import { IconChevronDown, IconChevronDownBlack, IconChevronUp, IconCircleCheck, IconSwitchOff, IconSwitchOn } from "./icon";
 import { FacePile } from "./people";
 import { Popup } from "../platform-specific/popup";
 
@@ -180,6 +180,13 @@ const ReactionButtonStyle = StyleSheet.create({
     }
 })
 
+export function ClickableText({type, text, label, formatParams, onPress}) {
+    const [hover, setHover] = useState(false);
+    return <Clickable onPress={onPress} onHoverChange={setHover}>
+        <UtilityText type={type} text={text} label={label} underline={hover} formatParams={formatParams} />
+    </Clickable>
+}
+
 export function DropDownSelector({label, options, value, onChange=()=>{}}) {
     const s = DropDownSelectorStyle;
     const selectedOption = options.find(o => o.key == value) || options[0];
@@ -187,21 +194,21 @@ export function DropDownSelector({label, options, value, onChange=()=>{}}) {
         return <View >
             {options.map((o, i) => <View key={i}>
                 {i != 0 && <Pad size={20} />}
-                <Clickable onPress={() => onChange(o.key)}>
-                    <UtilityText label={o.label} type='tiny' />
-                </Clickable>
+                <ClickableText label={o.label} type='tiny' onPress={() => {console.log('o',o.key); onChange(o.key)}} />
             </View>)}
         </View>
     }
-    return <Popup popupContent={popup} popupStyle={s.popup}>
-        <View style={s.button}>
-            <UtilityText label={label} type='tiny' />
-            <UtilityText text=': ' type='tiny' />
-            <UtilityText label={selectedOption.label} type='tiny' />
-            <Pad size={8} />
-            <IconChevronDownBlack />
-        </View>        
-    </Popup>
+    return <View style={{alignSelf: 'flex-start'}}> 
+        <Popup popupContent={popup} popupStyle={s.popup} alignRight>
+            <View style={s.button}>
+                <UtilityText label={label} type='tiny' />
+                <UtilityText text=': ' type='tiny' />
+                <UtilityText label={selectedOption.label} type='tiny' />
+                <Pad size={8} />
+                <IconChevronDownBlack />
+            </View>        
+        </Popup>
+    </View>
 }
 
 const DropDownSelectorStyle = StyleSheet.create({
@@ -213,5 +220,61 @@ const DropDownSelectorStyle = StyleSheet.create({
         backgroundColor: colorGreyPopupBackground,
         borderRadius: 8,
         padding: 12
+    }
+})
+
+export function Toggle({label, value, onChange}) {
+    const s = ToggleStyle;
+    return <Clickable style={s.outer} onPress={() => onChange(!value)}>
+        <UtilityText label={label} type='large' />
+        <Pad size={12} />
+        {/* {value ? <IconSwitchOn /> : <IconSwitchOff />} */}
+        <View style={value ? s.toggleZoneSelected : s.toggleZone} onPress={() => onChange(!value)}>
+            <View style={value ? s.toggleBallSelected : s.toggleBall} />
+        </View>
+    </Clickable>
+}
+const ToggleStyle = StyleSheet.create({
+    outer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    toggleZone: {
+        width: 56,
+        height: 32,
+        backgroundColor: colorGreyPopupBackground,
+        borderRadius: 100,
+        transition: 'background-color 0.2s ease-in-out'
+    },
+    toggleBall: {
+        shadowOffset: { width: 2, height: 0 },
+        shadowOpacity: 0.50,
+        shadowRadius: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.30)',
+        elevation: 5,  // for Android,
+        position: 'absolute',
+        left: 2,
+        top: 2,
+        width: 28,
+        height: 28,
+        borderRadius: 100,
+        backgroundColor: colorWhite,
+        transition: 'left 0.2s ease-in-out, background-color 0.2s ease-in-out'
+    },
+    toggleZoneSelected: {
+        width: 56,
+        height: 32,
+        backgroundColor: colorLightGreen,
+        borderRadius: 100,
+        transition: 'background-color 0.2s ease-in-out'
+    },
+    toggleBallSelected: {
+        backgroundColor: colorGreen,
+        left: 56-28-2,
+        top: 2,
+        width: 28,
+        height: 28,
+        borderRadius: 100,
+        transition: 'left 0.2s ease-in-out, background-color 0.2s ease-in-out'
     }
 })
