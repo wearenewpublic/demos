@@ -180,5 +180,5 @@ export function mapKeys(object, callback) {
 }
 
 export function getFirstName(name) {
-  return name.trim().split(' ')[0];
+  return (name || '').trim().split(' ')[0];
 }

@@ -94,11 +94,10 @@ const IconReplyStyle = StyleSheet.create({
 
 export function SubtleButton({label, text, bold=false, formatParams, icon=null, padRight, onPress}) {
     const s = SubtleButtonStyle;
-    return <HoverView style={s.button} hoverStyle={s.hover} onPress={onPress}>
+    return <HoverView style={[s.button, padRight && {marginRight: 20}]} hoverStyle={s.hover} onPress={onPress}>
         {React.createElement(icon)}
         {(label || text) && <Pad size={4} />}
         <UtilityText label={label} text={text} bold={bold} formatParams={formatParams} type='tiny' />
-        {padRight && <Pad size={20} />}
     </HoverView>
 }
 const SubtleButtonStyle = StyleSheet.create({

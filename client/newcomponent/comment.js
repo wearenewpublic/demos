@@ -21,7 +21,7 @@ export function Comment({commentKey}) {
     return <Card>
         <Byline userId={comment.from} time={comment.time} />
         <Pad size={20} />
-        <Paragraph label={comment.text.trim()} />
+        <CommentBody commentKey={commentKey} />
         <Pad size={20} />
         <CommentActions commentKey={commentKey} />
         <MaybeCommentReply commentKey={commentKey} />
@@ -39,7 +39,7 @@ export function ReplyComment({commentKey}) {
         <Byline type='small' userId={comment.from} time={comment.time} />
         <Pad size={20} />
         <View style={{marginLeft: 40}}>
-            <Paragraph label={comment.text.trim()} />
+            <CommentBody commentKey={commentKey} />
             <Pad size={20} />
             <CommentActions commentKey={commentKey} />
             <MaybeCommentReply commentKey={commentKey} />
@@ -48,47 +48,63 @@ export function ReplyComment({commentKey}) {
     </View>    
 }
 
-function MaybeCommentReply({commentKey}) {
-    const replyEnabled = useSessionData(['replyToComment', commentKey]);
-    const [comment, setComment] = useState({text: '', replyTo: commentKey});
-    if (!replyEnabled) return null;
-    return <CommentWriteReply commentKey={commentKey} comment={comment} setComment={setComment} />
+function CommentBody({commentKey}) {
+    const comment = useObject('comment', commentKey);
+    const editing = useSessionData(['editComment', commentKey]);
+    const [editedComment, setEditedComment] = useState(null);
+
+    if (editing) {
+        return <EditComment comment={editedComment ?? comment} setComment={setEditedComment} />
+    } else {
+        return <Paragraph text={comment.text.trim()} />
+    }
 }
 
-function CommentWriteReply({comment, setComment}) {
+function MaybeCommentReply({commentKey}) {
+    const replyEnabled = useSessionData(['replyToComment', commentKey]);
     const personaKey = usePersonaKey();
+    const [comment, setComment] = useState({text: '', replyTo: commentKey});
+    if (!replyEnabled) return null;
+    return <View>
+        <Pad size={20} />
+        <Persona userId={personaKey} />
+        <Pad size={20} />
+        <EditComment commentKey={commentKey} comment={comment} setComment={setComment} />
+    </View>
+}
+
+function EditComment({comment, setComment}) {
     const replyToComment = useObject('comment', comment.replyTo);
-    const author = useObject('persona', replyToComment.from);
+    const author = useObject('persona', replyToComment?.from);
     const datastore = useDatastore();
 
     function onReply() {
         if (comment.key) {
             datastore.updateObject('comment', comment.key, comment);
+            datastore.setSessionData(['editComment', comment.key], false);
+            setComment(null);
         } else {
             datastore.addObject('comment', comment);
+            setComment({text: '', replyTo: comment.replyTo || null})
         }
         if (comment.replyTo) {
             datastore.setSessionData(['replyToComment', comment.replyTo], false);
             datastore.setSessionData(['showReplies', comment.replyTo], true);
         }
-        setComment({text: '', replyTo: comment.replyTo || null})
     }
 
     const canPost = comment.text && !comment.blockPost;
-
+    const action = comment.key ? 'Update' : comment.replyTo ? 'Reply' : 'Post';
     const placeholder = comment.replyTo ? 'Reply to {authorName}...' : 'Write a comment...';
 
     return <View>
-        <Pad size={20} />
-        <Persona userId={personaKey} />
-        <Pad size={20} />
         <TextField value={comment.text} onChange={text => setComment({...comment, text})} 
             placeholder={placeholder} 
-            placeholderParams={{authorName: getFirstName(author.name)}} />
+            placeholderParams={{authorName: getFirstName(author?.name)}} />
         <Pad size={20} />
         <HorizBox center spread>
             <EditWidgets comment={comment} setComment={setComment} />
-            <CTAButton label='Reply' type={canPost ? 'primary' : 'disabled'} onPress={onReply} />
+            <CTAButton label={action} type={canPost ? 'primary' : 'disabled'} onPress={onReply} />
         </HorizBox>    
     </View>
 }
@@ -197,7 +213,8 @@ export function ActionEdit({commentKey}) {
     const personaKey = usePersonaKey();
     const comment = useObject('comment', commentKey)
     function onEdit() {
-        datastore.setSessionData(['editComment', commentKey], true);
+        const old = datastore.getSessionData(['editComment', commentKey]);
+        datastore.setSessionData(['editComment', commentKey], !old);
     }
 
     if (comment.from != personaKey) return null;

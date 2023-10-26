@@ -10,8 +10,8 @@ import { TranslatableLabel, translateLabel, useLanguage } from "./translation";
 import { useObject } from "../util/datastore";
 
 
-export function ScrollableScreen({children, grey, maxWidth=500, pad=true}) {
-    return <ScrollView style={{backgroundColor: grey ? '#EFF2F5' : null}}>
+export function ScrollableScreen({children, grey, backgroundColor, maxWidth=500, pad=true}) {
+    return <ScrollView style={{backgroundColor: grey ? '#EFF2F5' : backgroundColor ?? null}}>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', paddingVertical: pad ? 16 :  null}}>
             <View style={{maxWidth: maxWidth, flexShrink: 1, flexGrow: 1, marginHorizontal: pad ? 8 : null}}>
                 {children}
