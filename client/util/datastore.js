@@ -106,6 +106,9 @@ export class Datastore extends React.Component {
             throw new Error('Missing key or typeName', key, typeName);
         }
         const typeData = {...this.getData()[typeName], [key]: value};
+        if (value == null) {
+            delete typeData[key]
+        }
         this.setData({...this.getData(), [typeName]: typeData});
         // this.notifyWatchers();
 
@@ -139,6 +142,9 @@ export class Datastore extends React.Component {
         const objectData = {key, from: personaKey, time: Date.now(), ...value};
         this.setObject(typeName, key, objectData);
         return key;
+    }
+    deleteObject(typeName, key) {
+        this.setObject(typeName, key, null);
     }
     getCollection(typeName, props) {
         return processObjectList(this.getData()[typeName], props);

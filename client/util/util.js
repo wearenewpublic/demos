@@ -178,3 +178,7 @@ export function mapKeys(object, callback) {
       return result;
   });
 }
+
+export function getFirstName(name) {
+  return name.trim().split(' ')[0];
+}

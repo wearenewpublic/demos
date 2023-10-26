@@ -92,12 +92,13 @@ const IconReplyStyle = StyleSheet.create({
     },
 });
 
-export function SubtleButton({label, text, formatParams, icon=null, onPress}) {
+export function SubtleButton({label, text, bold=false, formatParams, icon=null, padRight, onPress}) {
     const s = SubtleButtonStyle;
     return <HoverView style={s.button} hoverStyle={s.hover} onPress={onPress}>
         {React.createElement(icon)}
-        <Pad size={4} />
-        <UtilityText label={label} text={text} formatParams={formatParams} type='tiny' />
+        {(label || text) && <Pad size={4} />}
+        <UtilityText label={label} text={text} bold={bold} formatParams={formatParams} type='tiny' />
+        {padRight && <Pad size={20} />}
     </HoverView>
 }
 const SubtleButtonStyle = StyleSheet.create({
@@ -110,21 +111,16 @@ const SubtleButtonStyle = StyleSheet.create({
 });
 
 
-export function ExpanderButton({userList, label, text, type='tiny', formatParams, setExpanded=()=>{}}) {
+export function ExpanderButton({userList, label, text, type='tiny', formatParams, expanded, setExpanded=()=>{}}) {
     const s = ExpanderButtonStyle;
     const [hover, setHover] = useState(false);
-    const [localExpanded, setLocalExpanded] = useState(false);
-    function onPress() {
-        console.log('onPress', localExpanded);
-        setLocalExpanded(!localExpanded);
-        setExpanded(!localExpanded);
-    }
-    return <HoverView style={s.button} setHover={setHover} onPress={onPress}>        
+
+    return <HoverView style={s.button} setHover={setHover} onPress={() => setExpanded(!expanded)}>        
         {userList && <FacePile type={type} userIdList={userList} />}
         {userList && <Pad size={4.5} />}
         <UtilityText label={label} text={text} formatParams={formatParams} type={type} color={colorTextBlue} underline={hover} />
         <Pad size={8} />
-        {localExpanded ? <IconChevronUp /> : <IconChevronDown />}
+        {expanded ? <IconChevronUp /> : <IconChevronDown />}
     </HoverView>
 
 }

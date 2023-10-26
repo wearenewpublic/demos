@@ -14,6 +14,7 @@ export const colorAccent = '#5A1EF5';
 export const colorBlackHover = '#2B2B2B';
 export const colorGreyHover = '#E9E9E9';
 export const colorAccentHover = '#4718C4';
+export const colorGreyHoverBorder = '#0f0f0f';
 
 export const colorPink = '#FCEBEA';
 export const colorRed = '#F44336';

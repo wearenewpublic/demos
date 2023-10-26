@@ -7,6 +7,7 @@ import { IconCircleCheck } from "./icon";
 import { UtilityText } from "./text";
 import { Pad } from "../component/basics";
 import { formatDate, formatMiniDate } from "./date";
+import { colorTextGrey } from "./color";
 
 
 export function ProfilePhoto({userId, type='large', faint=false, check=false}) {
@@ -32,7 +33,7 @@ export function ProfilePhoto({userId, type='large', faint=false, check=false}) {
 
 function FaceImage({face, photoUrl=null, type='small', faint=false, check=false}) {
     const sizeMap = {
-        large: 48,
+        large: 40,
         small: 32,
         tiny: 24,
     }
@@ -96,17 +97,17 @@ export function Byline({type='large', userId, time}) {
         return <View style={s.outer}>
             <ProfilePhoto userId={userId} type='large' /> 
             <View style={s.right}>
-                <UtilityText type='bold' text={persona?.name} />
-                <UtilityText type='faint' text={formatDate(time)} />
+                <UtilityText bold text={persona?.name} />
+                <UtilityText color={colorTextGrey} text={formatDate(time)} />
             </View>
         </View>
     } else {
         return <View style={s.smallOuter}>
             <ProfilePhoto userId={userId} type='small' /> 
             <Pad size={8} />
-            <UtilityText type='bold' text={persona?.name} />
+            <UtilityText bold text={persona?.name} />
             <Pad size={6} />
-            <UtilityText type='faint' text={formatMiniDate(time)} />
+            <UtilityText color={colorTextGrey} text={formatMiniDate(time)} />
         </View>
     }
 }
@@ -127,13 +128,13 @@ const BylineStyle = StyleSheet.create({
     }
 })
 
-export function Persona({userId}) {
+export function Persona({userId, type='small'}) {
     const s = PersonaStyle;
     const persona = useObject('persona', userId);
     return <View style={s.outer}>
-        <ProfilePhoto userId={userId} type='large' /> 
+        <ProfilePhoto userId={userId} type={type} /> 
         <View style={s.right}>
-            <UtilityText type='bold' text={persona?.name} />
+            <UtilityText bold text={persona?.name} />
         </View>
     </View>
 }

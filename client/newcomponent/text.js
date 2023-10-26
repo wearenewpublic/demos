@@ -1,6 +1,7 @@
 import { StyleSheet, Text } from "react-native";
 import { TranslatableText, useTranslation } from "../component/translation"
-import { colorTextGrey } from "./color";
+import { colorDisabledText, colorGreyBorder, colorGreyHoverBorder, colorTextGrey } from "./color";
+import { AutoSizeTextInput } from "../component/basics";
 
 
 export function ContentHeading({level=3, text, label, formatParams}) {
@@ -17,12 +18,6 @@ export function ContentHeading({level=3, text, label, formatParams}) {
     return <TranslatableText text={text} label={label} formatParams={formatParams}
         style={[s.contentHeading, {fontSize: size, lineHeight: size * 1.25}]} />
 }
-
-const ContentHeadingStyle = StyleSheet.create({
-    heading: {
-        fontFamily: 'Raleway_400Regular'
-    }
-})
 
 export function Heading({text, label, formatParams}) {
     return <TranslatableText text={text} label={label} formatParams={formatParams} 
@@ -48,6 +43,7 @@ export function UtilityText({type='small', text, label, formatParams, color='bla
         tiny: s.utilityTiny,
         tinycaps: s.utilityTinyCaps,
     }
+    if (!text && !label) return null;
     return <TranslatableText text={text} label={label} formatParams={formatParams}
         style={[
             styleMap[type], {color}, 
@@ -95,5 +91,27 @@ const TextStyle = StyleSheet.create({
         fontSize: 14,
         lineHeight: 14 * 1.5,
         fontFamily: 'IBMPlexMono_400Regular',
+    }
+})
+
+export function TextField({value, placeholder, placeholderParams, onChange}) {
+    const s = TextFieldStyle;
+    const tPlaceholder = useTranslation(placeholder, placeholderParams);
+    return <AutoSizeTextInput value={value ?? ''} onChange={onChange} 
+        emptyHeight={48}
+        style={s.textField} hoverStyle={s.hover}
+        placeholder={tPlaceholder} placeholderTextColor={colorDisabledText} />
+}
+const TextFieldStyle = StyleSheet.create({
+    textField: {
+        borderColor: colorGreyBorder,
+        borderWidth: 1,
+        borderRadius: 4,
+        paddingHorizontal: 16,
+        paddingVertical: 15,
+        fontFamily: 'IBMPlexMono_400Regular',
+    },
+    hover: {
+        borderColor: colorGreyHoverBorder
     }
 })

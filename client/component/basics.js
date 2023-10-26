@@ -358,13 +358,13 @@ export function MaybeEditableText({editable, value, action, placeholder, onChang
     }
 }
 
-export function AutoSizeTextInput({value, onChange, placeholder, style, hoverStyle=null, maxHeight = 400, ...props}) {
+export function AutoSizeTextInput({value, onChange, placeholder, style, hoverStyle=null, maxHeight = 400, emptyHeight = 0, ...props}) {
     const [height, setHeight] = useState(0);
     const [hover, setHover] = useState(false);
 
     useEffect(() => {
         if (value == '' && height > 0) {
-            setHeight(0);
+            setHeight(emptyHeight);
         }
     }, [value])
 

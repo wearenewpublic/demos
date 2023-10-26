@@ -5,12 +5,14 @@ import { usePersonaKey } from "../util/datastore";
 import { personaK } from "../data/personas";
 import { IconAudio, IconCircleCheck, IconComment, IconEdit, IconEmoji, IconImage, IconReply, IconReport, IconSave, IconUpvote, IconVideo } from "../newcomponent/icon";
 import { HorizBox, Narrow, Pad, ScrollableScreen } from "../component/basics";
-import { ContentHeading, Heading, Paragraph, UtilityText } from "../newcomponent/text";
+import { ContentHeading, Heading, Paragraph, TextField, UtilityText } from "../newcomponent/text";
 import { NewPublicTitle } from "../component/newpublic";
 import { colorPink, colorTextGrey } from "../newcomponent/color";
 import { CTAButton, DropDownSelector, ExpanderButton, IconButton, ReactionButton, SubtleButton, Tag, Toggle } from "../newcomponent/button";
 import { translatePlural, useLanguage } from "../component/translation";
 import { useState } from "react";
+import { expandDataList } from "../util/util";
+import { Comment } from "../newcomponent/comment";
 // import { Byline } from "../newcomponent/byline";
 
 export const ComponentDemoPrototype = {
@@ -21,7 +23,12 @@ export const ComponentDemoPrototype = {
     description: 'Demonstrate production components',
     screen: ComponentDemoScreen,
     instance: [
-        {key: 'demo', name: 'Demo'}
+        {key: 'demo', name: 'Demo', comment: expandDataList([
+            {key: 'a', from: 'd', text: 'This is a comment'},
+            {key: 'b', from: 'b', replyTo: 'a', text: 'This is a rely'},
+            {key: 'c', from: 'c', replyTo: 'a', text: 'This is another reply. This reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\nThis reply contains a lot of text so that it tests the challenge of a comment being too long.\n '}
+
+        ])}
     ]
 }
 
@@ -29,6 +36,8 @@ function ComponentDemoScreen() {
     const personaKey = usePersonaKey();
     const [switchValue, setSwitchValue] = useState(false);
     const [dropDownValue, setDropDownValue] = useState(null);
+    const [text, setText] = useState(null);
+    const [expanded, setExpanded] = useState(false);
     return <ScrollableScreen>
         <Narrow>
             <DemoSection label='Content Text'>
@@ -50,15 +59,18 @@ function ComponentDemoScreen() {
                 <UtilityText type='tiny' label='Utility:Tiny' />
                 <UtilityText type='tinycaps' label='Utility:Tiny Caps' />
             </DemoSection>
+            <DemoSection label='Text Field'>
+                <TextField value={text} placeholder='Enter some text' onChange={setText} />
+            </DemoSection>
             <DemoSection label='Profile Photo'>
-                <HorizBox>
+                <SpacedArray horiz pad={8}>
                     <ProfilePhoto userId={personaKey} />
                     <ProfilePhoto userId={personaKey} type="small"/>
                     <ProfilePhoto userId={personaKey} type="tiny"/>
                     <ProfilePhoto userId={personaKey} check={true} />
                     <ProfilePhoto userId={personaKey} type="small" check/>
                     <ProfilePhoto userId={personaKey} type="tiny" check/>
-                </HorizBox>
+                </SpacedArray>
             </DemoSection>
             <DemoSection label='Facepile'>
                 <FacePile userIdList={['a','b','c']} />
@@ -107,10 +119,10 @@ function ComponentDemoScreen() {
                 </SpacedArray>
             </DemoSection>
             <DemoSection label='Expander Button'>
-                <ExpanderButton label='Show More' type='small' />
-                <ExpanderButton label='Show More' />
+                <ExpanderButton label='Show More' type='small' expanded={expanded} setExpanded={setExpanded} />
+                <ExpanderButton label='Show More' expanded={expanded} setExpanded={setExpanded} />
                 <ExpanderButton userList={['a','b','c','d']} label='{count} {noun}' 
-                    formatParams={{count: 22, singular: 'reply', plural: 'replies'}} />
+                    formatParams={{count: 22, singular: 'reply', plural: 'replies'}} expanded={expanded} setExpanded={setExpanded} />
             </DemoSection>
             <DemoSection label='Tag'>
                 <Tag label='Subtle Tag' type='subtle' />
@@ -129,6 +141,9 @@ function ComponentDemoScreen() {
             </DemoSection>
             <DemoSection label='Toggle'>
                 <Toggle label='Toggle' value={switchValue} onChange={setSwitchValue} />
+            </DemoSection>
+            <DemoSection label='Comment'>
+                <Comment commentKey='a' />
             </DemoSection>
         </Narrow>
      </ScrollableScreen>
