@@ -69,7 +69,7 @@ export function AnonymousFace({faint, size}) {
 export function FacePile({type='large', userIdList}) {
     const s = FacePileStyle;
     const sizeMap = {
-        large: 48,
+        large: 40,
         small: 32,
         tiny: 24,
     }

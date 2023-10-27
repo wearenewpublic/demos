@@ -91,7 +91,7 @@ function global_layoutPopup() {
 }
 
 
-export function Popup({popupContent, popupStyle, alignRight=false, children}) {
+export function Popup({popupContent, popupStyle, alignRight=false, setHover=()=>{}, children}) {
     const s = PopupButtonStyle;
     const [shown, setShown] = useState(false);
     const popupRef = React.useRef(null);
@@ -147,7 +147,7 @@ export function Popup({popupContent, popupStyle, alignRight=false, children}) {
 
     return <View style={s.frame}>
         <View ref={clickTargetRef}>
-            <Clickable onPress={onClickShow}>
+            <Clickable onPress={onClickShow} onHoverChange={setHover}>
                 {children}
             </Clickable>
         </View> 

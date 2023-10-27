@@ -94,10 +94,12 @@ const IconReplyStyle = StyleSheet.create({
 
 export function SubtleButton({label, text, bold=false, formatParams, icon=null, padRight, onPress}) {
     const s = SubtleButtonStyle;
-    return <HoverView style={[s.button, padRight && {marginRight: 20}]} hoverStyle={s.hover} onPress={onPress}>
+    const [hover, setHover] = useState(false);
+    return <HoverView style={[s.button, padRight && {marginRight: 20}]} 
+            onPress={onPress} setHover={setHover}>
         {React.createElement(icon)}
         {(label || text) && <Pad size={4} />}
-        <UtilityText label={label} text={text} bold={bold} formatParams={formatParams} type='tiny' />
+        <UtilityText label={label} text={text} bold={bold} underline={hover} formatParams={formatParams} type='tiny' />
     </HoverView>
 }
 const SubtleButtonStyle = StyleSheet.create({
@@ -184,6 +186,7 @@ export function ClickableText({type, text, label, formatParams, onPress}) {
 
 export function DropDownSelector({label, options, value, onChange=()=>{}}) {
     const s = DropDownSelectorStyle;
+    const [hover, setHover] = useState(false);
     const selectedOption = options.find(o => o.key == value) || options[0];
     function popup() {
         return <View >
@@ -194,11 +197,11 @@ export function DropDownSelector({label, options, value, onChange=()=>{}}) {
         </View>
     }
     return <View style={{alignSelf: 'flex-start'}}> 
-        <Popup popupContent={popup} popupStyle={s.popup} alignRight>
+        <Popup popupContent={popup} popupStyle={s.popup} alignRight setHover={setHover}>
             <View style={s.button}>
                 <UtilityText label={label} type='tiny' />
                 <UtilityText text=': ' type='tiny' />
-                <UtilityText label={selectedOption.label} type='tiny' />
+                <UtilityText label={selectedOption.label} type='tiny' underline={hover} />
                 <Pad size={8} />
                 <IconChevronDownBlack />
             </View>        
