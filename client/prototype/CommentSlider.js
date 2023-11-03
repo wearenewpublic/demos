@@ -10,6 +10,7 @@ import { useCollection, useGlobalProperty, usePersonaKey } from "../util/datasto
 import { expandDataList } from "../util/util";
 import { askGptToEvaluateMessageTextAsync, gptProcessAsync } from "../component/chatgpt";
 import { View } from "react-native";
+import { PopupSelector } from "../platform-specific/popup";
 
 export const CommentSliderPrototype = {
     key: 'commentsliderqa',
@@ -65,19 +66,20 @@ function CommentSliderScreen() {
         {hasAnswered ? 
             <QuietSystemMessage label='You have already written an opinion' />
         :
-            <PostInput placeholder={"What's your opinion?" + (auto ? '' : ' (optional)')}
+            <PostInput placeholder={"Can you say more?" + (auto ? '' : ' (optional)')}
                 getCanPost={getCanPost}
                 topWidgets={auto ? [] : [EditRating]} 
+                bottomWidgets={auto ? [] : [WarnIfMissingRating]}
                 postHandler={auto ? postHandlerAsync : null} />
         }
 
         <Card>
-            <SectionTitleLabel label='Filter by Opinion' />
+            <SectionTitleLabel label='Filter Responses by Opinion' />
             <RatingSummary labelSet={ratingLabels} ratingCounts={ratingCounts} selection={selection} onChangeSelection={setSelection} />
         </Card>
 
         {selection ?
-            <QuietSystemMessage label='Showing only posts with selected opinion'/>
+            <QuietSystemMessage label='Showing only responses with selected opinion'/>
         :null}
 
         {shownPosts.map(post => 
@@ -95,7 +97,7 @@ function getCanPost({datastore, post}) {
     if (auto) {
         return post.text.length > 0;
     } else {
-        return post.slide != null;
+        return post.slide;
     }
 }
 
@@ -140,12 +142,22 @@ function EditRating({post, onPostChanged}) {
     const sideOne = useGlobalProperty('sideOne');
     const sideTwo = useGlobalProperty('sideTwo');
     const ratingLabels = getRatingLabels({sideOne, sideTwo});
+    const selectorItems = ratingLabels.map((label, index) => ({label, key: index+1}))
 
     return <View>
-        <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
+        <PopupSelector label='Rate your opinion' value={post.slide || 0} 
+            items={[{label: 'Rate your opinion', key:0}, ...selectorItems]} onSelect={slide => onPostChanged({...post, slide})} />
+        {/* <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
         placeholder='Rate your opinion'
-        onChangeValue={slide => onPostChanged({...post, slide})} />
+        onChangeValue={slide => onPostChanged({...post, slide})} /> */}
         <Pad />
     </View>
 }
 
+function WarnIfMissingRating({post, onPostChanged}) {
+    if (!post.slide) {
+        return <QuietSystemMessage label='Please rate your opinion' />
+    } else {
+        return null;
+    }   
+}

@@ -45,6 +45,7 @@ import { SimilarCommentPrototype } from "./SimilarComment";
 import { LikelyResponsePrototype } from "./LikelyResponse";
 import { PrivateAIChatPrototype } from "./PrivateAIChat";
 import { ComponentDemoPrototype } from "../newprototype/componentdemo";
+import { MultiQuestionSlider } from "./MultiQuestionSlider";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -57,7 +58,9 @@ export const prototypes = [
     TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, ConversationHelperPrototype, SimilarCommentPrototype,
     LikelyResponsePrototype, HumanCheckinPrototype, PrivateAIChatPrototype,
-    
+
+    MultiQuestionSlider,
+
     ComponentDemoPrototype,
 
     ArticleGenerator,
