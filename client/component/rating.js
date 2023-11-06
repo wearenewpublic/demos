@@ -1,7 +1,95 @@
 import { StyleSheet, Text, View } from "react-native";
-import { BackgroundBar, Clickable, MaybeClickable } from "./basics";
+import { BackgroundBar, Center, Clickable, HorizBox, MaybeClickable } from "./basics";
 import { TranslatableLabel } from "./translation";
 import { useState } from "react";
+
+
+export function RatingSelector({value, sideOne, sideTwo, labelSet, placeholder, onChangeValue}) {
+    const s = RatingSelectorStyle;
+    const label = value ? labelSet[value - 1] : placeholder;
+    const ratings = [1,2,3,4,5];
+
+    return <View style={s.outer}>
+        <HorizBox spread>
+            <TranslatableLabel label={sideOne} />
+            <TranslatableLabel label={sideTwo} />
+        </HorizBox>
+        <View style={s.slider}>
+            <HorizBox spread center>
+                {ratings.map(rating =>
+                    <MaybeClickable key={rating} isClickable={rating != value} 
+                        hoverStyle={{opacity: 0.5}}
+                        onPress={() => onChangeValue(rating)}>
+                        <SpectrumSelectItem enabled={rating == value} color={colors[rating-1]}/>
+                    </MaybeClickable>
+                )}          
+            </HorizBox>
+            <View style={s.bar}/>
+            <View style={s.leftTick}/>
+            <View style={s.rightTick}/>
+        </View>
+        <Center>
+            <TranslatableLabel style={s.name} label={label} />
+        </Center>
+    </View>
+}
+
+
+
+const RatingSelectorStyle = StyleSheet.create({
+    leftTick: {
+        position: 'absolute',
+        left: 10, top: 0, bottom: 10,
+        borderLeftWidth: 1,
+        borderLeftColor: '#999',
+        borderLeftStyle: 'dashed',
+        zIndex: -1,
+    },
+    rightTick: {
+        position: 'absolute',
+        right: 10, top: 0, bottom: 10,
+        borderLeftWidth: 1,
+        borderLeftColor: '#999',
+        borderLeftStyle: 'dashed',
+        zIndex: -1,
+    },
+
+    outer: { 
+        // width: 200,
+        // alignSelf: 'center'
+    },
+    slider: {
+        paddingTop: 10,
+        marginTop: 4,
+        marginBottom: 0,
+    },
+    name: {
+        color: '#222',
+        marginTop: 4,
+        marginBottom: 4,
+        fontWeight: 'bold',
+        fontSize: 14,
+        marginLeft: 8
+    },
+    bar: {
+        position: 'absolute',
+        borderTopWidth: 1,
+        borderTopColor: '#666',
+        zIndex: -1,
+        left: 10,
+        right: 10,
+        top: 20
+    }
+})
+
+function SpectrumSelectItem({enabled, color}) {    
+    if (enabled) {
+        return <Dot size={20} color={color} outerSize={20} borderColor='#ccc' borderWidth={1} />
+    } else {
+        return <Dot size={10} color='#ccc' outerSize={20} />
+    }
+}
+
 
 
 export function RatingWithLabel({value, labelSet, editable=false, placeholder, onChangeValue}) {
@@ -25,12 +113,12 @@ const RatingWithLabelStyle = StyleSheet.create({
     }
 })
 
-const colors = ['#f00', '#fa0', '#ff0', '#af0', '#0f0']
+// const colors = ['#f00', '#fa0', '#ff0', '#af0', '#0f0']
+const colors = ['#0f0', '#af0', '#ff0', '#fa0', '#f00']
 
 export function SpectrumRating({value, editable, onChangeValue}) {
     const s = SpectrumRatingStyle;
     const ratings = [1,2,3,4,5];
-    // const hues = [0, 30, 60, 90, 120];
 
     return <View style={s.outer}>
         {ratings.map(rating =>
@@ -45,9 +133,9 @@ export function SpectrumRating({value, editable, onChangeValue}) {
 
 function SpectrumItem({enabled, color}) {    
     if (enabled) {
-        return <Dot size={20} color={color}  padSize={2} borderColor='#ccc' borderWidth={1} />
+        return <Dot size={20} color={color} outerSize={30} borderColor='#ccc' borderWidth={1} />
     } else {
-        return <Dot size={10} color='#ccc' padSize={4} />
+        return <Dot size={10} color='#ccc' outerSize={20} />
     }
 }
 
@@ -58,8 +146,8 @@ const SpectrumRatingStyle = StyleSheet.create({
     }
 })
 
-function Dot({size, color, borderColor, borderWidth, padSize}) {
-    return <View style={{borderColor, borderWidth, backgroundColor: color, width: size, height: size, borderRadius: size/2, margin: padSize}} />
+function Dot({size, color, borderColor, borderWidth, outerSize}) {
+    return <View style={{borderColor, borderWidth, backgroundColor: color, width: size, height: size, borderRadius: size/2, margin: (outerSize-size)/2}} />
 }
 
 export function RatingSummary({labelSet, ratingCounts, selection, onChangeSelection }) {

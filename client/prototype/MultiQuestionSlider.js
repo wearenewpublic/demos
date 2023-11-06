@@ -7,7 +7,7 @@ import { UserFace } from "../component/userface";
 import { pushSubscreen } from "../util/navigate";
 import { expandDataList } from "../util/util";
 import { QuietSystemMessage } from "../component/message";
-import { RatingSummary, RatingWithLabel } from "../component/rating";
+import { RatingSelector, RatingSummary, RatingWithLabel } from "../component/rating";
 import { Post, PostActionEdit, PostActionLike } from "../component/post";
 import React, { useState } from "react";
 import { PopupSelector } from "../platform-specific/popup.web";
@@ -183,8 +183,10 @@ function EditRating({post, onPostChanged}) {
     const selectorItems = ratingLabels.map((label, index) => ({label, key: index+1}))
 
     return <View>
-        <PopupSelector label='Rate your opinion' value={post.slide || 0} 
-            items={[{label: 'Rate your opinion', key:0}, ...selectorItems]} onSelect={slide => onPostChanged({...post, slide})} />
+        {/* <PopupSelector label='Rate your opinion' value={post.slide || 0} 
+            items={[{label: 'Rate your opinion', key:0}, ...selectorItems]} onSelect={slide => onPostChanged({...post, slide})} /> */}
+            <RatingSelector value={post.slide} sideOne={sideOne} sideTwo={sideTwo} 
+                labelSet={ratingLabels} placeholder='Rate your opinion' onChangeValue={slide => onPostChanged({...post, slide})} />
         <Pad />
     </View>
 }

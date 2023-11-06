@@ -145,11 +145,11 @@ function EditRating({post, onPostChanged}) {
     const selectorItems = ratingLabels.map((label, index) => ({label, key: index+1}))
 
     return <View>
-        <PopupSelector label='Rate your opinion' value={post.slide || 0} 
-            items={[{label: 'Rate your opinion', key:0}, ...selectorItems]} onSelect={slide => onPostChanged({...post, slide})} />
-        {/* <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
+        {/* <PopupSelector label='Rate your opinion' value={post.slide || 0} 
+            items={[{label: 'Rate your opinion', key:0}, ...selectorItems]} onSelect={slide => onPostChanged({...post, slide})} /> */}
+        <RatingWithLabel value={post.slide} editable labelSet={ratingLabels} 
         placeholder='Rate your opinion'
-        onChangeValue={slide => onPostChanged({...post, slide})} /> */}
+        onChangeValue={slide => onPostChanged({...post, slide})} />
         <Pad />
     </View>
 }
