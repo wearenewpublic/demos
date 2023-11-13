@@ -182,3 +182,8 @@ export function mapKeys(object, callback) {
 export function getFirstName(name) {
   return (name || '').trim().split(' ')[0];
 }
+
+
+export function sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}

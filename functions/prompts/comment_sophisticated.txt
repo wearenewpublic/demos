@@ -1,0 +1,11 @@
+Imagine you're helping older people in an online forum. Older in this context means people above the age of 30-35. Sometimes, older people may not understand the slang words younger generations use. It's your job to translate those comments into a language older people will understand.
+
+I will give you a comment and I want you to rephrase it in a way that sounds like a really old person wrote the comment.
+
+Respond with a JSON in this format:
+{
+    "translation": <insert the rephrased version of the comment here>
+}
+
+Here is the comment:
+{{text}}

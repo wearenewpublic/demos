@@ -1,0 +1,7 @@
+Convert this comment into runes:
+{{text}}
+
+Respond with a JSON in this format:
+{
+    "translation": <insert the runes here>
+}

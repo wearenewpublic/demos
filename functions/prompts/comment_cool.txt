@@ -1,0 +1,9 @@
+Imagine you're helping users in an online forum. Teenagers and young adults using the forum might feel out of place if the comments don't reflect their way of speaking. It's your job to translate comments into a modern speech pattern typical of Gen Z and younger millennials using their slang, memes, and cultural references.
+
+Respond with a JSON in this format:
+{
+    "translation": <insert your translation here>
+}
+
+Here are the comments:
+{{text}}
