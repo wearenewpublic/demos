@@ -28,7 +28,7 @@ In this prototype, we are exploring the idea of using AI to make comments more a
 
 - Convert the comment into runes
 
-Additionally, the option "Explain Words" (working title) will search for any phrases that might need additional context, such as brand names, names of famous people, cultural references, memes, slang, abbreviations, etc.
+Additionally, the option "Explain Words" will search for any phrases that might need additional context, such as brand names, names of famous people, cultural references, memes, slang, abbreviations, etc.
 `
 
 export const WorldInterpreterPrototype = {
