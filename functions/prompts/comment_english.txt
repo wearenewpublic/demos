@@ -1,0 +1,7 @@
+Translate the following comment into English:
+{{text}}
+
+Respond with a JSON in this format:
+{
+    "translation": <insert the English translation here>
+}

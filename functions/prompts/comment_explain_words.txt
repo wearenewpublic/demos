@@ -1,0 +1,16 @@
+Your job is to help users in an online forum. I'm going to show you a comment and I want you to detect terms that might need additional context to be understood. Examples of terms that might need additional context are brand names, abbreviations, memes, slang words, technical terms, scientific concepts, names of famous people, famous quotes, sayings, or references to media and literature. Explain those terms in very simple words that anyone would be able to understand, no matter their background. Some comments might not contain any terms that need to be explained.
+
+Respond with a JSON array formatted like this:
+[
+    {
+        "phrase": <insert the term you want to explain here>,
+        "explanation": <insert the explanation here>
+    },
+    {
+        "phrase": <insert the term you want to explain here>,
+        "explanation": <insert the explanation here>
+    }
+]
+
+Here is the comment:
+{{text}}

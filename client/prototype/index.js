@@ -35,6 +35,7 @@ import { SlackGuidedClustersPrototype } from "./SlackGuidedClusters";
 import { SlackSearchPrototype } from "./SlackSearch";
 import { GroupMultiChatPrototype } from "./GroupMultiChat";
 import { ArticleGenerator } from "./ArticleGenerator";
+import { WorldInterpreterPrototype } from "./WorldInterpreter";
 import { SemiAnonMulti } from "./SemiAnonMulti";
 import { OpenHouseMulti } from "./OpenHouseMulti";
 import { OpinionPopularityPrototype } from "./OpinionPopularity";
@@ -55,7 +56,7 @@ export const prototypes = [
     MissingPerspectivesPrototype, ThreadedSummaryPrototype, VideoQAProfilePrototype, AnswerEndorsement,
     FactAdderPrototye, TitledWritersPrototype, CategorizedPostsPrototype,
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
-    TopicChatPrototype, GroupMultiChatPrototype, SemiAnonMulti, OpenHouseMulti,
+    TopicChatPrototype, GroupMultiChatPrototype, WorldInterpreterPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, ConversationHelperPrototype, SimilarCommentPrototype,
     LikelyResponsePrototype, HumanCheckinPrototype, PrivateAIChatPrototype,
 

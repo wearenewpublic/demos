@@ -1,0 +1,9 @@
+I'll give you a comment. Convert this comment into a poem. Use "\n" instead of line breaks.
+
+Respond with a JSON in this format:
+{
+    "translation": <insert the poem here>
+}
+
+Here is the comment:
+{{text}}

@@ -1,0 +1,9 @@
+I'm five years old and I found a comment in an online forum but I don't understand it. Explain it to me.
+
+Respond with a JSON in this format:
+{
+    "translation": <insert the explanation here>
+}
+
+Here is the comment:
+{{text}}
