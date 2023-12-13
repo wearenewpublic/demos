@@ -111,23 +111,8 @@ function ActionToggleAnonymous({comment}) {
 }
 
 function AnonToggle({post, onPostChanged}) {
-    const personaKey = usePersonaKey();
-    const persona = useObject('persona', personaKey);
-    const name = persona.name;
-    const tAnonymous = useTranslation('Anonymous');
-
-    // const anonItems = [{key: 'false', label: tAnonymous}, {key: 'true', label: name}];
-    // return <View>
-    //     <PopupSelector value={boolToString(post.public)} items={anonItems} 
-    //         onSelect={value => onPostChanged({...post, public: stringToBool(value)})}
-    //         textStyle={{fontWeight: 'bold', fontSize: 13}} paddingVertical={4}
-    //          /> 
-    // <Pad />
-// </View>
     return <View>
         <HorizBox center>
-            {/* <Text style={{fontSize: 13, fontWeight: post.public ? 'bold' : null}}>{name}</Text>
-            <Pad size={12} /> */}
             <Switch value={!post.public} onValueChange={value => onPostChanged({...post, public: !value})} />
             <Pad size={12} />
             <TranslatableLabel label='Anonymous' style={{fontSize: 13, fontWeight: post.public ? null : 'bold'}}/>
@@ -137,9 +122,10 @@ function AnonToggle({post, onPostChanged}) {
 }
 
 function AnonInfo({post}) {
-    if (post.public) {
-        return null;
-    } else {
-        return <QuietSystemMessage center={false} label='Only the group admin will see your name.' />
-    }
+    return null;
+    // if (post.public) {
+    //     return null;
+    // } else {
+    //     return <QuietSystemMessage center={false} label='Only the group admin will see your name.' />
+    // }
 }
