@@ -393,4 +393,3 @@ export function BasicComments({about = null, config={}}) {
         )}
     </CommentContext.Provider>
 }
-
