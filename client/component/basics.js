@@ -283,9 +283,10 @@ export function Pad({size=8}) {
     return <View style={{height: size, width: size}}/>
 }
 
-export function HorizBox({children, center=false, spread=false}) {
+export function HorizBox({children, center=false, spread=false, hideOverflow=true}) {
     return <View style={{
             flexDirection: 'row', 
+            overflow: hideOverflow ? 'hidden' : null,
             alignItems: center ? 'center' : 'flex-start', 
             justifyContent: spread ? 'space-between' : 'flex-start'
         }}>

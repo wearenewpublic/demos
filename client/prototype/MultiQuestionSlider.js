@@ -38,7 +38,7 @@ export const MultiQuestionSlider = {
 
 function MultiQuestionSliderScreen() {
     const name = useGlobalProperty('name');
-    const questions = useCollection('question', {sortBy: 'time', reverse: true});
+    const questions = useCollection('question', {sortBy: 'time'});
     const admin = useGlobalProperty('admin');
     const personaKey = usePersonaKey();
     const datastore = useDatastore();
