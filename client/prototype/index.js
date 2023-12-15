@@ -48,6 +48,7 @@ import { PrivateAIChatPrototype } from "./PrivateAIChat";
 import { ComponentDemoPrototype } from "../newprototype/componentdemo";
 import { MultiQuestionSlider } from "./MultiQuestionSlider";
 import { TouchReactionsPrototype } from "./TouchReactions";
+import { GandalfPrototype } from "./Gandalf";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -59,7 +60,7 @@ export const prototypes = [
     SlackTestPrototype, TopicMultiChatPrototype, CheekyChatBotPrototype, CommentBouncerPrototype,
     TopicChatPrototype, GroupMultiChatPrototype, WorldInterpreterPrototype, SemiAnonMulti, OpenHouseMulti,
     OpinionPopularityPrototype, CustomRankedPrototype, ConversationHelperPrototype, SimilarCommentPrototype,
-    LikelyResponsePrototype, HumanCheckinPrototype, PrivateAIChatPrototype, TouchReactionsPrototype,
+    LikelyResponsePrototype, HumanCheckinPrototype, PrivateAIChatPrototype, GandalfPrototype,
 
     MultiQuestionSlider,
 
@@ -68,6 +69,8 @@ export const prototypes = [
     ArticleGenerator,
 
     SlackViewPrototype, SlackGuidedClustersPrototype, SlackSearchPrototype, 
+
+    TouchReactionsPrototype
 
 ]
 

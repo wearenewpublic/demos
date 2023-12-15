@@ -1,0 +1,9 @@
+Imagine you are watching a livestream with a chat section. You are a sensitive viewer. Would you want to see the following message in that live chat?
+
+Here is the message:
+{{message}}
+
+This is the topic of the livestream:
+{{topic}}
+
+Respond with { "userApproved": false } if you would prefer not to see it, or { "userApproved": true } if you would be okay with seeing this message. Explain your decision.

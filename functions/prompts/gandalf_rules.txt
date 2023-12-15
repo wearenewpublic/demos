@@ -1,0 +1,10 @@
+Imagine a livestream with a chat section. I will show you a message and the rules of the chat.
+
+Respond with { "breaksRules": true } if the message breaks the rules, or { "breaksRules": false } if the message doesn't break any rules. Explain your decision.
+
+Here is the message:
+{{message}}
+
+Here are the chat rules:
+{{rules}}
+
