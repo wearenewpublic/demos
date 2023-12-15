@@ -55,3 +55,20 @@ exports.disco = [
     {key: 'long', from: 'b', tone: "neutral", text: "I'm going to share an extremely long and boring rant about the origin of the word 'disco' that nobody asked for. Here I go. I'm still not done. There is so much to say and I won't stop until everyone is sick of me."},
     {from: 'b', tone: "neutral", text: "I just thought of another nerdy fun fact about the history of dance music and the culture surrounding it. I'm sure you would love to hear it. But even if you don't, I'll share it anyway..."}
 ]
+
+exports.grandprix = [
+    { key: "welcome", from: "a", shallPass: "yes", isPublic: true, text: "Welcome everyone!" },
+    { key: "finally", from: "c", shallPass: "yes", isPublic: true, text: "Finally a Grand Prix in Vegas!" },
+    { key: "dream", from: "b", shallPass: "yes", isPublic: true, text: "Wow, this is everything I've dreamed of! The speed, the glam, the neon lights. Amazing!" },
+    { key: "prices", from: "d", shallPass: "yes", isPublic: true, text: "Can't believe the ticket prices for this. It's like they're trying to make it an exclusive club. What's the point of bringing the Grand Prix to Vegas if locals like me can't even afford to see it?" },
+    { key: "race", from: "a", shallPass: "yes", isPublic: true, text: "How is everyone enjoying the race?" },
+    { key: "lap", from: "e", shallPass: "yes", isPublic: true, text: "That last lap had me on the edge of my seat! What a race!" },
+    { key: "home", from: "c", shallPass: "yes", isPublic: true, text: "So much fun to watch from home! Wish I could be there" },
+    { key: "skyline", from: "h", shallPass: "yes", isPublic: true, text: "Kudos to Vegas for hosting the Grand Prix! The city skyline as a backdrop is just stunning." },
+    { key: "work", from: "l", shallPass: "no", isPublic: false, text: "I sure am glad y'all are having so much fun watching this. Meanwhile I couldn't get to work today because the roads are blocked off. That's all thanks to you racing idiots." },
+    { key: "noisy", from: "f", shallPass: "yes", isPublic: true, text: "I don't get the hype. It's just a massive inconvenience for locals. Wish they had reconsidered the location." },
+    { key: "casinos", from: "i", shallPass: "no", isPublic: false, text: "This just makes me hate F1 more. Yet another waste of tax payer money. No one in Vegas actually wanted this. The only people benefitting from this event are hotels and casinos." },
+    { key: "safety", from: "g", shallPass: "maybe", isPublic: false, text: "Whoever is responsible for building the track needs to be sued! Who thought it was a good idea to cut corners on safety measures?"},
+    { key: "fail", from: "k", shallPass: "maybe", isPublic: false, text: "This event is a disaster. The organizers clearly have no clue what they're doing." },
+    { key: "mods", from: "l", shallPass: "no", isPublic: false, text: "The mods here are on a power trip" }
+]
