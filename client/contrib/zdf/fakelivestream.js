@@ -41,7 +41,7 @@ const FakeLivestreamStyle = StyleSheet.create({
     streamChannelIcon: {
         height: 40,
         width: 40,
-        borderRadius: "50%",
+        borderRadius: 20,
         marginRight: 10,
     },
     description: {

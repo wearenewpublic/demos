@@ -7,7 +7,7 @@ import { useCollection, useDatastore } from "../util/datastore";
 import { FakeLivestreamScreen, streamRace } from "../contrib/zdf/fakelivestream";
 import { View, StyleSheet } from "react-native";
 import { DeletableMessage, DeletedMessage, ModMessage, PendingMessage, QueuedMessage, QuietSystemMessageCustomizable } from "../contrib/zdf/message";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { gptProcessAsync } from "../component/chatgpt";
 import { LiveChatInput } from "../contrib/zdf/chatinput";
 
@@ -67,11 +67,11 @@ function GandalfScreen() {
 
     // Modify inital persona data so users with pending messages in the default conversation can see their pending message
     function initializePersonas() {
-        console.log("Initializing personas");
+        // console.log("Initializing personas");
         messages.map(message => {
             if (message.shallPass === ShallPass.Maybe) {
                 datastore.modifyObject("persona", message.from, persona => ({ ...persona, shallPass: ShallPass.Maybe, lastMessageKey: message.key }));
-                console.log("Persona: ", datastore.getObject("persona", message.from));
+                // console.log("Persona: ", datastore.getObject("persona", message.from));
             }
         });
 
@@ -85,7 +85,7 @@ function GandalfScreen() {
 
         setAnalysisInProgress(true);
 
-        console.log('Message sent: ', text);
+        // console.log('Message sent: ', text);
         let messageKey = datastore.addObject('message', { text });
         datastore.modifyObject("persona", selfKey, persona => ({ ...persona, shallPass: ShallPass.Unset, lastMessageKey: messageKey }));
 
@@ -100,7 +100,7 @@ function GandalfScreen() {
             shallPassJudgement = await analyzeMessage(text);
         }
 
-        console.log("shallPassJudgement: ", shallPassJudgement);
+        // console.log("shallPassJudgement: ", shallPassJudgement);
 
         datastore.modifyObject('message', messageKey, message => ({ ...message, shallPass: shallPassJudgement }));
         datastore.modifyObject("persona", selfKey, persona => ({ ...persona, shallPass: shallPassJudgement, lastMessageKey: messageKey }));
@@ -175,7 +175,7 @@ function GandalfScreen() {
             <BottomScroller style={s.messageContainer}>
                 <Pad size={10} />
                 {messages.map(message =>
-                    <>
+                    <Fragment key={message.key}>
                         {(message.shallPass === ShallPass.No) ?
                             // Deleted messages that were public at one point can be seen by anyone
                             // If they were never public, only mods and the OP can see the deleted message
@@ -197,7 +197,7 @@ function GandalfScreen() {
                                     </>
                                 : null
                         }
-                    </>
+                    </Fragment>
                 )}
 
                 {/* Below all other messages, show this user's current pending message if there is one */}
@@ -245,10 +245,10 @@ function GandalfScreen() {
                     <Pad size={10}/>
                     <BottomScroller>
                         {messages.filter(message => (message.shallPass === ShallPass.Maybe)).map(message => 
-                            <>
+                            <Fragment key={message.key}>
                                 <QueuedMessage key={message.key} messageKey={message.key} />
                                 <Pad size={5}/>
-                            </>
+                            </Fragment>
                         )}
                     </BottomScroller>
                 </View>
