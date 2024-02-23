@@ -49,6 +49,7 @@ import { ComponentDemoPrototype } from "../newprototype/componentdemo";
 import { MultiQuestionSlider } from "./MultiQuestionSlider";
 import { TouchReactionsPrototype } from "./TouchReactions";
 import { GandalfPrototype } from "./Gandalf";
+import { PositionCardsPrototype } from "./PositionCards";
 
 export const prototypes = [
     ExamplePrototype, ChatPrototype, ThreadedCommentsPrototype, RoboMediatorChatPrototype, RuleEnforcerChatPrototype, VideoResponse,
@@ -70,7 +71,7 @@ export const prototypes = [
 
     SlackViewPrototype, SlackGuidedClustersPrototype, SlackSearchPrototype, 
 
-    TouchReactionsPrototype
+    TouchReactionsPrototype, PositionCardsPrototype
 
 ]
 

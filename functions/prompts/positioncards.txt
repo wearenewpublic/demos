@@ -1,0 +1,27 @@
+Take a look on the following comments of an article and think about the general topic of the discussion.
+We want to offer the users a general overview of all the possible viewpoints of this matter.
+We want you to pick {{COUNT}} different comments, which represent different and distinct as possible positions.
+Please make sure that your selection offers a good variety.
+
+{{TOPIC}}
+
+Please give the answer in a JSON-format as following:
+
+{
+    positions: [
+        {
+            id: <an id for the first position>,
+            title: <a short title describing the position>,
+            comment_key: <The key of the comment>
+        },
+        {
+            id: <an id for the second position>,
+            title: <a short title describing the position>,
+            comment_key: <The key of the comment>
+        }
+    ]
+}
+
+Here are the comments:
+
+{{COMMENTS}}
