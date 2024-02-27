@@ -1,0 +1,29 @@
+Take a look on following news article or video of a particular topic.
+The description of the article is:
+{{TOPIC}}
+
+We have identified following viewpoints towards this topic, people might have.
+
+{{CATEGORIES}}
+
+We want now to assign each comment of the comment section to the category it fits the best into.
+If you think, that a comment does not clearly fit into a category or does not really address the topic you do not have to include it.
+
+Please answer in form of a JSON like following:
+
+{
+    comments:[
+        {
+            comment_key: <The identifying comment_key of the comment>,
+            id: <The category id it is assigned to>
+        },
+        {
+            comment_key: <The identifying comment_key of the comment>,
+            id: <The category id it is assigned to>
+        }
+    ]
+}
+
+Here are the comments:
+
+{{COMMENTS}}

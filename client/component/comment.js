@@ -116,7 +116,7 @@ export function BlingPending({comment}) {
 }
 
 const defaultActions = [ActionLike, ActionReply, ActionCollapse];
-function ActionBar({actions, commentKey, comment}) {
+export function ActionBar({actions, commentKey, comment}) {
     return <View style={{flexDirection: 'row'}}>
         {actions.map((action, idx) => 
             React.createElement(action, {key: idx, commentKey, comment})
@@ -124,7 +124,7 @@ function ActionBar({actions, commentKey, comment}) {
     </View>
 }
 
-function TopBlingBar({commentKey, comment}) {
+export function TopBlingBar({commentKey, comment}) {
     const {topBling} = React.useContext(CommentContext);
     return <View style={{flexDirection: 'row'}}>
         {topBling.map((bling, idx) => 
@@ -260,7 +260,7 @@ const CommentStyle = StyleSheet.create({
     }
 })
 
-function CollapsedComment({commentKey, onPress}) {
+export function CollapsedComment({commentKey, onPress}) {
     const s = CollapsedCommentStyle;
     const comment = useObject('comment', commentKey);
     const {authorFace} = React.useContext(CommentContext);
@@ -321,7 +321,7 @@ const PreviewCommentStyle = StyleSheet.create({
 })
 
 
-function Replies({commentKey}) {
+export function Replies({commentKey}) {
     const s = RepliesStyle;
     const datastore = useDatastore();
     const {getIsVisible, sortComments} = React.useContext(CommentContext);
@@ -340,7 +340,7 @@ const RepliesStyle = StyleSheet.create({
     }
 })
 
-function CommentAuthorInfo({commentKey, collapsed=false}) {
+export function CommentAuthorInfo({commentKey, collapsed=false}) {
     const s = CommentAuthorInfoStyle;
 
     const {authorName, authorBling} = React.useContext(CommentContext);

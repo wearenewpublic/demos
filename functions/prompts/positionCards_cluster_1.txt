@@ -1,0 +1,24 @@
+Take a look on following news article or video of a particular topic.
+The description of the media is:
+{{TOPIC}}
+
+{{COMMENTS}}
+
+What positions or viewpoints can people have towards this topic?
+Please identify {{COUNT}} as distinct as possible viewpoints to capture the wide array of opinions people could have on this topic.
+
+Please answer in form of a JSON like following:
+
+{
+    topic: <What is the general topic>
+    positions:[
+        {
+            id: <an id for the position>,
+            position: <A short title of the position>
+        },
+        {
+            id: <an id for the position>,
+            position: <A short title of the position>
+        }
+    ]
+}

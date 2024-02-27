@@ -37,7 +37,9 @@ export function MediaLibraryPost({primaryVideoTitle, secondaryVideoTitle, videoS
 const MediaLibraryPostStyle = StyleSheet.create({
     description: {
         backgroundColor: "#e6e9f0",
-        padding: 24
+        padding: 24,
+        width: 800,
+        alignSelf: "center"
     },
     time: {
         display: "flex",
